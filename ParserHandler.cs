@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using antlr_parser.Antlr4Impl.Java;
 using antlr_parser.Antlr4Impl.JavaScript;
+using antlr_parser.Antlr4Impl.Kotlin;
 using PrimitiveCodebaseElements.Primitive;
 
 namespace antlr_parser
@@ -13,14 +13,14 @@ namespace antlr_parser
         public static readonly HashSet<string> SupportedParsableFiles =
             new HashSet<string>
             {
-                ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3", ".js", ".jsx"
+                ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3", ".js", ".jsx", ".kt"
             };
 
         static readonly HashSet<string> SupportedUnparsableFiles =
             new HashSet<string>
             {
                 // files to be parsed in the future
-                ".kt", ".sc", ".sol", ".rs", ".ts", ".go", ".class", ".clj", ".cxx", ".el", ".lua",
+                ".sc", ".sol", ".rs", ".ts", ".go", ".class", ".clj", ".cxx", ".el", ".lua",
                 ".m4", ".php", ".pl", ".po", ".rb", ".sh", ".swift", ".vb",
                 // other data formats
                 ".txt", ".md", ".html", ".json", ".xml", ".sql", ".yaml", ".hbs", ".sh", ".vcxproj", ".xcodeproj", 
@@ -68,6 +68,10 @@ namespace antlr_parser
                 case ".py3":
                     // python
                     return new List<ClassInfo>();
+                case ".kt":
+                    return AntlrParseKotlin.OuterClassInfosFromKotlinSource(
+                        sourceText,
+                        filePath);
             }
 
             return new List<ClassInfo>();

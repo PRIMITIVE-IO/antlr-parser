@@ -15,4 +15,8 @@
       <HintPath>..\javaparser-ikvm\PrimitiveCodebaseElements.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="gen\Kotlin" />
+  </ItemGroup>
 </Project>
