@@ -31,7 +31,7 @@ namespace antlr_parser.Antlr4Impl.Java
                 Console.WriteLine(e);
             }
 
-            return null;
+            return new List<ClassInfo>();
         }
     }
 }

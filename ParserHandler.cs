@@ -30,7 +30,7 @@ namespace antlr_parser
             string sourceExtension,
             string sourceText)
         {
-            if (!SupportedParsableFiles.Contains(sourceExtension)) return null;
+            if (!SupportedParsableFiles.Contains(sourceExtension)) return new List<ClassInfo>();
 
             switch (sourceExtension)
             {
@@ -54,7 +54,7 @@ namespace antlr_parser
                     return new List<ClassInfo>();
             }
 
-            return null;
+            return new List<ClassInfo>();
         }
 
         public static string GetTextFromFilePath(string filePath)
