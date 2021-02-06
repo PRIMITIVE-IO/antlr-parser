@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using antlr_parser.Antlr4Impl.Java;
+using antlr_parser.Antlr4Impl.JavaScript;
 using PrimitiveCodebaseElements.Primitive;
 
 namespace antlr_parser
@@ -11,16 +12,16 @@ namespace antlr_parser
         public static readonly HashSet<string> SupportedParsableFiles =
             new HashSet<string>
             {
-                ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3"
+                ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3", ".js", ".jsx"
             };
 
         public static readonly HashSet<string> ReadableFiles =
             new HashSet<string>
             {
                 // parsable (see above)
-                ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3",
+                ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3",".js", ".jsx",
                 // languages to be parsed in the future
-                ".js", ".jsx", ".kt", ".sc", ".sol", ".rs",
+                ".kt", ".sc", ".sol", ".rs",
                 // data formats
                 ".txt", ".md", ".html", ".json", ".xml", ".sql", ".yaml"
             };
@@ -38,8 +39,13 @@ namespace antlr_parser
                     return AntlrParseJava.OuterClassInfosFromJavaSource(
                         sourceText,
                         filePath);
+                case ".js":
+                case ".jsx":
+                    return AntlrParseJavaScript.OuterClassInfosFromJavaScriptSource(
+                        sourceText,
+                        filePath);
                 case ".cs":
-                    // cs
+                // cs
                 case ".h":
                 case ".hxx":
                 case ".hpp":
