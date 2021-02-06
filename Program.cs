@@ -37,11 +37,13 @@ namespace antlr_parser
 
         static void Parse(Args args)
         {
-            string intputPath = args.InputPath;
+            string inputPath = args.InputPath;
 
-            if (intputPath.Contains('.'))
+            if (inputPath.Contains('.') &&
+                ParserHandler.SupportedParsableFiles.Contains(Path.GetExtension(inputPath)))
             {
-                string filePath = intputPath;
+                // single file
+                string filePath = inputPath;
                 string sourceText = ParserHandler.GetTextFromFilePath(filePath);
                 List<ClassInfo> classInfos = ParserHandler.ClassInfoFromSourceText(
                     filePath,
@@ -55,9 +57,12 @@ namespace antlr_parser
             }
             else
             {
-                string[] allFiles = Directory.GetFiles(intputPath, "*.*", SearchOption.AllDirectories);
+                // directory
+                string[] allFiles = Directory.GetFiles(inputPath, "*.*", SearchOption.AllDirectories);
 
-                foreach (string filePath in allFiles)
+                foreach (string filePath in allFiles
+                    .Where(filePath => ParserHandler.SupportedParsableFiles
+                        .Contains(Path.GetExtension(filePath))))
                 {
                     string sourceText = ParserHandler.GetTextFromFilePath(filePath);
                     List<ClassInfo> classInfos = ParserHandler.ClassInfoFromSourceText(

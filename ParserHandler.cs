@@ -9,21 +9,31 @@ namespace antlr_parser
 {
     public static class ParserHandler
     {
+        // see: https://github.com/dyne/file-extension-list
         public static readonly HashSet<string> SupportedParsableFiles =
             new HashSet<string>
             {
                 ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3", ".js", ".jsx"
             };
 
-        public static readonly HashSet<string> ReadableFiles =
+        static readonly HashSet<string> SupportedUnparsableFiles =
             new HashSet<string>
             {
-                // parsable (see above)
-                ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3",".js", ".jsx",
-                // languages to be parsed in the future
-                ".kt", ".sc", ".sol", ".rs",
-                // data formats
-                ".txt", ".md", ".html", ".json", ".xml", ".sql", ".yaml"
+                // files to be parsed in the future
+                ".kt", ".sc", ".sol", ".rs", ".ts", ".go", ".class", ".clj", ".cxx", ".el", ".lua",
+                ".m4", ".php", ".pl", ".po", ".rb", ".sh", ".swift", ".vb",
+                // other data formats
+                ".txt", ".md", ".html", ".json", ".xml", ".sql", ".yaml", ".hbs", ".sh", ".vcxproj", ".xcodeproj", 
+                ".csproj", ".xml", ".diff", ".patch", ".log", ".rtf", ".tex", ".odt", ".org", ".pdf", ".rst", ".wpd",
+                ".wps"
+            };
+        
+        public static readonly HashSet<string> SupportedLibraryFiles =
+            new HashSet<string>
+            {
+                ".jar", ".war", ".ear", // Java 
+                ".dll", ".exe", // CLR
+                ".so", ".lib", ".a" // Linux
             };
 
         public static IEnumerable<ClassInfo> ClassInfoFromSourceText(
@@ -68,7 +78,7 @@ namespace antlr_parser
             string ext = Path.GetExtension(filePath);
             try
             {
-                return ReadableFiles.Contains(ext)
+                return SupportedParsableFiles.Contains(ext)
                     ? File.ReadAllText(filePath)
                     : "binary data";
             }
