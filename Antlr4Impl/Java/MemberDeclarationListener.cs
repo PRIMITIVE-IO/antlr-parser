@@ -168,7 +168,7 @@ namespace antlr_parser.Antlr4Impl.Java
                 new FormalParametersListener();
             formalParametersContext.EnterRule(formalParametersListener);
 
-            TypeName returnType = PrimitiveTypeName.Void;
+            TypeName returnType = TypeName.For("void");
             if (typeTypeOrVoidContext != null)
             {
                 TypeTypeOrVoidListener typeOrVoidListener = new TypeTypeOrVoidListener();
@@ -187,12 +187,12 @@ namespace antlr_parser.Antlr4Impl.Java
             MethodName methodName = new MethodName(
                 parentClassName,
                 methodNameText,
-                returnType.FullyQualified,
+                returnType.Signature,
                 formalParametersListener
                     .Arguments
                     .Select(arg => new Argument(
-                        arg.Type.FullyQualified, 
-                        TypeName.For(arg.Type.FullyQualified))).ToList());
+                        arg.Type.Signature, 
+                        TypeName.For(arg.Type.Signature))).ToList());
             MethodInfo = new MethodInfo(
                 methodName,
                 AccessFlags.AccPublic, // TODO
@@ -236,7 +236,7 @@ namespace antlr_parser.Antlr4Impl.Java
         {
             if (context.typeType() == null)
             {
-                TypeName = PrimitiveTypeName.Void;
+                TypeName = TypeName.For("void");
                 return;
             }
 
@@ -253,7 +253,7 @@ namespace antlr_parser.Antlr4Impl.Java
             }
             else
             {
-                TypeName = PrimitiveTypeName.Void;
+                TypeName = TypeName.For("void");
             }
         }
     }
@@ -309,7 +309,7 @@ namespace antlr_parser.Antlr4Impl.Java
             }
             else
             {
-                typeName = PrimitiveTypeName.Void;
+                typeName = TypeName.For("void");
             }
 
             // name of parameter
@@ -357,16 +357,16 @@ namespace antlr_parser.Antlr4Impl.Java
 
             if (primitiveTypeName == null && string.IsNullOrEmpty(qualifiedName))
             {
-                primitiveTypeName = PrimitiveTypeName.Void;
+                primitiveTypeName = TypeName.For("void") as PrimitiveTypeName;
             }
 
             string fieldName = IDs.FirstOrDefault();
-            FieldName fieldFqn = FieldName.FieldFqnFromNames(
+            FieldName fieldFqn = new FieldName(
+                parentClassName,
                 fieldName,
-                parentClassName.FullyQualified,
                 primitiveTypeName != null
-                    ? primitiveTypeName.FullyQualified
-                    : TypeName.For(qualifiedName).FullyQualified);
+                    ? primitiveTypeName.Signature
+                    : TypeName.For(qualifiedName).Signature);
             FieldInfo = new FieldInfo(
                 fieldFqn,
                 parentClassName,

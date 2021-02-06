@@ -174,17 +174,13 @@ namespace antlr_parser.Antlr4Impl.Java
             string name = context.IDENTIFIER().GetText();
             if (outerClass != null)
             {
-                string history = outerClass
-                    .FullyQualified
-                    .Substring(outerClass.FullyQualified.LastIndexOf('/') + 1);
-                name = $"{history}${name}";
+                name = $"{outerClass.ShortName}${name}";
             }
 
-            string classPackageFqn = string.IsNullOrEmpty(packageFqn)
-                ? name
-                : $"{packageFqn}.{name}";
-
-            ClassName className = new ClassName($"{parentFileName}|{classPackageFqn}");
+            ClassName className = new ClassName(
+                new FileName(parentFileName),
+                new PackageName(packageFqn),
+                name);
 
             string headerText = context.GetFullText();
             if (headerText.Contains("{"))
@@ -307,12 +303,12 @@ namespace antlr_parser.Antlr4Impl.Java
         {
             string name = context.IDENTIFIER().GetText();
 
-            string classPackageFqn = string.IsNullOrEmpty(packageFqn)
-                ? name
-                : $"{packageFqn}.{name}";
-
-            ClassName className = new ClassName($"{parentFilePath}|{classPackageFqn}");
-
+            
+            ClassName className = new ClassName(
+                new FileName(parentFilePath),
+                new PackageName(packageFqn),
+                name);
+            
             string headerText = context.GetFullText();
             if (headerText.Contains("{"))
             {
@@ -405,11 +401,10 @@ namespace antlr_parser.Antlr4Impl.Java
         {
             string name = context.IDENTIFIER().GetText();
 
-            string enumPackageFqn = string.IsNullOrEmpty(packageFqn)
-                ? name
-                : $"{packageFqn}.{name}";
-
-            ClassName enumName = new ClassName($"{parentFilePath}|{enumPackageFqn}");
+            ClassName enumName = new ClassName(
+                new FileName(parentFilePath),
+                new PackageName(packageFqn),
+                name);
 
             EnumBodyDeclarationsListener enumBodyDeclarationsListener =
                 new EnumBodyDeclarationsListener(enumName, parentFilePath, packageFqn);
@@ -534,42 +529,42 @@ namespace antlr_parser.Antlr4Impl.Java
         {
             if (context.INT() != null)
             {
-                PrimitiveTypeName = PrimitiveTypeName.Int;
+                PrimitiveTypeName = TypeName.For("int") as PrimitiveTypeName;
             }
 
             if (context.BYTE() != null)
             {
-                PrimitiveTypeName = PrimitiveTypeName.Byte;
+                PrimitiveTypeName = TypeName.For("byte") as PrimitiveTypeName;
             }
 
             if (context.CHAR() != null)
             {
-                PrimitiveTypeName = PrimitiveTypeName.Char;
+                PrimitiveTypeName = TypeName.For("char") as PrimitiveTypeName;
             }
 
             if (context.LONG() != null)
             {
-                PrimitiveTypeName = PrimitiveTypeName.Long;
+                PrimitiveTypeName = TypeName.For("long") as PrimitiveTypeName;
             }
 
             if (context.FLOAT() != null)
             {
-                PrimitiveTypeName = PrimitiveTypeName.Float;
+                PrimitiveTypeName = TypeName.For("float") as PrimitiveTypeName;
             }
 
             if (context.SHORT() != null)
             {
-                PrimitiveTypeName = PrimitiveTypeName.Short;
+                PrimitiveTypeName = TypeName.For("short") as PrimitiveTypeName;
             }
 
             if (context.DOUBLE() != null)
             {
-                PrimitiveTypeName = PrimitiveTypeName.Double;
+                PrimitiveTypeName = TypeName.For("double") as PrimitiveTypeName;
             }
 
             if (context.BOOLEAN() != null)
             {
-                PrimitiveTypeName = PrimitiveTypeName.Boolean;
+                PrimitiveTypeName = TypeName.For("bool") as PrimitiveTypeName;
             }
         }
     }
@@ -604,7 +599,7 @@ namespace antlr_parser.Antlr4Impl.Java
         {
             if (context.typeType() == null)
             {
-                Type = PrimitiveTypeName.Void.FullyQualified;
+                Type = TypeName.For("void").Signature;
                 return;
             }
 
@@ -621,7 +616,7 @@ namespace antlr_parser.Antlr4Impl.Java
             }
             else if (typeTypeListener.PrimitiveTypeName != null)
             {
-                Type = PrimitiveTypeName.Void.FullyQualified;
+                Type = TypeName.For("void").Signature;
             }
         }
     }

@@ -15,16 +15,16 @@ namespace antlr_parser
             string sourceText = ParserHandler.GetTextFromFilePath(filePath);
             List<ClassInfo> classInfos = ParserHandler.ClassInfoFromSourceText(
                 filePath,
-                 Path.GetExtension(filePath),
-                 sourceText).ToList();
+                Path.GetExtension(filePath),
+                sourceText).ToList();
 
             foreach (ClassInfo classInfo in classInfos)
             {
-                Console.WriteLine(classInfo.className.FullyQualified);
+                Console.WriteLine(classInfo.className.ToJavaFullyQualified());
                 foreach (ICodebaseElementInfo codebaseElementInfo in classInfo.Children)
                 {
                     Console.WriteLine("Children:");
-                    Console.WriteLine(codebaseElementInfo.Name.FullyQualified);
+                    Console.WriteLine(codebaseElementInfo.Name);
                 }
             }
         }
