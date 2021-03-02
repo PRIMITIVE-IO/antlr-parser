@@ -13632,7 +13632,7 @@ public partial class CPP14Parser : Parser {
 			Match(Assign);
 			State = 1746;
 			_localctx.val = Match(OctalLiteral);
-			if((_localctx.val!=null?_localctx.val.Text:null).compareTo("0")!=0) throw new InputMismatchException(this);
+			//if((_localctx.val!=null?_localctx.val.Text:null).compareTo("0")!=0) throw new InputMismatchException(this);
 					
 			}
 		}
