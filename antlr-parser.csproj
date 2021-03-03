@@ -12,11 +12,7 @@
 
   <ItemGroup>
     <Reference Include="PrimitiveCodebaseElements, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\javaparser-ikvm\PrimitiveCodebaseElements.dll</HintPath>
+      <HintPath>PrimitiveCodebaseElements.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="gen\Kotlin" />
   </ItemGroup>
 </Project>
