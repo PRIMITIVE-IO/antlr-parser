@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using antlr_parser.Antlr4Impl.C;
 using antlr_parser.Antlr4Impl.Java;
 using antlr_parser.Antlr4Impl.JavaScript;
 using antlr_parser.Antlr4Impl.Kotlin;
@@ -58,10 +59,12 @@ namespace antlr_parser
                 case ".cs":
                 // cs
                 case ".h":
+                case ".c":
+                    // C
+                    return AntlrParseC.OuterClassInfosFromJavaSource(sourceText, filePath);
+                case ".cpp":
                 case ".hxx":
                 case ".hpp":
-                case ".cpp":
-                case ".c":
                 case ".m":
                 case ".cc":
                     //cpp
