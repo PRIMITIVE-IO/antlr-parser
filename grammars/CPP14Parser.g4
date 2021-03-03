@@ -29,7 +29,7 @@ translationUnit: declarationseq? EOF;
 /*Expressions*/
 
 primaryExpression:
-	Literal+
+	literal+
 	| This
 	| LeftParen expression RightParen
 	| idExpression
@@ -62,7 +62,7 @@ lambdaCapture:
 	captureList
 	| captureDefault (Comma captureList)?;
 
-captureDefault: And | Equal;
+captureDefault: And | Assign;
 
 captureList: capture (Comma capture)* Ellipsis?;
 
@@ -73,7 +73,7 @@ simpleCapture: And? Identifier | This;
 initcapture: And? Identifier initializer;
 
 lambdaDeclarator:
-	LeftParen parameterDeclarationClause RightParen Mutable? exceptionSpecification?
+	LeftParen parameterDeclarationClause? RightParen Mutable? exceptionSpecification?
 		attributeSpecifierSeq? trailingReturnType?;
 
 postfixExpression:
@@ -170,7 +170,7 @@ additiveExpression:
 shiftExpression:
 	additiveExpression (shiftOperator additiveExpression)*;
 
-shiftOperator: RightShift | LeftShift;
+shiftOperator: Greater Greater | Less Less;
 
 relationalExpression:
 	shiftExpression (
@@ -596,13 +596,16 @@ classSpecifier:
 classHead:
 	classKey attributeSpecifierSeq? (
 		classHeadName classVirtSpecifier?
-	)? baseClause?;
+	)? baseClause?
+	| Union attributeSpecifierSeq? (
+		classHeadName classVirtSpecifier?
+	)?;
 
 classHeadName: nestedNameSpecifier? className;
 
 classVirtSpecifier: Final;
 
-classKey: Class | Struct | Union;
+classKey: Class | Struct;
 
 memberSpecification:
 	(memberdeclaration | accessSpecifier Colon)+;
@@ -763,10 +766,8 @@ noeExceptSpecification:
 /*Lexer*/
 
 theOperator:
-	New
-	| Delete
-	| New LeftBracket RightBracket
-	| Delete LeftBracket RightBracket
+	New (LeftBracket RightBracket)?
+	| Delete (LeftBracket RightBracket)?
 	| Plus
 	| Minus
 	| Star
@@ -778,6 +779,7 @@ theOperator:
 	| Tilde
 	| Not
 	| Assign
+	| Greater
 	| Less
 	| GreaterEqual
 	| PlusAssign
@@ -788,8 +790,8 @@ theOperator:
 	| XorAssign
 	| AndAssign
 	| OrAssign
-	| LeftShift
-	| RightShift
+	| Less Less
+	| Greater Greater
 	| RightShiftAssign
 	| LeftShiftAssign
 	| Equal
@@ -805,3 +807,12 @@ theOperator:
 	| Arrow
 	| LeftParen RightParen
 	| LeftBracket RightBracket;
+
+literal:
+	IntegerLiteral
+	| CharacterLiteral
+	| FloatingLiteral
+	| StringLiteral
+	| BooleanLiteral
+	| PointerLiteral
+	| UserDefinedLiteral;
