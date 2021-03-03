@@ -5,6 +5,7 @@ using antlr_parser.Antlr4Impl.Java;
 using antlr_parser.Antlr4Impl.JavaScript;
 using antlr_parser.Antlr4Impl.Kotlin;
 using antlr_parser.Antlr4Impl.Solidity;
+using antlr_parser.Antlr4Impl.TypeScript;
 using PrimitiveCodebaseElements.Primitive;
 
 namespace antlr_parser
@@ -15,15 +16,16 @@ namespace antlr_parser
         public static readonly HashSet<string> SupportedParsableFiles =
             new HashSet<string>
             {
-                ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3", ".js", ".jsx", ".kt", ".sol"
+                ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3", ".js", ".jsx", ".kt", 
+                ".sol", ".ts"
             };
 
         static readonly HashSet<string> SupportedUnparsableFiles =
             new HashSet<string>
             {
                 // files to be parsed in the future
-                ".sc", ".rs", ".ts", ".go", ".class", ".clj", ".cxx", ".el", ".lua",
-                ".m4", ".php", ".pl", ".po", ".rb", ".sh", ".swift", ".vb",
+                ".sc", ".rs", ".go", ".class", ".clj", ".cxx", ".el", ".lua", ".m4", ".php", ".pl", ".po", ".rb", ".sh",
+                ".swift", ".vb",
                 // other data formats
                 ".txt", ".md", ".html", ".json", ".xml", ".sql", ".yaml", ".hbs", ".sh", ".vcxproj", ".xcodeproj", 
                 ".csproj", ".xml", ".diff", ".patch", ".log", ".rtf", ".tex", ".odt", ".org", ".pdf", ".rst", ".wpd",
@@ -55,6 +57,10 @@ namespace antlr_parser
                 case ".jsx":
                     return AntlrParseJavaScript.OuterClassInfosFromJavaScriptSource(
                         sourceText,
+                        filePath);
+                case ".ts":
+                    return AntlrParseTypeScript.OuterClassInfosFromSource(
+                        sourceText, 
                         filePath);
                 case ".cs":
                 // cs
