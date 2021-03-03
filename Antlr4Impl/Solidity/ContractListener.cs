@@ -6,23 +6,24 @@ namespace antlr_parser.Antlr4Impl.Solidity
 {
     public class ContractDefinitionListener : SolidityBaseListener
     {
-        readonly ClassInfo outerFileClass;
+        public ClassInfo ContractClassInfo;
+        readonly string filePath;
 
-        public ContractDefinitionListener(ClassInfo outerFileClass)
+        public ContractDefinitionListener(string filePath)
         {
-            this.outerFileClass = outerFileClass;
+            this.filePath = filePath;
         }
 
         public override void EnterContractDefinition(SolidityParser.ContractDefinitionContext context)
         {
-            string classNameString = $"{outerFileClass.className.ShortName}${context.identifier().GetText()}";
+            string classNameString = context.identifier().GetText();
 
             ClassName className = new ClassName(
-                outerFileClass.className.ContainmentFile(),
-                outerFileClass.className.ContainmentPackage,
+                new FileName(filePath),
+                new PackageName(),
                 classNameString);
 
-            ClassInfo classInfo = new ClassInfo(
+            ContractClassInfo = new ClassInfo(
                 className,
                 new List<MethodInfo>(),
                 new List<FieldInfo>(),
@@ -30,12 +31,10 @@ namespace antlr_parser.Antlr4Impl.Solidity
                 new List<ClassInfo>(),
                 new SourceCodeSnippet(context.GetFullText(), SourceCodeLanguage.Solidity),
                 false);
-
-            outerFileClass.Children.Add(classInfo);
-
+            
             foreach (SolidityParser.ContractPartContext contractPartContext in context.contractPart())
             {
-                ContractPartListener contractPartListener = new ContractPartListener(classInfo);
+                ContractPartListener contractPartListener = new ContractPartListener(ContractClassInfo);
                 contractPartContext.EnterRule(contractPartListener);
             }
         }
@@ -71,7 +70,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
         public override void EnterFunctionDefinition(SolidityParser.FunctionDefinitionContext context)
         {
-            FunctionDescriptorListener functionDescriptorListener = new FunctionDescriptorListener();
+            FunctionDescriptorListener functionDescriptorListener = new FunctionDescriptorListener(classInfo.className.ShortName);
             context.functionDescriptor().EnterRule(functionDescriptorListener);
 
             ModifierListListener modifierListListener = new ModifierListListener();
@@ -102,7 +101,14 @@ namespace antlr_parser.Antlr4Impl.Solidity
         
         class FunctionDescriptorListener : SolidityBaseListener
         {
-            public string FunctionName = "anonymous";
+            public string FunctionName;
+            
+            public FunctionDescriptorListener(string classNameString)
+            {
+                // default to constructor name
+                FunctionName = classNameString;
+            }
+
             public override void EnterFunctionDescriptor(SolidityParser.FunctionDescriptorContext context)
             {
                 if (context.identifier() != null)
@@ -116,33 +122,40 @@ namespace antlr_parser.Antlr4Impl.Solidity
     public class ModifierListListener : SolidityBaseListener
     {
         public AccessFlags AccessFlags;
+        public TypeName ReturnType = TypeName.For("void");
+        
         public override void EnterModifierList(SolidityParser.ModifierListContext context)
         {
+            string typeString = "";
             foreach (SolidityParser.ModifierInvocationContext modifierInvocationContext in context.modifierInvocation())
             {
-                string s = modifierInvocationContext.identifier().GetFullText();
-                Console.WriteLine(s);
-            }
-            
-            AccessFlags = AccessFlags.None;
-            string modText = context.GetFullText();
-            switch (modText)
-            {
-                case "public":
-                case "external":
-                case "external view":
-                    AccessFlags = AccessFlags.AccPublic;
-                    break;
-                case "internal":
-                case "internal view":
-                    AccessFlags = AccessFlags.AccPrivate;
-                    break;
-                default:
-                    Console.WriteLine(modText);
-                    break;
+                // TODO not sure if this is the return type
+                typeString += modifierInvocationContext.identifier().GetFullText();
             }
 
-            
+            if (!string.IsNullOrEmpty(typeString))
+            {
+                ReturnType = TypeName.For(typeString);
+            }
+
+            AccessFlags = AccessFlags.None;
+            string modText = context.GetFullText();
+            if (modText.StartsWith("public") || modText.StartsWith("external"))
+            {
+                AccessFlags = AccessFlags.AccPublic;
+            }
+            else if (modText.StartsWith("private") || modText.StartsWith("internal"))
+            {
+                AccessFlags = AccessFlags.AccPrivate;
+            }
+            else if (modText.Contains("public"))
+            {
+                AccessFlags = AccessFlags.AccPublic;
+            }
+            else
+            {
+                Console.WriteLine($"unknown modifier {modText}");
+            }
         }
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
 
@@ -26,7 +25,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
                 SourceUnitListener sourceUnitListener = new SourceUnitListener(filePath);
                 parser.sourceUnit().EnterRule(sourceUnitListener);
 
-                return new List<ClassInfo> {sourceUnitListener.FileClassInfo};
+                return sourceUnitListener.ClassInfos;
             }
             catch (Exception e)
             {
@@ -38,7 +37,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
         class SourceUnitListener : SolidityBaseListener
         {
-            public ClassInfo FileClassInfo;
+            public List<ClassInfo> ClassInfos;
             readonly string filePath;
 
             public SourceUnitListener(string filePath)
@@ -48,26 +47,13 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
             public override void EnterSourceUnit(SolidityParser.SourceUnitContext context)
             {
-                ClassName fileClassName = new ClassName(
-                    new FileName(filePath),
-                    new PackageName(),
-                    Path.GetFileNameWithoutExtension(filePath));
-
-                FileClassInfo = new ClassInfo(
-                    fileClassName,
-                    new List<MethodInfo>(),
-                    new List<FieldInfo>(),
-                    AccessFlags.AccPublic,
-                    new List<ClassInfo>(),
-                    new SourceCodeSnippet("", SourceCodeLanguage.Solidity),
-                    false);
-
                 foreach (SolidityParser.ContractDefinitionContext contractDefinitionContext in context
                     .contractDefinition())
                 {
                     ContractDefinitionListener contractDefinitionListener =
-                        new ContractDefinitionListener(FileClassInfo);
+                        new ContractDefinitionListener(filePath);
                     contractDefinitionContext.EnterRule(contractDefinitionListener);
+                    ClassInfos.Add(contractDefinitionListener.ContractClassInfo);
                 }
             }
         }
