@@ -37,7 +37,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
         class SourceUnitListener : SolidityBaseListener
         {
-            public List<ClassInfo> ClassInfos;
+            public readonly List<ClassInfo> ClassInfos = new List<ClassInfo>();
             readonly string filePath;
 
             public SourceUnitListener(string filePath)
