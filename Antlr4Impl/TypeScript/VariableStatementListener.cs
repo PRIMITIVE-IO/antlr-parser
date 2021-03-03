@@ -55,7 +55,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
             // add single line expressions to the outer fileClass header source
             string newSourceText = outerClassInfo.SourceCode.Text + "\n" + context.singleExpression();
-            outerClassInfo.SourceCode = new SourceCodeSnippet(newSourceText, SourceCodeLanguage.JavaScript);
+            outerClassInfo.SourceCode = new SourceCodeSnippet(newSourceText, SourceCodeLanguage.TypeScript);
         }
     }
 }

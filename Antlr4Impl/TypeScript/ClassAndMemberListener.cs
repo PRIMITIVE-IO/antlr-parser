@@ -27,7 +27,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 new List<FieldInfo>(),
                 AccessFlags.AccPublic,
                 new List<ClassInfo>(),
-                new SourceCodeSnippet(context.GetFullText(), SourceCodeLanguage.JavaScript),
+                new SourceCodeSnippet(context.GetFullText(), SourceCodeLanguage.TypeScript),
                 false);
 
             outerClassInfo.Children.Add(classInfo);

@@ -115,7 +115,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 outerClassInfo.className,
                 arguments,
                 returnType,
-                new SourceCodeSnippet(context.GetFullText(), SourceCodeLanguage.JavaScript));
+                new SourceCodeSnippet(context.GetFullText(), SourceCodeLanguage.TypeScript));
 
             outerClassInfo.Children.Add(expressionMethodInfo);
         }

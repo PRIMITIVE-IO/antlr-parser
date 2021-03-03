@@ -25,7 +25,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 new List<FieldInfo>(),
                 AccessFlags.AccPublic,
                 new List<ClassInfo>(), 
-                new SourceCodeSnippet("", SourceCodeLanguage.JavaScript),
+                new SourceCodeSnippet("", SourceCodeLanguage.TypeScript),
                 false);
             
             SourceElementsListener sourceElementsListener = new SourceElementsListener(FileClassInfo);
