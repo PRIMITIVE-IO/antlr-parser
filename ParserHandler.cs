@@ -3,6 +3,7 @@ using System.IO;
 using antlr_parser.Antlr4Impl.Java;
 using antlr_parser.Antlr4Impl.JavaScript;
 using antlr_parser.Antlr4Impl.Kotlin;
+using antlr_parser.Antlr4Impl.Solidity;
 using PrimitiveCodebaseElements.Primitive;
 
 namespace antlr_parser
@@ -13,14 +14,14 @@ namespace antlr_parser
         public static readonly HashSet<string> SupportedParsableFiles =
             new HashSet<string>
             {
-                ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3", ".js", ".jsx", ".kt"
+                ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3", ".js", ".jsx", ".kt", ".sol"
             };
 
         static readonly HashSet<string> SupportedUnparsableFiles =
             new HashSet<string>
             {
                 // files to be parsed in the future
-                ".sc", ".sol", ".rs", ".ts", ".go", ".class", ".clj", ".cxx", ".el", ".lua",
+                ".sc", ".rs", ".ts", ".go", ".class", ".clj", ".cxx", ".el", ".lua",
                 ".m4", ".php", ".pl", ".po", ".rb", ".sh", ".swift", ".vb",
                 // other data formats
                 ".txt", ".md", ".html", ".json", ".xml", ".sql", ".yaml", ".hbs", ".sh", ".vcxproj", ".xcodeproj", 
@@ -71,6 +72,10 @@ namespace antlr_parser
                 case ".kt":
                     return AntlrParseKotlin.OuterClassInfosFromKotlinSource(
                         sourceText,
+                        filePath);
+                case ".sol":
+                    return AntlrParseSolidity.OuterClassInfosFromKotlinSource(
+                        sourceText, 
                         filePath);
             }
 
