@@ -41,7 +41,7 @@ namespace antlr_parser.Antlr4Impl.Java
                 ClassDeclarationListener classDeclarationListener =
                     new ClassDeclarationListener(parentFilePath, packageFqn, modifier);
                 context.classDeclaration().EnterRule(classDeclarationListener);
-                OuterClassInfo = classDeclarationListener.ClassInfo;
+                OuterClassInfo = classDeclarationListener.OuterClass;
             }
 
             if (context.interfaceDeclaration() != null)
@@ -61,7 +61,7 @@ namespace antlr_parser.Antlr4Impl.Java
             }
         }
 
-        public static AccessFlags GetAccessFlags(JavaParser.TypeDeclarationContext context)
+        static AccessFlags GetAccessFlags(JavaParser.TypeDeclarationContext context)
         {
             ModifierListener modifierListener = new ModifierListener();
             AccessFlags modifier = AccessFlags.None;
@@ -74,74 +74,74 @@ namespace antlr_parser.Antlr4Impl.Java
 
             return modifier;
         }
-    }
 
-    public class ModifierListener : JavaParserBaseListener
-    {
-        public AccessFlags flag;
-
-        public override void EnterClassOrInterfaceModifier(JavaParser.ClassOrInterfaceModifierContext context)
+        class ModifierListener : JavaParserBaseListener
         {
-            if (context.FINAL() != null)
-            {
-                flag = AccessFlags.AccFinal;
-            }
+            public AccessFlags flag;
 
-            if (context.PUBLIC() != null)
+            public override void EnterClassOrInterfaceModifier(JavaParser.ClassOrInterfaceModifierContext context)
             {
-                flag = AccessFlags.AccPublic;
-            }
+                if (context.FINAL() != null)
+                {
+                    flag = AccessFlags.AccFinal;
+                }
 
-            if (context.STATIC() != null)
-            {
-                flag = AccessFlags.AccStatic;
-            }
+                if (context.PUBLIC() != null)
+                {
+                    flag = AccessFlags.AccPublic;
+                }
 
-            if (context.PRIVATE() != null)
-            {
-                flag = AccessFlags.AccPrivate;
-            }
+                if (context.STATIC() != null)
+                {
+                    flag = AccessFlags.AccStatic;
+                }
 
-            if (context.ABSTRACT() != null)
-            {
-                flag = AccessFlags.AccAbstract;
-            }
+                if (context.PRIVATE() != null)
+                {
+                    flag = AccessFlags.AccPrivate;
+                }
 
-            if (context.STRICTFP() != null)
-            {
-                flag = AccessFlags.AccStrict;
-            }
+                if (context.ABSTRACT() != null)
+                {
+                    flag = AccessFlags.AccAbstract;
+                }
 
-            if (context.PROTECTED() != null)
-            {
-                flag = AccessFlags.AccProtected;
+                if (context.STRICTFP() != null)
+                {
+                    flag = AccessFlags.AccStrict;
+                }
+
+                if (context.PROTECTED() != null)
+                {
+                    flag = AccessFlags.AccProtected;
+                }
             }
         }
-    }
 
-    public class AnnotationTypeDeclarationListener : JavaParserBaseListener
-    {
-        public string Body;
-        public string ID;
-
-        public override void EnterAnnotationTypeDeclaration(JavaParser.AnnotationTypeDeclarationContext context)
+        class AnnotationTypeDeclarationListener : JavaParserBaseListener
         {
-            ID = context.IDENTIFIER().GetText();
+            public string Body;
+            public string ID;
 
-            AnnotationTypeBodyListener annotationTypeBodyListener =
-                new AnnotationTypeBodyListener();
-            context.annotationTypeBody().EnterRule(annotationTypeBodyListener);
-            Body = annotationTypeBodyListener.Body;
-        }
-    }
+            public override void EnterAnnotationTypeDeclaration(JavaParser.AnnotationTypeDeclarationContext context)
+            {
+                ID = context.IDENTIFIER().GetText();
 
-    public class AnnotationTypeBodyListener : JavaParserBaseListener
-    {
-        public string Body;
+                AnnotationTypeBodyListener annotationTypeBodyListener =
+                    new AnnotationTypeBodyListener();
+                context.annotationTypeBody().EnterRule(annotationTypeBodyListener);
+                Body = annotationTypeBodyListener.Body;
+            }
 
-        public override void EnterAnnotationTypeBody(JavaParser.AnnotationTypeBodyContext context)
-        {
-            Body = context.GetText();
+            class AnnotationTypeBodyListener : JavaParserBaseListener
+            {
+                public string Body;
+
+                public override void EnterAnnotationTypeBody(JavaParser.AnnotationTypeBodyContext context)
+                {
+                    Body = context.GetText();
+                }
+            }
         }
     }
 
@@ -154,34 +154,31 @@ namespace antlr_parser.Antlr4Impl.Java
         readonly string parentFileName;
         readonly string packageFqn;
         readonly AccessFlags modifier;
-        public ClassInfo ClassInfo;
-        readonly ClassName outerClass;
+        
+        readonly ClassInfo parentClass;
+        
+        // only set if this is a top level outer class
+        public ClassInfo OuterClass;
 
         public ClassDeclarationListener(
             string parentFileName,
             string packageFqn,
-            AccessFlags modifier,
-            ClassName outerClass = null)
+            AccessFlags modifier)
         {
             this.parentFileName = parentFileName;
             this.packageFqn = packageFqn;
             this.modifier = modifier;
-            this.outerClass = outerClass;
+        }
+
+        public ClassDeclarationListener(ClassInfo parentClass)
+        {
+            this.parentClass = parentClass;
         }
 
         public override void EnterClassDeclaration(JavaParser.ClassDeclarationContext context)
         {
             string name = context.IDENTIFIER().GetText();
-            if (outerClass != null)
-            {
-                name = $"{outerClass.ShortName}${name}";
-            }
-
-            ClassName className = new ClassName(
-                new FileName(parentFileName),
-                new PackageName(packageFqn),
-                name);
-
+            
             string headerText = context.GetFullText();
             if (headerText.Contains("{"))
             {
@@ -190,94 +187,90 @@ namespace antlr_parser.Antlr4Impl.Java
                     headerText.IndexOf("{", StringComparison.Ordinal));
             }
 
-            ClassBodyListener classBodyListener = new ClassBodyListener(className, parentFileName, packageFqn);
-            context.classBody().EnterRule(classBodyListener);
+            ClassInfo newClassInfo;
 
-            ClassInfo = new ClassInfo(
-                className,
-                classBodyListener.MethodInfos,
-                classBodyListener.FieldInfos,
-                modifier,
-                classBodyListener.InnerClasses,
-                new SourceCodeSnippet(headerText, SourceCodeLanguage.Java),
-                false);
-        }
-    }
-
-    public class ClassBodyListener : JavaParserBaseListener
-    {
-        readonly ClassName parentClass;
-        readonly string package;
-        readonly string packageFqn;
-
-        public ClassBodyListener(ClassName parentClass, string package, string packageFqn)
-        {
-            this.parentClass = parentClass;
-            this.package = package;
-            this.packageFqn = packageFqn;
-        }
-
-        public List<MethodInfo> MethodInfos;
-        public List<FieldInfo> FieldInfos;
-        public List<ClassInfo> InnerClasses;
-
-        public override void EnterClassBody(JavaParser.ClassBodyContext context)
-        {
-            ClassBodyDeclarationListener classBodyDeclarationListener =
-                new ClassBodyDeclarationListener(parentClass, package, packageFqn);
-            foreach (JavaParser.ClassBodyDeclarationContext classBodyDeclarationContext in
-                context.classBodyDeclaration())
+            if (parentClass != null)
             {
-                classBodyDeclarationContext.EnterRule(classBodyDeclarationListener);
+                name = $"{parentClass.className.ShortName}${name}";
+                
+                ClassName className = new ClassName(
+                    parentClass.className.ContainmentFile(),
+                    parentClass.className.ContainmentPackage,
+                    name);
+                
+                newClassInfo = new ClassInfo(
+                    className,
+                    new List<MethodInfo>(),
+                    new List<FieldInfo>(),
+                    AccessFlags.AccPrivate,
+                    new List<ClassInfo>(),
+                    new SourceCodeSnippet(headerText, SourceCodeLanguage.Java),
+                    false);
+                
+                parentClass.Children.Add(newClassInfo);   
+            }
+            else
+            {
+                // top level class
+                ClassName className = new ClassName(
+                    new FileName(parentFileName),
+                    new PackageName(packageFqn),
+                    name);    
+                
+                newClassInfo = new ClassInfo(
+                    className,
+                    new List<MethodInfo>(),
+                    new List<FieldInfo>(),
+                    modifier,
+                    new List<ClassInfo>(),
+                    new SourceCodeSnippet(headerText, SourceCodeLanguage.Java),
+                    false);
+
+                OuterClass = newClassInfo;
             }
 
-            MethodInfos = classBodyDeclarationListener.MethodInfos;
-            FieldInfos = classBodyDeclarationListener.FieldInfos;
-            InnerClasses = classBodyDeclarationListener.InnerClasses;
+            ClassBodyListener classBodyListener = new ClassBodyListener(newClassInfo);
+            context.classBody().EnterRule(classBodyListener);
+        }
+
+        class ClassBodyListener : JavaParserBaseListener
+        {
+            readonly ClassInfo parentClass;
+
+            public ClassBodyListener(ClassInfo parentClass)
+            {
+                this.parentClass = parentClass;
+            }
+
+            public override void EnterClassBody(JavaParser.ClassBodyContext context)
+            {
+                ClassBodyDeclarationListener classBodyDeclarationListener =
+                    new ClassBodyDeclarationListener(parentClass);
+                foreach (JavaParser.ClassBodyDeclarationContext classBodyDeclarationContext in
+                    context.classBodyDeclaration())
+                {
+                    classBodyDeclarationContext.EnterRule(classBodyDeclarationListener);
+                }
+            }
         }
     }
 
     public class ClassBodyDeclarationListener : JavaParserBaseListener
     {
-        readonly ClassName parentClassName;
-        readonly string package;
-        readonly string packageFqn;
+        readonly ClassInfo parentClass;
 
-        public readonly List<MethodInfo> MethodInfos = new List<MethodInfo>();
-        public readonly List<FieldInfo> FieldInfos = new List<FieldInfo>();
-        public readonly List<ClassInfo> InnerClasses = new List<ClassInfo>();
-
-        public ClassBodyDeclarationListener(
-            ClassName parentClassName,
-            string package,
-            string packageFqn)
+        public ClassBodyDeclarationListener(ClassInfo parentClass)
         {
-            this.parentClassName = parentClassName;
-            this.package = package;
-            this.packageFqn = packageFqn;
+            this.parentClass = parentClass;
         }
 
         public override void EnterClassBodyDeclaration(JavaParser.ClassBodyDeclarationContext context)
         {
             if (context.memberDeclaration() == null) return;
             MemberDeclarationListener memberDeclarationListener =
-                new MemberDeclarationListener(parentClassName, package, packageFqn);
+                new MemberDeclarationListener(parentClass);
 
             context.memberDeclaration().EnterRule(memberDeclarationListener);
-            if (memberDeclarationListener.MethodInfo != null)
-            {
-                MethodInfos.Add(memberDeclarationListener.MethodInfo);
-            }
-
-            if (memberDeclarationListener.FieldInfo != null)
-            {
-                FieldInfos.Add(memberDeclarationListener.FieldInfo);
-            }
-
-            if (memberDeclarationListener.InnerClassInfo != null)
-            {
-                InnerClasses.Add(memberDeclarationListener.InnerClassInfo);
-            }
         }
     }
 
@@ -303,12 +296,11 @@ namespace antlr_parser.Antlr4Impl.Java
         {
             string name = context.IDENTIFIER().GetText();
 
-            
             ClassName className = new ClassName(
                 new FileName(parentFilePath),
                 new PackageName(packageFqn),
                 name);
-            
+
             string headerText = context.GetFullText();
             if (headerText.Contains("{"))
             {
@@ -317,68 +309,60 @@ namespace antlr_parser.Antlr4Impl.Java
                     headerText.IndexOf("{", StringComparison.Ordinal));
             }
 
-            InterfaceBodyListener classBodyListener =
-                new InterfaceBodyListener(className);
-            context.interfaceBody().EnterRule(classBodyListener);
-
             InterfaceInfo = new ClassInfo(
                 className,
-                classBodyListener.MethodInfos,
+                new List<MethodInfo>(),
                 new List<FieldInfo>(),
                 modifier,
                 new List<ClassInfo>(),
                 new SourceCodeSnippet(headerText, SourceCodeLanguage.Java),
                 false);
-        }
-    }
-
-    public class InterfaceBodyListener : JavaParserBaseListener
-    {
-        readonly ClassName parentClass;
-
-        public InterfaceBodyListener(ClassName parentClass)
-        {
-            this.parentClass = parentClass;
+            
+            InterfaceBodyListener classBodyListener =
+                new InterfaceBodyListener(InterfaceInfo);
+            context.interfaceBody().EnterRule(classBodyListener);
         }
 
-        public List<MethodInfo> MethodInfos;
-
-        public override void EnterInterfaceBody(JavaParser.InterfaceBodyContext context)
+        class InterfaceBodyListener : JavaParserBaseListener
         {
-            InterfaceBodyDeclarationListener classBodyDeclarationListener =
-                new InterfaceBodyDeclarationListener(parentClass);
-            foreach (JavaParser.InterfaceBodyDeclarationContext classBodyDeclarationContext in
-                context.interfaceBodyDeclaration())
+            readonly ClassInfo parentClass;
+
+            public InterfaceBodyListener(ClassInfo parentClass)
             {
-                classBodyDeclarationContext.EnterRule(classBodyDeclarationListener);
+                this.parentClass = parentClass;
             }
 
-            MethodInfos = classBodyDeclarationListener.MethodInfos;
-        }
-    }
-
-    public class InterfaceBodyDeclarationListener : JavaParserBaseListener
-    {
-        readonly ClassName parentClassName;
-
-        public readonly List<MethodInfo> MethodInfos = new List<MethodInfo>();
-
-        public InterfaceBodyDeclarationListener(ClassName parentClassName)
-        {
-            this.parentClassName = parentClassName;
-        }
-
-        public override void EnterInterfaceBodyDeclaration(
-            JavaParser.InterfaceBodyDeclarationContext context)
-        {
-            if (context.interfaceMemberDeclaration() == null) return;
-            InterfaceMemberDeclarationListener memberDeclarationListener =
-                new InterfaceMemberDeclarationListener(parentClassName);
-
-            context.interfaceMemberDeclaration().EnterRule(memberDeclarationListener);
-            if (memberDeclarationListener.MethodInfo != null)
+            public override void EnterInterfaceBody(JavaParser.InterfaceBodyContext context)
             {
-                MethodInfos.Add(memberDeclarationListener.MethodInfo);
+                InterfaceBodyDeclarationListener classBodyDeclarationListener =
+                    new InterfaceBodyDeclarationListener(parentClass);
+                foreach (JavaParser.InterfaceBodyDeclarationContext classBodyDeclarationContext in
+                    context.interfaceBodyDeclaration())
+                {
+                    classBodyDeclarationContext.EnterRule(classBodyDeclarationListener);
+                }
+            }
+
+            class InterfaceBodyDeclarationListener : JavaParserBaseListener
+            {
+                readonly ClassInfo parentClass;
+
+                public readonly List<MethodInfo> MethodInfos = new List<MethodInfo>();
+
+                public InterfaceBodyDeclarationListener(ClassInfo parentClass)
+                {
+                    this.parentClass = parentClass;
+                }
+
+                public override void EnterInterfaceBodyDeclaration(
+                    JavaParser.InterfaceBodyDeclarationContext context)
+                {
+                    if (context.interfaceMemberDeclaration() == null) return;
+                    InterfaceMemberDeclarationListener memberDeclarationListener =
+                        new InterfaceMemberDeclarationListener(parentClass);
+
+                    context.interfaceMemberDeclaration().EnterRule(memberDeclarationListener);
+                }
             }
         }
     }
@@ -406,45 +390,41 @@ namespace antlr_parser.Antlr4Impl.Java
                 new PackageName(packageFqn),
                 name);
 
-            EnumBodyDeclarationsListener enumBodyDeclarationsListener =
-                new EnumBodyDeclarationsListener(enumName, parentFilePath, packageFqn);
-            context.enumBodyDeclarations().EnterRule(enumBodyDeclarationsListener);
-
             EnumInfo = new ClassInfo(
                 enumName,
                 new List<MethodInfo>(),
-                enumBodyDeclarationsListener.FieldInfos,
+                new List<FieldInfo>(),
                 modifier,
                 new List<ClassInfo>(),
-                new SourceCodeSnippet("", SourceCodeLanguage.Java), 
+                new SourceCodeSnippet("", SourceCodeLanguage.Java),
                 false);
-        }
-    }
 
-    public class EnumBodyDeclarationsListener : JavaParserBaseListener
-    {
-        readonly ClassName parentClassName;
-        readonly string parentFilePath;
-        readonly string packageFqn;
-
-        public readonly List<FieldInfo> FieldInfos = new List<FieldInfo>();
-
-        public EnumBodyDeclarationsListener(ClassName parentClassName, string parentFilePath, string packageFqn)
-        {
-            this.parentClassName = parentClassName;
-            this.parentFilePath = parentFilePath;
-            this.packageFqn = packageFqn;
-        }
-
-        public override void EnterEnumBodyDeclarations(JavaParser.EnumBodyDeclarationsContext context)
-        {
-            ClassBodyDeclarationListener classBodyDeclarationListener =
-                new ClassBodyDeclarationListener(parentClassName, parentFilePath, packageFqn);
-            foreach (JavaParser.ClassBodyDeclarationContext classBodyDeclarationContext
-                in context.classBodyDeclaration())
+            if (context.enumBodyDeclarations() != null)
             {
-                classBodyDeclarationContext.EnterRule(classBodyDeclarationListener);
-                FieldInfos.AddRange(classBodyDeclarationListener.FieldInfos);
+                EnumBodyDeclarationsListener enumBodyDeclarationsListener =
+                    new EnumBodyDeclarationsListener(EnumInfo);
+                context.enumBodyDeclarations().EnterRule(enumBodyDeclarationsListener);
+            }
+        }
+
+        class EnumBodyDeclarationsListener : JavaParserBaseListener
+        {
+            readonly ClassInfo parentClass;
+
+            public EnumBodyDeclarationsListener(ClassInfo parentClass)
+            {
+                this.parentClass = parentClass;
+            }
+
+            public override void EnterEnumBodyDeclarations(JavaParser.EnumBodyDeclarationsContext context)
+            {
+                ClassBodyDeclarationListener classBodyDeclarationListener =
+                    new ClassBodyDeclarationListener(parentClass);
+                foreach (JavaParser.ClassBodyDeclarationContext classBodyDeclarationContext
+                    in context.classBodyDeclaration())
+                {
+                    classBodyDeclarationContext.EnterRule(classBodyDeclarationListener);
+                }
             }
         }
     }
@@ -483,140 +463,133 @@ namespace antlr_parser.Antlr4Impl.Java
                 PrimitiveTypeName = primitiveTypeListener.PrimitiveTypeName;
             }
         }
-    }
 
-    public class AnnotationListener : JavaParserBaseListener
-    {
-        public string QualifiedName;
-
-        public override void EnterAnnotation(JavaParser.AnnotationContext context)
+        class AnnotationListener : JavaParserBaseListener
         {
-            QualifiedName = context.qualifiedName().GetText();
-        }
-    }
+            public string QualifiedName;
 
-    public class ClassOrInterfaceTypeListener : JavaParserBaseListener
-    {
-        public string id;
-
-        public override void EnterClassOrInterfaceType(JavaParser.ClassOrInterfaceTypeContext context)
-        {
-            TypeArgumentsListener typeArgumentsListener = new TypeArgumentsListener();
-            List<string> typeArguments = new List<string>();
-            foreach (JavaParser.TypeArgumentsContext typeArgumentsContext in context.typeArguments())
+            public override void EnterAnnotation(JavaParser.AnnotationContext context)
             {
-                typeArgumentsContext.EnterRule(typeArgumentsListener);
-                typeArguments.AddRange(typeArgumentsListener.typeArguments);
-            }
-
-            if (typeArguments.Any())
-            {
-                id = "";
-            }
-
-            foreach (string typeArgument in typeArguments)
-            {
-                id += typeArgument;
+                QualifiedName = context.qualifiedName().GetText();
             }
         }
-    }
 
-    public class PrimitiveTypeListener : JavaParserBaseListener
-    {
-        public PrimitiveTypeName PrimitiveTypeName;
-
-        public override void EnterPrimitiveType(JavaParser.PrimitiveTypeContext context)
+        class ClassOrInterfaceTypeListener : JavaParserBaseListener
         {
-            if (context.INT() != null)
+            public string id;
+
+            public override void EnterClassOrInterfaceType(JavaParser.ClassOrInterfaceTypeContext context)
             {
-                PrimitiveTypeName = TypeName.For("int") as PrimitiveTypeName;
+                TypeArgumentsListener typeArgumentsListener = new TypeArgumentsListener();
+                List<string> typeArguments = new List<string>();
+                foreach (JavaParser.TypeArgumentsContext typeArgumentsContext in context.typeArguments())
+                {
+                    typeArgumentsContext.EnterRule(typeArgumentsListener);
+                    typeArguments.AddRange(typeArgumentsListener.typeArguments);
+                }
+
+                if (typeArguments.Any())
+                {
+                    id = "";
+                }
+
+                foreach (string typeArgument in typeArguments)
+                {
+                    id += typeArgument;
+                }
             }
 
-            if (context.BYTE() != null)
+            class TypeArgumentsListener : JavaParserBaseListener
             {
-                PrimitiveTypeName = TypeName.For("byte") as PrimitiveTypeName;
-            }
+                public readonly List<string> typeArguments = new List<string>();
 
-            if (context.CHAR() != null)
-            {
-                PrimitiveTypeName = TypeName.For("char") as PrimitiveTypeName;
-            }
+                public override void EnterTypeArguments(JavaParser.TypeArgumentsContext context)
+                {
+                    TypeArgumentListener typeArgumentListener = new TypeArgumentListener();
+                    foreach (JavaParser.TypeArgumentContext typeArgumentContext in context.typeArgument())
+                    {
+                        typeArgumentContext.EnterRule(typeArgumentListener);
+                        typeArguments.Add(typeArgumentListener.Type);
+                    }
+                }
 
-            if (context.LONG() != null)
-            {
-                PrimitiveTypeName = TypeName.For("long") as PrimitiveTypeName;
-            }
+                class TypeArgumentListener : JavaParserBaseListener
+                {
+                    public string Type;
 
-            if (context.FLOAT() != null)
-            {
-                PrimitiveTypeName = TypeName.For("float") as PrimitiveTypeName;
-            }
+                    public override void EnterTypeArgument(JavaParser.TypeArgumentContext context)
+                    {
+                        if (context.typeType() == null)
+                        {
+                            Type = TypeName.For("void").Signature;
+                            return;
+                        }
 
-            if (context.SHORT() != null)
-            {
-                PrimitiveTypeName = TypeName.For("short") as PrimitiveTypeName;
-            }
+                        TypeTypeListener typeTypeListener = new TypeTypeListener();
+                        context.typeType().EnterRule(typeTypeListener);
 
-            if (context.DOUBLE() != null)
-            {
-                PrimitiveTypeName = TypeName.For("double") as PrimitiveTypeName;
-            }
-
-            if (context.BOOLEAN() != null)
-            {
-                PrimitiveTypeName = TypeName.For("bool") as PrimitiveTypeName;
+                        if (typeTypeListener.ID != null)
+                        {
+                            Type = typeTypeListener.ID;
+                        }
+                        else if (typeTypeListener.QualifiedName != null)
+                        {
+                            Type = typeTypeListener.QualifiedName;
+                        }
+                        else if (typeTypeListener.PrimitiveTypeName != null)
+                        {
+                            Type = TypeName.For("void").Signature;
+                        }
+                    }
+                }
             }
         }
-    }
 
-    public class TypeListListener : JavaParserBaseListener
-    {
-        public override void EnterTypeList(JavaParser.TypeListContext context)
+        class PrimitiveTypeListener : JavaParserBaseListener
         {
-        }
-    }
+            public PrimitiveTypeName PrimitiveTypeName;
 
-    public class TypeArgumentsListener : JavaParserBaseListener
-    {
-        public readonly List<string> typeArguments = new List<string>();
-
-        public override void EnterTypeArguments(JavaParser.TypeArgumentsContext context)
-        {
-            TypeArgumentListener typeArgumentListener = new TypeArgumentListener();
-            foreach (JavaParser.TypeArgumentContext typeArgumentContext in context.typeArgument())
+            public override void EnterPrimitiveType(JavaParser.PrimitiveTypeContext context)
             {
-                typeArgumentContext.EnterRule(typeArgumentListener);
-                typeArguments.Add(typeArgumentListener.Type);
-            }
-        }
-    }
+                if (context.INT() != null)
+                {
+                    PrimitiveTypeName = TypeName.For("int") as PrimitiveTypeName;
+                }
 
-    public class TypeArgumentListener : JavaParserBaseListener
-    {
-        public string Type;
+                if (context.BYTE() != null)
+                {
+                    PrimitiveTypeName = TypeName.For("byte") as PrimitiveTypeName;
+                }
 
-        public override void EnterTypeArgument(JavaParser.TypeArgumentContext context)
-        {
-            if (context.typeType() == null)
-            {
-                Type = TypeName.For("void").Signature;
-                return;
-            }
+                if (context.CHAR() != null)
+                {
+                    PrimitiveTypeName = TypeName.For("char") as PrimitiveTypeName;
+                }
 
-            TypeTypeListener typeTypeListener = new TypeTypeListener();
-            context.typeType().EnterRule(typeTypeListener);
+                if (context.LONG() != null)
+                {
+                    PrimitiveTypeName = TypeName.For("long") as PrimitiveTypeName;
+                }
 
-            if (typeTypeListener.ID != null)
-            {
-                Type = typeTypeListener.ID;
-            }
-            else if (typeTypeListener.QualifiedName != null)
-            {
-                Type = typeTypeListener.QualifiedName;
-            }
-            else if (typeTypeListener.PrimitiveTypeName != null)
-            {
-                Type = TypeName.For("void").Signature;
+                if (context.FLOAT() != null)
+                {
+                    PrimitiveTypeName = TypeName.For("float") as PrimitiveTypeName;
+                }
+
+                if (context.SHORT() != null)
+                {
+                    PrimitiveTypeName = TypeName.For("short") as PrimitiveTypeName;
+                }
+
+                if (context.DOUBLE() != null)
+                {
+                    PrimitiveTypeName = TypeName.For("double") as PrimitiveTypeName;
+                }
+
+                if (context.BOOLEAN() != null)
+                {
+                    PrimitiveTypeName = TypeName.For("bool") as PrimitiveTypeName;
+                }
             }
         }
     }

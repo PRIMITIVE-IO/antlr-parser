@@ -8,13 +8,14 @@ namespace antlr_parser.Antlr4Impl.Java
     /// </summary>
     public class CompilationUnitListener : JavaParserBaseListener
     {
-        public readonly List<ClassInfo> OuterClassInfos = new List<ClassInfo>(); 
+        public readonly List<ClassInfo> OuterClassInfos = new List<ClassInfo>();
         readonly string filePath;
+
         public CompilationUnitListener(string filePath)
         {
             this.filePath = filePath;
         }
-        
+
         public override void EnterCompilationUnit(JavaParser.CompilationUnitContext context)
         {
             PackageDeclarationListener packageDeclarationListener = new PackageDeclarationListener();
@@ -29,7 +30,7 @@ namespace antlr_parser.Antlr4Impl.Java
             foreach (JavaParser.TypeDeclarationContext typeDeclarationContext in context.typeDeclaration())
             {
                 typeDeclarationContext.EnterRule(typeDeclarationListener);
-                
+
                 // this type declaration can be a class, enum, or interface
                 if (typeDeclarationListener.OuterClassInfo != null)
                 {
@@ -50,14 +51,15 @@ namespace antlr_parser.Antlr4Impl.Java
                 }
             }
         }
-    }
 
-    public class PackageDeclarationListener : JavaParserBaseListener
-    {
-        public string QualifiedName;
-        public override void EnterPackageDeclaration(JavaParser.PackageDeclarationContext context)
+        class PackageDeclarationListener : JavaParserBaseListener
         {
-            QualifiedName = context.qualifiedName().GetText();
+            public string QualifiedName = "";
+
+            public override void EnterPackageDeclaration(JavaParser.PackageDeclarationContext context)
+            {
+                QualifiedName = context.qualifiedName().GetText();
+            }
         }
     }
 }

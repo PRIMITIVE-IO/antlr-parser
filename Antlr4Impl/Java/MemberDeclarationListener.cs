@@ -11,19 +11,11 @@ namespace antlr_parser.Antlr4Impl.Java
     /// </summary>
     public class MemberDeclarationListener : JavaParserBaseListener
     {
-        readonly ClassName parentClassName;
-        readonly string package;
-        readonly string packageFqn;
+        readonly ClassInfo parentClass;
 
-        public MethodInfo MethodInfo;
-        public FieldInfo FieldInfo;
-        public ClassInfo InnerClassInfo;
-
-        public MemberDeclarationListener(ClassName parentClassName, string package, string packageFqn)
+        public MemberDeclarationListener(ClassInfo parentClass)
         {
-            this.parentClassName = parentClassName;
-            this.package = package;
-            this.packageFqn = packageFqn;
+            this.parentClass = parentClass;
         }
 
         public override void EnterMemberDeclaration(JavaParser.MemberDeclarationContext context)
@@ -32,49 +24,40 @@ namespace antlr_parser.Antlr4Impl.Java
             if (context.methodDeclaration() != null)
             {
                 MethodDeclarationListener methodDeclarationListener =
-                    new MethodDeclarationListener(parentClassName);
+                    new MethodDeclarationListener(parentClass);
                 context.methodDeclaration().EnterRule(methodDeclarationListener);
-                MethodInfo = methodDeclarationListener.MethodInfo;
             }
 
             if (context.constructorDeclaration() != null)
             {
                 ConstructorDeclarationListener constructorDeclarationListener =
-                    new ConstructorDeclarationListener(parentClassName);
+                    new ConstructorDeclarationListener(parentClass);
                 context.constructorDeclaration().EnterRule(constructorDeclarationListener);
-                MethodInfo = constructorDeclarationListener.MethodInfo;
             }
 
             if (context.fieldDeclaration() != null)
             {
                 FieldDeclarationListener fieldDeclarationListener =
-                    new FieldDeclarationListener(parentClassName);
+                    new FieldDeclarationListener(parentClass);
                 context.fieldDeclaration().EnterRule(fieldDeclarationListener);
-                FieldInfo = fieldDeclarationListener.FieldInfo;
             }
 
             if (context.classDeclaration() != null)
             {
                 ClassDeclarationListener classDeclarationListener =
-                    new ClassDeclarationListener(
-                        package,
-                        packageFqn,
-                        AccessFlags.AccPrivate, // TODO
-                        parentClassName);
+                    new ClassDeclarationListener(parentClass);
                 context.classDeclaration().EnterRule(classDeclarationListener);
-                InnerClassInfo = classDeclarationListener.ClassInfo;
             }
         }
     }
 
     public class InterfaceMemberDeclarationListener : JavaParserBaseListener
     {
-        readonly ClassName parentClassName;
-        public MethodInfo MethodInfo;
+        readonly ClassInfo parentClass;
 
-        public InterfaceMemberDeclarationListener(ClassName parentClassName)
+        public InterfaceMemberDeclarationListener(ClassInfo parentClass)
         {
-            this.parentClassName = parentClassName;
+            this.parentClass = parentClass;
         }
 
         public override void EnterInterfaceMemberDeclaration(
@@ -84,9 +67,8 @@ namespace antlr_parser.Antlr4Impl.Java
             if (context.interfaceMethodDeclaration() != null)
             {
                 InterfaceMethodDeclarationListener methodDeclarationListener =
-                    new InterfaceMethodDeclarationListener(parentClassName);
+                    new InterfaceMethodDeclarationListener(parentClass);
                 context.interfaceMethodDeclaration().EnterRule(methodDeclarationListener);
-                MethodInfo = methodDeclarationListener.MethodInfo;
             }
         }
     }
@@ -97,7 +79,7 @@ namespace antlr_parser.Antlr4Impl.Java
 
     public class MethodDeclarationListener : BaseMethodDeclarationListener
     {
-        public MethodDeclarationListener(ClassName parentClassName) : base(parentClassName)
+        public MethodDeclarationListener(ClassInfo parentClass) : base(parentClass)
         {
         }
 
@@ -114,7 +96,7 @@ namespace antlr_parser.Antlr4Impl.Java
 
     public class ConstructorDeclarationListener : BaseMethodDeclarationListener
     {
-        public ConstructorDeclarationListener(ClassName parentClassName) : base(parentClassName)
+        public ConstructorDeclarationListener(ClassInfo parentClass) : base(parentClass)
         {
         }
 
@@ -129,10 +111,9 @@ namespace antlr_parser.Antlr4Impl.Java
         }
     }
 
-
     public class InterfaceMethodDeclarationListener : BaseMethodDeclarationListener
     {
-        public InterfaceMethodDeclarationListener(ClassName parentClassName) : base(parentClassName)
+        public InterfaceMethodDeclarationListener(ClassInfo parentClass) : base(parentClass)
         {
         }
 
@@ -149,12 +130,11 @@ namespace antlr_parser.Antlr4Impl.Java
 
     public abstract class BaseMethodDeclarationListener : JavaParserBaseListener
     {
-        readonly ClassName parentClassName;
-        public MethodInfo MethodInfo;
+        readonly ClassInfo parentClass;
 
-        protected BaseMethodDeclarationListener(ClassName parentClassName)
+        protected BaseMethodDeclarationListener(ClassInfo parentClass)
         {
-            this.parentClassName = parentClassName;
+            this.parentClass = parentClass;
         }
 
         protected void ParseMethodFromContext(
@@ -185,138 +165,140 @@ namespace antlr_parser.Antlr4Impl.Java
             }
 
             MethodName methodName = new MethodName(
-                parentClassName,
+                parentClass.className,
                 methodNameText,
                 returnType.Signature,
                 formalParametersListener
                     .Arguments
                     .Select(arg => new Argument(
-                        arg.Type.Signature, 
+                        arg.Type.Signature,
                         TypeName.For(arg.Type.Signature))).ToList());
-            MethodInfo = new MethodInfo(
+            MethodInfo newMethodInfo = new MethodInfo(
                 methodName,
                 AccessFlags.AccPublic, // TODO
-                parentClassName,
+                parentClass.className,
                 formalParametersListener.Arguments,
                 returnType,
                 new SourceCodeSnippet(methodBody, SourceCodeLanguage.Java));
+
+            parentClass.Children.Add(newMethodInfo);
         }
-    }
 
-    public class QualifiedNameListListener : JavaParserBaseListener
-    {
-        public readonly List<string> QualifiedNames = new List<string>();
-
-        public override void EnterQualifiedNameList(JavaParser.QualifiedNameListContext context)
+        class QualifiedNameListListener : JavaParserBaseListener
         {
-            QualifiedNameListener qualifiedNameListener = new QualifiedNameListener();
-            foreach (JavaParser.QualifiedNameContext qualifiedNameContext in context.qualifiedName())
+            public readonly List<string> QualifiedNames = new List<string>();
+
+            public override void EnterQualifiedNameList(JavaParser.QualifiedNameListContext context)
             {
-                qualifiedNameContext.EnterRule(qualifiedNameListener);
-                QualifiedNames.Add(qualifiedNameListener.QualifiedName);
-            }
-        }
-    }
-
-    public class QualifiedNameListener : JavaParserBaseListener
-    {
-        public string QualifiedName;
-
-        public override void EnterQualifiedName(JavaParser.QualifiedNameContext context)
-        {
-            QualifiedName = context.IDENTIFIER().ToString();
-        }
-    }
-
-    public class TypeTypeOrVoidListener : JavaParserBaseListener
-    {
-        public TypeName TypeName;
-
-        public override void EnterTypeTypeOrVoid(JavaParser.TypeTypeOrVoidContext context)
-        {
-            if (context.typeType() == null)
-            {
-                TypeName = TypeName.For("void");
-                return;
+                QualifiedNameListener qualifiedNameListener = new QualifiedNameListener();
+                foreach (JavaParser.QualifiedNameContext qualifiedNameContext in context.qualifiedName())
+                {
+                    qualifiedNameContext.EnterRule(qualifiedNameListener);
+                    QualifiedNames.Add(qualifiedNameListener.QualifiedName);
+                }
             }
 
-            TypeTypeListener typeTypeListener = new TypeTypeListener();
-            context.typeType().EnterRule(typeTypeListener);
+            class QualifiedNameListener : JavaParserBaseListener
+            {
+                public string QualifiedName;
 
-            if (typeTypeListener.PrimitiveTypeName != null)
-            {
-                TypeName = typeTypeListener.PrimitiveTypeName;
-            }
-            else if (!string.IsNullOrEmpty(typeTypeListener.ID))
-            {
-                TypeName = TypeName.For(typeTypeListener.ID);
-            }
-            else
-            {
-                TypeName = TypeName.For("void");
+                public override void EnterQualifiedName(JavaParser.QualifiedNameContext context)
+                {
+                    QualifiedName = context.IDENTIFIER().ToString();
+                }
             }
         }
-    }
 
-    public class FormalParametersListener : JavaParserBaseListener
-    {
-        public List<Argument> Arguments = new List<Argument>();
-
-        public override void EnterFormalParameters(JavaParser.FormalParametersContext context)
+        class TypeTypeOrVoidListener : JavaParserBaseListener
         {
-            if (context.formalParameterList() != null)
+            public TypeName TypeName;
+
+            public override void EnterTypeTypeOrVoid(JavaParser.TypeTypeOrVoidContext context)
             {
-                FormalParameterListListener formalParameterListListener = new FormalParameterListListener();
-                context.formalParameterList().EnterRule(formalParameterListListener);
-                Arguments = formalParameterListListener.Arguments;
+                if (context.typeType() == null)
+                {
+                    TypeName = TypeName.For("void");
+                    return;
+                }
+
+                TypeTypeListener typeTypeListener = new TypeTypeListener();
+                context.typeType().EnterRule(typeTypeListener);
+
+                if (typeTypeListener.PrimitiveTypeName != null)
+                {
+                    TypeName = typeTypeListener.PrimitiveTypeName;
+                }
+                else if (!string.IsNullOrEmpty(typeTypeListener.ID))
+                {
+                    TypeName = TypeName.For(typeTypeListener.ID);
+                }
+                else
+                {
+                    TypeName = TypeName.For("void");
+                }
             }
         }
-    }
 
-    public class FormalParameterListListener : JavaParserBaseListener
-    {
-        public readonly List<Argument> Arguments = new List<Argument>();
-
-        public override void EnterFormalParameterList(JavaParser.FormalParameterListContext context)
+        class FormalParametersListener : JavaParserBaseListener
         {
-            FormalParameterListener formalParameterListener = new FormalParameterListener();
-            foreach (JavaParser.FormalParameterContext formalParameterContext in context.formalParameter())
-            {
-                formalParameterContext.EnterRule(formalParameterListener);
-                Arguments.Add(formalParameterListener.Argument);
-            }
-        }
-    }
+            public List<Argument> Arguments = new List<Argument>();
 
-    public class FormalParameterListener : JavaParserBaseListener
-    {
-        public Argument Argument;
-
-        public override void EnterFormalParameter(JavaParser.FormalParameterContext context)
-        {
-            // type of parameter
-            TypeTypeListener typeTypeListener = new TypeTypeListener();
-            context.typeType().EnterRule(typeTypeListener);
-
-            TypeName typeName = null;
-            if (typeTypeListener.PrimitiveTypeName != null)
+            public override void EnterFormalParameters(JavaParser.FormalParametersContext context)
             {
-                typeName = typeTypeListener.PrimitiveTypeName;
-            }
-            else if (!string.IsNullOrEmpty(typeTypeListener.ID))
-            {
-                typeName = TypeName.For(typeTypeListener.ID);
-            }
-            else
-            {
-                typeName = TypeName.For("void");
+                if (context.formalParameterList() != null)
+                {
+                    FormalParameterListListener formalParameterListListener = new FormalParameterListListener();
+                    context.formalParameterList().EnterRule(formalParameterListListener);
+                    Arguments = formalParameterListListener.Arguments;
+                }
             }
 
-            // name of parameter
-            VariableDeclaratorIdListener variableDeclaratorIdListener = new VariableDeclaratorIdListener();
-            context.variableDeclaratorId().EnterRule(variableDeclaratorIdListener);
+            class FormalParameterListListener : JavaParserBaseListener
+            {
+                public readonly List<Argument> Arguments = new List<Argument>();
 
-            Argument = new Argument(variableDeclaratorIdListener.ID, typeName);
+                public override void EnterFormalParameterList(JavaParser.FormalParameterListContext context)
+                {
+                    FormalParameterListener formalParameterListener = new FormalParameterListener();
+                    foreach (JavaParser.FormalParameterContext formalParameterContext in context.formalParameter())
+                    {
+                        formalParameterContext.EnterRule(formalParameterListener);
+                        Arguments.Add(formalParameterListener.Argument);
+                    }
+                }
+
+                class FormalParameterListener : JavaParserBaseListener
+                {
+                    public Argument Argument;
+
+                    public override void EnterFormalParameter(JavaParser.FormalParameterContext context)
+                    {
+                        // type of parameter
+                        TypeTypeListener typeTypeListener = new TypeTypeListener();
+                        context.typeType().EnterRule(typeTypeListener);
+
+                        TypeName typeName = null;
+                        if (typeTypeListener.PrimitiveTypeName != null)
+                        {
+                            typeName = typeTypeListener.PrimitiveTypeName;
+                        }
+                        else if (!string.IsNullOrEmpty(typeTypeListener.ID))
+                        {
+                            typeName = TypeName.For(typeTypeListener.ID);
+                        }
+                        else
+                        {
+                            typeName = TypeName.For("void");
+                        }
+
+                        // name of parameter
+                        VariableDeclaratorIdListener variableDeclaratorIdListener = new VariableDeclaratorIdListener();
+                        context.variableDeclaratorId().EnterRule(variableDeclaratorIdListener);
+
+                        Argument = new Argument(variableDeclaratorIdListener.ID, typeName);
+                    }
+                }
+            }
         }
     }
 
@@ -326,14 +308,12 @@ namespace antlr_parser.Antlr4Impl.Java
 
     public class FieldDeclarationListener : JavaParserBaseListener
     {
-        readonly ClassName parentClassName;
+        readonly ClassInfo parentClass;
 
-        public FieldDeclarationListener(ClassName parentClassName)
+        public FieldDeclarationListener(ClassInfo parentClass)
         {
-            this.parentClassName = parentClassName;
+            this.parentClass = parentClass;
         }
-
-        public FieldInfo FieldInfo;
 
         public override void EnterFieldDeclaration(JavaParser.FieldDeclarationContext context)
         {
@@ -362,44 +342,46 @@ namespace antlr_parser.Antlr4Impl.Java
 
             string fieldName = IDs.FirstOrDefault();
             FieldName fieldFqn = new FieldName(
-                parentClassName,
+                parentClass.className,
                 fieldName,
                 primitiveTypeName != null
                     ? primitiveTypeName.Signature
                     : TypeName.For(qualifiedName).Signature);
-            FieldInfo = new FieldInfo(
+            FieldInfo fieldInfo = new FieldInfo(
                 fieldFqn,
-                parentClassName,
+                parentClass.className,
                 AccessFlags.AccPublic,
                 new SourceCodeSnippet(context.GetFullText(), SourceCodeLanguage.Java));
+
+            parentClass.Children.Add(fieldInfo);
         }
-    }
 
-    public class VariableDeclaratorsListener : JavaParserBaseListener
-    {
-        public readonly List<string> IDs = new List<string>();
-
-        public override void EnterVariableDeclarators(JavaParser.VariableDeclaratorsContext context)
+        class VariableDeclaratorsListener : JavaParserBaseListener
         {
-            VariableDeclaratorListener variableDeclaratorListener = new VariableDeclaratorListener();
-            foreach (JavaParser.VariableDeclaratorContext variableDeclaratorContext in context.variableDeclarator())
+            public readonly List<string> IDs = new List<string>();
+
+            public override void EnterVariableDeclarators(JavaParser.VariableDeclaratorsContext context)
             {
-                variableDeclaratorContext.EnterRule(variableDeclaratorListener);
-                IDs.Add(variableDeclaratorListener.ID);
-                variableDeclaratorListener.ID = null;
+                VariableDeclaratorListener variableDeclaratorListener = new VariableDeclaratorListener();
+                foreach (JavaParser.VariableDeclaratorContext variableDeclaratorContext in context.variableDeclarator())
+                {
+                    variableDeclaratorContext.EnterRule(variableDeclaratorListener);
+                    IDs.Add(variableDeclaratorListener.ID);
+                    variableDeclaratorListener.ID = null;
+                }
             }
-        }
-    }
 
-    public class VariableDeclaratorListener : JavaParserBaseListener
-    {
-        public string ID;
+            class VariableDeclaratorListener : JavaParserBaseListener
+            {
+                public string ID;
 
-        public override void EnterVariableDeclarator(JavaParser.VariableDeclaratorContext context)
-        {
-            VariableDeclaratorIdListener variableDeclaratorIdListener = new VariableDeclaratorIdListener();
-            context.variableDeclaratorId().EnterRule(variableDeclaratorIdListener);
-            ID = variableDeclaratorIdListener.ID;
+                public override void EnterVariableDeclarator(JavaParser.VariableDeclaratorContext context)
+                {
+                    VariableDeclaratorIdListener variableDeclaratorIdListener = new VariableDeclaratorIdListener();
+                    context.variableDeclaratorId().EnterRule(variableDeclaratorIdListener);
+                    ID = variableDeclaratorIdListener.ID;
+                }
+            }
         }
     }
 

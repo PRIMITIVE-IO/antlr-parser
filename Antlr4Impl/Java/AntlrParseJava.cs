@@ -22,6 +22,7 @@ namespace antlr_parser.Antlr4Impl.Java
                 parser.AddErrorListener(new ErrorListener()); // add ours
 
                 // a compilation unit is the highest level container -> start there
+                // do not call parser.compilationUnit() more than once
                 CompilationUnitListener compilationUnitListener = new CompilationUnitListener(filePath);
                 parser.compilationUnit().EnterRule(compilationUnitListener);
                 return compilationUnitListener.OuterClassInfos;
