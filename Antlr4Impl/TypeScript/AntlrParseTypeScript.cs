@@ -22,6 +22,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 parser.AddErrorListener(new ErrorListener()); // add ours
 
                 // a program is the highest level container -> start there
+                // do not call parser.program() more than once
                 ProgramListener programListener = new ProgramListener(filePath);
                 parser.program().EnterRule(programListener);
                 return new List<ClassInfo> {programListener.FileClassInfo};

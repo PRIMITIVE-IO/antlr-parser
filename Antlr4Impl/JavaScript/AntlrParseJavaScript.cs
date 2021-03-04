@@ -5,9 +5,9 @@ using PrimitiveCodebaseElements.Primitive;
 
 namespace antlr_parser.Antlr4Impl.JavaScript
 {
-    public class AntlrParseJavaScript
+    public static class AntlrParseJavaScript
     {
-        public static IEnumerable<ClassInfo> OuterClassInfosFromJavaScriptSource(string source, string filePath)
+        public static IEnumerable<ClassInfo> OuterClassInfosFromSource(string source, string filePath)
         {
             try
             {
@@ -22,6 +22,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 parser.AddErrorListener(new ErrorListener()); // add ours
 
                 // a program is the highest level container -> start there
+                // do not call parser.program() more than once
                 ProgramListener programListener = new ProgramListener(filePath);
                 parser.program().EnterRule(programListener);
                 return new List<ClassInfo> {programListener.FileClassInfo};

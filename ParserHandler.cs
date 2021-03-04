@@ -50,12 +50,12 @@ namespace antlr_parser
             switch (sourceExtension)
             {
                 case ".java":
-                    return AntlrParseJava.OuterClassInfosFromJavaSource(
+                    return AntlrParseJava.OuterClassInfosFromSource(
                         sourceText,
                         filePath);
                 case ".js":
                 case ".jsx":
-                    return AntlrParseJavaScript.OuterClassInfosFromJavaScriptSource(
+                    return AntlrParseJavaScript.OuterClassInfosFromSource(
                         sourceText,
                         filePath);
                 case ".ts":
@@ -67,7 +67,7 @@ namespace antlr_parser
                 case ".h":
                 case ".c":
                     // C
-                    return AntlrParseC.OuterClassInfosFromJavaSource(sourceText, filePath);
+                    return AntlrParseC.OuterClassInfosFromSource(sourceText, filePath);
                 case ".cpp":
                 case ".hxx":
                 case ".hpp":
@@ -79,11 +79,11 @@ namespace antlr_parser
                     // python
                     return new List<ClassInfo>();
                 case ".kt":
-                    return AntlrParseKotlin.OuterClassInfosFromKotlinSource(
+                    return AntlrParseKotlin.OuterClassInfosFromSource(
                         sourceText,
                         filePath);
                 case ".sol":
-                    return AntlrParseSolidity.OuterClassInfosFromKotlinSource(
+                    return AntlrParseSolidity.OuterClassInfosFromSource(
                         sourceText, 
                         filePath);
             }

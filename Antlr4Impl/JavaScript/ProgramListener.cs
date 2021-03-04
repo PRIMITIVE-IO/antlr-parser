@@ -17,52 +17,54 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         public override void EnterProgram(JavaScriptParser.ProgramContext context)
         {
             string fileName = Path.GetFileNameWithoutExtension(filePath);
-            
+
             ClassName fileClassName = new ClassName(new FileName(filePath), new PackageName(), fileName);
             FileClassInfo = new ClassInfo(
-                fileClassName, 
-                new List<MethodInfo>(), 
+                fileClassName,
+                new List<MethodInfo>(),
                 new List<FieldInfo>(),
                 AccessFlags.AccPublic,
-                new List<ClassInfo>(), 
+                new List<ClassInfo>(),
                 new SourceCodeSnippet("", SourceCodeLanguage.JavaScript),
                 false);
-            
+
             SourceElementsListener sourceElementsListener = new SourceElementsListener(FileClassInfo);
             context.sourceElements().EnterRule(sourceElementsListener);
         }
-    }
 
-    public class SourceElementsListener : JavaScriptParserBaseListener
-    {
-        readonly ClassInfo fileClassInfo;
-        public SourceElementsListener(ClassInfo fileClassInfo)
+        class SourceElementsListener : JavaScriptParserBaseListener
         {
-            this.fileClassInfo = fileClassInfo;
-        }
-        
-        public override void EnterSourceElements(JavaScriptParser.SourceElementsContext context)
-        {
-            foreach (JavaScriptParser.SourceElementContext sourceElementContext in context.sourceElement())
+            readonly ClassInfo fileClassInfo;
+
+            public SourceElementsListener(ClassInfo fileClassInfo)
             {
-                SourceElementListener sourceElementListener = new SourceElementListener(fileClassInfo);
-                sourceElementContext.EnterRule(sourceElementListener);
+                this.fileClassInfo = fileClassInfo;
             }
-        }
-    }
 
-    public class SourceElementListener : JavaScriptParserBaseListener
-    {
-        readonly ClassInfo fileClassInfo;
-        public SourceElementListener(ClassInfo fileClassInfo)
-        {
-            this.fileClassInfo = fileClassInfo;
-        }
+            public override void EnterSourceElements(JavaScriptParser.SourceElementsContext context)
+            {
+                foreach (JavaScriptParser.SourceElementContext sourceElementContext in context.sourceElement())
+                {
+                    SourceElementListener sourceElementListener = new SourceElementListener(fileClassInfo);
+                    sourceElementContext.EnterRule(sourceElementListener);
+                }
+            }
 
-        public override void EnterSourceElement(JavaScriptParser.SourceElementContext context)
-        {
-            StatementListener statementListener = new StatementListener(fileClassInfo);
-            context.statement().EnterRule(statementListener);
+            class SourceElementListener : JavaScriptParserBaseListener
+            {
+                readonly ClassInfo fileClassInfo;
+
+                public SourceElementListener(ClassInfo fileClassInfo)
+                {
+                    this.fileClassInfo = fileClassInfo;
+                }
+
+                public override void EnterSourceElement(JavaScriptParser.SourceElementContext context)
+                {
+                    StatementListener statementListener = new StatementListener(fileClassInfo);
+                    context.statement().EnterRule(statementListener);
+                }
+            }
         }
     }
 }

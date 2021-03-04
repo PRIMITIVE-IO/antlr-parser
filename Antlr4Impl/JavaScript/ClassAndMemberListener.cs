@@ -36,60 +36,60 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             ClassTailListener classTailListener = new ClassTailListener(classInfo);
             context.classTail().EnterRule(classTailListener);
         }
-    }
 
-    public class ClassTailListener : JavaScriptParserBaseListener
-    {
-        readonly ClassInfo classInfo;
-
-        public ClassTailListener(ClassInfo classInfo)
+        class ClassTailListener : JavaScriptParserBaseListener
         {
-            this.classInfo = classInfo;
-        }
+            readonly ClassInfo classInfo;
 
-        public override void EnterClassTail(JavaScriptParser.ClassTailContext context)
-        {
-            foreach (JavaScriptParser.ClassElementContext classElementContext in context.classElement())
+            public ClassTailListener(ClassInfo classInfo)
             {
-                if (classElementContext.methodDefinition() != null)
+                this.classInfo = classInfo;
+            }
+
+            public override void EnterClassTail(JavaScriptParser.ClassTailContext context)
+            {
+                foreach (JavaScriptParser.ClassElementContext classElementContext in context.classElement())
                 {
-                    MethodDefinitionListener methodDefinitionListener = new MethodDefinitionListener(classInfo);
-                    classElementContext.methodDefinition().EnterRule(methodDefinitionListener);
+                    if (classElementContext.methodDefinition() != null)
+                    {
+                        MethodDefinitionListener methodDefinitionListener = new MethodDefinitionListener(classInfo);
+                        classElementContext.methodDefinition().EnterRule(methodDefinitionListener);
+                    }
                 }
             }
-        }
-    }
 
-    public class MethodDefinitionListener : JavaScriptParserBaseListener
-    {
-        readonly ClassInfo classInfo;
+            class MethodDefinitionListener : JavaScriptParserBaseListener
+            {
+                readonly ClassInfo classInfo;
 
-        public MethodDefinitionListener(ClassInfo classInfo)
-        {
-            this.classInfo = classInfo;
-        }
+                public MethodDefinitionListener(ClassInfo classInfo)
+                {
+                    this.classInfo = classInfo;
+                }
 
-        public override void EnterMethodDefinition(JavaScriptParser.MethodDefinitionContext context)
-        {
-            // TODO
-            List<Argument> arguments = new List<Argument>();
-            TypeName returnType = TypeName.For("void");
+                public override void EnterMethodDefinition(JavaScriptParser.MethodDefinitionContext context)
+                {
+                    // TODO
+                    List<Argument> arguments = new List<Argument>();
+                    TypeName returnType = TypeName.For("void");
 
-            MethodName expressionMethodName = new MethodName(
-                classInfo.className,
-                context.propertyName().GetText(),
-                returnType.Signature,
-                arguments);
+                    MethodName expressionMethodName = new MethodName(
+                        classInfo.className,
+                        context.propertyName().GetText(),
+                        returnType.Signature,
+                        arguments);
 
-            MethodInfo expressionMethodInfo = new MethodInfo(
-                expressionMethodName,
-                AccessFlags.AccPublic,
-                classInfo.className,
-                arguments,
-                returnType,
-                new SourceCodeSnippet(context.GetFullText(), SourceCodeLanguage.JavaScript));
+                    MethodInfo expressionMethodInfo = new MethodInfo(
+                        expressionMethodName,
+                        AccessFlags.AccPublic,
+                        classInfo.className,
+                        arguments,
+                        returnType,
+                        new SourceCodeSnippet(context.GetFullText(), SourceCodeLanguage.JavaScript));
 
-            classInfo.Children.Add(expressionMethodInfo);
+                    classInfo.Children.Add(expressionMethodInfo);
+                }
+            }
         }
     }
 }

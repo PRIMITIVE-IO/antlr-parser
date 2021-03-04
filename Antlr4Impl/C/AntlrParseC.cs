@@ -8,7 +8,7 @@ namespace antlr_parser.Antlr4Impl.C
 {
     public static class AntlrParseC
     {
-        public static IEnumerable<ClassInfo> OuterClassInfosFromJavaSource(string source, string filePath)
+        public static IEnumerable<ClassInfo> OuterClassInfosFromSource(string source, string filePath)
         {
             try
             {
@@ -22,7 +22,8 @@ namespace antlr_parser.Antlr4Impl.C
                 parser.RemoveErrorListeners();
                 parser.AddErrorListener(new ErrorListener()); // add ours
 
-                // a primary expression is the highest level container -> start there
+                // a compilation unit is the highest level container -> start there
+                // do not call parser.compilationUnit() more than once
                 CompilationUnitListener compilationUnitListener = new CompilationUnitListener(filePath);
                 parser.compilationUnit().EnterRule(compilationUnitListener);
 

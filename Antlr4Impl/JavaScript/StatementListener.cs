@@ -45,84 +45,85 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 context.variableStatement().EnterRule(variableStatementListener);
             }
         }
-    }
 
-    public class ExpressionStatementListener : JavaScriptParserBaseListener
-    {
-        readonly ClassInfo outerClassInfo;
-
-        public ExpressionStatementListener(ClassInfo outerClassInfo)
+        class ExpressionStatementListener : JavaScriptParserBaseListener
         {
-            this.outerClassInfo = outerClassInfo;
-        }
+            readonly ClassInfo outerClassInfo;
 
-        public override void EnterExpressionStatement(JavaScriptParser.ExpressionStatementContext context)
-        {
-            ExpressionSequenceListener expressionSequenceListener = new ExpressionSequenceListener(outerClassInfo);
-            context.expressionSequence().EnterRule(expressionSequenceListener);
-        }
-    }
-
-    public class ExpressionSequenceListener : JavaScriptParserBaseListener
-    {
-        readonly ClassInfo outerClassInfo;
-
-        public ExpressionSequenceListener(ClassInfo outerClassInfo)
-        {
-            this.outerClassInfo = outerClassInfo;
-        }
-
-        public override void EnterExpressionSequence(JavaScriptParser.ExpressionSequenceContext context)
-        {
-            foreach (JavaScriptParser.SingleExpressionContext singleExpressionContext in context.singleExpression())
+            public ExpressionStatementListener(ClassInfo outerClassInfo)
             {
-                JavaScriptParser.FunctionDeclContext functionDeclContext =
-                    singleExpressionContext.GetChild<JavaScriptParser.FunctionDeclContext>(0);
-                if (functionDeclContext != null)
+                this.outerClassInfo = outerClassInfo;
+            }
+
+            public override void EnterExpressionStatement(JavaScriptParser.ExpressionStatementContext context)
+            {
+                ExpressionSequenceListener expressionSequenceListener = new ExpressionSequenceListener(outerClassInfo);
+                context.expressionSequence().EnterRule(expressionSequenceListener);
+            }
+
+            class ExpressionSequenceListener : JavaScriptParserBaseListener
+            {
+                readonly ClassInfo outerClassInfo;
+
+                public ExpressionSequenceListener(ClassInfo outerClassInfo)
                 {
-                    JavaScriptParser.FunctionDeclarationContext functionDeclarationContext =
-                        functionDeclContext.GetChild<JavaScriptParser.FunctionDeclarationContext>(0);
-                    FunctionDeclarationListener functionDeclarationListener =
-                        new FunctionDeclarationListener(outerClassInfo);
-                    functionDeclarationContext.EnterRule(functionDeclarationListener);
+                    this.outerClassInfo = outerClassInfo;
+                }
+
+                public override void EnterExpressionSequence(JavaScriptParser.ExpressionSequenceContext context)
+                {
+                    foreach (JavaScriptParser.SingleExpressionContext singleExpressionContext in context
+                        .singleExpression())
+                    {
+                        JavaScriptParser.FunctionDeclContext functionDeclContext =
+                            singleExpressionContext.GetChild<JavaScriptParser.FunctionDeclContext>(0);
+                        if (functionDeclContext != null)
+                        {
+                            JavaScriptParser.FunctionDeclarationContext functionDeclarationContext =
+                                functionDeclContext.GetChild<JavaScriptParser.FunctionDeclarationContext>(0);
+                            FunctionDeclarationListener functionDeclarationListener =
+                                new FunctionDeclarationListener(outerClassInfo);
+                            functionDeclarationContext.EnterRule(functionDeclarationListener);
+                        }
+                    }
                 }
             }
         }
-    }
 
-    /// <summary>
-    /// Function Declarations are at the top statement level. Unlike methods that are inside of classes.
-    /// </summary>
-    public class FunctionDeclarationListener : JavaScriptParserBaseListener
-    {
-        readonly ClassInfo outerClassInfo;
-
-        public FunctionDeclarationListener(ClassInfo outerClassInfo)
+        /// <summary>
+        /// Function Declarations are at the top statement level. Unlike methods that are inside of classes.
+        /// </summary>
+        class FunctionDeclarationListener : JavaScriptParserBaseListener
         {
-            this.outerClassInfo = outerClassInfo;
-        }
+            readonly ClassInfo outerClassInfo;
 
-        public override void EnterFunctionDeclaration(JavaScriptParser.FunctionDeclarationContext context)
-        {
-            // TODO
-            List<Argument> arguments = new List<Argument>();
-            TypeName returnType = TypeName.For("void");
+            public FunctionDeclarationListener(ClassInfo outerClassInfo)
+            {
+                this.outerClassInfo = outerClassInfo;
+            }
 
-            MethodName expressionMethodName = new MethodName(
-                outerClassInfo.className,
-                context.identifier().Identifier().GetText(),
-                returnType.Signature,
-                arguments);
+            public override void EnterFunctionDeclaration(JavaScriptParser.FunctionDeclarationContext context)
+            {
+                // TODO
+                List<Argument> arguments = new List<Argument>();
+                TypeName returnType = TypeName.For("void");
 
-            MethodInfo expressionMethodInfo = new MethodInfo(
-                expressionMethodName,
-                AccessFlags.AccPublic,
-                outerClassInfo.className,
-                arguments,
-                returnType,
-                new SourceCodeSnippet(context.GetFullText(), SourceCodeLanguage.JavaScript));
+                MethodName expressionMethodName = new MethodName(
+                    outerClassInfo.className,
+                    context.identifier().Identifier().GetText(),
+                    returnType.Signature,
+                    arguments);
 
-            outerClassInfo.Children.Add(expressionMethodInfo);
+                MethodInfo expressionMethodInfo = new MethodInfo(
+                    expressionMethodName,
+                    AccessFlags.AccPublic,
+                    outerClassInfo.className,
+                    arguments,
+                    returnType,
+                    new SourceCodeSnippet(context.GetFullText(), SourceCodeLanguage.JavaScript));
+
+                outerClassInfo.Children.Add(expressionMethodInfo);
+            }
         }
     }
 }

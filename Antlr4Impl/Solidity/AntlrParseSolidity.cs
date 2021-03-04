@@ -7,7 +7,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
 {
     public static class AntlrParseSolidity
     {
-        public static IEnumerable<ClassInfo> OuterClassInfosFromKotlinSource(string source, string filePath)
+        public static IEnumerable<ClassInfo> OuterClassInfosFromSource(string source, string filePath)
         {
             try
             {
@@ -21,7 +21,8 @@ namespace antlr_parser.Antlr4Impl.Solidity
                 parser.RemoveErrorListeners();
                 parser.AddErrorListener(new ErrorListener()); // add ours 
 
-                // if the parser.kotlinFile() is called once it parses, if it is called twice it doesn't parse!
+                // a sourceUnit is the highest level container -> start there
+                // do not call parser.sourceUnit() more than once
                 SourceUnitListener sourceUnitListener = new SourceUnitListener(filePath);
                 parser.sourceUnit().EnterRule(sourceUnitListener);
 

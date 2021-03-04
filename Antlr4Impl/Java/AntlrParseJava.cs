@@ -7,7 +7,7 @@ namespace antlr_parser.Antlr4Impl.Java
 {
     public static class AntlrParseJava
     {
-        public static IEnumerable<ClassInfo> OuterClassInfosFromJavaSource(string source, string filePath)
+        public static IEnumerable<ClassInfo> OuterClassInfosFromSource(string source, string filePath)
         {
             try
             {
