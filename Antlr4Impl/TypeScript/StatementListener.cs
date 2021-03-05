@@ -45,79 +45,131 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 VariableStatementListener variableStatementListener = new VariableStatementListener(outerClassInfo);
                 context.variableStatement().EnterRule(variableStatementListener);
             }
-        }
-    }
 
-    public class ExpressionStatementListener : TypeScriptParserBaseListener
-    {
-        readonly ClassInfo outerClassInfo;
-
-        public ExpressionStatementListener(ClassInfo outerClassInfo)
-        {
-            this.outerClassInfo = outerClassInfo;
-        }
-
-        public override void EnterExpressionStatement(TypeScriptParser.ExpressionStatementContext context)
-        {
-            if (context.expressionSequence() != null)
+            if (context.interfaceDeclaration() != null)
             {
-                ExpressionSequenceListener expressionSequenceListener = new ExpressionSequenceListener(outerClassInfo);
-                context.expressionSequence().EnterRule(expressionSequenceListener);
+                
+            }
+
+            if (context.enumDeclaration() != null)
+            {
+                
             }
         }
-    }
-
-    public class ExpressionSequenceListener : TypeScriptParserBaseListener
-    {
-        readonly ClassInfo outerClassInfo;
-
-        public ExpressionSequenceListener(ClassInfo outerClassInfo)
+        
+        class ExpressionStatementListener : TypeScriptParserBaseListener
         {
-            this.outerClassInfo = outerClassInfo;
-        }
+            readonly ClassInfo outerClassInfo;
 
-        public override void EnterExpressionSequence(TypeScriptParser.ExpressionSequenceContext context)
-        {
-            foreach (TypeScriptParser.SingleExpressionContext singleExpressionContext in context.singleExpression())
+            public ExpressionStatementListener(ClassInfo outerClassInfo)
             {
-                Console.WriteLine($"single expression: {singleExpressionContext.GetFullText()}");
+                this.outerClassInfo = outerClassInfo;
+            }
+
+            public override void EnterExpressionStatement(TypeScriptParser.ExpressionStatementContext context)
+            {
+                if (context.expressionSequence() != null)
+                {
+                    ExpressionSequenceListener expressionSequenceListener = new ExpressionSequenceListener(outerClassInfo);
+                    context.expressionSequence().EnterRule(expressionSequenceListener);
+                }
+            }
+            
+            class ExpressionSequenceListener : TypeScriptParserBaseListener
+            {
+                readonly ClassInfo outerClassInfo;
+
+                public ExpressionSequenceListener(ClassInfo outerClassInfo)
+                {
+                    this.outerClassInfo = outerClassInfo;
+                }
+
+                public override void EnterExpressionSequence(TypeScriptParser.ExpressionSequenceContext context)
+                {
+                    foreach (TypeScriptParser.SingleExpressionContext singleExpressionContext in context.singleExpression())
+                    {
+                        outerClassInfo.SourceCode = new SourceCodeSnippet(
+                            outerClassInfo.SourceCode.Text + '\n' + singleExpressionContext.GetFullText(),
+                            SourceCodeLanguage.TypeScript);
+                    }
+                }
             }
         }
-    }
-
-    /// <summary>
-    /// Function Declarations are at the top statement level. Unlike methods that are inside of classes.
-    /// </summary>
-    public class FunctionDeclarationListener : TypeScriptParserBaseListener
-    {
-        readonly ClassInfo outerClassInfo;
-
-        public FunctionDeclarationListener(ClassInfo outerClassInfo)
+        
+        /// <summary>
+        /// Function Declarations are at the top statement level. Unlike methods that are inside of classes.
+        /// </summary>
+        class FunctionDeclarationListener : TypeScriptParserBaseListener
         {
-            this.outerClassInfo = outerClassInfo;
-        }
+            readonly ClassInfo outerClassInfo;
 
-        public override void EnterFunctionDeclaration(TypeScriptParser.FunctionDeclarationContext context)
-        {
-            // TODO
-            List<Argument> arguments = new List<Argument>();
-            TypeName returnType = TypeName.For("void");
+            public FunctionDeclarationListener(ClassInfo outerClassInfo)
+            {
+                this.outerClassInfo = outerClassInfo;
+            }
 
-            MethodName expressionMethodName = new MethodName(
-                outerClassInfo.className,
-                context.Identifier().GetText(),
-                returnType.Signature,
-                arguments);
+            public override void EnterFunctionDeclaration(TypeScriptParser.FunctionDeclarationContext context)
+            {
+                // TODO
+                List<Argument> arguments = new List<Argument>();
+                TypeName returnType = TypeName.For("void");
 
-            MethodInfo expressionMethodInfo = new MethodInfo(
-                expressionMethodName,
-                AccessFlags.AccPublic,
-                outerClassInfo.className,
-                arguments,
-                returnType,
-                new SourceCodeSnippet(context.GetFullText(), SourceCodeLanguage.TypeScript));
+                if (context.callSignature() != null)
+                {
+                    CallSignatureListener callSignatureListener = new CallSignatureListener();
+                    context.callSignature().EnterRule(callSignatureListener);
 
-            outerClassInfo.Children.Add(expressionMethodInfo);
+                    if (!string.IsNullOrEmpty(callSignatureListener.TypeString))
+                    {
+                        returnType = TypeName.For(callSignatureListener.TypeString);
+                    }
+                }
+
+                MethodName expressionMethodName = new MethodName(
+                    outerClassInfo.className,
+                    context.Identifier().GetText(),
+                    returnType.Signature,
+                    arguments);
+
+                MethodInfo expressionMethodInfo = new MethodInfo(
+                    expressionMethodName,
+                    AccessFlags.AccPublic,
+                    outerClassInfo.className,
+                    arguments,
+                    returnType,
+                    new SourceCodeSnippet(context.GetFullText(), SourceCodeLanguage.TypeScript));
+
+                outerClassInfo.Children.Add(expressionMethodInfo);
+            }
+
+            class CallSignatureListener : TypeScriptParserBaseListener
+            {
+                public string TypeString = "";
+                
+                public override void EnterCallSignature(TypeScriptParser.CallSignatureContext context)
+                {
+                    if (context.typeAnnotation() != null)
+                    {
+                        TypeAnnotationListener typeAnnotationListener = new TypeAnnotationListener();
+                        context.typeAnnotation().EnterRule(typeAnnotationListener);
+
+                        TypeString = typeAnnotationListener.TypeString;
+                    }
+                }
+
+                class TypeAnnotationListener : TypeScriptParserBaseListener
+                {
+                    public string TypeString = "";
+                    
+                    public override void EnterTypeAnnotation(TypeScriptParser.TypeAnnotationContext context)
+                    {
+                        if (context.type_() != null)
+                        {
+                            TypeString = context.type_().GetFullText();
+                        }
+                    }
+                }
+            }
         }
     }
 }

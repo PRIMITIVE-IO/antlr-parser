@@ -25,11 +25,14 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 new List<FieldInfo>(),
                 AccessFlags.AccPublic,
                 new List<ClassInfo>(), 
-                new SourceCodeSnippet("", SourceCodeLanguage.TypeScript),
+                new SourceCodeSnippet(context.GetFullText(), SourceCodeLanguage.TypeScript),
                 false);
-            
-            SourceElementsListener sourceElementsListener = new SourceElementsListener(FileClassInfo);
-            context.sourceElements().EnterRule(sourceElementsListener);
+
+            if (context.sourceElements() != null)
+            {
+                SourceElementsListener sourceElementsListener = new SourceElementsListener(FileClassInfo);
+                context.sourceElements().EnterRule(sourceElementsListener);
+            }
         }
     }
 

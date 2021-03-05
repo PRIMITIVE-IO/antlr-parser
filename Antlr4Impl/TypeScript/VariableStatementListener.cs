@@ -1,3 +1,4 @@
+using System;
 using PrimitiveCodebaseElements.Primitive;
 
 namespace antlr_parser.Antlr4Impl.TypeScript
@@ -13,9 +14,12 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
         public override void EnterVariableStatement(TypeScriptParser.VariableStatementContext context)
         {
-            VariableDeclarationListListener variableDeclarationListListener =
-                new VariableDeclarationListListener(outerClassInfo);
-            context.variableDeclarationList().EnterRule(variableDeclarationListListener);
+            if (context.variableDeclarationList() != null)
+            {
+                VariableDeclarationListListener variableDeclarationListListener =
+                    new VariableDeclarationListListener(outerClassInfo);
+                context.variableDeclarationList().EnterRule(variableDeclarationListListener);
+            }
         }
     }
 
