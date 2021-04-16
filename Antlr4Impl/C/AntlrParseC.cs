@@ -60,77 +60,37 @@ namespace antlr_parser.Antlr4Impl.C
                     new List<FieldInfo>(),
                     AccessFlags.AccPublic,
                     new List<ClassInfo>(),
-                    new SourceCodeSnippet("", SourceCodeLanguage.Kotlin),
+                    new SourceCodeSnippet("", SourceCodeLanguage.C),
                     false);
-
-                TranslationUnitListener translationUnitListener = new TranslationUnitListener(FileClassInfo);
-                context.translationUnit().EnterRule(translationUnitListener);
-            }
-        }
-
-        class TranslationUnitListener : CBaseListener
-        {
-            readonly ClassInfo fileClassInfo;
-
-            public TranslationUnitListener(ClassInfo fileClassInfo)
-            {
-                this.fileClassInfo = fileClassInfo;
-            }
-
-            public override void EnterTranslationUnit(CParser.TranslationUnitContext context)
-            {
-                ExternalDeclarationListener externalDeclarationListener =
-                    new ExternalDeclarationListener(fileClassInfo);
-                context.externalDeclaration().EnterRule(externalDeclarationListener);
 
                 if (context.translationUnit() != null)
                 {
-                    TranslationUnitListener translationUnitListener = new TranslationUnitListener(fileClassInfo);
+                    TranslationUnitListener translationUnitListener = new TranslationUnitListener(FileClassInfo);
                     context.translationUnit().EnterRule(translationUnitListener);
                 }
             }
-        }
-
-        public class FunctionDefinitionListener : CBaseListener
-        {
-            readonly ClassInfo classInfo;
-
-            public FunctionDefinitionListener(ClassInfo classInfo)
+            
+            class TranslationUnitListener : CBaseListener
             {
-                this.classInfo = classInfo;
-            }
+                readonly ClassInfo fileClassInfo;
 
-            public override void EnterFunctionDefinition(CParser.FunctionDefinitionContext context)
-            {
-                AccessFlags accessFlags = AccessFlags.AccPublic;
+                public TranslationUnitListener(ClassInfo fileClassInfo)
+                {
+                    this.fileClassInfo = fileClassInfo;
+                }
 
-                DeclarationSpecifiersListener declarationSpecifiersListener = new DeclarationSpecifiersListener();
-                context.declarationSpecifiers().EnterRule(declarationSpecifiersListener);
-                
-                TypeName returnType = declarationSpecifiersListener.ReturnType;
+                public override void EnterTranslationUnit(CParser.TranslationUnitContext context)
+                {
+                    ExternalDeclarationListener externalDeclarationListener =
+                        new ExternalDeclarationListener(fileClassInfo);
+                    context.externalDeclaration().EnterRule(externalDeclarationListener);
 
-                DeclaratorListener declaratorListener = new DeclaratorListener();
-                context.declarator().EnterRule(declaratorListener);
-                string methodNameString = declaratorListener.DeclaratorName;
-
-                // TODO
-                List<Argument> arguments = new List<Argument>();
-
-                MethodName methodName = new MethodName(
-                    classInfo.className,
-                    methodNameString,
-                    returnType.Signature,
-                    arguments);
-
-                MethodInfo methodInfo = new MethodInfo(
-                    methodName,
-                    accessFlags,
-                    classInfo.className,
-                    arguments,
-                    returnType,
-                    new SourceCodeSnippet(context.GetFullText(), SourceCodeLanguage.C));
-
-                classInfo.Children.Add(methodInfo);
+                    if (context.translationUnit() != null)
+                    {
+                        TranslationUnitListener translationUnitListener = new TranslationUnitListener(fileClassInfo);
+                        context.translationUnit().EnterRule(translationUnitListener);
+                    }
+                }
             }
         }
     }
