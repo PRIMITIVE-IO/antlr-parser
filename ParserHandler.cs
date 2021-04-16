@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using antlr_parser.Antlr4Impl.C;
+using antlr_parser.Antlr4Impl.CPP;
 using antlr_parser.Antlr4Impl.Java;
 using antlr_parser.Antlr4Impl.JavaScript;
 using antlr_parser.Antlr4Impl.Kotlin;
@@ -74,6 +75,7 @@ namespace antlr_parser
                 case ".m":
                 case ".cc":
                     //cpp
+                    return AntlrParseCpp.OuterClassInfosFromSource(sourceText, filePath);
                 case ".py":
                 case ".py3":
                     // python
