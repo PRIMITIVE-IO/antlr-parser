@@ -99,16 +99,19 @@ namespace antlr_parser.Antlr4Impl.C
 
     public class DeclaratorListener : CBaseListener
     {
-        public string DeclaratorName;
+        public string DeclaratorName = "";
         public readonly List<Argument> Arguments = new List<Argument>();
 
         public override void EnterDeclarator(CParser.DeclaratorContext context)
         {
-            DirectDeclaratorListener directDeclaratorListener = new DirectDeclaratorListener();
-            context.directDeclarator().EnterRule(directDeclaratorListener);
-            Arguments.AddRange(directDeclaratorListener.Arguments);
-            
-            DeclaratorName = directDeclaratorListener.DirectDeclarator;
+            if (context.directDeclarator() != null)
+            {
+                DirectDeclaratorListener directDeclaratorListener = new DirectDeclaratorListener();
+                context.directDeclarator().EnterRule(directDeclaratorListener);
+                Arguments.AddRange(directDeclaratorListener.Arguments);
+
+                DeclaratorName = directDeclaratorListener.DirectDeclarator;
+            }
         }
         
         class DirectDeclaratorListener : CBaseListener
@@ -155,10 +158,13 @@ namespace antlr_parser.Antlr4Impl.C
         
         public override void EnterParameterTypeList(CParser.ParameterTypeListContext context)
         {
-            ParameterListListener parameterListListener = new ParameterListListener();
-            context.parameterList().EnterRule(parameterListListener);
-            
-            Arguments.AddRange(parameterListListener.Arguments);
+            if (context.parameterList() != null)
+            {
+                ParameterListListener parameterListListener = new ParameterListListener();
+                context.parameterList().EnterRule(parameterListListener);
+
+                Arguments.AddRange(parameterListListener.Arguments);
+            }
         }
 
         class ParameterListListener : CBaseListener

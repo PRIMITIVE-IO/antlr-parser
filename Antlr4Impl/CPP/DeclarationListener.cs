@@ -57,8 +57,11 @@ namespace antlr_parser.Antlr4Impl.CPP
                 
                 public override void EnterSimpleDeclaration(CPP14Parser.SimpleDeclarationContext context)
                 {
-                    DeclSpecifierSeqListener declSpecifierSeqListener = new DeclSpecifierSeqListener(outerClass);
-                    context.declSpecifierSeq().EnterRule(declSpecifierSeqListener);
+                    if (context.declSpecifierSeq() != null)
+                    {
+                        DeclSpecifierSeqListener declSpecifierSeqListener = new DeclSpecifierSeqListener(outerClass);
+                        context.declSpecifierSeq().EnterRule(declSpecifierSeqListener);
+                    }
                 }
             }
         }
