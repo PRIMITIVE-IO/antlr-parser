@@ -23,10 +23,9 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
                 // a KotlinFile is the highest level container -> start there
                 // do not call parser.kotlinFile() more than once
-                KotlinFileListener kotlinFileListener = new KotlinFileListener(filePath);
-                parser.kotlinFile().EnterRule(kotlinFileListener);
+                var astFile = parser.kotlinFile().Accept(new KotlinVisitor(filePath)) as Ast.File;
 
-                return new List<ClassInfo> {kotlinFileListener.FileClassInfo};
+                return new List<ClassInfo> { AstToClassInfoConverter.ToClassInfo(astFile) };
             }
             catch (Exception e)
             {
