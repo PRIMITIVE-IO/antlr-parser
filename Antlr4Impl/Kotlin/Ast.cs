@@ -12,7 +12,8 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             public readonly ImmutableList<Field> Fields;
             public readonly ImmutableList<Method> Methods;
 
-            public File(string name, Package package, ImmutableList<Klass> classes, ImmutableList<Field> fields, ImmutableList<Method> methods)
+            public File(string name, Package package, ImmutableList<Klass> classes, ImmutableList<Field> fields,
+                ImmutableList<Method> methods)
             {
                 Name = name;
                 Package = package;
@@ -21,6 +22,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 Methods = methods;
             }
         }
+
         public class Package : Ast
         {
             public readonly string Name;
@@ -39,7 +41,8 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             public readonly ImmutableList<Klass> InnerClasses;
             public readonly string Modifier;
 
-            public Klass(string name, ImmutableList<Method> methods, ImmutableList<Field> fields, ImmutableList<Klass> innerClasses,
+            public Klass(string name, ImmutableList<Method> methods, ImmutableList<Field> fields,
+                ImmutableList<Klass> innerClasses,
                 string modifier)
             {
                 Name = name;
@@ -61,6 +64,16 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 Name = name;
                 AccFlag = accFlag;
                 SourceCode = sourceCode;
+            }
+        }
+
+        public class Fields : Ast
+        {
+            public readonly ImmutableList<Field> FieldList;
+
+            public Fields(ImmutableList<Field> fieldList)
+            {
+                FieldList = fieldList;
             }
         }
 
