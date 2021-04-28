@@ -7,7 +7,6 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 {
     public static class AntlrParseKotlin
     {
-
         public static IEnumerable<ClassInfo> OuterClassInfosFromSource(string source, string filePath)
         {
             try
@@ -24,8 +23,8 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
                 // a KotlinFile is the highest level container -> start there
                 // do not call parser.kotlinFile() more than once
-                var kotlinFileContext = parser.kotlinFile();
-                var astFile = kotlinFileContext.Accept(new KotlinVisitor(filePath)) as Ast.File;
+                KotlinParser.KotlinFileContext kotlinFileContext = parser.kotlinFile();
+                Ast.File astFile = kotlinFileContext.Accept(new KotlinVisitor(filePath)) as Ast.File;
 
                 return new List<ClassInfo> {AstToClassInfoConverter.ToClassInfo(astFile)};
             }

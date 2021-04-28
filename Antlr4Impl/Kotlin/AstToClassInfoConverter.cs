@@ -7,13 +7,12 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 {
     public static class AstToClassInfoConverter
     {
-        
-        private static readonly TypeName VoidType = TypeName.For("void");
+        static readonly TypeName VoidType = TypeName.For("void");
 
         public static ClassInfo ToClassInfo(Ast.File astFile)
         {
-            var classNameFromFile = Path.GetFileNameWithoutExtension(astFile.Name);
-            var className = new ClassName(
+            string classNameFromFile = Path.GetFileNameWithoutExtension(astFile.Name);
+            ClassName className = new ClassName(
                 new FileName(astFile.Name),
                 new PackageName(astFile.Package.Name),
                 classNameFromFile
@@ -30,14 +29,14 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             );
         }
 
-        private static ClassInfo ToClassInfo(Ast.Klass klass, string fileName, string package, string parentClassName)
+        static ClassInfo ToClassInfo(Ast.Klass klass, string fileName, string package, string parentClassName)
         {
-            var stringClassName = parentClassName switch
+            string stringClassName = parentClassName switch
             {
                 null => klass.Name,
                 _ => $"{parentClassName}${klass.Name}"
             };
-            var className = new ClassName(
+            ClassName className = new ClassName(
                 new FileName(fileName),
                 new PackageName(package),
                 stringClassName
@@ -53,7 +52,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             );
         }
 
-        private static FieldInfo ToFieldInfo(Ast.Field field, ClassName className)
+        static FieldInfo ToFieldInfo(Ast.Field field, ClassName className)
         {
             return new FieldInfo(
                 new FieldName(
@@ -67,7 +66,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             );
         }
 
-        private static MethodInfo ToMethodInfo(Ast.Method method, ClassName className)
+        static MethodInfo ToMethodInfo(Ast.Method method, ClassName className)
         {
             return new MethodInfo(
                 new MethodName(
@@ -84,7 +83,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             );
         }
 
-        private static AccessFlags ToAccessFlag(string accFlag)
+        static AccessFlags ToAccessFlag(string accFlag)
         {
             return accFlag switch
             {
