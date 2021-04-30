@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Text.RegularExpressions;
 using PrimitiveCodebaseElements.Primitive;
 
@@ -53,14 +52,14 @@ namespace antlr_parser.Antlr4Impl
                     // TODO implement regex for each language
                     return new MethodBodyRemovalResult(
                         source, 
-                        ImmutableDictionary<int, string>.Empty);
+                        new Dictionary<int, string>());
                 case SourceCodeLanguage.Kotlin:
                     languageMethodBodyRegex = KotlinFunctionDeclarationRegex;
                     break;
                 default:
                     return new MethodBodyRemovalResult(
                         source, 
-                        ImmutableDictionary<int, string>.Empty);
+                        new Dictionary<int, string>());
             }
 
             Match currentMatch = languageMethodBodyRegex.Match(source);
@@ -93,7 +92,7 @@ namespace antlr_parser.Antlr4Impl
                 currentMatch = languageMethodBodyRegex.Match(sourceAccumulator, startAt);
             }
 
-            return new MethodBodyRemovalResult(sourceAccumulator, indexToRemovedString.ToImmutableDictionary());
+            return new MethodBodyRemovalResult(sourceAccumulator, indexToRemovedString);
         }
 
         static int ClosedCurlyPosition(string source, int firstCurlyPosition)
@@ -127,9 +126,9 @@ namespace antlr_parser.Antlr4Impl
         /// It is 'Y' for: fun f(x:X):Y  { 
         /// and ')' for: fun f(x:X){ 
         /// </summary>
-        public readonly ImmutableDictionary<int, string> IdxToRemovedMethodBody;
+        public readonly Dictionary<int, string> IdxToRemovedMethodBody;
 
-        public MethodBodyRemovalResult(string source, ImmutableDictionary<int, string> idxToRemovedMethodBody)
+        public MethodBodyRemovalResult(string source, Dictionary<int, string> idxToRemovedMethodBody)
         {
             Source = source;
             IdxToRemovedMethodBody = idxToRemovedMethodBody;

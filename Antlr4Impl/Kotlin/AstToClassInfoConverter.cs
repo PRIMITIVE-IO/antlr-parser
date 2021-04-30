@@ -15,8 +15,8 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             ClassName className = new ClassName(
                 new FileName(astFile.Name),
                 new PackageName(astFile.Package.Name),
-                classNameFromFile
-            );
+                classNameFromFile);
+
             return new ClassInfo(
                 className,
                 astFile.Methods.Select(method => ToMethodInfo(method, className)).ToList(),
@@ -25,8 +25,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 astFile.Classes.Select(klass =>
                     ToClassInfo(klass, astFile.Name, astFile.Package.Name, classNameFromFile)),
                 new SourceCodeSnippet("", SourceCodeLanguage.Kotlin),
-                false
-            );
+                false);
         }
 
         static ClassInfo ToClassInfo(Ast.Klass klass, string fileName, string package, string parentClassName)
@@ -36,11 +35,12 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 null => klass.Name,
                 _ => $"{parentClassName}${klass.Name}"
             };
+
             ClassName className = new ClassName(
                 new FileName(fileName),
                 new PackageName(package),
-                stringClassName
-            );
+                stringClassName);
+
             return new ClassInfo(
                 className,
                 klass.Methods.Select(method => ToMethodInfo(method, className)),
@@ -48,33 +48,22 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 ToAccessFlag(klass.Modifier),
                 klass.InnerClasses.Select(inner => ToClassInfo(inner, fileName, package, stringClassName)),
                 new SourceCodeSnippet("", SourceCodeLanguage.Kotlin),
-                false
-            );
+                false);
         }
 
         static FieldInfo ToFieldInfo(Ast.Field field, ClassName className)
         {
             return new FieldInfo(
-                new FieldName(
-                    className,
-                    field.Name,
-                    VoidType.Signature
-                ),
+                new FieldName(className, field.Name, VoidType.Signature),
                 className,
                 ToAccessFlag(field.AccFlag),
-                new SourceCodeSnippet(field.SourceCode, SourceCodeLanguage.Kotlin)
-            );
+                new SourceCodeSnippet(field.SourceCode, SourceCodeLanguage.Kotlin));
         }
 
         static MethodInfo ToMethodInfo(Ast.Method method, ClassName className)
         {
             return new MethodInfo(
-                new MethodName(
-                    className,
-                    method.Name,
-                    VoidType.Signature,
-                    new List<Argument>()
-                ),
+                new MethodName(className, method.Name, VoidType.Signature, new List<Argument>()),
                 ToAccessFlag(method.AccFlag),
                 className,
                 new List<Argument>(),

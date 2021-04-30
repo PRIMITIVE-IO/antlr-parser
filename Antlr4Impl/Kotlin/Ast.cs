@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+using System.Collections.Generic;
 
 namespace antlr_parser.Antlr4Impl.Kotlin
 {
@@ -8,12 +8,15 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         {
             public readonly string Name;
             public readonly Package Package;
-            public readonly ImmutableList<Klass> Classes;
-            public readonly ImmutableList<Field> Fields;
-            public readonly ImmutableList<Method> Methods;
+            public readonly List<Klass> Classes;
+            public readonly List<Field> Fields;
+            public readonly List<Method> Methods;
 
-            public File(string name, Package package, ImmutableList<Klass> classes, ImmutableList<Field> fields,
-                ImmutableList<Method> methods)
+            public File(string name, 
+                Package package, 
+                List<Klass> classes,
+                List<Field> fields, 
+                List<Method> methods)
             {
                 Name = name;
                 Package = package;
@@ -36,13 +39,15 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         public class Klass : Ast
         {
             public readonly string Name;
-            public readonly ImmutableList<Method> Methods;
-            public readonly ImmutableList<Field> Fields;
-            public readonly ImmutableList<Klass> InnerClasses;
+            public readonly List<Method> Methods;
+            public readonly List<Field> Fields;
+            public readonly List<Klass> InnerClasses;
             public readonly string Modifier;
 
-            public Klass(string name, ImmutableList<Method> methods, ImmutableList<Field> fields,
-                ImmutableList<Klass> innerClasses,
+            public Klass(string name,
+                List<Method> methods,
+                List<Field> fields,
+                List<Klass> innerClasses,
                 string modifier)
             {
                 Name = name;
