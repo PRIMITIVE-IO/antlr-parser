@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -8,10 +9,12 @@ namespace antlr_parser.Antlr4Impl.Kotlin
     public class KotlinVisitor : KotlinParserBaseVisitor<Ast>
     {
         readonly string _fileName;
+        readonly MethodBodyRemovalResult MethodBodyRemovalResult;
 
-        public KotlinVisitor(string fileName)
+        public KotlinVisitor(string fileName, MethodBodyRemovalResult methodBodyRemovalResult)
         {
             _fileName = fileName;
+            MethodBodyRemovalResult = methodBodyRemovalResult;
         }
 
         public override Ast VisitKotlinFile(KotlinParser.KotlinFileContext context)
@@ -45,9 +48,12 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         public override Ast VisitFunctionDeclaration(KotlinParser.FunctionDeclarationContext context)
         {
             string modifier = extractVisibilityModifier(context.modifierList());
-            string soruceCode = context.GetFullText();
+            string removedBody =
+                MethodBodyRemovalResult.IdxToRemovedMethodBody.GetValueOrDefault(context.Stop.StopIndex) ?? "";
+            string sourceCode = context.GetFullText() + removedBody;
 
-            return new Ast.Method(context.identifier().GetFullText(), modifier, soruceCode);
+            sourceCode = StringUtil.TrimIndent(sourceCode);
+            return new Ast.Method(context.identifier().GetFullText(), modifier, sourceCode);
         }
 
         string extractVisibilityModifier(KotlinParser.ModifierListContext ctx)

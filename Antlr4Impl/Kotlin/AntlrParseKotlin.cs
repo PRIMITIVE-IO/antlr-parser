@@ -11,7 +11,8 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         {
             try
             {
-                char[] codeArray = KotlinMethodBodyRemover.RemoveFunctionBodies(source).ToCharArray();
+                MethodBodyRemovalResult removalMethodBodyRemovalResult = KotlinMethodBodyRemover.RemoveFunctionBodies(source);
+                char[] codeArray = removalMethodBodyRemovalResult.Source.ToCharArray();
                 AntlrInputStream inputStream = new AntlrInputStream(codeArray, codeArray.Length);
 
                 KotlinLexer lexer = new KotlinLexer(inputStream);
@@ -24,7 +25,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 // a KotlinFile is the highest level container -> start there
                 // do not call parser.kotlinFile() more than once
                 KotlinParser.KotlinFileContext kotlinFileContext = parser.kotlinFile();
-                Ast.File astFile = kotlinFileContext.Accept(new KotlinVisitor(filePath)) as Ast.File;
+                Ast.File astFile = kotlinFileContext.Accept(new KotlinVisitor(filePath, removalMethodBodyRemovalResult)) as Ast.File;
 
                 return new List<ClassInfo> {AstToClassInfoConverter.ToClassInfo(astFile)};
             }
