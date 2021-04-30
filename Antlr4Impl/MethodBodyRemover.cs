@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Text.RegularExpressions;
+using PrimitiveCodebaseElements.Primitive;
 
-namespace antlr_parser.Antlr4Impl.Kotlin
+namespace antlr_parser.Antlr4Impl
 {
-    public static class KotlinMethodBodyRemover
+    public static class MethodBodyRemover
     {
         //matches functions having open curly braces, like: "fun <T> `my f_u-nc`(a:B<C[]>, b:C, d:()->E?):Z<T>? {"
         //group 4 matches spaces before the last curly
@@ -29,17 +29,46 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             fun f():A<B.c>? {
             fun f(): A<B, C> {
         */
-        static Regex FunctionDeclarationRegex =
-            new Regex(
-                "fun\\s+[\\w, <, >, \\[,\\],\\-,_,`,\\.]*\\s*\\((\\s*(vararg\\s*)?\\w*\\s*:\\s*[\\w, <, >, \\[, \\],\\?,=,\\(,\\),->,\\.]*\\s*,?)*\\)(\\s*:\\s*[<,>,\\[,\\],\\w,\\?,\\., ]*[\\w,>,?])?(\\s*)({)");
+        static readonly Regex KotlinFunctionDeclarationRegex = new Regex(
+            "fun\\s+[\\w, <, >, \\[,\\],\\-,_,`,\\.]*\\s*\\((\\s*(vararg\\s*)?\\w*\\s*:\\s*[\\w, <, >, \\[, \\],\\?,=,\\(,\\),->,\\.]*\\s*,?)*\\)(\\s*:\\s*[<,>,\\[,\\],\\w,\\?,\\., ]*[\\w,>,?])?(\\s*)({)");
 
-        public static MethodBodyRemovalResult RemoveFunctionBodies(string source)
+        /// <summary>
+        /// Identifies a function or method body that is defined with opening and closing curly braces, and removes the
+        /// source code from within the braces. In the <see cref="MethodBodyRemovalResult"/>, both the shortened source
+        /// code and also a dictionary for the indices of the removed source code is returned to later be re-inserted
+        /// into the <see cref="SourceCodeSnippet"/>s within <see cref="MethodInfo"/>s.
+        /// </summary>
+        public static MethodBodyRemovalResult RemoveMethodBodyWithBraces(string source, SourceCodeLanguage language)
         {
-            Match currentMatch = FunctionDeclarationRegex.Match(source);
+            Regex languageMethodBodyRegex;
+            switch (language)
+            {
+                case SourceCodeLanguage.Java:
+                case SourceCodeLanguage.JavaScript:
+                case SourceCodeLanguage.TypeScript:
+                case SourceCodeLanguage.Cpp:
+                case SourceCodeLanguage.C:
+                case SourceCodeLanguage.CWithClasses:
+                case SourceCodeLanguage.ObjC:
+                    // TODO implement regex for each language
+                    return new MethodBodyRemovalResult(
+                        source, 
+                        ImmutableDictionary<int, string>.Empty);
+                case SourceCodeLanguage.Kotlin:
+                    languageMethodBodyRegex = KotlinFunctionDeclarationRegex;
+                    break;
+                default:
+                    return new MethodBodyRemovalResult(
+                        source, 
+                        ImmutableDictionary<int, string>.Empty);
+            }
+
+            Match currentMatch = languageMethodBodyRegex.Match(source);
             string sourceAccumulator = source;
             Dictionary<int, string> indexToRemovedString = new Dictionary<int, string>();
             while (currentMatch.Success)
             {
+                // TODO this is still specific to Kotlin code
                 int openedCurlyPosition = currentMatch.Groups[5].Index;
                 int closedCurlyPosition = ClosedCurlyPosition(sourceAccumulator, openedCurlyPosition);
 
@@ -47,14 +76,21 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
                 int lastMethodDeclarationPosition = afterMethodDeclarationPosition - 1;
                 int bodyLength = closedCurlyPosition - afterMethodDeclarationPosition;
+
+                string removedString = sourceAccumulator.Substring(
+                    afterMethodDeclarationPosition,
+                    bodyLength + 1);
                 
-                string removedString = sourceAccumulator.Substring(afterMethodDeclarationPosition, bodyLength + 1);
-                sourceAccumulator = sourceAccumulator.Remove(afterMethodDeclarationPosition, bodyLength + 1);
+                sourceAccumulator = sourceAccumulator.Remove(
+                    afterMethodDeclarationPosition, 
+                    bodyLength + 1);
 
                 indexToRemovedString.Add(lastMethodDeclarationPosition, removedString);
                 int startAt = currentMatch.Index + currentMatch.Length;
+                
                 if (startAt >= sourceAccumulator.Length) break;
-                currentMatch = FunctionDeclarationRegex.Match(sourceAccumulator, startAt);
+                
+                currentMatch = languageMethodBodyRegex.Match(sourceAccumulator, startAt);
             }
 
             return new MethodBodyRemovalResult(sourceAccumulator, indexToRemovedString.ToImmutableDictionary());
@@ -84,7 +120,8 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
     public class MethodBodyRemovalResult
     {
-        public string Source;
+        public readonly string Source;
+        
         /// <summary>
         /// Index is a position of last symbol of a function declaration header
         /// It is 'Y' for: fun f(x:X):Y  { 

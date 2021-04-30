@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -8,13 +7,13 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 {
     public class KotlinVisitor : KotlinParserBaseVisitor<Ast>
     {
-        readonly string _fileName;
-        readonly MethodBodyRemovalResult MethodBodyRemovalResult;
+        readonly string fileName;
+        readonly MethodBodyRemovalResult methodBodyRemovalResult;
 
         public KotlinVisitor(string fileName, MethodBodyRemovalResult methodBodyRemovalResult)
         {
-            _fileName = fileName;
-            MethodBodyRemovalResult = methodBodyRemovalResult;
+            this.fileName = fileName;
+            this.methodBodyRemovalResult = methodBodyRemovalResult;
         }
 
         public override Ast VisitKotlinFile(KotlinParser.KotlinFileContext context)
@@ -29,7 +28,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             ImmutableList<Ast.Method> methods = parsed.OfType<Ast.Method>().ToImmutableList();
             ImmutableList<Ast.Field> fields = parsed.OfType<Ast.Field>().ToImmutableList();
 
-            return new Ast.File(_fileName, pkg, classes, fields, methods);
+            return new Ast.File(fileName, pkg, classes, fields, methods);
         }
 
         public override Ast VisitTopLevelObject(KotlinParser.TopLevelObjectContext context)
@@ -47,20 +46,20 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
         public override Ast VisitFunctionDeclaration(KotlinParser.FunctionDeclarationContext context)
         {
-            string modifier = extractVisibilityModifier(context.modifierList());
+            string modifier = ExtractVisibilityModifier(context.modifierList());
             string removedBody =
-                MethodBodyRemovalResult.IdxToRemovedMethodBody.GetValueOrDefault(context.Stop.StopIndex) ?? "";
+                methodBodyRemovalResult.IdxToRemovedMethodBody.GetValueOrDefault(context.Stop.StopIndex) ?? "";
             string sourceCode = context.GetFullText() + removedBody;
 
             sourceCode = StringUtil.TrimIndent(sourceCode);
             return new Ast.Method(context.identifier().GetFullText(), modifier, sourceCode);
         }
 
-        string extractVisibilityModifier(KotlinParser.ModifierListContext ctx)
+        static string ExtractVisibilityModifier(KotlinParser.ModifierListContext ctx)
         {
             return ctx?.modifier()
                 ?.Select(it => it.visibilityModifier())
-                ?.FirstOrDefault()
+                .FirstOrDefault()
                 ?.GetFullText();
         }
 
@@ -71,11 +70,11 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
         public override Ast VisitClassDeclaration(KotlinParser.ClassDeclarationContext context)
         {
-            string modifier = extractVisibilityModifier(context.modifierList());
+            string modifier = ExtractVisibilityModifier(context.modifierList());
             ImmutableList<Ast> parsedMembers = context.classBody()?.classMemberDeclaration()
                                                    ?.Select(decl => decl.Accept(this))
-                                                   ?.Where(it => it != null)
-                                                   ?.ToImmutableList()
+                                                   .Where(it => it != null)
+                                                   .ToImmutableList()
                                                ?? ImmutableList<Ast>.Empty;
 
             return new Ast.Klass(
@@ -89,7 +88,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
         public override Ast VisitPropertyDeclaration(KotlinParser.PropertyDeclarationContext context)
         {
-            string modifier = extractVisibilityModifier(context.modifierList());
+            string modifier = ExtractVisibilityModifier(context.modifierList());
             string sourceCode = context.GetFullText();
             return new Ast.Field(context.variableDeclaration().simpleIdentifier().GetFullText(), modifier, sourceCode);
         }

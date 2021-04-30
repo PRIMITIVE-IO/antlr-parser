@@ -11,7 +11,8 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         {
             try
             {
-                MethodBodyRemovalResult removalMethodBodyRemovalResult = KotlinMethodBodyRemover.RemoveFunctionBodies(source);
+                MethodBodyRemovalResult removalMethodBodyRemovalResult =
+                    MethodBodyRemover.RemoveMethodBodyWithBraces(source, SourceCodeLanguage.Kotlin);
                 char[] codeArray = removalMethodBodyRemovalResult.Source.ToCharArray();
                 AntlrInputStream inputStream = new AntlrInputStream(codeArray, codeArray.Length);
 
