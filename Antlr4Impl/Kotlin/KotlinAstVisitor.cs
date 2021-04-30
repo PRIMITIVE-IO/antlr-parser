@@ -46,8 +46,11 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         public override Ast VisitFunctionDeclaration(KotlinParser.FunctionDeclarationContext context)
         {
             string modifier = ExtractVisibilityModifier(context.modifierList());
-            string removedBody =
-                methodBodyRemovalResult.IdxToRemovedMethodBody.GetValueOrDefault(context.Stop.StopIndex) ?? "";
+            methodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex, out string removedBody);
+            if (string.IsNullOrEmpty(removedBody))
+            {
+                removedBody = "";
+            }
             string sourceCode = context.GetFullText() + removedBody;
 
             sourceCode = StringUtil.TrimIndent(sourceCode);

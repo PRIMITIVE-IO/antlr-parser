@@ -30,11 +30,16 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
         static ClassInfo ToClassInfo(Ast.Klass klass, string fileName, string package, string parentClassName)
         {
-            string stringClassName = parentClassName switch
+            string stringClassName;
+            switch (parentClassName)
             {
-                null => klass.Name,
-                _ => $"{parentClassName}${klass.Name}"
-            };
+                case null:
+                    stringClassName = klass.Name;
+                    break;
+                default:
+                    stringClassName = $"{parentClassName}${klass.Name}";
+                    break;
+            }
 
             ClassName className = new ClassName(
                 new FileName(fileName),
@@ -74,14 +79,18 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
         static AccessFlags ToAccessFlag(string accFlag)
         {
-            return accFlag switch
+            switch (accFlag)
             {
-                null => AccessFlags.AccPublic,
-                "public" => AccessFlags.AccPublic,
-                "private" => AccessFlags.AccPrivate,
-                "internal" => AccessFlags.AccProtected,
-                _ => AccessFlags.AccPublic
-            };
+                case null:
+                case "public":
+                    return AccessFlags.AccPublic;
+                case "private":
+                    return AccessFlags.AccPrivate;
+                case "internal":
+                    return AccessFlags.AccProtected;
+                default:
+                    return AccessFlags.AccPublic;
+            }
         }
     }
 }
