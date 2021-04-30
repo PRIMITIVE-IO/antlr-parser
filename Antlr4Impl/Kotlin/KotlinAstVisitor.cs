@@ -7,31 +7,33 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 {
     public class KotlinVisitor : KotlinParserBaseVisitor<Ast>
     {
-        private readonly string _fileName;
+        readonly string fileName;
+        readonly MethodBodyRemovalResult methodBodyRemovalResult;
 
-        public KotlinVisitor(string fileName)
+        public KotlinVisitor(string fileName, MethodBodyRemovalResult methodBodyRemovalResult)
         {
-            _fileName = fileName;
+            this.fileName = fileName;
+            this.methodBodyRemovalResult = methodBodyRemovalResult;
         }
 
         public override Ast VisitKotlinFile(KotlinParser.KotlinFileContext context)
         {
-            var pkg = context.preamble().packageHeader().Accept(this) as Ast.Package;
-            var parsed = context.topLevelObject()
-                .Select(obj => obj.Accept(this) )
+            Ast.Package pkg = context.preamble().packageHeader().Accept(this) as Ast.Package;
+            List<Ast> parsed = context.topLevelObject()
+                .Select(obj => obj.Accept(this))
                 .Where(it => it != null)
                 .ToList();
 
-            var classes = parsed.OfType<Ast.Klass>().ToImmutableList();
-            var methods = parsed.OfType<Ast.Method>().ToImmutableList();
-            var fields = parsed.OfType<Ast.Field>().ToImmutableList();
-            
-            return new Ast.File(_fileName, pkg, classes, fields, methods);
+            ImmutableList<Ast.Klass> classes = parsed.OfType<Ast.Klass>().ToImmutableList();
+            ImmutableList<Ast.Method> methods = parsed.OfType<Ast.Method>().ToImmutableList();
+            ImmutableList<Ast.Field> fields = parsed.OfType<Ast.Field>().ToImmutableList();
+
+            return new Ast.File(fileName, pkg, classes, fields, methods);
         }
 
         public override Ast VisitTopLevelObject(KotlinParser.TopLevelObjectContext context)
         {
-            var declaration = new List<ParserRuleContext>()
+            ParserRuleContext declaration = new List<ParserRuleContext>()
                 {
                     context.classDeclaration(),
                     context.functionDeclaration(),
@@ -44,17 +46,20 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
         public override Ast VisitFunctionDeclaration(KotlinParser.FunctionDeclarationContext context)
         {
-            var modifier = extractVisibilityModifier(context.modifierList());
-            var soruceCode = context.GetFullText();
+            string modifier = ExtractVisibilityModifier(context.modifierList());
+            string removedBody =
+                methodBodyRemovalResult.IdxToRemovedMethodBody.GetValueOrDefault(context.Stop.StopIndex) ?? "";
+            string sourceCode = context.GetFullText() + removedBody;
 
-            return new Ast.Method(context.identifier().GetFullText(), modifier, soruceCode);
+            sourceCode = StringUtil.TrimIndent(sourceCode);
+            return new Ast.Method(context.identifier().GetFullText(), modifier, sourceCode);
         }
 
-        private string extractVisibilityModifier(KotlinParser.ModifierListContext ctx)
+        static string ExtractVisibilityModifier(KotlinParser.ModifierListContext ctx)
         {
             return ctx?.modifier()
                 ?.Select(it => it.visibilityModifier())
-                ?.FirstOrDefault()
+                .FirstOrDefault()
                 ?.GetFullText();
         }
 
@@ -65,12 +70,12 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
         public override Ast VisitClassDeclaration(KotlinParser.ClassDeclarationContext context)
         {
-            var modifier = extractVisibilityModifier(context.modifierList());
-            var parsedMembers = context.classBody()?.classMemberDeclaration()
-                ?.Select(decl => decl.Accept(this))
-                ?.Where(it => it != null)
-                ?.ToImmutableList()
-                ??ImmutableList<Ast>.Empty;
+            string modifier = ExtractVisibilityModifier(context.modifierList());
+            ImmutableList<Ast> parsedMembers = context.classBody()?.classMemberDeclaration()
+                                                   ?.Select(decl => decl.Accept(this))
+                                                   .Where(it => it != null)
+                                                   .ToImmutableList()
+                                               ?? ImmutableList<Ast>.Empty;
 
             return new Ast.Klass(
                 context.simpleIdentifier().GetFullText(),
@@ -83,14 +88,14 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
         public override Ast VisitPropertyDeclaration(KotlinParser.PropertyDeclarationContext context)
         {
-            var modifier = extractVisibilityModifier(context.modifierList());
-            var sourceCode = context.GetFullText();
+            string modifier = ExtractVisibilityModifier(context.modifierList());
+            string sourceCode = context.GetFullText();
             return new Ast.Field(context.variableDeclaration().simpleIdentifier().GetFullText(), modifier, sourceCode);
         }
 
         public override Ast VisitClassMemberDeclaration(KotlinParser.ClassMemberDeclarationContext context)
         {
-            var declaration = new List<ParserRuleContext>
+            ParserRuleContext declaration = new List<ParserRuleContext>
             {
                 context.functionDeclaration(),
                 context.classDeclaration(),

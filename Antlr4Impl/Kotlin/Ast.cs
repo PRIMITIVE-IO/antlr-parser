@@ -67,16 +67,6 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             }
         }
 
-        public class Fields : Ast
-        {
-            public readonly ImmutableList<Field> FieldList;
-
-            public Fields(ImmutableList<Field> fieldList)
-            {
-                FieldList = fieldList;
-            }
-        }
-
         public class Field : Ast
         {
             public readonly string Name;
