@@ -1,53 +1,53 @@
 using System.Collections.Generic;
 
-namespace antlr_parser.Antlr4Impl.Kotlin
+namespace antlr_parser.Antlr4Impl
 {
-    public class Ast
+    public class AstNode
     {
-        public class File : Ast
+        public class FileNode : AstNode
         {
             public readonly string Name;
-            public readonly Package Package;
-            public readonly List<Klass> Classes;
-            public readonly List<Field> Fields;
-            public readonly List<Method> Methods;
+            public readonly PackageNode PackageNode;
+            public readonly List<ClassNode> Classes;
+            public readonly List<FieldNode> Fields;
+            public readonly List<MethodNode> Methods;
 
-            public File(string name, 
-                Package package, 
-                List<Klass> classes,
-                List<Field> fields, 
-                List<Method> methods)
+            public FileNode(string name, 
+                PackageNode packageNode, 
+                List<ClassNode> classes,
+                List<FieldNode> fields, 
+                List<MethodNode> methods)
             {
                 Name = name;
-                Package = package;
+                PackageNode = packageNode;
                 Classes = classes;
                 Fields = fields;
                 Methods = methods;
             }
         }
 
-        public class Package : Ast
+        public class PackageNode : AstNode
         {
             public readonly string Name;
 
-            public Package(string name)
+            public PackageNode(string name)
             {
                 Name = name;
             }
         }
 
-        public class Klass : Ast
+        public class ClassNode : AstNode
         {
             public readonly string Name;
-            public readonly List<Method> Methods;
-            public readonly List<Field> Fields;
-            public readonly List<Klass> InnerClasses;
+            public readonly List<MethodNode> Methods;
+            public readonly List<FieldNode> Fields;
+            public readonly List<ClassNode> InnerClasses;
             public readonly string Modifier;
 
-            public Klass(string name,
-                List<Method> methods,
-                List<Field> fields,
-                List<Klass> innerClasses,
+            public ClassNode(string name,
+                List<MethodNode> methods,
+                List<FieldNode> fields,
+                List<ClassNode> innerClasses,
                 string modifier)
             {
                 Name = name;
@@ -58,13 +58,13 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             }
         }
 
-        public class Method : Ast
+        public class MethodNode : AstNode
         {
             public readonly string Name;
             public readonly string AccFlag;
             public readonly string SourceCode;
 
-            public Method(string name, string accFlag, string sourceCode)
+            public MethodNode(string name, string accFlag, string sourceCode)
             {
                 Name = name;
                 AccFlag = accFlag;
@@ -72,13 +72,13 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             }
         }
 
-        public class Field : Ast
+        public class FieldNode : AstNode
         {
             public readonly string Name;
             public readonly string AccFlag;
             public readonly string SourceCode;
 
-            public Field(string name, string accFlag, string sourceCode)
+            public FieldNode(string name, string accFlag, string sourceCode)
             {
                 Name = name;
                 AccFlag = accFlag;

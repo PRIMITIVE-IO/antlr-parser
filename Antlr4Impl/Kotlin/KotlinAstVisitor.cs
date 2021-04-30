@@ -4,7 +4,7 @@ using Antlr4.Runtime;
 
 namespace antlr_parser.Antlr4Impl.Kotlin
 {
-    public class KotlinVisitor : KotlinParserBaseVisitor<Ast>
+    public class KotlinVisitor : KotlinParserBaseVisitor<AstNode>
     {
         readonly string fileName;
         readonly MethodBodyRemovalResult methodBodyRemovalResult;
@@ -15,22 +15,22 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             this.methodBodyRemovalResult = methodBodyRemovalResult;
         }
 
-        public override Ast VisitKotlinFile(KotlinParser.KotlinFileContext context)
+        public override AstNode VisitKotlinFile(KotlinParser.KotlinFileContext context)
         {
-            Ast.Package pkg = context.preamble().packageHeader().Accept(this) as Ast.Package;
-            List<Ast> parsed = context.topLevelObject()
+            AstNode.PackageNode pkg = context.preamble().packageHeader().Accept(this) as AstNode.PackageNode;
+            List<AstNode> parsed = context.topLevelObject()
                 .Select(obj => obj.Accept(this))
                 .Where(it => it != null)
                 .ToList();
 
-            List<Ast.Klass> classes = parsed.OfType<Ast.Klass>().ToList();
-            List<Ast.Method> methods = parsed.OfType<Ast.Method>().ToList();
-            List<Ast.Field> fields = parsed.OfType<Ast.Field>().ToList();
+            List<AstNode.ClassNode> classes = parsed.OfType<AstNode.ClassNode>().ToList();
+            List<AstNode.MethodNode> methods = parsed.OfType<AstNode.MethodNode>().ToList();
+            List<AstNode.FieldNode> fields = parsed.OfType<AstNode.FieldNode>().ToList();
 
-            return new Ast.File(fileName, pkg, classes, fields, methods);
+            return new AstNode.FileNode(fileName, pkg, classes, fields, methods);
         }
 
-        public override Ast VisitTopLevelObject(KotlinParser.TopLevelObjectContext context)
+        public override AstNode VisitTopLevelObject(KotlinParser.TopLevelObjectContext context)
         {
             ParserRuleContext declaration = new List<ParserRuleContext>()
                 {
@@ -43,7 +43,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             return declaration?.Accept(this);
         }
 
-        public override Ast VisitFunctionDeclaration(KotlinParser.FunctionDeclarationContext context)
+        public override AstNode VisitFunctionDeclaration(KotlinParser.FunctionDeclarationContext context)
         {
             string modifier = ExtractVisibilityModifier(context.modifierList());
             methodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex, out string removedBody);
@@ -54,7 +54,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             string sourceCode = context.GetFullText() + removedBody;
 
             sourceCode = StringUtil.TrimIndent(sourceCode);
-            return new Ast.Method(context.identifier().GetFullText(), modifier, sourceCode);
+            return new AstNode.MethodNode(context.identifier().GetFullText(), modifier, sourceCode);
         }
 
         static string ExtractVisibilityModifier(KotlinParser.ModifierListContext ctx)
@@ -65,39 +65,39 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 ?.GetFullText();
         }
 
-        public override Ast VisitPackageHeader(KotlinParser.PackageHeaderContext context)
+        public override AstNode VisitPackageHeader(KotlinParser.PackageHeaderContext context)
         {
-            return new Ast.Package(context.identifier()?.GetText() ?? "");
+            return new AstNode.PackageNode(context.identifier()?.GetText() ?? "");
         }
 
-        public override Ast VisitClassDeclaration(KotlinParser.ClassDeclarationContext context)
+        public override AstNode VisitClassDeclaration(KotlinParser.ClassDeclarationContext context)
         {
             string modifier = ExtractVisibilityModifier(context.modifierList());
-            List<Ast> parsedMembers = context.classBody()?.classMemberDeclaration()
+            List<AstNode> parsedMembers = context.classBody()?.classMemberDeclaration()
                                                    ?.Select(decl => decl.Accept(this))
                                                    .Where(it => it != null)
                                                    .ToList()
-                                               ?? new List<Ast>();
+                                               ?? new List<AstNode>();
 
-            return new Ast.Klass(
+            return new AstNode.ClassNode(
                 context.simpleIdentifier().GetFullText(),
-                parsedMembers.OfType<Ast.Method>().ToList(),
-                parsedMembers.OfType<Ast.Field>().ToList(),
-                parsedMembers.OfType<Ast.Klass>().ToList(),
+                parsedMembers.OfType<AstNode.MethodNode>().ToList(),
+                parsedMembers.OfType<AstNode.FieldNode>().ToList(),
+                parsedMembers.OfType<AstNode.ClassNode>().ToList(),
                 modifier
             );
         }
 
-        public override Ast VisitPropertyDeclaration(KotlinParser.PropertyDeclarationContext context)
+        public override AstNode VisitPropertyDeclaration(KotlinParser.PropertyDeclarationContext context)
         {
             string modifier = ExtractVisibilityModifier(context.modifierList());
             string sourceCode = context.GetFullText();
-            return new Ast.Field(
+            return new AstNode.FieldNode(
                 context.variableDeclaration().simpleIdentifier().GetFullText(),
                 modifier, sourceCode);
         }
 
-        public override Ast VisitClassMemberDeclaration(KotlinParser.ClassMemberDeclarationContext context)
+        public override AstNode VisitClassMemberDeclaration(KotlinParser.ClassMemberDeclarationContext context)
         {
             ParserRuleContext declaration = new List<ParserRuleContext>
             {
