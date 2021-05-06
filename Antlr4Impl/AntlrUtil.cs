@@ -44,7 +44,7 @@ namespace antlr_parser.Antlr4Impl
 
     public static class StringUtil
     {
-        public static string TrimIndent(string s)
+        public static string TrimIndent(this string s)
         {
             string[] lines = s.Split('\n');
 
@@ -89,6 +89,26 @@ namespace antlr_parser.Antlr4Impl
             }
 
             return -1;
+        }
+        public static int ClosedCurlyPosition(string source, int firstCurlyPosition)
+        {
+            int nestingCounter = 0;
+            for (int i = firstCurlyPosition; i < source.Length; i++)
+            {
+                switch (source[i])
+                {
+                    case '{':
+                        nestingCounter++;
+                        break;
+                    case '}':
+                        nestingCounter--;
+                        break;
+                }
+
+                if (nestingCounter == 0) return i;
+            }
+
+            throw new Exception($"Cannot find close curly brace starting from {firstCurlyPosition} for: {source}");
         }
     }
 }

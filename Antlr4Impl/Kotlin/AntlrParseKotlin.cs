@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
 
@@ -11,8 +12,9 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         {
             try
             {
-                MethodBodyRemovalResult removalMethodBodyRemovalResult =
-                    MethodBodyRemover.RemoveMethodBodyWithBraces(source, SourceCodeLanguage.Kotlin);
+                ImmutableList<Tuple<int, int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
+                MethodBodyRemovalResult removalMethodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+
                 char[] codeArray = removalMethodBodyRemovalResult.Source.ToCharArray();
                 AntlrInputStream inputStream = new AntlrInputStream(codeArray, codeArray.Length);
 
@@ -29,7 +31,8 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 AstNode.FileNode astFileNode = kotlinFileContext.Accept(
                     new KotlinVisitor(filePath, removalMethodBodyRemovalResult)) as AstNode.FileNode;
 
-                return new List<ClassInfo> {AstToClassInfoConverter.ToClassInfo(astFileNode, SourceCodeLanguage.Kotlin)};
+                return new List<ClassInfo>
+                    {AstToClassInfoConverter.ToClassInfo(astFileNode, SourceCodeLanguage.Kotlin)};
             }
             catch (Exception e)
             {
