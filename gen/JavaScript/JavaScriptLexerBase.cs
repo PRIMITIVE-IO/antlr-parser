@@ -1,5 +1,7 @@
 using Antlr4.Runtime;
 using System.Collections.Generic;
+using System.IO;
+using static JavaScriptParser;
 
 /// <summary>
 /// All lexer methods that used in grammar (IsStrictMode)
@@ -29,6 +31,10 @@ public abstract class JavaScriptLexerBase : Lexer
 
     public JavaScriptLexerBase(ICharStream input)
         : base(input)
+    {
+    }
+
+    public JavaScriptLexerBase(ICharStream input, TextWriter output, TextWriter errorOutput) : this(input)
     {
     }
 
@@ -91,7 +97,7 @@ public abstract class JavaScriptLexerBase : Lexer
 
     protected void ProcessStringLiteral()
     {
-        if (_lastToken == null || _lastToken.Type == 9) // open brace
+        if (_lastToken == null || _lastToken.Type == OpenBrace)
         {
             if (Text.Equals("\"use strict\"") || Text.Equals("'use strict'"))
             {
@@ -117,19 +123,18 @@ public abstract class JavaScriptLexerBase : Lexer
 
         switch (_lastToken.Type)
         {
-            // THESE WERE MANUALLY ASSIGNED BY JOHN
-            case 117: //Identifier:
-            case 59: //NullLiteral:
-            case 60: //BooleanLiteral:
-            case 88: //This:
-            case 6: //CloseBracket:
-            case 8: //CloseParen:
-            case 63: //OctalIntegerLiteral:
-            case 61: //DecimalLiteral:
-            case 62: //HexIntegerLiteral:
-            case 118: //StringLiteral:
-            case 18://PlusPlus:
-            case 19: //MinusMinus:
+            case Identifier:
+            case NullLiteral:
+            case BooleanLiteral:
+            case This:
+            case CloseBracket:
+            case CloseParen:
+            case OctalIntegerLiteral:
+            case DecimalLiteral:
+            case HexIntegerLiteral:
+            case StringLiteral:
+            case PlusPlus:
+            case MinusMinus:
                 // After any of the tokens above, no regex literal can follow.
                 return false;
             default:
