@@ -19,8 +19,9 @@ namespace antlr_parser.Antlr4Impl
 
         public static MethodBodyRemovalResult From(string source, ImmutableList<Tuple<int, int>> blocksToRemove)
         {
-            ImmutableDictionary<int,string> idxToRemovedMethodBody = ComputeIdxToRemovedMethodBody(blocksToRemove, source);
-            string cleanedText = RemoveBlocks(source, blocksToRemove);
+            ImmutableList<Tuple<int, int>> topLevelBlocksToRemove = removeNested(blocksToRemove);
+            ImmutableDictionary<int,string> idxToRemovedMethodBody = ComputeIdxToRemovedMethodBody(topLevelBlocksToRemove, source);
+            string cleanedText = RemoveBlocks(source, topLevelBlocksToRemove);
             return new MethodBodyRemovalResult(cleanedText, idxToRemovedMethodBody);
         } 
         static string RemoveBlocks(string source, ImmutableList<Tuple<int, int>> removeFromTo)
@@ -49,7 +50,31 @@ namespace antlr_parser.Antlr4Impl
             return idxToRemovedMethodBody.ToImmutableDictionary();
         }
         
-        MethodBodyRemovalResult(string source, ImmutableDictionary<int, string> idxToRemovedMethodBody)
+        /// <summary>
+        /// Removes nested blocks for removal. For example:
+        /// for input: [1..10, 2..5] this method return: [1..10], since
+        /// second block (2..5) is in first block (1..10).  
+        /// </summary>
+        /// <param name="blocksForRemoval"></param>
+        /// <returns></returns>
+        static ImmutableList<Tuple<int, int>> removeNested(ImmutableList<Tuple<int, int>> blocksForRemoval)
+        {
+            List<Tuple<int, int>> res = new List<Tuple<int, int>>();
+            int lastIndexForRemoval = -1;
+            foreach (Tuple<int, int> blockForRemoval in blocksForRemoval)
+            {
+                var (from, to) = blockForRemoval;
+                if (from > lastIndexForRemoval)
+                {
+                    res.Add(blockForRemoval);
+                    lastIndexForRemoval = to;
+                }
+            }
+
+            return res.ToImmutableList();
+        }
+        
+        public MethodBodyRemovalResult(string source, ImmutableDictionary<int, string> idxToRemovedMethodBody)
         {
             Source = source;
             IdxToRemovedMethodBody = idxToRemovedMethodBody;

@@ -110,5 +110,10 @@ namespace antlr_parser.Antlr4Impl
 
             throw new Exception($"Cannot find close curly brace starting from {firstCurlyPosition} for: {source}");
         }
+        
+        public static string Substring(this string s, Tuple<int, int> fromTo)
+        {
+            return s.Substring(fromTo.Item1, fromTo.Item2 - fromTo.Item1 + 1);
+        }
     }
 }

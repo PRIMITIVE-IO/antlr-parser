@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
 
@@ -11,7 +12,10 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         {
             try
             {
-                char[] codeArray = source.ToCharArray();
+                ImmutableList<Tuple<int,int>> blocksToRemove = RegexBasedJavaScriptMethodBodyRemover.FindBlocksToRemove(source);
+                MethodBodyRemovalResult removalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+
+                char[] codeArray = removalResult.Source.ToCharArray();
                 AntlrInputStream inputStream = new AntlrInputStream(codeArray, codeArray.Length);
 
                 JavaScriptLexer lexer = new JavaScriptLexer(inputStream);
@@ -23,16 +27,17 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
                 // a program is the highest level container -> start there
                 // do not call parser.program() more than once
-                ProgramListener programListener = new ProgramListener(filePath);
-                parser.program().EnterRule(programListener);
-                return new List<ClassInfo> {programListener.FileClassInfo};
+                JavaScriptParser.ProgramContext programContext = parser.program();
+                AstNode.FileNode astFile = programContext.Accept(new JavaScriptAstVisitor(filePath, removalResult)) as AstNode.FileNode;
+                return ImmutableList.Create( AstToClassInfoConverter.ToClassInfo(astFile, SourceCodeLanguage.JavaScript));
             }
             catch (Exception e)
             {
+                Console.WriteLine($"file: {filePath}");
+                Console.WriteLine(source);
                 Console.WriteLine(e);
+                return ImmutableList<ClassInfo>.Empty;
             }
-
-            return new List<ClassInfo>();
         }
     }
 }

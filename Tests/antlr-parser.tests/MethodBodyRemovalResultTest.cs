@@ -35,5 +35,30 @@ namespace antlr_parser.tests
             result.IdxToRemovedMethodBody[7].Should().Be("{ REMOVE }");// 7 - is a position of ')' in 'fun f()' 
             result.IdxToRemovedMethodBody[15].Should().Be(" { REMOVE }"); // 15 is a position of ')' in 'fun g()'
         }
+        
+        [Fact]
+        public void IgnoreNestedBlocks()
+        {
+            string source = @"
+                fun f(){ fun h() {} }
+            ".TrimIndent();
+
+            ImmutableList<Tuple<int, int>> blocksToRemove = ImmutableList.Create(
+                new Tuple<int, int>(8, 21), // outer fun f(){ fun h() {} }
+                new Tuple<int, int>(18, 19)// inner fun h() {}
+            );
+
+            //Act
+            MethodBodyRemovalResult result = MethodBodyRemovalResult.From(source, blocksToRemove);
+
+            //Verify
+            string expectedSource = @"
+                fun f()
+            ".TrimIndent();
+            result.Source.Should().Be(expectedSource);
+
+            result.IdxToRemovedMethodBody.Count.Should().Be(1);
+            result.IdxToRemovedMethodBody[7].Should().Be("{ fun h() {} }");// 7 - is a position of ')' in 'fun f()' 
+        }
     }
 }
