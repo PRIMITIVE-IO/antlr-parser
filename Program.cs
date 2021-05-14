@@ -37,45 +37,29 @@ namespace antlr_parser
 
         static void Parse(Args args)
         {
-            string inputPath = args.InputPath;
+            FilePathsFrom(args.InputPath)
+                .AsParallel()
+                .Where(filePath => ParserHandler.SupportedParsableFiles.Contains(Path.GetExtension(filePath)))
+                .SelectMany(ParseFile)
+                .ForAll(PrintClass);
+        }
 
-            if (inputPath.Contains('.') &&
-                ParserHandler.SupportedParsableFiles.Contains(Path.GetExtension(inputPath)))
+        static IEnumerable<string> FilePathsFrom(string inputPath)
+        {
+            if (File.GetAttributes(inputPath).HasFlag(FileAttributes.Directory))
             {
-                // single file
-                string filePath = inputPath;
-                string sourceText = ParserHandler.GetTextFromFilePath(filePath);
-                List<ClassInfo> classInfos = ParserHandler.ClassInfoFromSourceText(
-                    filePath,
-                    Path.GetExtension(filePath),
-                    sourceText).ToList();
-
-                foreach (ClassInfo classInfo in classInfos)
-                {
-                    PrintClass(classInfo);
-                }
+                return Directory.GetFiles(inputPath, "*.*", SearchOption.AllDirectories);
             }
-            else
-            {
-                // directory
-                string[] allFiles = Directory.GetFiles(inputPath, "*.*", SearchOption.AllDirectories);
 
-                foreach (string filePath in allFiles
-                    .Where(filePath => ParserHandler.SupportedParsableFiles
-                        .Contains(Path.GetExtension(filePath))))
-                {
-                    string sourceText = ParserHandler.GetTextFromFilePath(filePath);
-                    List<ClassInfo> classInfos = ParserHandler.ClassInfoFromSourceText(
-                        filePath,
-                        Path.GetExtension(filePath),
-                        sourceText).ToList();
+            return new[] {inputPath};
+        }
 
-                    foreach (ClassInfo classInfo in classInfos)
-                    {
-                        PrintClass(classInfo);
-                    }
-                }
-            }
+        static IEnumerable<ClassInfo> ParseFile(string filePath)
+        {
+            return ParserHandler.ClassInfoFromSourceText(
+                filePath,
+                Path.GetExtension(filePath),
+                ParserHandler.GetTextFromFilePath(filePath));
         }
 
         static void PrintClass(ClassInfo classInfo)
