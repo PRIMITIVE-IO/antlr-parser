@@ -21,4 +21,8 @@
       <HintPath>PrimitiveCodebaseElements.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="gen\C" />
+  </ItemGroup>
 </Project>

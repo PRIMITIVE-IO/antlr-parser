@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from C:/Users/john/Desktop/PRIMITIVE_Tools/antlr-parser/grammars\C.g4 by ANTLR 4.9.1
+// Generated from /Users/maxfarsikov/IdeaProjects/antlr-parser/grammars/C.g4 by ANTLR 4.9.1
 
 // Unreachable code detected
 #pragma warning disable 0162
