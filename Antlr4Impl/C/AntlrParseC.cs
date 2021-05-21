@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
 
@@ -11,7 +12,10 @@ namespace antlr_parser.Antlr4Impl.C
         {
             try
             {
-                char[] codeArray = source.ToCharArray();
+                ImmutableList<Tuple<int,int>> blocksToRemove = RegexBasedCMethodBodyRemover.FindBlocksToRemove(source);
+                MethodBodyRemovalResult methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+                
+                char[] codeArray = methodBodyRemovalResult.Source.ToCharArray();
                 AntlrInputStream inputStream = new AntlrInputStream(codeArray, codeArray.Length);
 
                 CLexer lexer = new CLexer(inputStream);
@@ -24,7 +28,7 @@ namespace antlr_parser.Antlr4Impl.C
                 // a compilation unit is the highest level container -> start there
                 // do not call parser.compilationUnit() more than once
                 CParser.CompilationUnitContext compilationUnitContext = parser.compilationUnit();
-                AstNode.FileNode astNode = compilationUnitContext.Accept(new CVisitor(filePath)) as AstNode.FileNode;
+                AstNode.FileNode astNode = compilationUnitContext.Accept(new CVisitor(filePath, methodBodyRemovalResult)) as AstNode.FileNode;
 
                 return new List<ClassInfo> {AstToClassInfoConverter.ToClassInfo(astNode, SourceCodeLanguage.C)};
             }

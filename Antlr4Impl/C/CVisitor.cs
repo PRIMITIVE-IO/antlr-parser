@@ -1,16 +1,18 @@
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Antlr4.Runtime;
 
 namespace antlr_parser.Antlr4Impl.C
 {
     public class CVisitor : CBaseVisitor<AstNode>
     {
         readonly string fileName;
+        private readonly MethodBodyRemovalResult methodBodyRemovalResult;
 
-        public CVisitor(string fileName)
+        public CVisitor(string fileName, MethodBodyRemovalResult methodBodyRemovalResult)
         {
             this.fileName = fileName;
+            this.methodBodyRemovalResult = methodBodyRemovalResult;
         }
 
         public override AstNode VisitCompilationUnit(CParser.CompilationUnitContext context)
@@ -40,36 +42,72 @@ namespace antlr_parser.Antlr4Impl.C
         public override AstNode VisitStructOrUnionSpecifier(CParser.StructOrUnionSpecifierContext context)
         {
             string name = context.Identifier().ToString();
+
             ImmutableList<AstNode.FieldNode> fields = context.structDeclarationList().structDeclaration()
                 .Select(it => it.Accept(this) as AstNode.FieldNode)
+                .ToImmutableList();
+
+            ImmutableList<AstNode.ClassNode> innerClasses = context.structDeclarationList().structDeclaration()
+                .Select(it => it.specifierQualifierList()
+                    ?.typeSpecifier()
+                    ?.structOrUnionSpecifier()
+                    ?.Accept(this) as AstNode.ClassNode
+                )
+                .Where(it => it != null)
                 .ToImmutableList();
 
             return new AstNode.ClassNode(
                 name,
                 ImmutableList<AstNode.MethodNode>.Empty,
                 fields,
-                ImmutableList<AstNode.ClassNode>.Empty,
+                innerClasses,
                 "public"
             );
         }
 
         public override AstNode VisitStructDeclaration(CParser.StructDeclarationContext context)
         {
+            string fieldName = ExtractPlainFieldName(context) ?? ExtractArrayFieldName(context);
+
             return new AstNode.FieldNode(
-                context.specifierQualifierList().specifierQualifierList().GetFullText(),
+                fieldName,
                 "public",
                 context.GetFullText()
             );
         }
 
+        private string ExtractPlainFieldName(CParser.StructDeclarationContext context)
+        {
+            return context.specifierQualifierList()
+                ?.specifierQualifierList()
+                ?.typeSpecifier()
+                ?.typedefName()
+                ?.Identifier()
+                ?.ToString();
+        }
+
+        private string ExtractArrayFieldName(CParser.StructDeclarationContext context)
+        {
+            return context.structDeclaratorList()
+                ?.structDeclarator()
+                ?.First()
+                ?.declarator()
+                ?.directDeclarator()
+                ?.directDeclarator()
+                ?.Identifier()
+                ?.ToString();
+        }
+
         public override AstNode VisitFunctionDefinition(CParser.FunctionDefinitionContext context)
         {
+            string text = (context.Parent.Parent as ParserRuleContext).GetFullText(); //TODO avoid 'parent.parent' hack
             string fName = ExtractFunctionName(context.declarator().directDeclarator());
 
             return new AstNode.MethodNode(
                 fName,
                 "public",
-                context.GetFullText()
+                text +
+                (methodBodyRemovalResult.IdxToRemovedMethodBody.GetValueOrDefault(context.Stop.StopIndex) ?? "")
             );
         }
 
