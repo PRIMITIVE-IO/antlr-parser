@@ -55,17 +55,21 @@ namespace antlr_parser.Antlr4Impl
                 new PackageName(package),
                 stringClassName);
 
+            IEnumerable<MethodInfo> methodInfos = classNode.Methods.Select(method => ToMethodInfo(method, className, language));
+            IEnumerable<FieldInfo> fieldInfos = classNode.Fields.Select(field => ToFieldInfo(field, className, language));
+            IEnumerable<ClassInfo> innerClasses = classNode.InnerClasses.Select(inner => ToClassInfo(
+                inner, 
+                fileName,
+                package,
+                stringClassName,
+                language));
+            
             return new ClassInfo(
                 className,
-                classNode.Methods.Select(method => ToMethodInfo(method, className, language)),
-                classNode.Fields.Select(field => ToFieldInfo(field, className, language)),
+                methodInfos,
+                fieldInfos,
                 ToAccessFlag(classNode.Modifier),
-                classNode.InnerClasses.Select(inner => ToClassInfo(
-                    inner, 
-                    fileName,
-                    package,
-                    stringClassName,
-                    language)),
+                innerClasses,
                 new SourceCodeSnippet("", language),
                 false);
         }

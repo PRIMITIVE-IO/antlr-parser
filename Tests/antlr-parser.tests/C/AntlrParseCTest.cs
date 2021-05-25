@@ -85,5 +85,82 @@ namespace antlr_parser.tests.C
             ClassInfo dateClass = employeeClass.InnerClasses.First();
             dateClass.className.ShortName.Should().Be("Date");
         }
+
+        [Fact]
+        void ParseEmptyFile()
+        {
+            string source = @"
+                /**
+                  64-bit Mach-O library functions layer.
+
+                Copyright (C) 2020, Goldfish64.  All rights reserved.<BR>
+                This program and the accompanying materials are licensed and made available
+                under the terms and conditions of the BSD License which accompanies this
+                distribution.  The full text of the license may be found at
+                http://opensource.org/licenses/bsd-license.php.
+
+                THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN ""AS IS"" BASIS,
+                            WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+
+                            **/
+
+                #include ""CxxSymbolsX.h""
+                #include ""HeaderX.h""
+                #include ""SymbolsX.h""
+            ".TrimIndent(); 
+            IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
+            classInfos.Count().Should().Be(1);
+        }
+
+        [Fact]
+        void parseTwoFunctions()
+        {
+            string source = @"
+                /**
+                  Decode WAVE audio to PCM audio.
+
+                  @param[in]  This           Audio decode protocol instance.
+                **/
+                STATIC
+                EFI_STATUS
+                EFIAPI
+                AudioDecodeWave (
+                  IN  EFI_AUDIO_DECODE_PROTOCOL      *This,
+                  IN  CONST VOID                     *InBuffer
+                  )
+                {
+                  if (EFI_ERROR (Status)) {
+                    return Status;
+                  }
+                }
+
+                /**
+                  Decode MP3 audio to PCM audio.
+
+                  @param[in]  This           Audio decode protocol instance.
+                **/
+                STATIC
+                EFI_STATUS
+                EFIAPI
+                AudioDecodeMp3 (
+                  IN  EFI_AUDIO_DECODE_PROTOCOL      *This,
+                  OUT UINT8                          *Channels
+                  )
+                {
+                  Status = OcDecodeMp3 (
+                    InBuffer,
+                    Channels
+                  );
+                }
+            ".TrimIndent();
+            
+            IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
+
+            IEnumerable<MethodInfo> methodInfos = classInfos.First().Methods;
+
+           // methodInfos.Count().Should().Be(2);
+            MethodInfo vaweMethod = methodInfos.Single(it=> it.Name.ShortName == "AudioDecodeWave");
+            methodInfos.Single(it => it.Name.ShortName == "AudioDecodeMp3");
+        }
     }
 }

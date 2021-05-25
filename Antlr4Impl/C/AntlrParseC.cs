@@ -10,11 +10,12 @@ namespace antlr_parser.Antlr4Impl.C
     {
         public static IEnumerable<ClassInfo> OuterClassInfosFromSource(string source, string filePath)
         {
+            Console.WriteLine("Parsing file: {0}", filePath);
             try
             {
-                ImmutableList<Tuple<int,int>> blocksToRemove = RegexBasedCMethodBodyRemover.FindBlocksToRemove(source);
+                ImmutableList<Tuple<int, int>> blocksToRemove = RegexBasedCMethodBodyRemover.FindBlocksToRemove(source);
                 MethodBodyRemovalResult methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
-                
+
                 char[] codeArray = methodBodyRemovalResult.Source.ToCharArray();
                 AntlrInputStream inputStream = new AntlrInputStream(codeArray, codeArray.Length);
 
@@ -28,16 +29,17 @@ namespace antlr_parser.Antlr4Impl.C
                 // a compilation unit is the highest level container -> start there
                 // do not call parser.compilationUnit() more than once
                 CParser.CompilationUnitContext compilationUnitContext = parser.compilationUnit();
-                AstNode.FileNode astNode = compilationUnitContext.Accept(new CVisitor(filePath, methodBodyRemovalResult)) as AstNode.FileNode;
-
-                return new List<ClassInfo> {AstToClassInfoConverter.ToClassInfo(astNode, SourceCodeLanguage.C)};
+                AstNode.FileNode astNode =
+                    compilationUnitContext.Accept(new CVisitor(filePath, methodBodyRemovalResult)) as AstNode.FileNode;
+                
+                return ImmutableList.Create(AstToClassInfoConverter.ToClassInfo(astNode, SourceCodeLanguage.C));
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine($"file: {filePath}, source: {source}, exception: {e}");
             }
 
-            return new List<ClassInfo>();
+            return ImmutableList<ClassInfo>.Empty;
         }
     }
 }

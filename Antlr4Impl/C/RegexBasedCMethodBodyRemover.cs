@@ -13,15 +13,16 @@ namespace antlr_parser.Antlr4Impl.C
         //group 3 matches the last curly
         /*
          raw regex:
-            \w+(\s*\[\s*\])?\s+\w+\s*\([\w,\,\s,\[,\]]*\)(\s*)(\{)
+            \w+(\s*\[\s*\])?\s+\w+\s*\([\w,\,\s,\[,\],\*]*\)(\s*)(\{)
          test cases for regex:
             void f(){
             void f(s[] a, b c){
             int a ( x x, y y) {
             int[] a ( x x, y y) {
+            fsw_status_t fsw_mount(void *host_data, struct fsw_host_table **host_table) {
         */
         static readonly Regex CFunctionDeclarationRegex = new Regex(
-            "\\w+(\\s*\\[\\s*\\])?\\s+\\w+\\s*\\([\\w,\\,\\s,\\[,\\]]*\\)(\\s*)(\\{)");
+            "\\w+(\\s*\\[\\s*\\])?\\s+\\w+\\s*\\([\\w,\\,\\s,\\[,\\],\\*]*\\)(\\s*)(\\{)");
 
         /// <summary>
         /// Identifies a function or method body that is defined with opening and closing curly braces, and removes the
