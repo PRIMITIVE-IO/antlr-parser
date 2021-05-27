@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Text.RegularExpressions;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
 
@@ -8,13 +9,31 @@ namespace antlr_parser.Antlr4Impl.C
 {
     public static class AntlrParseC
     {
+        /// <summary>
+        /// Unescaped regex: #if(.|\n)*?(\{|\})(.|\n)*?#endif
+        /// Matches curly braces between #if and #endif preprocessor directives.
+        /// False-positive match: #if #endif { #if #endif
+        ///
+        /// Reason: broken open-closed curly brace parity causes errors when we are trying to remove function bodies.
+        /// That is why we are trying to identify such a files and do not apply body removal for them.
+        /// </summary>
+        static readonly Regex HasCurlyBetweenDirectives = new Regex("#if(.|\\n)*?(\\{|\\})(.|\\n)*?#endif"); 
         public static IEnumerable<ClassInfo> OuterClassInfosFromSource(string source, string filePath)
         {
             Console.WriteLine("Parsing file: {0}", filePath);
             try
             {
-                ImmutableList<Tuple<int, int>> blocksToRemove = RegexBasedCMethodBodyRemover.FindBlocksToRemove(source);
-                MethodBodyRemovalResult methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+                MethodBodyRemovalResult methodBodyRemovalResult;
+
+                if (HasCurlyBetweenDirectives.IsMatch(source))
+                {
+                    methodBodyRemovalResult = new MethodBodyRemovalResult(source, ImmutableDictionary<int, string>.Empty);
+                }
+                else
+                {
+                    ImmutableList<Tuple<int, int>> blocksToRemove = RegexBasedCMethodBodyRemover.FindBlocksToRemove(source);
+                    methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+                }
 
                 char[] codeArray = methodBodyRemovalResult.Source.ToCharArray();
                 AntlrInputStream inputStream = new AntlrInputStream(codeArray, codeArray.Length);
