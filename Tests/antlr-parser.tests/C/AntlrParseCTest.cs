@@ -162,5 +162,38 @@ namespace antlr_parser.tests.C
             MethodInfo vaweMethod = methodInfos.Single(it=> it.Name.ShortName == "AudioDecodeWave");
             methodInfos.Single(it => it.Name.ShortName == "AudioDecodeMp3");
         }
+
+        [Fact]
+        void ParseCodeWithDirectives()
+        {
+            string source = @"
+                int f(int a, int b)
+                {
+                #if 1
+                    for(i = 0; i<0; i++){
+                #else
+                    for(j = 0; j<0; j++){
+                #endif
+                    };
+                }
+                int g(int a, int b)  
+                {
+     
+                }
+            ".TrimIndent();
+            
+            IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
+
+            IEnumerable<MethodInfo> methodInfos = classInfos.First().Methods;
+            MethodInfo fMethod = methodInfos.SingleOrDefault(it => it.Name.ShortName == "f");
+            fMethod.Should().NotBeNull();
+            fMethod.SourceCode.Text.Trim().Should().Be(@"
+                int f(int a, int b)
+                {
+                    for(i = 0; i<0; i++){
+                    };
+                }".TrimIndent().Trim());
+            methodInfos.SingleOrDefault(it => it.Name.ShortName == "g").Should().NotBeNull();
+        }
     }
 }

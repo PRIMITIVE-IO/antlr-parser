@@ -110,7 +110,7 @@ namespace antlr_parser.Antlr4Impl.C
 
         public override AstNode VisitFunctionDefinition(CParser.FunctionDefinitionContext context)
         {
-            string text = (context.Parent.Parent as ParserRuleContext).GetFullText(); //TODO avoid 'parent.parent' hack
+            string text = context.GetFullText(); //(context.Parent.Parent as ParserRuleContext).GetFullText(); //TODO avoid 'parent.parent' hack
             string fName = ExtractFunctionName(context.declarator().directDeclarator());
 
             return new AstNode.MethodNode(

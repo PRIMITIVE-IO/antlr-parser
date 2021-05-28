@@ -19,7 +19,7 @@ namespace antlr_parser.Antlr4Impl
 
         public static MethodBodyRemovalResult From(string source, ImmutableList<Tuple<int, int>> blocksToRemove)
         {
-            ImmutableList<Tuple<int, int>> topLevelBlocksToRemove = removeNested(blocksToRemove);
+            ImmutableList<Tuple<int, int>> topLevelBlocksToRemove = RemoveNested(blocksToRemove);
             ImmutableDictionary<int,string> idxToRemovedMethodBody = ComputeIdxToRemovedMethodBody(topLevelBlocksToRemove, source);
             string cleanedText = RemoveBlocks(source, topLevelBlocksToRemove);
             return new MethodBodyRemovalResult(cleanedText, idxToRemovedMethodBody);
@@ -43,7 +43,7 @@ namespace antlr_parser.Antlr4Impl
             foreach (var (from, to) in blocksToRemove)
             {
                 int lengthToRemove = to - from + 1;
-                idxToRemovedMethodBody.Add(from - removedLength - 1, text.Substring(from, lengthToRemove));
+                idxToRemovedMethodBody[from - removedLength - 1] = text.Substring(from, lengthToRemove);
                 removedLength += lengthToRemove;
             }
 
@@ -57,7 +57,7 @@ namespace antlr_parser.Antlr4Impl
         /// </summary>
         /// <param name="blocksForRemoval"></param>
         /// <returns></returns>
-        static ImmutableList<Tuple<int, int>> removeNested(ImmutableList<Tuple<int, int>> blocksForRemoval)
+        static ImmutableList<Tuple<int, int>> RemoveNested(ImmutableList<Tuple<int, int>> blocksForRemoval)
         {
             List<Tuple<int, int>> res = new List<Tuple<int, int>>();
             int lastIndexForRemoval = -1;
