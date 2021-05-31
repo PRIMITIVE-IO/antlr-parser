@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
 
@@ -12,7 +11,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         {
             try
             {
-                ImmutableList<Tuple<int, int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
+                List<Tuple<int, int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
                 MethodBodyRemovalResult removalMethodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
 
                 char[] codeArray = removalMethodBodyRemovalResult.Source.ToCharArray();

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Text.RegularExpressions;
 using PrimitiveCodebaseElements.Primitive;
@@ -30,9 +29,9 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         /// code and also a dictionary for the indices of the removed source code is returned to later be re-inserted
         /// into the <see cref="SourceCodeSnippet"/>s within <see cref="MethodInfo"/>s.
         /// </summary>
-        public static ImmutableList<Tuple<int, int>> FindBlocksToRemove(string source)
+        public static List<Tuple<int, int>> FindBlocksToRemove(string source)
         {
-            ImmutableList<Tuple<int,int>> blocksToRemove = KotlinFunctionDeclarationRegex.Matches(source).Select(currentMatch =>
+            List<Tuple<int,int>> blocksToRemove = KotlinFunctionDeclarationRegex.Matches(source).Select(currentMatch =>
             {
                 int openedCurlyPosition = currentMatch.Groups[4].Index;
                 int closedCurlyPosition = StringUtil.ClosedCurlyPosition(source, openedCurlyPosition);
@@ -40,7 +39,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 int afterMethodDeclarationPosition = currentMatch.Groups[3].Index;
 
                 return new Tuple<int, int>(afterMethodDeclarationPosition, closedCurlyPosition);
-            }).ToImmutableList();
+            }).ToList();
 
             return blocksToRemove;
         }

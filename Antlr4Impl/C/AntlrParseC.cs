@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Text.RegularExpressions;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
@@ -14,12 +13,15 @@ namespace antlr_parser.Antlr4Impl.C
             Console.WriteLine("Parsing file: {0}", filePath);
             try
             {
-                string preprocessedSource = MethodBodyRemovalResult.From(source, DirectivesRemover.FindBlocksToRemove(source))
+                string preprocessedSource = MethodBodyRemovalResult
+                    .From(source, DirectivesRemover.FindBlocksToRemove(source))
                     .Source;
 
-                ImmutableList<Tuple<int, int>> blocksToRemove = RegexBasedCMethodBodyRemover.FindBlocksToRemove(preprocessedSource);
+                List<Tuple<int, int>> blocksToRemove =
+                    RegexBasedCMethodBodyRemover.FindBlocksToRemove(preprocessedSource);
 
-                MethodBodyRemovalResult methodBodyRemovalResult = MethodBodyRemovalResult.From(preprocessedSource, blocksToRemove);
+                MethodBodyRemovalResult methodBodyRemovalResult =
+                    MethodBodyRemovalResult.From(preprocessedSource, blocksToRemove);
 
 
                 char[] codeArray = methodBodyRemovalResult.Source.ToCharArray();
@@ -38,14 +40,14 @@ namespace antlr_parser.Antlr4Impl.C
                 AstNode.FileNode astNode =
                     compilationUnitContext.Accept(new CVisitor(filePath, methodBodyRemovalResult)) as AstNode.FileNode;
 
-                return ImmutableList.Create(AstToClassInfoConverter.ToClassInfo(astNode, SourceCodeLanguage.C));
+                return new List<ClassInfo> {AstToClassInfoConverter.ToClassInfo(astNode, SourceCodeLanguage.C)};
             }
             catch (Exception e)
             {
                 Console.WriteLine($"file: {filePath}, source: {source}, exception: {e}");
             }
 
-            return ImmutableList<ClassInfo>.Empty;
+            return new List<ClassInfo>();
         }
     }
 }

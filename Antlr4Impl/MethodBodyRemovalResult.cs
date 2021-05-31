@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 
 namespace antlr_parser.Antlr4Impl
@@ -15,39 +14,36 @@ namespace antlr_parser.Antlr4Impl
         /// It is 'Y' for: fun f(x:X):Y  { 
         /// and ')' for: fun f(x:X){ 
         /// </summary>
-        public readonly ImmutableDictionary<int, string> IdxToRemovedMethodBody;
+        public readonly Dictionary<int, string> IdxToRemovedMethodBody;
 
-        public static MethodBodyRemovalResult From(string source, ImmutableList<Tuple<int, int>> blocksToRemove)
+        public static MethodBodyRemovalResult From(string source, List<Tuple<int, int>> blocksToRemove)
         {
-            ImmutableList<Tuple<int, int>> topLevelBlocksToRemove = RemoveNested(blocksToRemove);
-            ImmutableDictionary<int,string> idxToRemovedMethodBody = ComputeIdxToRemovedMethodBody(topLevelBlocksToRemove, source);
+            List<Tuple<int, int>> topLevelBlocksToRemove = RemoveNested(blocksToRemove);
+            Dictionary<int,string> idxToRemovedMethodBody = ComputeIdxToRemovedMethodBody(topLevelBlocksToRemove, source);
             string cleanedText = RemoveBlocks(source, topLevelBlocksToRemove);
             return new MethodBodyRemovalResult(cleanedText, idxToRemovedMethodBody);
         } 
-        static string RemoveBlocks(string source, ImmutableList<Tuple<int, int>> removeFromTo)
+        static string RemoveBlocks(string source, List<Tuple<int, int>> removeFromTo)
         {
-            return removeFromTo.Reverse()
+            return removeFromTo.AsEnumerable() 
+                .Reverse()
                 .Aggregate(source,
-                    (acc, fromTo) =>
-                    {
-                        var (from, to) = fromTo;
-                        return acc.Remove(from, to - from + 1);
-                    });
+                    (acc, fromTo) => acc.Remove(fromTo.Item1, fromTo.Item2 - fromTo.Item1 + 1));
         }
 
-        static ImmutableDictionary<int, string> ComputeIdxToRemovedMethodBody(ImmutableList<Tuple<int, int>> blocksToRemove, string text)
+        static Dictionary<int, string> ComputeIdxToRemovedMethodBody(List<Tuple<int, int>> blocksToRemove, string text)
         {
             Dictionary<int, string> idxToRemovedMethodBody = new Dictionary<int, string>();
 
             int removedLength = 0;
-            foreach (var (from, to) in blocksToRemove)
+            foreach (Tuple<int, int> fromTo in blocksToRemove)
             {
-                int lengthToRemove = to - from + 1;
-                idxToRemovedMethodBody[from - removedLength - 1] = text.Substring(from, lengthToRemove);
+                int lengthToRemove = fromTo.Item2 - fromTo.Item1 + 1;
+                idxToRemovedMethodBody[fromTo.Item1 - removedLength - 1] = text.Substring(fromTo.Item1, lengthToRemove);
                 removedLength += lengthToRemove;
             }
 
-            return idxToRemovedMethodBody.ToImmutableDictionary();
+            return idxToRemovedMethodBody;
         }
         
         /// <summary>
@@ -57,24 +53,24 @@ namespace antlr_parser.Antlr4Impl
         /// </summary>
         /// <param name="blocksForRemoval"></param>
         /// <returns></returns>
-        static ImmutableList<Tuple<int, int>> RemoveNested(ImmutableList<Tuple<int, int>> blocksForRemoval)
+        static List<Tuple<int, int>> RemoveNested(List<Tuple<int, int>> blocksForRemoval)
         {
             List<Tuple<int, int>> res = new List<Tuple<int, int>>();
             int lastIndexForRemoval = -1;
             foreach (Tuple<int, int> blockForRemoval in blocksForRemoval)
             {
-                var (from, to) = blockForRemoval;
-                if (from > lastIndexForRemoval)
+                Tuple<int, int> fromTo = blockForRemoval;
+                if (fromTo.Item1 > lastIndexForRemoval)
                 {
                     res.Add(blockForRemoval);
-                    lastIndexForRemoval = to;
+                    lastIndexForRemoval = fromTo.Item2;
                 }
             }
 
-            return res.ToImmutableList();
+            return res.ToList();
         }
         
-        public MethodBodyRemovalResult(string source, ImmutableDictionary<int, string> idxToRemovedMethodBody)
+        public MethodBodyRemovalResult(string source, Dictionary<int, string> idxToRemovedMethodBody)
         {
             Source = source;
             IdxToRemovedMethodBody = idxToRemovedMethodBody;

@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Immutable;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using PrimitiveCodebaseElements.Primitive;
@@ -30,9 +30,9 @@ namespace antlr_parser.Antlr4Impl.C
         /// code and also a dictionary for the indices of the removed source code is returned to later be re-inserted
         /// into the <see cref="SourceCodeSnippet"/>s within <see cref="MethodInfo"/>s.
         /// </summary>
-        public static ImmutableList<Tuple<int, int>> FindBlocksToRemove(string source)
+        public static List<Tuple<int, int>> FindBlocksToRemove(string source)
         {
-            ImmutableList<Tuple<int,int>> blocksToRemove = CFunctionDeclarationRegex.Matches(source).Select(currentMatch =>
+            List<Tuple<int,int>> blocksToRemove = CFunctionDeclarationRegex.Matches(source).Select(currentMatch =>
             {
                 int openedCurlyPosition = currentMatch.Groups[3].Index;
                 int closedCurlyPosition = StringUtil.ClosedCurlyPosition(source, openedCurlyPosition);
@@ -40,7 +40,7 @@ namespace antlr_parser.Antlr4Impl.C
                 int afterMethodDeclarationPosition = currentMatch.Groups[2].Index;
 
                 return new Tuple<int, int>(afterMethodDeclarationPosition, closedCurlyPosition);
-            }).ToImmutableList();
+            }).ToList();
 
             return blocksToRemove;
         }

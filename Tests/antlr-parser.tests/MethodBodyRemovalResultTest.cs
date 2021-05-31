@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Immutable;
+using System.Collections.Generic;
 using antlr_parser.Antlr4Impl;
 using FluentAssertions;
 using Xunit;
@@ -16,10 +16,11 @@ namespace antlr_parser.tests
                 fun g() { REMOVE }
             ".TrimIndent();
 
-            ImmutableList<Tuple<int, int>> blocksToRemove = ImmutableList.Create(
+            List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>
+            {
                 new Tuple<int, int>(8, 17), // first '{ REMOVE }' block
-                new Tuple<int, int>(26, 36)// second ' { REMOVE }' block including leading space
-            );
+                new Tuple<int, int>(26, 36) // second ' { REMOVE }' block including leading space
+            };
 
             //Act
             MethodBodyRemovalResult result = MethodBodyRemovalResult.From(source, blocksToRemove);
@@ -32,10 +33,10 @@ namespace antlr_parser.tests
             result.Source.Should().Be(expectedSource);
 
             result.IdxToRemovedMethodBody.Count.Should().Be(2);
-            result.IdxToRemovedMethodBody[7].Should().Be("{ REMOVE }");// 7 - is a position of ')' in 'fun f()' 
+            result.IdxToRemovedMethodBody[7].Should().Be("{ REMOVE }"); // 7 - is a position of ')' in 'fun f()' 
             result.IdxToRemovedMethodBody[15].Should().Be(" { REMOVE }"); // 15 is a position of ')' in 'fun g()'
         }
-        
+
         [Fact]
         public void IgnoreNestedBlocks()
         {
@@ -43,10 +44,11 @@ namespace antlr_parser.tests
                 fun f(){ fun h() {} }
             ".TrimIndent();
 
-            ImmutableList<Tuple<int, int>> blocksToRemove = ImmutableList.Create(
+            List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>
+            {
                 new Tuple<int, int>(8, 21), // outer fun f(){ fun h() {} }
-                new Tuple<int, int>(18, 19)// inner fun h() {}
-            );
+                new Tuple<int, int>(18, 19) // inner fun h() {}
+            };
 
             //Act
             MethodBodyRemovalResult result = MethodBodyRemovalResult.From(source, blocksToRemove);
@@ -58,7 +60,7 @@ namespace antlr_parser.tests
             result.Source.Should().Be(expectedSource);
 
             result.IdxToRemovedMethodBody.Count.Should().Be(1);
-            result.IdxToRemovedMethodBody[7].Should().Be("{ fun h() {} }");// 7 - is a position of ')' in 'fun f()' 
+            result.IdxToRemovedMethodBody[7].Should().Be("{ fun h() {} }"); // 7 - is a position of ')' in 'fun f()' 
         }
     }
 }

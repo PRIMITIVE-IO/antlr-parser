@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Immutable;
+using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
 
@@ -18,27 +18,27 @@ namespace antlr_parser.Antlr4Impl.C
 
         public override AstNode VisitCompilationUnit(CParser.CompilationUnitContext context)
         {
-            ImmutableList<AstNode.MethodNode> methods = context.translationUnit()?.externalDeclaration()
-                .Select(it => it.functionDefinition()?.Accept(this) as AstNode.MethodNode)
-                .Where(it => it != null)
-                .ToImmutableList()
-                ??ImmutableList<AstNode.MethodNode>.Empty;
+            List<AstNode.MethodNode> methods = context.translationUnit()?.externalDeclaration()
+                                                   .Select(it => it.functionDefinition()?.Accept(this) as AstNode.MethodNode)
+                                                   .Where(it => it != null)
+                                                   .ToList()
+                                               ?? new List<AstNode.MethodNode>();
 
-            ImmutableList<AstNode.ClassNode> structs = context.translationUnit()?.externalDeclaration()
+            List<AstNode.ClassNode> structs = context.translationUnit()?.externalDeclaration()
                 .SelectMany(it =>
                     it?.declaration()?.declarationSpecifiers()?.declarationSpecifier() ??
                     new CParser.DeclarationSpecifierContext[0]
                 )
                 .Select(it => it.typeSpecifier()?.structOrUnionSpecifier()?.Accept(this) as AstNode.ClassNode)
                 .Where(it => it != null)
-                .ToImmutableList()
-                ??ImmutableList<AstNode.ClassNode>.Empty;
+                .ToList()
+                ?? new List<AstNode.ClassNode>();
 
             return new AstNode.FileNode(
                 fileName,
                 new AstNode.PackageNode(""),
                 structs,
-                ImmutableList<AstNode.FieldNode>.Empty,
+                new List<AstNode.FieldNode>(),
                 methods
             );
         }
@@ -53,24 +53,24 @@ namespace antlr_parser.Antlr4Impl.C
              */
             string name = context.Identifier()?.ToString() ?? "anonymous";
 
-            ImmutableList<AstNode.FieldNode> fields = context.structDeclarationList()?.structDeclaration()
+            List<AstNode.FieldNode> fields = context.structDeclarationList()?.structDeclaration()
                 .Select(it => it.Accept(this) as AstNode.FieldNode)
-                .ToImmutableList();
+                .ToList();
 
-            ImmutableList<AstNode.ClassNode> innerClasses = context.structDeclarationList()?.structDeclaration()
+            List<AstNode.ClassNode> innerClasses = context.structDeclarationList()?.structDeclaration()
                 .Select(it => it.specifierQualifierList()
                     ?.typeSpecifier()
                     ?.structOrUnionSpecifier()
                     ?.Accept(this) as AstNode.ClassNode
                 )
                 .Where(it => it != null)
-                .ToImmutableList();
+                .ToList();
 
             return new AstNode.ClassNode(
                 name,
-                ImmutableList<AstNode.MethodNode>.Empty,
-                fields ?? ImmutableList<AstNode.FieldNode>.Empty,
-                innerClasses ?? ImmutableList<AstNode.ClassNode>.Empty,
+                new List<AstNode.MethodNode>(),
+                fields ?? new List<AstNode.FieldNode>(),
+                innerClasses ?? new List<AstNode.ClassNode>(),
                 "public"
             );
         }

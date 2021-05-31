@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using Antlr4.Runtime;
 
@@ -24,9 +23,9 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 .Where(it => it != null)
                 .ToList();
 
-            ImmutableList<AstNode.ClassNode> classes = parsed.OfType<AstNode.ClassNode>().ToImmutableList();
-            ImmutableList<AstNode.MethodNode> methods = parsed.OfType<AstNode.MethodNode>().ToImmutableList();
-            ImmutableList<AstNode.FieldNode> fields = parsed.OfType<AstNode.FieldNode>().ToImmutableList();
+            List<AstNode.ClassNode> classes = parsed.OfType<AstNode.ClassNode>().ToList();
+            List<AstNode.MethodNode> methods = parsed.OfType<AstNode.MethodNode>().ToList();
+            List<AstNode.FieldNode> fields = parsed.OfType<AstNode.FieldNode>().ToList();
 
             return new AstNode.FileNode(fileName, pkg, classes, fields, methods);
         }
@@ -75,17 +74,17 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         public override AstNode VisitClassDeclaration(KotlinParser.ClassDeclarationContext context)
         {
             string modifier = ExtractVisibilityModifier(context.modifierList());
-            ImmutableList<AstNode> parsedMembers = context.classBody()?.classMemberDeclaration()
+            List<AstNode> parsedMembers = context.classBody()?.classMemberDeclaration()
                                                        ?.Select(decl => decl.Accept(this))
                                                        .Where(it => it != null)
-                                                       .ToImmutableList()
-                                                   ?? ImmutableList<AstNode>.Empty;
+                                                       .ToList()
+                                                   ?? new List<AstNode>();
 
             return new AstNode.ClassNode(
                 context.simpleIdentifier().GetFullText(),
-                parsedMembers.OfType<AstNode.MethodNode>().ToImmutableList(),
-                parsedMembers.OfType<AstNode.FieldNode>().ToImmutableList(),
-                parsedMembers.OfType<AstNode.ClassNode>().ToImmutableList(),
+                parsedMembers.OfType<AstNode.MethodNode>().ToList(),
+                parsedMembers.OfType<AstNode.FieldNode>().ToList(),
+                parsedMembers.OfType<AstNode.ClassNode>().ToList(),
                 modifier
             );
         }

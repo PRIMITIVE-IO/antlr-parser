@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
 
@@ -12,7 +11,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         {
             try
             {
-                ImmutableList<Tuple<int,int>> blocksToRemove = RegexBasedJavaScriptMethodBodyRemover.FindBlocksToRemove(source);
+                List<Tuple<int,int>> blocksToRemove = RegexBasedJavaScriptMethodBodyRemover.FindBlocksToRemove(source);
                 MethodBodyRemovalResult removalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
 
                 char[] codeArray = removalResult.Source.ToCharArray();
@@ -29,14 +28,14 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 // do not call parser.program() more than once
                 JavaScriptParser.ProgramContext programContext = parser.program();
                 AstNode.FileNode astFile = programContext.Accept(new JavaScriptAstVisitor(filePath, removalResult)) as AstNode.FileNode;
-                return ImmutableList.Create( AstToClassInfoConverter.ToClassInfo(astFile, SourceCodeLanguage.JavaScript));
+                return new List<ClassInfo> { AstToClassInfoConverter.ToClassInfo(astFile, SourceCodeLanguage.JavaScript)};
             }
             catch (Exception e)
             {
                 Console.WriteLine($"file: {filePath}");
                 Console.WriteLine(source);
                 Console.WriteLine(e);
-                return ImmutableList<ClassInfo>.Empty;
+                return new List<ClassInfo>();
             }
         }
     }

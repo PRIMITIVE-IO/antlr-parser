@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Immutable;
+using System.Collections.Generic;
 using antlr_parser.Antlr4Impl;
 using antlr_parser.Antlr4Impl.Kotlin;
 using FluentAssertions;
@@ -20,7 +20,7 @@ namespace antlr_parser.tests
             ".TrimIndent();
 
             //Act
-            ImmutableList<Tuple<int,int>> blocksToRemove = RegexBasedKotlinMethodBodyRemover.FindBlocksToRemove(source);
+            List<Tuple<int,int>> blocksToRemove = RegexBasedKotlinMethodBodyRemover.FindBlocksToRemove(source);
 
             //Verify
             blocksToRemove.Count.Should().Be(2);

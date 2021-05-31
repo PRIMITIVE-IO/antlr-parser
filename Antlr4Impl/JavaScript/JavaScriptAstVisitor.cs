@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 
 namespace antlr_parser.Antlr4Impl.JavaScript
@@ -36,24 +35,24 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                                          ?.GetChild<JavaScriptParser.FunctionDeclarationContext>(0)
                                          ?.Accept(this) as AstNode.MethodNode)
                                      .Where(it => it != null)
-                                 ?? ImmutableList<AstNode.MethodNode>.Empty);
+                                 ?? new List<AstNode.MethodNode>());
 
                 fields.AddRange(statement.variableStatement()
                                     ?.variableDeclarationList()
                                     ?.variableDeclaration()
                                     ?.Select(variableDecl => variableDecl.Accept(this))
                                     .OfType<AstNode.FieldNode>()
-                                    .ToImmutableList()
-                                ?? ImmutableList<AstNode.FieldNode>.Empty
+                                    .ToList()
+                                ?? new List<AstNode.FieldNode>()
                 );
             }
 
             return new AstNode.FileNode(
                 FileName,
                 new AstNode.PackageNode(""),
-                classes.ToImmutableList(),
-                fields.ToImmutableList(),
-                methods.ToImmutableList()
+                classes.ToList(),
+                fields.ToList(),
+                methods.ToList()
             );
         }
 
@@ -70,15 +69,15 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         public override AstNode VisitClassDeclaration(JavaScriptParser.ClassDeclarationContext context)
         {
-            ImmutableList<AstNode> classElements = context.classTail().classElement()
+            List<AstNode> classElements = context.classTail().classElement()
                 .Select(elem => elem.Accept(this))
-                .ToImmutableList();
+                .ToList();
 
             return new AstNode.ClassNode(
                 context.identifier().GetFullText(),
-                classElements.OfType<AstNode.MethodNode>().ToImmutableList(),
-                classElements.OfType<AstNode.FieldNode>().ToImmutableList(),
-                classElements.OfType<AstNode.ClassNode>().ToImmutableList(),
+                classElements.OfType<AstNode.MethodNode>().ToList(),
+                classElements.OfType<AstNode.FieldNode>().ToList(),
+                classElements.OfType<AstNode.ClassNode>().ToList(),
                 ""
             );
         }
@@ -90,19 +89,12 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         public override AstNode VisitMethodDefinition(JavaScriptParser.MethodDefinitionContext context)
         {
-            try
-            {
-                return new AstNode.MethodNode(
-                    context.propertyName().GetFullText(),
-                    "",
-                    context.GetFullText() +
-                    (MethodBodyRemovalResult.IdxToRemovedMethodBody.GetValueOrDefault(context.Stop.StopIndex) ?? "")
-                );
-            }
-            catch (Exception ex)
-            {
-                return null; //TODO
-            }
+            return new AstNode.MethodNode(
+                context.propertyName().GetFullText(),
+                "",
+                context.GetFullText() +
+                (MethodBodyRemovalResult.IdxToRemovedMethodBody.GetValueOrDefault(context.Stop.StopIndex) ?? "")
+            );
         }
 
         public override AstNode VisitVariableDeclaration(JavaScriptParser.VariableDeclarationContext context)

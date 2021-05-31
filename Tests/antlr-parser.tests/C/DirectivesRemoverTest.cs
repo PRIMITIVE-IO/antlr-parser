@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Immutable;
+using System.Collections.Generic;
 using antlr_parser.Antlr4Impl;
 using antlr_parser.Antlr4Impl.C;
 using FluentAssertions;
@@ -22,7 +22,7 @@ namespace antlr_parser.tests.C
                 #endif
             ".TrimIndent();
 
-            ImmutableList<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
+            List<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
             MethodBodyRemovalResult.From(source, blocksToRemove).Source.Should().Be("\n    textToKeep\n");
         }
@@ -44,7 +44,7 @@ namespace antlr_parser.tests.C
                 #endif
             ".TrimIndent();
 
-            ImmutableList<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
+            List<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
             MethodBodyRemovalResult.From(source, blocksToRemove).Source.Should().Be("\n    textToKeep\n");
         }
@@ -71,7 +71,7 @@ namespace antlr_parser.tests.C
                 #endif
             ".TrimIndent();
 
-            ImmutableList<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
+            List<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
             MethodBodyRemovalResult.From(source, blocksToRemove).Source.Should().Be("\n    textToKeep\n    textToKeep2\n");
         }
@@ -96,7 +96,7 @@ namespace antlr_parser.tests.C
                 #endif
             ".TrimIndent();
 
-            ImmutableList<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
+            List<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
             MethodBodyRemovalResult.From(source, blocksToRemove).Source.Should().Be("\n    textToKeep\n    textToKeep2\n");
         }

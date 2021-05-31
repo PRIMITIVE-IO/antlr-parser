@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -36,7 +35,7 @@ namespace antlr_parser.Antlr4Impl.C
             }
         }
 
-        public static ImmutableList<Tuple<int, int>> FindBlocksToRemove(string source)
+        public static List<Tuple<int, int>> FindBlocksToRemove(string source)
         {
             List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>();
 
@@ -100,7 +99,7 @@ namespace antlr_parser.Antlr4Impl.C
                 }
             }
 
-            return blocksToRemove.ToImmutableList();
+            return blocksToRemove.ToList();
         }
     }
 }

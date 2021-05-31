@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
+using System.Linq;
 
 namespace antlr_parser.Antlr4Impl
 {
@@ -19,7 +19,7 @@ namespace antlr_parser.Antlr4Impl
     /// </summary>
     public class ClassBasedMethodBodyRemover
     {
-        public static ImmutableList<Tuple<int, int>> FindBlocksToRemove(string s)
+        public static List<Tuple<int, int>> FindBlocksToRemove(string s)
         {
             List<Tuple<int, int>> removeFromTo = new List<Tuple<int, int>>();
             bool keepNextCurly = false;
@@ -48,7 +48,7 @@ namespace antlr_parser.Antlr4Impl
                 if (!IsEmptyChar(s[i])) lastNonEmptyCharIdx = i;
             }
 
-            return removeFromTo.ToImmutableList();
+            return removeFromTo.ToList();
         }
 
         static bool IsCompletedClassWord(string s, int i)

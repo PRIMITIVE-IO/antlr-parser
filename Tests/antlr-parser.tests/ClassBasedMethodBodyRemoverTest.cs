@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Immutable;
+using System.Collections.Generic;
 using antlr_parser.Antlr4Impl;
 using FluentAssertions;
 using Xunit;
@@ -22,7 +22,7 @@ namespace antlr_parser.tests
                 }
             ".TrimIndent();
             //Act
-            ImmutableList<Tuple<int,int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
+            List<Tuple<int,int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
             
             //Verify
             blocksToRemove.Count.Should().Be(4);
@@ -43,7 +43,7 @@ namespace antlr_parser.tests
             ".TrimIndent();
             
             //Act
-            ImmutableList<Tuple<int,int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
+            List<Tuple<int,int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
             
             //Verify
             blocksToRemove.Count.Should().Be(2);

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.Immutable;
 
 namespace antlr_parser.Antlr4Impl
 {
@@ -9,15 +8,15 @@ namespace antlr_parser.Antlr4Impl
         {
             public readonly string Name;
             public readonly PackageNode PackageNode;
-            public readonly ImmutableList<ClassNode> Classes;
-            public readonly ImmutableList<FieldNode> Fields;
-            public readonly ImmutableList<MethodNode> Methods;
+            public readonly List<ClassNode> Classes;
+            public readonly List<FieldNode> Fields;
+            public readonly List<MethodNode> Methods;
 
             public FileNode(string name, 
                 PackageNode packageNode, 
-                ImmutableList<ClassNode> classes,
-                ImmutableList<FieldNode> fields, 
-                ImmutableList<MethodNode> methods)
+                List<ClassNode> classes,
+                List<FieldNode> fields, 
+                List<MethodNode> methods)
             {
                 Name = name;
                 PackageNode = packageNode;
@@ -40,15 +39,15 @@ namespace antlr_parser.Antlr4Impl
         public class ClassNode : AstNode
         {
             public readonly string Name;
-            public readonly ImmutableList<MethodNode> Methods;
-            public readonly ImmutableList<FieldNode> Fields;
-            public readonly ImmutableList<ClassNode> InnerClasses;
+            public readonly List<MethodNode> Methods;
+            public readonly List<FieldNode> Fields;
+            public readonly List<ClassNode> InnerClasses;
             public readonly string Modifier;
 
             public ClassNode(string name,
-                ImmutableList<MethodNode> methods,
-                ImmutableList<FieldNode> fields,
-                ImmutableList<ClassNode> innerClasses,
+                List<MethodNode> methods,
+                List<FieldNode> fields,
+                List<ClassNode> innerClasses,
                 string modifier)
             {
                 Name = name;
