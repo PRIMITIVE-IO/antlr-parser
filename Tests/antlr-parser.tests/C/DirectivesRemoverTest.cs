@@ -10,7 +10,7 @@ namespace antlr_parser.tests.C
     public class DirectivesRemoverTest
     {
         [Fact]
-        void Test()
+        void RemoveElseDirectives()
         {
             string source = @"
                 #if 1
@@ -25,6 +25,80 @@ namespace antlr_parser.tests.C
             ImmutableList<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
             MethodBodyRemovalResult.From(source, blocksToRemove).Source.Should().Be("\n    textToKeep\n");
+        }
+        
+        [Fact]
+        void RemoveNestedDirectives()
+        {
+            string source = @"
+                #if 1
+                #if 2
+                    textToKeep
+                #else
+                    textToRemove1
+                #endif
+                #elif 1
+                    textToRemove2
+                #else
+                    textToRemove3
+                #endif
+            ".TrimIndent();
+
+            ImmutableList<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
+
+            MethodBodyRemovalResult.From(source, blocksToRemove).Source.Should().Be("\n    textToKeep\n");
+        }
+        [Fact]
+        void RemoveNestedDirectivesLevel2()
+        {
+            string source = @"
+                #if 1
+                #if 2
+                #if 3
+                    textToKeep
+                #endif
+                    textToKeep2
+                #else
+                    textToRemove1
+                #endif
+                #elif 1
+                    textToRemove2
+                #else
+                #if 4
+                    textToRemove3
+                #endif
+                    textToRemove4
+                #endif
+            ".TrimIndent();
+
+            ImmutableList<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
+
+            MethodBodyRemovalResult.From(source, blocksToRemove).Source.Should().Be("\n    textToKeep\n    textToKeep2\n");
+        }
+        
+        [Fact]
+        void KeepSameLevelDirectives()
+        {
+            string source = @"
+                #if 1
+                #if 2
+                    textToKeep
+                #else
+                    textToRemove1
+                #endif
+                #elif 1
+                    textToRemove2
+                #else
+                    textToRemove3
+                #endif
+                #if 3
+                    textToKeep2
+                #endif
+            ".TrimIndent();
+
+            ImmutableList<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
+
+            MethodBodyRemovalResult.From(source, blocksToRemove).Source.Should().Be("\n    textToKeep\n    textToKeep2\n");
         }
         
     }

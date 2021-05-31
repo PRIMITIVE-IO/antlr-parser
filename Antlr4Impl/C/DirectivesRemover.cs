@@ -6,44 +6,98 @@ using System.Text.RegularExpressions;
 
 namespace antlr_parser.Antlr4Impl.C
 {
+    /// <summary>
+    /// Removes preprocessor directives (#if, #ifdef, #ifndef, #else, #elif, #endif) alongside with their ELSE brances
+    /// and keeps only THEN blocks. Works with nested directives as well. 
+    /// </summary>
     public class DirectivesRemover
     {
         //matches text from # to end of a line
-        private readonly static Regex ifRegex = new Regex("^[ \\t]*#if((n)?def)?.*?$", RegexOptions.Multiline);
-        private readonly static Regex elseRegex = new Regex("^[ \\t]*#(elif|else).*?$", RegexOptions.Multiline);
-        private readonly static Regex endifRegex = new Regex("^[ \\t]*#endif.*?$", RegexOptions.Multiline);
+        static readonly Regex IfRegex = new Regex("^[ \\t]*#if((n)?def)?.*?$", RegexOptions.Multiline);
+        static readonly Regex ElseRegex = new Regex("^[ \\t]*#(elif|else).*?$", RegexOptions.Multiline);
+        static readonly Regex EndifRegex = new Regex("^[ \\t]*#endif.*?$", RegexOptions.Multiline);
+
+        enum DirectiveType
+        {
+            If,
+            Else,
+            Endif
+        }
+
+        class DirectiveOccurence
+        {
+            public readonly Match Match;
+            public readonly DirectiveType Type;
+
+            public DirectiveOccurence(Match match, DirectiveType type)
+            {
+                Type = type;
+                Match = match;
+            }
+        }
 
         public static ImmutableList<Tuple<int, int>> FindBlocksToRemove(string source)
         {
             List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>();
-            MatchCollection ifMatches = ifRegex.Matches(source);
-            MatchCollection endifMatches = endifRegex.Matches(source);
-            MatchCollection elseMatches = elseRegex.Matches(source);
 
-            if (ifMatches.Count != endifMatches.Count)
-                throw new Exception(
-                    $"Invalid count of 'if' ({ifMatches.Count()}) and 'endif' ({endifMatches.Count}) directives. {source}");
+            MatchCollection ifMatches = IfRegex.Matches(source);
+            MatchCollection endifMatches = EndifRegex.Matches(source);
+            MatchCollection elseMatches = ElseRegex.Matches(source);
 
-            for (int i = 0; i < ifMatches.Count; i++)
+            List<DirectiveOccurence> directives = ifMatches.Select(it => new DirectiveOccurence(it, DirectiveType.If))
+                .Concat(elseMatches.Select(it => new DirectiveOccurence(it, DirectiveType.Else)))
+                .Concat(endifMatches.Select(it => new DirectiveOccurence(it, DirectiveType.Endif)))
+                .OrderBy(it => it.Match.Index)
+                .ToList();
+
+            int startRemoveBlock = -1;
+            bool inThenBlock = true;
+            Stack<bool> inThenBlockStack = new Stack<bool>();
+
+            foreach (DirectiveOccurence directive in directives)
             {
-                Match ifMatch = ifMatches[i];
-                Match endifMatch = endifMatches[i];
-
-                if (endifMatch.Index < ifMatch.Index) throw new Exception("endif before if");
-
-                //remove #if (ifdef, ifndef) directive from '#' to '\n'
-                blocksToRemove.Add(Tuple.Create(ifMatch.Index, ifMatch.Index + ifMatch.Length));
-
-                //remove else block from '#' until '#endif'
-                Match firstElse =
-                    elseMatches.FirstOrDefault(it => ifMatch.Index < it.Index && it.Index < endifMatch.Index);
-                if (firstElse != null)
+                switch (directive.Type)
                 {
-                    blocksToRemove.Add(Tuple.Create(firstElse.Index, endifMatch.Index - 1));
-                }
+                    case DirectiveType.If:
+                    {
+                        inThenBlockStack.Push(inThenBlock);
+                        if (inThenBlock)
+                        {
+                            blocksToRemove.Add(Tuple.Create(directive.Match.Index,
+                                directive.Match.Index + directive.Match.Length));
+                        }
 
-                //remove #endif
-                blocksToRemove.Add(Tuple.Create(endifMatch.Index, endifMatch.Index + endifMatch.Length));
+                        break;
+                    }
+                    case DirectiveType.Else:
+                    {
+                        // if it is the first ELSE block
+                        if (inThenBlock)
+                            //remember first ELSE block position (to remove starting from this point later)
+                            startRemoveBlock = directive.Match.Index;
+                        inThenBlock = false;
+                        break;
+                    }
+                    case DirectiveType.Endif:
+                    {
+                        // if there was an ELSE block and current IF is in THEN branch
+                        if (!inThenBlock && inThenBlockStack.Peek())
+                        {
+                            //remove block from the first ELSE (in current IF) until first index of #endif
+                            blocksToRemove.Add(Tuple.Create(startRemoveBlock, directive.Match.Index - 1));
+                            startRemoveBlock = -1;
+                        }
+
+                        inThenBlock = inThenBlockStack.Pop();
+                        if (inThenBlock)
+                        {
+                            blocksToRemove.Add(Tuple.Create(directive.Match.Index,
+                                directive.Match.Index + directive.Match.Length));
+                        }
+
+                        break;
+                    }
+                }
             }
 
             return blocksToRemove.ToImmutableList();
