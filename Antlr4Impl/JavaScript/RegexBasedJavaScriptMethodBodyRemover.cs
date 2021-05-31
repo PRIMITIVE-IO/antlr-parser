@@ -31,7 +31,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         /// </summary>
         public static List<Tuple<int, int>> FindBlocksToRemove(string source)
         {
-            List<Tuple<int,int>> blocksToRemove = KotlinFunctionDeclarationRegex.Matches(source).Select(currentMatch =>
+            List<Tuple<int,int>> blocksToRemove = (KotlinFunctionDeclarationRegex.Matches(source) as IList<Match>).Select(currentMatch =>
             {
                 int openedCurlyPosition = currentMatch.Groups[4].Index;
                 int closedCurlyPosition = StringUtil.ClosedCurlyPosition(source, openedCurlyPosition);

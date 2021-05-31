@@ -113,11 +113,12 @@ namespace antlr_parser.Antlr4Impl.C
             string text = context.GetFullText();
             string fName = ExtractFunctionName(context.declarator().directDeclarator());
 
+            methodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex, out string removedSourceCode);
+            
             return new AstNode.MethodNode(
                 fName,
                 "public",
-                text +
-                (methodBodyRemovalResult.IdxToRemovedMethodBody.GetValueOrDefault(context.Stop.StopIndex) ?? "")
+                text + removedSourceCode??""
             );
         }
 

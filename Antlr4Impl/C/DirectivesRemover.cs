@@ -39,9 +39,9 @@ namespace antlr_parser.Antlr4Impl.C
         {
             List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>();
 
-            MatchCollection ifMatches = IfRegex.Matches(source);
-            MatchCollection endifMatches = EndifRegex.Matches(source);
-            MatchCollection elseMatches = ElseRegex.Matches(source);
+            IList<Match> ifMatches = IfRegex.Matches(source) as IList<Match>;
+            IList<Match> endifMatches = EndifRegex.Matches(source) as IList<Match>;
+            IList<Match> elseMatches = ElseRegex.Matches(source) as IList<Match>;
 
             List<DirectiveOccurence> directives = ifMatches.Select(it => new DirectiveOccurence(it, DirectiveType.If))
                 .Concat(elseMatches.Select(it => new DirectiveOccurence(it, DirectiveType.Else)))

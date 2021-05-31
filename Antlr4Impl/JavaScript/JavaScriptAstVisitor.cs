@@ -58,11 +58,12 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         public override AstNode VisitFunctionDeclaration(JavaScriptParser.FunctionDeclarationContext context)
         {
+            MethodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex,
+                out string removeSourceCode);
             return new AstNode.MethodNode(
                 context.identifier().GetFullText(),
                 "",
-                context.GetFullText() +
-                (MethodBodyRemovalResult.IdxToRemovedMethodBody.GetValueOrDefault(context.Stop.StopIndex) ?? "")
+                context.GetFullText() + (removeSourceCode ?? "")
             );
         }
 
@@ -89,11 +90,12 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         public override AstNode VisitMethodDefinition(JavaScriptParser.MethodDefinitionContext context)
         {
+            MethodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex,
+                out string removedSourceCode);
             return new AstNode.MethodNode(
                 context.propertyName().GetFullText(),
                 "",
-                context.GetFullText() +
-                (MethodBodyRemovalResult.IdxToRemovedMethodBody.GetValueOrDefault(context.Stop.StopIndex) ?? "")
+                context.GetFullText() + (removedSourceCode ?? "")
             );
         }
 
