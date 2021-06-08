@@ -6,7 +6,9 @@ namespace antlr_parser.Antlr4Impl
 {
     public class MethodBodyRemovalResult
     {
-        public readonly string Source;
+        public readonly string ShortenedSource;
+        public readonly string OriginalSource; 
+        readonly List<Tuple<int, int>> BlocksToRemove;
 
         /// <summary>
         /// Index is a position of last symbol of a function declaration header
@@ -21,7 +23,7 @@ namespace antlr_parser.Antlr4Impl
             Dictionary<int, string> idxToRemovedMethodBody =
                 ComputeIdxToRemovedMethodBody(topLevelBlocksToRemove, source);
             string cleanedText = RemoveBlocks(source, topLevelBlocksToRemove);
-            return new MethodBodyRemovalResult(cleanedText, idxToRemovedMethodBody);
+            return new MethodBodyRemovalResult(cleanedText, source, idxToRemovedMethodBody, topLevelBlocksToRemove);
         }
 
         static string RemoveBlocks(string source, List<Tuple<int, int>> removeFromTo)
@@ -81,10 +83,43 @@ namespace antlr_parser.Antlr4Impl
             return res.ToList();
         }
 
-        public MethodBodyRemovalResult(string source, Dictionary<int, string> idxToRemovedMethodBody)
+        public MethodBodyRemovalResult(
+            string shortenedSource,
+            string originalSource,
+            Dictionary<int, string> idxToRemovedMethodBody,
+            List<Tuple<int, int>> blocksToRemove
+        )
         {
-            Source = source;
+            ShortenedSource = shortenedSource;
             IdxToRemovedMethodBody = idxToRemovedMethodBody;
+            BlocksToRemove = blocksToRemove;
+            OriginalSource = originalSource;
+        }
+
+        /// <summary>
+        /// Restores original substring based on indices from "shortened" (without method bodies) source code 
+        /// </summary>
+        /// <param name="from">index in "shortened" source</param>
+        /// <param name="to">index in "shortened" source</param>
+        /// <returns>substring from an original source code, including removed blocks</returns>
+        public string RestoreOriginalSubstring(int from, int to)
+        {
+            int fromIdx = RestoreIdx(from);
+            int toIdx = RestoreIdx(to);
+            return OriginalSource.Substring(fromIdx, toIdx - fromIdx + 1);
+        }
+
+        int RestoreIdx(int idx)
+        {
+            int acc = idx;
+            foreach (Tuple<int, int> tuple in BlocksToRemove)
+            {
+                if (acc < tuple.Item1) break;
+
+                acc += tuple.Item2 - tuple.Item1 + 1;
+            }
+
+            return acc;
         }
     }
 }

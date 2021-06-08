@@ -28,7 +28,7 @@ namespace antlr_parser.Antlr4Impl
                     astFileNode.PackageNode.Name, 
                     classNameFromFile,
                     language)),
-                new SourceCodeSnippet("", language),
+                new SourceCodeSnippet(astFileNode.Header, language),
                 false);
         }
 
@@ -70,7 +70,7 @@ namespace antlr_parser.Antlr4Impl
                 fieldInfos,
                 ToAccessFlag(classNode.Modifier),
                 innerClasses,
-                new SourceCodeSnippet("", language),
+                new SourceCodeSnippet(classNode.Header, language),
                 false);
         }
 

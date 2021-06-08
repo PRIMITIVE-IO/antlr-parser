@@ -27,7 +27,15 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             List<AstNode.MethodNode> methods = parsed.OfType<AstNode.MethodNode>().ToList();
             List<AstNode.FieldNode> fields = parsed.OfType<AstNode.FieldNode>().ToList();
 
-            return new AstNode.FileNode(fileName, pkg, classes, fields, methods);
+            int headerEnd = classes.Select(it => it.StartIdx -1)
+                .Concat(methods.Select(it => it.StartIdx-1))
+                .Concat(fields.Select(it => it.StartIdx-1))
+                .DefaultIfEmpty(context.Stop.StopIndex)
+                .Min();
+
+            string header = methodBodyRemovalResult.RestoreOriginalSubstring(0, headerEnd).Trim().TrimIndent();
+
+            return new AstNode.FileNode(fileName, pkg, classes, fields, methods, header);
         }
 
         public override AstNode VisitTopLevelObject(KotlinParser.TopLevelObjectContext context)
@@ -55,7 +63,13 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             string sourceCode = context.GetFullText() + removedBody;
 
             sourceCode = StringUtil.TrimIndent(sourceCode);
-            return new AstNode.MethodNode(context.identifier().GetFullText(), modifier, sourceCode);
+            return new AstNode.MethodNode(
+                context.identifier().GetFullText(),
+                modifier,
+                sourceCode,
+                context.Start.StartIndex,
+                context.Stop.StopIndex
+            );
         }
 
         static string ExtractVisibilityModifier(KotlinParser.ModifierListContext ctx)
@@ -75,17 +89,33 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         {
             string modifier = ExtractVisibilityModifier(context.modifierList());
             List<AstNode> parsedMembers = context.classBody()?.classMemberDeclaration()
-                                                       ?.Select(decl => decl.Accept(this))
-                                                       .Where(it => it != null)
-                                                       .ToList()
-                                                   ?? new List<AstNode>();
+                ?.Select(decl => decl.Accept(this))
+                .Where(it => it != null)
+                .ToList() ?? new List<AstNode>();
+
+
+            List<AstNode.ClassNode> innerClasses = parsedMembers.OfType<AstNode.ClassNode>().ToList();
+            List<AstNode.FieldNode> fieldNodes = parsedMembers.OfType<AstNode.FieldNode>().ToList();
+            List<AstNode.MethodNode> methodNodes = parsedMembers.OfType<AstNode.MethodNode>().ToList();
+
+            int headerEndIdx = innerClasses.Select(it => it.StartIdx - 1)
+                .Concat(methodNodes.Select(it => it.StartIdx - 1))
+                .Concat(fieldNodes.Select(it => it.StartIdx - 1))
+                .DefaultIfEmpty(context.Stop.StopIndex)
+                .Min();
+
+            string header = methodBodyRemovalResult.RestoreOriginalSubstring(context.Start.StartIndex, headerEndIdx)
+                .Trim();
 
             return new AstNode.ClassNode(
                 context.simpleIdentifier().GetFullText(),
-                parsedMembers.OfType<AstNode.MethodNode>().ToList(),
-                parsedMembers.OfType<AstNode.FieldNode>().ToList(),
-                parsedMembers.OfType<AstNode.ClassNode>().ToList(),
-                modifier
+                methodNodes,
+                fieldNodes,
+                innerClasses,
+                modifier,
+                context.Start.StartIndex,
+                context.Stop.StartIndex,
+                header
             );
         }
 
@@ -95,7 +125,11 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             string sourceCode = context.GetFullText();
             return new AstNode.FieldNode(
                 context.variableDeclaration().simpleIdentifier().GetFullText(),
-                modifier, sourceCode);
+                modifier,
+                sourceCode,
+                context.Start.StartIndex,
+                context.Stop.StopIndex
+            );
         }
 
         public override AstNode VisitClassMemberDeclaration(KotlinParser.ClassMemberDeclarationContext context)

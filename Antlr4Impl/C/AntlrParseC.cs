@@ -15,7 +15,7 @@ namespace antlr_parser.Antlr4Impl.C
             {
                 string preprocessedSource = MethodBodyRemovalResult
                     .From(source, DirectivesRemover.FindBlocksToRemove(source))
-                    .Source;
+                    .ShortenedSource;
 
                 List<Tuple<int, int>> blocksToRemove =
                     RegexBasedCMethodBodyRemover.FindBlocksToRemove(preprocessedSource);
@@ -24,7 +24,7 @@ namespace antlr_parser.Antlr4Impl.C
                     MethodBodyRemovalResult.From(preprocessedSource, blocksToRemove);
 
 
-                char[] codeArray = methodBodyRemovalResult.Source.ToCharArray();
+                char[] codeArray = methodBodyRemovalResult.ShortenedSource.ToCharArray();
                 AntlrInputStream inputStream = new AntlrInputStream(codeArray, codeArray.Length);
 
                 CLexer lexer = new CLexer(inputStream);

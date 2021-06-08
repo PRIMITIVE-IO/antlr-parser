@@ -30,29 +30,37 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 if (statement.functionDeclaration()?.Accept(this) is AstNode.MethodNode method) methods.Add(method);
 
                 methods.AddRange(statement.expressionStatement()?.expressionSequence()?.singleExpression()
-                                     ?.Select(singleExpressionContext => singleExpressionContext
-                                         .GetChild<JavaScriptParser.FunctionDeclContext>(0)
-                                         ?.GetChild<JavaScriptParser.FunctionDeclarationContext>(0)
-                                         ?.Accept(this) as AstNode.MethodNode)
-                                     .Where(it => it != null)
-                                 ?? new List<AstNode.MethodNode>());
+                    ?.Select(singleExpressionContext => singleExpressionContext
+                        .GetChild<JavaScriptParser.FunctionDeclContext>(0)
+                        ?.GetChild<JavaScriptParser.FunctionDeclarationContext>(0)
+                        ?.Accept(this) as AstNode.MethodNode)
+                    .Where(it => it != null) ?? new List<AstNode.MethodNode>());
 
                 fields.AddRange(statement.variableStatement()
-                                    ?.variableDeclarationList()
-                                    ?.variableDeclaration()
-                                    ?.Select(variableDecl => variableDecl.Accept(this))
-                                    .OfType<AstNode.FieldNode>()
-                                    .ToList()
-                                ?? new List<AstNode.FieldNode>()
+                        ?.variableDeclarationList()
+                        ?.variableDeclaration()
+                        ?.Select(variableDecl => variableDecl.Accept(this))
+                        .OfType<AstNode.FieldNode>()
+                        .ToList() ?? new List<AstNode.FieldNode>()
                 );
             }
+
+            int headerEnd = classes.Select(it => it.StartIdx - 1)
+                .Concat(methods.Select(it => it.StartIdx - 1))
+                .Concat(fields.Select(it => it.StartIdx - 1))
+                .DefaultIfEmpty(context.Stop.StopIndex)
+                .Min();
+
+            string header = MethodBodyRemovalResult.RestoreOriginalSubstring(0, headerEnd)
+                .Trim();
 
             return new AstNode.FileNode(
                 FileName,
                 new AstNode.PackageNode(""),
-                classes.ToList(),
-                fields.ToList(),
-                methods.ToList()
+                classes,
+                fields,
+                methods,
+                header
             );
         }
 
@@ -63,10 +71,11 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             return new AstNode.MethodNode(
                 context.identifier().GetFullText(),
                 "",
-                context.GetFullText() + (removeSourceCode ?? "")
+                context.GetFullText() + (removeSourceCode ?? ""),
+                context.Start.StartIndex,
+                context.Stop.StopIndex
             );
         }
-
 
         public override AstNode VisitClassDeclaration(JavaScriptParser.ClassDeclarationContext context)
         {
@@ -74,12 +83,27 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 .Select(elem => elem.Accept(this))
                 .ToList();
 
+            List<AstNode.MethodNode> methodNodes = classElements.OfType<AstNode.MethodNode>().ToList();
+            List<AstNode.FieldNode> fieldNodes = classElements.OfType<AstNode.FieldNode>().ToList();
+            List<AstNode.ClassNode> innerClasses = classElements.OfType<AstNode.ClassNode>().ToList();
+
+            int headerEnd = methodNodes.Select(it => it.StartIdx - 1)
+                .Concat(fieldNodes.Select(it => it.StartIdx - 1))
+                .Concat(innerClasses.Select(it => it.StartIdx - 1))
+                .DefaultIfEmpty(context.Stop.StopIndex)
+                .Min();
+
+            string header = MethodBodyRemovalResult.RestoreOriginalSubstring(context.Start.StartIndex, headerEnd);
+
             return new AstNode.ClassNode(
                 context.identifier().GetFullText(),
-                classElements.OfType<AstNode.MethodNode>().ToList(),
-                classElements.OfType<AstNode.FieldNode>().ToList(),
-                classElements.OfType<AstNode.ClassNode>().ToList(),
-                ""
+                methodNodes,
+                fieldNodes,
+                innerClasses,
+                "",
+                context.Start.StartIndex,
+                context.Stop.StopIndex,
+                header
             );
         }
 
@@ -95,13 +119,21 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             return new AstNode.MethodNode(
                 context.propertyName().GetFullText(),
                 "",
-                context.GetFullText() + (removedSourceCode ?? "")
+                context.GetFullText() + (removedSourceCode ?? ""),
+                context.Start.StartIndex,
+                context.Stop.StopIndex
             );
         }
 
         public override AstNode VisitVariableDeclaration(JavaScriptParser.VariableDeclarationContext context)
         {
-            return new AstNode.FieldNode(context.assignable().identifier().GetFullText(), "", context.GetFullText());
+            return new AstNode.FieldNode(
+                context.assignable().identifier().GetFullText(),
+                "",
+                context.GetFullText(),
+                context.Start.StartIndex,
+                context.Stop.StopIndex
+            );
         }
     }
 }

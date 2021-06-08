@@ -24,7 +24,7 @@ namespace antlr_parser.tests.C
 
             List<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
-            MethodBodyRemovalResult.From(source, blocksToRemove).Source.Should().Be("\n    textToKeep\n");
+            MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be("\n    textToKeep\n");
         }
         
         [Fact]
@@ -46,7 +46,7 @@ namespace antlr_parser.tests.C
 
             List<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
-            MethodBodyRemovalResult.From(source, blocksToRemove).Source.Should().Be("\n    textToKeep\n");
+            MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be("\n    textToKeep\n");
         }
         [Fact]
         void RemoveNestedDirectivesLevel2()
@@ -73,7 +73,7 @@ namespace antlr_parser.tests.C
 
             List<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
-            MethodBodyRemovalResult.From(source, blocksToRemove).Source.Should().Be("\n    textToKeep\n    textToKeep2\n");
+            MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be("\n    textToKeep\n    textToKeep2\n");
         }
         
         [Fact]
@@ -98,7 +98,7 @@ namespace antlr_parser.tests.C
 
             List<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
-            MethodBodyRemovalResult.From(source, blocksToRemove).Source.Should().Be("\n    textToKeep\n    textToKeep2\n");
+            MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be("\n    textToKeep\n    textToKeep2\n");
         }
         
     }

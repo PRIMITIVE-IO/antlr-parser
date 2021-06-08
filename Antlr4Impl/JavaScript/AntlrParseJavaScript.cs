@@ -14,7 +14,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 List<Tuple<int,int>> blocksToRemove = RegexBasedJavaScriptMethodBodyRemover.FindBlocksToRemove(source);
                 MethodBodyRemovalResult removalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
 
-                char[] codeArray = removalResult.Source.ToCharArray();
+                char[] codeArray = removalResult.ShortenedSource.ToCharArray();
                 AntlrInputStream inputStream = new AntlrInputStream(codeArray, codeArray.Length);
 
                 JavaScriptLexer lexer = new JavaScriptLexer(inputStream);

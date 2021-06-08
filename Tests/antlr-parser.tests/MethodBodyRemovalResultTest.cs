@@ -30,7 +30,7 @@ namespace antlr_parser.tests
                 fun f()
                 fun g()
             ".TrimIndent();
-            result.Source.Should().Be(expectedSource);
+            result.ShortenedSource.Should().Be(expectedSource);
 
             result.IdxToRemovedMethodBody.Count.Should().Be(2);
             result.IdxToRemovedMethodBody[7].Should().Be("{ REMOVE }"); // 7 - is a position of ')' in 'fun f()' 
@@ -57,10 +57,35 @@ namespace antlr_parser.tests
             string expectedSource = @"
                 fun f()
             ".TrimIndent();
-            result.Source.Should().Be(expectedSource);
+            result.ShortenedSource.Should().Be(expectedSource);
 
             result.IdxToRemovedMethodBody.Count.Should().Be(1);
             result.IdxToRemovedMethodBody[7].Should().Be("{ fun h() {} }"); // 7 - is a position of ')' in 'fun f()' 
+        }
+
+        [Fact]
+        public void RestoreOriginalCodeBlockBasedOnIndicesFromShortenedSource()
+        {
+            string source = @"
+                fun f(){ REMOVE }
+                fun g() { REMOVE }
+                fun h() { REMOVE }
+            ".TrimIndent();
+
+            List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>
+            {
+                new Tuple<int, int>(8, 17), // first '{ REMOVE }' block
+                new Tuple<int, int>(26, 36), // second ' { REMOVE }' block including leading space
+                new Tuple<int, int>(45, 55) 
+            };
+
+            //Act
+            MethodBodyRemovalResult result = MethodBodyRemovalResult.From(source, blocksToRemove);
+            
+            result.RestoreOriginalSubstring(1, 8).Should().Be("fun f(){ REMOVE }\n");
+            result.RestoreOriginalSubstring(9, 16).Should().Be("fun g() { REMOVE }\n");
+            result.RestoreOriginalSubstring(17, 24).Should().Be("fun h() { REMOVE }\n");
+
         }
     }
 }

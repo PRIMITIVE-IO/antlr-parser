@@ -14,7 +14,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 List<Tuple<int, int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
                 MethodBodyRemovalResult removalMethodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
 
-                char[] codeArray = removalMethodBodyRemovalResult.Source.ToCharArray();
+                char[] codeArray = removalMethodBodyRemovalResult.ShortenedSource.ToCharArray();
                 AntlrInputStream inputStream = new AntlrInputStream(codeArray, codeArray.Length);
 
                 KotlinLexer lexer = new KotlinLexer(inputStream);

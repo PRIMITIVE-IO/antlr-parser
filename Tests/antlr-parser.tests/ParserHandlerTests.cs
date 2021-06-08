@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
+using antlr_parser.Antlr4Impl;
 using FluentAssertions;
+using PrimitiveCodebaseElements.Primitive;
 using Xunit;
 
 namespace antlr_parser.tests
@@ -18,7 +21,7 @@ namespace antlr_parser.tests
         public void ParserHandlerShouldReturnCollectionWithOneElement()
         {
             //Act
-            var result = ParserHandler.ClassInfoFromSourceText("test.java", ".java", testJavaClassSourceCode);
+            IEnumerable<ClassInfo> result = ParserHandler.ClassInfoFromSourceText("test.java", ".java", testJavaClassSourceCode);
 
             //Verify
             result.Should().NotBeNull();
@@ -29,10 +32,45 @@ namespace antlr_parser.tests
         public void ParserHandlerShouldReturnCollectionWithAnyClassInfoWithClassName()
         {
             //Act
-            var result = ParserHandler.ClassInfoFromSourceText("test.java", ".java", testJavaClassSourceCode);
+            IEnumerable<ClassInfo> result = ParserHandler.ClassInfoFromSourceText("test.java", ".java", testJavaClassSourceCode);
 
             //Verify
             result.ToList().First().Children.Any(x => x.Name.ShortName == "doWork").Should().BeTrue();
+        }   
+        
+        [Fact]
+        public void KotlinClassHasHeader()
+        {
+            //string source = System.IO.File.ReadAllText(@"Resources/KotlinExample.kt");
+            //Act
+            string source = @"
+                package pkg
+                
+                /** comment */
+                class C {
+                  fun method() {
+                    println()
+                  }
+                }
+                
+                fun outerFunction() { }
+
+            ".TrimIndent();
+            
+            IEnumerable<ClassInfo> result = ParserHandler.ClassInfoFromSourceText("kotlin.kt", ".kt", source);
+
+            //Verify
+            ClassInfo fileInfo = result.ToList().First();
+            fileInfo.SourceCode.Text.Should().Be(
+                @"package pkg
+
+                  /** comment */".TrimIndent());
+
+            ClassInfo classInfo = fileInfo.InnerClasses.Single();
+            classInfo.Name.ShortName.Should().Be("C");
+            classInfo.SourceCode.Text.Should().Be("class C {");
+
+            classInfo.Methods.Single().SourceCode.Text.Should().Be("fun method() {\n  println()\n}");
         }
     }
 }
