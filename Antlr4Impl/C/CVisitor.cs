@@ -97,7 +97,7 @@ namespace antlr_parser.Antlr4Impl.C
 
         public override AstNode VisitStructDeclaration(CParser.StructDeclarationContext context)
         {
-            string fieldName = ExtractPlainFieldName(context) ?? ExtractArrayFieldName(context);
+            string fieldName = ExtractPlainFieldName(context) ?? ExtractArrayFieldName(context) ?? ExtractReferenceFieldName(context);
 
             return new AstNode.FieldNode(
                 fieldName,
@@ -106,6 +106,17 @@ namespace antlr_parser.Antlr4Impl.C
                 context.Start.StartIndex,
                 context.Stop.StopIndex
             );
+        }
+
+        private string ExtractReferenceFieldName(CParser.StructDeclarationContext context)
+        {
+            return context.specifierQualifierList()
+                ?.specifierQualifierList()
+                ?.specifierQualifierList()
+                ?.typeSpecifier()
+                ?.typedefName()
+                ?.Identifier()
+                ?.ToString();
         }
 
         private string ExtractPlainFieldName(CParser.StructDeclarationContext context)

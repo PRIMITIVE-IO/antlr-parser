@@ -195,5 +195,19 @@ namespace antlr_parser.tests.C
                 }".TrimIndent().Trim());
             methodInfos.SingleOrDefault(it => it.Name.ShortName == "g").Should().NotBeNull();
         }
+        
+        [Fact]
+        void ParseReferenceFieldNames()
+        {
+            string source = @"
+                struct A {
+                    const struct b *c;
+                };
+            ".TrimIndent();
+            
+            IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
+
+            classInfos.First().InnerClasses.First().Fields.First().Name.ShortName.Should().Be("c");
+        }
     }
 }
