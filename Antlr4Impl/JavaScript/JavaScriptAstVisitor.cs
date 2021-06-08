@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Antlr4.Runtime.Tree;
 
 namespace antlr_parser.Antlr4Impl.JavaScript
 {
@@ -127,13 +128,89 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         public override AstNode VisitVariableDeclaration(JavaScriptParser.VariableDeclarationContext context)
         {
+            JavaScriptParser.AssignableContext x = context.assignable();
+
+            string name = "";
+
+            if (x.identifier() != null)
+            {
+                name = x.identifier().GetFullText();
+            }
+
+            if (x.arrayLiteral() != null)
+            {
+                name = String.Join(",", x.arrayLiteral().Accept(new DeconstructionAssignmentVisitor()));
+            }
+
+            if (x.objectLiteral() != null)
+            {
+                name = String.Join(",", x.objectLiteral().Accept(new DeconstructionAssignmentVisitor()));
+            }
+
+
             return new AstNode.FieldNode(
-                context.assignable().identifier().GetFullText(),
+                name,
                 "",
                 context.GetFullText(),
                 context.Start.StartIndex,
                 context.Stop.StopIndex
             );
+        }
+    }
+
+    public class DeconstructionAssignmentVisitor : JavaScriptParserBaseVisitor<List<String>>
+    {
+        public override List<string> VisitObjectLiteral(JavaScriptParser.ObjectLiteralContext context)
+        {
+            return context.propertyAssignment()
+                .SelectMany(it => it.Accept(this))
+                .ToList();
+        }
+
+        public override List<string> VisitPropertyShorthand(JavaScriptParser.PropertyShorthandContext context)
+        {
+            return new List<string> {context.singleExpression().GetFullText()};
+        }
+
+        public override List<string> VisitObjectLiteralExpression(
+            JavaScriptParser.ObjectLiteralExpressionContext context)
+        {
+            JavaScriptParser.PropertyAssignmentContext[] properties = context.objectLiteral().propertyAssignment();
+
+            return properties.SelectMany(property =>
+                {
+                    List<IParseTree> furtherDeconstructions = property
+                        .children.OfType<JavaScriptParser.ObjectLiteralExpressionContext>()
+                        .Concat<IParseTree>(property.children.OfType<JavaScriptParser.ArrayLiteralExpressionContext>())
+                        .ToList();
+
+                    if (furtherDeconstructions.Count == 0)
+                    {
+                        return property.children.OfType<JavaScriptParser.IdentifierExpressionContext>()
+                            .Single()
+                            .Accept(this);
+                    }
+                    else
+                    {
+                        return furtherDeconstructions.SelectMany(it => it.Accept(this)).ToList();
+                    }
+                })
+                .ToList();
+        }
+
+        public override List<string> VisitArrayLiteral(JavaScriptParser.ArrayLiteralContext context)
+        {
+            return context.elementList().arrayElement().SelectMany(it => it.Accept(this)).ToList();
+        }
+
+        public override List<string> VisitArrayElement(JavaScriptParser.ArrayElementContext context)
+        {
+            return context.singleExpression().Accept(this);
+        }
+
+        public override List<string> VisitIdentifierExpression(JavaScriptParser.IdentifierExpressionContext context)
+        {
+            return new List<string> {context.identifier().GetFullText()};
         }
     }
 }

@@ -40,8 +40,9 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         /// </summary>
         public static List<Tuple<int, int>> FindBlocksToRemove(string source)
         {
-            List<Tuple<int,int>> blocksToRemove = (KotlinFunctionDeclarationRegex.Matches(source) as IList<Match>)
-                .Select(currentMatch =>
+            IEnumerable<Match> matches = KotlinFunctionDeclarationRegex.Matches(source).Cast<Match>();
+
+            List<Tuple<int,int>> blocksToRemove = matches.Select(currentMatch =>
             {
                 int openedCurlyPosition = currentMatch.Groups[5].Index;
                 int closedCurlyPosition = StringUtil.ClosedCurlyPosition(source, openedCurlyPosition);

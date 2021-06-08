@@ -91,5 +91,84 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             script.Fields.First().Name.ShortName.Should().Be("x");
             script.Fields.First().SourceCode.Text.Should().Be("x = 10");
         }
+        
+        [Fact]
+        public void ParseDeconstructedFields()
+        {
+            string source = @"
+                const { y: { x } } = obj;
+            ".TrimIndent();
+            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
+            res.Count().Should().Be(1);
+            ClassInfo script = res.First();
+            script.Name.ShortName.Should().Be("path");
+
+            script.Fields.Count().Should().Be(1);
+            script.Fields.First().Name.ShortName.Should().Be("x");
+            script.Fields.First().SourceCode.Text.Should().Be("{ y: { x } } = obj");
+        }
+        
+        [Fact]
+        public void ParseDeconstructedFieldsAsSingleFieldInfo()
+        {
+            string source = @"
+                const { a: { x, y } } = obj;
+            ".TrimIndent();
+            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
+            res.Count().Should().Be(1);
+            ClassInfo script = res.First();
+            script.Name.ShortName.Should().Be("path");
+
+            script.Fields.Count().Should().Be(1);
+            script.Fields.First().Name.ShortName.Should().Be("x,y");
+            script.Fields.First().SourceCode.Text.Should().Be("{ a: { x, y } } = obj");
+        }
+        
+        [Fact]
+        public void ParseDeconstructedArray()
+        {
+            string source = @"
+                const [x, ...y] = obj;
+            ".TrimIndent();
+            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
+            res.Count().Should().Be(1);
+            ClassInfo script = res.First();
+            script.Name.ShortName.Should().Be("path");
+
+            script.Fields.Count().Should().Be(1);
+            script.Fields.First().Name.ShortName.Should().Be("x,y");
+            script.Fields.First().SourceCode.Text.Should().Be("[x, ...y] = obj");
+        }
+        
+        [Fact]
+        public void ParseDeconstructedArrayAndObject()
+        {
+            string source = @"
+                const { a: [x, ...y]} = obj;
+            ".TrimIndent();
+            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
+            res.Count().Should().Be(1);
+            ClassInfo script = res.First();
+            script.Name.ShortName.Should().Be("path");
+
+            script.Fields.Count().Should().Be(1);
+            script.Fields.First().Name.ShortName.Should().Be("x,y");
+            script.Fields.First().SourceCode.Text.Should().Be("{ a: [x, ...y]} = obj");
+        }
+        [Fact]
+        public void ParseDeconstructedArrayAndObject2()
+        {
+            string source = @"
+                const { a: [{x}, ...y], z} = obj;
+            ".TrimIndent();
+            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
+            res.Count().Should().Be(1);
+            ClassInfo script = res.First();
+            script.Name.ShortName.Should().Be("path");
+
+            script.Fields.Count().Should().Be(1);
+            script.Fields.First().Name.ShortName.Should().Be("x,y,z");
+            script.Fields.First().SourceCode.Text.Should().Be("{ a: [{x}, ...y], z} = obj");
+        }
     }
 }
