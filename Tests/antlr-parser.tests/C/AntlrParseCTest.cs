@@ -209,5 +209,19 @@ namespace antlr_parser.tests.C
 
             classInfos.First().InnerClasses.First().Fields.First().Name.ShortName.Should().Be("c");
         }
+        
+        [Fact]
+        void ParseMultiFieldNames()
+        {
+            string source = @"
+                struct A {
+                   struct b c,d;
+                };
+            ".TrimIndent();
+            
+            IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
+
+            classInfos.First().InnerClasses.First().Fields.Single().Name.ShortName.Should().Be("c,d");
+        }
     }
 }
