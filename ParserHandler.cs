@@ -64,9 +64,9 @@ namespace antlr_parser
                         sourceText, 
                         filePath);
                 case ".cs":
+                    return new List<ClassInfo>();
                 // cs
                 case ".h": 
-                    return new List<ClassInfo>();// there is no ANTLR grammar for header files
                 case ".c":
                     // C
                     return AntlrParseC.OuterClassInfosFromSource(sourceText, filePath);
