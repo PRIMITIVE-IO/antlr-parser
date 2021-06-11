@@ -41,11 +41,12 @@ namespace antlr_parser.tests.C
             IEnumerable<ClassInfo> classInfos =
                 AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
 
-            classInfos.Single().InnerClasses.Count().Should().Be(1);
-            ClassInfo classInfo = classInfos.Single().InnerClasses.Single();
+            classInfos.Count().Should().Be(1);
+            ClassInfo classInfo = classInfos.Single();
             classInfo.className.ShortName.Should().Be("structureName");
             classInfo.Fields.First().FieldName.ShortName.Should().Be("member1");
         }
+        
         [Fact]
         void ParseStructArrayField()
         {
@@ -57,8 +58,8 @@ namespace antlr_parser.tests.C
             IEnumerable<ClassInfo> classInfos =
                 AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
 
-            classInfos.Single().InnerClasses.Count().Should().Be(1);
-            ClassInfo classInfo = classInfos.Single().InnerClasses.Single();
+            classInfos.Count().Should().Be(1);
+            ClassInfo classInfo = classInfos.Single();
             classInfo.className.ShortName.Should().Be("structureName");
             classInfo.Fields.First().FieldName.ShortName.Should().Be("member1");
         }
@@ -77,8 +78,8 @@ namespace antlr_parser.tests.C
             IEnumerable<ClassInfo> classInfos =
                 AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
 
-            classInfos.Single().InnerClasses.Count().Should().Be(1);
-            ClassInfo employeeClass = classInfos.Single().InnerClasses.Single();
+            classInfos.Count().Should().Be(1);
+            ClassInfo employeeClass = classInfos.Single();
             employeeClass.className.ShortName.Should().Be("Employee");
             employeeClass.Fields.Single().FieldName.ShortName.Should().Be("doj");
             employeeClass.InnerClasses.Count().Should().Be(1);
@@ -207,7 +208,7 @@ namespace antlr_parser.tests.C
             
             IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
 
-            classInfos.First().InnerClasses.First().Fields.First().Name.ShortName.Should().Be("c");
+            classInfos.First().Fields.First().Name.ShortName.Should().Be("c");
         }
         
         [Fact]
@@ -221,7 +222,7 @@ namespace antlr_parser.tests.C
             
             IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
 
-            classInfos.First().InnerClasses.First().Fields.Single().Name.ShortName.Should().Be("c,d");
+            classInfos.First().Fields.Single().Name.ShortName.Should().Be("c,d");
         }
     }
 }

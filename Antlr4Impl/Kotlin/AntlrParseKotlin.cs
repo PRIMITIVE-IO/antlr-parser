@@ -30,8 +30,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 AstNode.FileNode astFileNode = kotlinFileContext.Accept(
                     new KotlinVisitor(filePath, removalMethodBodyRemovalResult)) as AstNode.FileNode;
 
-                return new List<ClassInfo>
-                    {AstToClassInfoConverter.ToClassInfo(astFileNode, SourceCodeLanguage.Kotlin)};
+                return AstToClassInfoConverter.ToClassInfo(astFileNode, SourceCodeLanguage.Kotlin);
             }
             catch (Exception e)
             {

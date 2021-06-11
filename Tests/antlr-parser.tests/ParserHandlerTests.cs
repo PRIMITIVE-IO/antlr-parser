@@ -68,7 +68,12 @@ namespace antlr_parser.tests
 
             ClassInfo classInfo = fileInfo.InnerClasses.Single();
             classInfo.Name.ShortName.Should().Be("C");
-            classInfo.SourceCode.Text.Should().Be("class C {");
+            classInfo.SourceCode.Text.Should().Be(@"
+                package pkg
+                
+                /** comment */
+                class C {
+            ".TrimIndent().Trim());
 
             classInfo.Methods.Single().SourceCode.Text.Should().Be("fun method() {\n  println()\n}");
         }

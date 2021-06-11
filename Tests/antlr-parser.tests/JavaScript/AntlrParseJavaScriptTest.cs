@@ -18,11 +18,8 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             ".TrimIndent();
             IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
             res.Count().Should().Be(1);
-            ClassInfo script = res.First();
-            script.Name.ShortName.Should().Be("path");
 
-            script.Children.Count.Should().Be(1);
-            ClassInfo klass = script.Children.First() as ClassInfo;
+            ClassInfo klass = res.First();
             klass.Name.ShortName.Should().Be("C");
             klass.Methods.Count().Should().Be(1);
             MethodInfo method = klass.Methods.First();
@@ -39,11 +36,8 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             ".TrimIndent();
             IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
             res.Count().Should().Be(1);
-            ClassInfo script = res.First();
-            script.Name.ShortName.Should().Be("path");
 
-            script.Children.Count.Should().Be(1);
-            ClassInfo klass = script.Children[0] as ClassInfo;
+            ClassInfo klass = res.First();
             klass.Name.ShortName.Should().Be("C");
             klass.Methods.Count().Should().Be(1);
             MethodInfo method = klass.Methods.First();

@@ -9,33 +9,47 @@ namespace antlr_parser.Antlr4Impl
     {
         static readonly TypeName VoidType = TypeName.For("void");
 
-        public static ClassInfo ToClassInfo(AstNode.FileNode astFileNode, SourceCodeLanguage language)
+        public static List<ClassInfo> ToClassInfo(AstNode.FileNode astFileNode, SourceCodeLanguage language)
         {
-            string classNameFromFile = Path.GetFileNameWithoutExtension(astFileNode.Name);
-            ClassName className = new ClassName(
-                new FileName(astFileNode.Name),
-                new PackageName(astFileNode.PackageNode.Name),
-                classNameFromFile);
+            if (astFileNode.Methods.Any() || astFileNode.Fields.Any() || astFileNode.Classes.Count == 0)
+            {
+                string classNameFromFile = Path.GetFileNameWithoutExtension(astFileNode.Name);
+                ClassName className = new ClassName(
+                    new FileName(astFileNode.Name),
+                    new PackageName(astFileNode.PackageNode.Name),
+                    classNameFromFile);
 
-            return new ClassInfo(
-                className,
-                astFileNode.Methods.Select(method => ToMethodInfo(method, className, language)).ToList(),
-                astFileNode.Fields.Select(field => ToFieldInfo(field, className, language)),
-                AccessFlags.AccPublic,
-                astFileNode.Classes.Select(klass => ToClassInfo(
-                    klass, 
-                    astFileNode.Name, 
-                    astFileNode.PackageNode.Name, 
-                    classNameFromFile,
-                    language)),
-                new SourceCodeSnippet(astFileNode.Header, language),
-                false);
+                return new List<ClassInfo>
+                {
+                    new ClassInfo(
+                        className,
+                        astFileNode.Methods.Select(method => ToMethodInfo(method, className, language)).ToList(),
+                        astFileNode.Fields.Select(field => ToFieldInfo(field, className, language)),
+                        AccessFlags.AccPublic,
+                        astFileNode.Classes.Select(klass => ToClassInfo(
+                            klass,
+                            astFileNode.Name,
+                            astFileNode.PackageNode.Name,
+                            classNameFromFile,
+                            language)),
+                        new SourceCodeSnippet(astFileNode.Header, language),
+                        false)
+                };
+            }
+
+            return astFileNode.Classes.Select(klass => ToClassInfo(
+                    klass,
+                    astFileNode.Name,
+                    astFileNode.PackageNode.Name,
+                    null,
+                    language))
+                .ToList();
         }
 
         static ClassInfo ToClassInfo(
-            AstNode.ClassNode classNode, 
-            string fileName, 
-            string package, 
+            AstNode.ClassNode classNode,
+            string fileName,
+            string package,
             string parentClassName,
             SourceCodeLanguage language)
         {
@@ -55,15 +69,17 @@ namespace antlr_parser.Antlr4Impl
                 new PackageName(package),
                 stringClassName);
 
-            IEnumerable<MethodInfo> methodInfos = classNode.Methods.Select(method => ToMethodInfo(method, className, language));
-            IEnumerable<FieldInfo> fieldInfos = classNode.Fields.Select(field => ToFieldInfo(field, className, language));
+            IEnumerable<MethodInfo> methodInfos =
+                classNode.Methods.Select(method => ToMethodInfo(method, className, language));
+            IEnumerable<FieldInfo> fieldInfos =
+                classNode.Fields.Select(field => ToFieldInfo(field, className, language));
             IEnumerable<ClassInfo> innerClasses = classNode.InnerClasses.Select(inner => ToClassInfo(
-                inner, 
+                inner,
                 fileName,
                 package,
                 stringClassName,
                 language));
-            
+
             return new ClassInfo(
                 className,
                 methodInfos,

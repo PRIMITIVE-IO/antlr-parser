@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
 
 namespace antlr_parser.Antlr4Impl.Kotlin
 {
@@ -27,9 +28,9 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             List<AstNode.MethodNode> methods = parsed.OfType<AstNode.MethodNode>().ToList();
             List<AstNode.FieldNode> fields = parsed.OfType<AstNode.FieldNode>().ToList();
 
-            int headerEnd = classes.Select(it => it.StartIdx -1)
-                .Concat(methods.Select(it => it.StartIdx-1))
-                .Concat(fields.Select(it => it.StartIdx-1))
+            int headerEnd = classes.Select(it => it.StartIdx - 1)
+                .Concat(methods.Select(it => it.StartIdx - 1))
+                .Concat(fields.Select(it => it.StartIdx - 1))
                 .DefaultIfEmpty(context.Stop.StopIndex)
                 .Min();
 
@@ -104,7 +105,15 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 .DefaultIfEmpty(context.Stop.StopIndex)
                 .Min();
 
-            string header = methodBodyRemovalResult.RestoreOriginalSubstring(context.Start.StartIndex, headerEndIdx)
+            int headerStart = new[]
+            {
+                PreviousPeerEndPosition(context.Parent, context),
+                OutboundClassBodyStartPosition(context.Parent),
+                0
+            }.Max();
+
+            string header = methodBodyRemovalResult.RestoreOriginalSubstring(headerStart, headerEndIdx)
+                .TrimIndent()
                 .Trim();
 
             return new AstNode.ClassNode(
@@ -117,6 +126,46 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 context.Stop.StartIndex,
                 header
             );
+        }
+
+        int OutboundClassBodyStartPosition(RuleContext parent)
+        {
+            if (parent == null)
+            {
+                return -1;
+            }
+
+            if (parent is KotlinParser.ClassBodyContext)
+            {
+                return (parent as KotlinParser.ClassBodyContext).Start.StartIndex + 1; // +1 to exclude '{'
+            }
+
+            return OutboundClassBodyStartPosition(parent.Parent);
+        }
+
+        int PreviousPeerEndPosition(RuleContext parent, IParseTree self)
+        {
+            if (parent == null)
+            {
+                return -1;
+            }
+
+            if (parent is KotlinParser.TopLevelObjectContext)
+            {
+                return PreviousPeerEndPosition(parent.Parent, parent);
+            }
+
+            return (parent as ParserRuleContext).children
+                .Where(it =>
+                    it is KotlinParser.ClassDeclarationContext ||
+                    it is KotlinParser.FunctionDeclarationContext ||
+                    it is KotlinParser.PropertyDeclarationContext ||
+                    it is KotlinParser.TopLevelObjectContext)
+                .TakeWhile(it => it != self)
+                .OfType<ParserRuleContext>()
+                .Select(it => it.Stop.StopIndex + 1)
+                .DefaultIfEmpty(-1)
+                .Max();
         }
 
         public override AstNode VisitPropertyDeclaration(KotlinParser.PropertyDeclarationContext context)

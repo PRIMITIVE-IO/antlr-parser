@@ -28,7 +28,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 // do not call parser.program() more than once
                 JavaScriptParser.ProgramContext programContext = parser.program();
                 AstNode.FileNode astFile = programContext.Accept(new JavaScriptAstVisitor(filePath, removalResult)) as AstNode.FileNode;
-                return new List<ClassInfo> { AstToClassInfoConverter.ToClassInfo(astFile, SourceCodeLanguage.JavaScript)};
+                return AstToClassInfoConverter.ToClassInfo(astFile, SourceCodeLanguage.JavaScript);
             }
             catch (Exception e)
             {

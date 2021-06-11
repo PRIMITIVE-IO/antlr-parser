@@ -40,7 +40,7 @@ namespace antlr_parser.Antlr4Impl.C
                 AstNode.FileNode astNode =
                     compilationUnitContext.Accept(new CVisitor(filePath, methodBodyRemovalResult)) as AstNode.FileNode;
 
-                return new List<ClassInfo> {AstToClassInfoConverter.ToClassInfo(astNode, SourceCodeLanguage.C)};
+                return AstToClassInfoConverter.ToClassInfo(astNode, SourceCodeLanguage.C);
             }
             catch (Exception e)
             {
