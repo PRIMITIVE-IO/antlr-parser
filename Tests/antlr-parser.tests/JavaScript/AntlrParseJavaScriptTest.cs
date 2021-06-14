@@ -164,5 +164,90 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             script.Fields.First().Name.ShortName.Should().Be("x,y,z");
             script.Fields.First().SourceCode.Text.Should().Be("{ a: [{x}, ...y], z} = obj");
         }
+        
+        [Fact]
+        public void FirstClassHeader()
+        {
+            string source = @"
+                requires('')
+                /**comment*/
+                class A {
+                    f(x){return 10}
+                }
+            ".TrimIndent();
+            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
+            res.Count().Should().Be(1);
+            ClassInfo classInfo = res.First();
+
+            classInfo.SourceCode.Text.Should().Be(@"
+                /**comment*/
+                class A {
+            ".TrimIndent().Trim());
+        }
+        
+        [Fact]
+        public void SecondClassHeader()
+        {
+            string source = @"
+                requires('')
+                /**comment1*/
+                class A {}
+
+                /**comment2*/
+                class B {}
+            ".TrimIndent();
+            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
+            
+            ClassInfo classB = res.ToArray()[1];
+
+            classB.SourceCode.Text.Should().Be(@"
+                /**comment2*/
+                class B {}
+            ".TrimIndent().Trim());
+        }
+        
+        [Fact]
+        public void FakeClassHeader()
+        {
+            string source = @"
+                requires('')
+                /**comment1*/
+                function f(){}
+            ".TrimIndent();
+            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
+            
+            ClassInfo fakeClass = res.First();
+
+            fakeClass.SourceCode.Text.Should().Be(@"
+                requires('')
+                /**comment1*/
+            ".TrimIndent().Trim());
+        }
+        
+        [Fact]
+        public void InnerClassHeader()
+        {
+            string source = @"
+                requires('')
+                /**comment1*/
+                function f(){}
+                /**comment2*/
+                class A {}
+            ".TrimIndent();
+            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
+            
+            ClassInfo fakeClass = res.First();
+
+            fakeClass.SourceCode.Text.Should().Be(@"
+                requires('')
+                /**comment1*/
+            ".TrimIndent().Trim());
+            
+            fakeClass.InnerClasses.Single().SourceCode.Text.Should().Be(@"
+                /**comment2*/
+                class A {}
+            ".TrimIndent().Trim());
+        }
+        
     }
 }

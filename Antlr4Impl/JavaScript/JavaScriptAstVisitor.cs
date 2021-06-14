@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 
 namespace antlr_parser.Antlr4Impl.JavaScript
@@ -65,6 +66,27 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             );
         }
 
+        int PreviousPeerEndPosition(RuleContext parent, IParseTree self)
+        {
+            if (parent == null)
+            {
+                return -1;
+            }
+
+            if (parent is JavaScriptParser.StatementContext || parent is JavaScriptParser.SourceElementContext)
+            {
+                return PreviousPeerEndPosition(parent.Parent, parent);
+            }
+
+            var sourceElementsContext = parent as JavaScriptParser.SourceElementsContext;
+
+            return sourceElementsContext.sourceElement()
+                .TakeWhile(it => it != self)
+                .Select(it => it.Stop.StopIndex + 1)
+                .DefaultIfEmpty(-1)
+                .Max();
+        }
+
         public override AstNode VisitFunctionDeclaration(JavaScriptParser.FunctionDeclarationContext context)
         {
             MethodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex,
@@ -94,7 +116,15 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 .DefaultIfEmpty(context.Stop.StopIndex)
                 .Min();
 
-            string header = MethodBodyRemovalResult.RestoreOriginalSubstring(context.Start.StartIndex, headerEnd);
+            int headerStart = new[]
+            {
+                PreviousPeerEndPosition(context.Parent, context),
+                0
+            }.Max();
+
+
+            string header = MethodBodyRemovalResult.RestoreOriginalSubstring(headerStart, headerEnd)
+                .Trim();
 
             return new AstNode.ClassNode(
                 context.identifier().GetFullText(),
