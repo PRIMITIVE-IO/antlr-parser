@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
 
 namespace antlr_parser.Antlr4Impl.C
 {
@@ -75,12 +76,18 @@ namespace antlr_parser.Antlr4Impl.C
                 .Where(it => it != null)
                 .ToList() ?? new List<AstNode.ClassNode>();
 
+            int headerStart = new[]
+            {
+                PreviousPeerEndPosition(context.Parent, context),
+                0
+            }.Max();
+
             int headerEnd = fields.Select(it => it.StartIdx - 1)
                 .Concat(innerClasses.Select(it => it.StartIdx - 1))
                 .DefaultIfEmpty(context.Stop?.StopIndex ?? 0)
                 .Min();
 
-            string header = methodBodyRemovalResult.RestoreOriginalSubstring(context.Start.StartIndex, headerEnd)
+            string header = methodBodyRemovalResult.RestoreOriginalSubstring(headerStart, headerEnd)
                 .Trim();
 
             return new AstNode.ClassNode(
@@ -93,6 +100,34 @@ namespace antlr_parser.Antlr4Impl.C
                 context.Stop.StopIndex,
                 header
             );
+        }
+
+        int PreviousPeerEndPosition(RuleContext parent, IParseTree self)
+        {
+            if (parent == null)
+            {
+                return -1;
+            }
+
+            if (parent is CParser.StructDeclarationListContext structDeclarationListContext)
+            {
+                return structDeclarationListContext.structDeclaration()
+                    .TakeWhile(it => it != self)
+                    .Select(it => it.Stop.StopIndex + 1)
+                    .DefaultIfEmpty(-1)
+                    .Max();
+            }
+
+            if (parent is CParser.TranslationUnitContext translationUnitContext)
+            {
+                return translationUnitContext.externalDeclaration()
+                    .TakeWhile(it => it != self)
+                    .Select(it => it.Stop.StopIndex + 1)
+                    .DefaultIfEmpty(-1)
+                    .Max();
+            }
+
+            return PreviousPeerEndPosition(parent.Parent, parent);
         }
 
         public override AstNode VisitStructDeclaration(CParser.StructDeclarationContext context)

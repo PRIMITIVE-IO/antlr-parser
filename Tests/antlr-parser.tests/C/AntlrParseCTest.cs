@@ -224,5 +224,48 @@ namespace antlr_parser.tests.C
 
             classInfos.First().Fields.Single().Name.ShortName.Should().Be("c,d");
         }
+        
+        [Fact]
+        void FirstClassHeader()
+        {
+            string source = @"
+                #include ""something""
+                /**comment*/
+                struct A {
+                   struct a b;
+                };
+            ".TrimIndent();
+            
+            IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
+
+            classInfos.First().SourceCode.Text.Should().Be(@"
+                #include ""something""
+                /**comment*/
+                struct A {
+            ".TrimIndent().Trim());
+        }
+        
+        [Fact]
+        void SecondClassHeader()
+        {
+            string source = @"
+                #include ""something""
+                struct A {
+                   struct a b;
+                };
+
+                /**comment2*/
+                struct B {
+                    struct c d;
+                };
+            ".TrimIndent();
+            
+            IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
+
+            classInfos.ToArray()[1].SourceCode.Text.Should().Be(@"
+                /**comment2*/
+                struct B {
+            ".TrimIndent().Trim());
+        }
     }
 }
