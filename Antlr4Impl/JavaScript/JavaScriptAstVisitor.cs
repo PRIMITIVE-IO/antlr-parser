@@ -78,7 +78,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 return PreviousPeerEndPosition(parent.Parent, parent);
             }
 
-            var sourceElementsContext = parent as JavaScriptParser.SourceElementsContext;
+            JavaScriptParser.SourceElementsContext sourceElementsContext = parent as JavaScriptParser.SourceElementsContext;
 
             return sourceElementsContext.sourceElement()
                 .TakeWhile(it => it != self)
