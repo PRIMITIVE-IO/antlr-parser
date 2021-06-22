@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from C:/Users/john/Desktop/PRIMITIVE_Tools/antlr-parser/grammars\CPP14Parser.g4 by ANTLR 4.9.1
+// Generated from /Users/maxfarsikov/IdeaProjects/antlr-parser/grammars/CPP14Parser.g4 by ANTLR 4.9.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -493,6 +493,18 @@ public interface ICPP14ParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitTrailingTypeSpecifierSeq([NotNull] CPP14Parser.TrailingTypeSpecifierSeqContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CPP14Parser.simpleTypeLengthModifier"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSimpleTypeLengthModifier([NotNull] CPP14Parser.SimpleTypeLengthModifierContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CPP14Parser.simpleTypeSignednessModifier"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSimpleTypeSignednessModifier([NotNull] CPP14Parser.SimpleTypeSignednessModifierContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="CPP14Parser.simpleTypeSpecifier"/>.
 	/// </summary>

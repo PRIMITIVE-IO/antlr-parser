@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from C:/Users/john/Desktop/PRIMITIVE_Tools/antlr-parser/grammars\CPP14Parser.g4 by ANTLR 4.9.1
+// Generated from /Users/maxfarsikov/IdeaProjects/antlr-parser/grammars/CPP14Parser.g4 by ANTLR 4.9.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -804,6 +804,26 @@ public partial class CPP14ParserBaseVisitor<Result> : AbstractParseTreeVisitor<R
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	public virtual Result VisitTrailingTypeSpecifierSeq([NotNull] CPP14Parser.TrailingTypeSpecifierSeqContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CPP14Parser.simpleTypeLengthModifier"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitSimpleTypeLengthModifier([NotNull] CPP14Parser.SimpleTypeLengthModifierContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CPP14Parser.simpleTypeSignednessModifier"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitSimpleTypeSignednessModifier([NotNull] CPP14Parser.SimpleTypeSignednessModifierContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="CPP14Parser.simpleTypeSpecifier"/>.
 	/// <para>

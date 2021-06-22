@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,9 +10,31 @@ namespace antlr_parser.Antlr4Impl
     {
         static readonly TypeName VoidType = TypeName.For("void");
 
+        /// <summary>
+        /// extracts nested fields,methods or classes from list of namespaces
+        /// </summary>
+        /// <param name="ns"></param>
+        /// <param name="extractor"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        static IEnumerable<T> ExtractNested<T>(List<AstNode.Namespace> ns, Func<AstNode.Namespace, IEnumerable<T>> extractor)
+        {
+            return ns.SelectMany(it => extractor(it).Concat(ExtractNested(it.Namespaces, extractor)));
+        }
+
         public static List<ClassInfo> ToClassInfo(AstNode.FileNode astFileNode, SourceCodeLanguage language)
         {
-            if (astFileNode.Methods.Any() || astFileNode.Fields.Any() || astFileNode.Classes.Count == 0)
+            
+            List<AstNode.MethodNode> nsMethods = ExtractNested(astFileNode.Namespaces, ns => ns.Methods).ToList();
+            List<AstNode.ClassNode> nsclasses = ExtractNested(astFileNode.Namespaces, ns => ns.Classes).ToList();
+            List<AstNode.FieldNode> nsFields = ExtractNested(astFileNode.Namespaces, ns => ns.Fields).ToList();
+
+            //combine file and namespace members
+            List<AstNode.MethodNode> methods = astFileNode.Methods.Concat(nsMethods).ToList();
+            List<AstNode.FieldNode> fields = astFileNode.Fields.Concat(nsFields).ToList();
+            List<AstNode.ClassNode> classes = astFileNode.Classes.Concat(nsclasses).ToList();
+
+            if (methods.Any() || fields.Any() || classes.Count == 0)
             {
                 string classNameFromFile = Path.GetFileNameWithoutExtension(astFileNode.Name);
                 ClassName className = new ClassName(
@@ -23,10 +46,10 @@ namespace antlr_parser.Antlr4Impl
                 {
                     new ClassInfo(
                         className,
-                        astFileNode.Methods.Select(method => ToMethodInfo(method, className, language)).ToList(),
-                        astFileNode.Fields.Select(field => ToFieldInfo(field, className, language)),
+                        methods.Select(method => ToMethodInfo(method, className, language)).ToList(),
+                        fields.Select(field => ToFieldInfo(field, className, language)),
                         AccessFlags.AccPublic,
-                        astFileNode.Classes.Select(klass => ToClassInfo(
+                        classes.Select(klass => ToClassInfo(
                             klass,
                             astFileNode.Name,
                             astFileNode.PackageNode.Name,
@@ -37,7 +60,7 @@ namespace antlr_parser.Antlr4Impl
                 };
             }
 
-            return astFileNode.Classes.Select(klass => ToClassInfo(
+            return classes.Select(klass => ToClassInfo(
                     klass,
                     astFileNode.Name,
                     astFileNode.PackageNode.Name,

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from C:/Users/john/Desktop/PRIMITIVE_Tools/antlr-parser/grammars\CPP14Parser.g4 by ANTLR 4.9.1
+// Generated from /Users/maxfarsikov/IdeaProjects/antlr-parser/grammars/CPP14Parser.g4 by ANTLR 4.9.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -800,6 +800,26 @@ public interface ICPP14ParserListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitTrailingTypeSpecifierSeq([NotNull] CPP14Parser.TrailingTypeSpecifierSeqContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="CPP14Parser.simpleTypeLengthModifier"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterSimpleTypeLengthModifier([NotNull] CPP14Parser.SimpleTypeLengthModifierContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="CPP14Parser.simpleTypeLengthModifier"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitSimpleTypeLengthModifier([NotNull] CPP14Parser.SimpleTypeLengthModifierContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="CPP14Parser.simpleTypeSignednessModifier"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterSimpleTypeSignednessModifier([NotNull] CPP14Parser.SimpleTypeSignednessModifierContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="CPP14Parser.simpleTypeSignednessModifier"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitSimpleTypeSignednessModifier([NotNull] CPP14Parser.SimpleTypeSignednessModifierContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="CPP14Parser.simpleTypeSpecifier"/>.
 	/// </summary>

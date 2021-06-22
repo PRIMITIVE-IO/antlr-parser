@@ -12,14 +12,24 @@ namespace antlr_parser.Antlr4Impl
             public readonly List<ClassNode> Classes;
             public readonly List<FieldNode> Fields;
             public readonly List<MethodNode> Methods;
+            public readonly List<Namespace> Namespaces;
 
             public FileNode(string name,
                 PackageNode packageNode,
                 List<ClassNode> classes,
                 List<FieldNode> fields,
                 List<MethodNode> methods,
-                string header
-            )
+                string header) : this(name, packageNode, classes, fields, methods, header, new List<Namespace>())
+            {
+            }
+
+            public FileNode(string name,
+                PackageNode packageNode,
+                List<ClassNode> classes,
+                List<FieldNode> fields,
+                List<MethodNode> methods,
+                string header,
+                List<Namespace> namespaces)
             {
                 Name = name;
                 PackageNode = packageNode;
@@ -27,6 +37,7 @@ namespace antlr_parser.Antlr4Impl
                 Fields = fields;
                 Methods = methods;
                 Header = header;
+                Namespaces = namespaces;
             }
         }
 
@@ -105,6 +116,22 @@ namespace antlr_parser.Antlr4Impl
                 SourceCode = sourceCode;
                 StartIdx = startIdx;
                 EndIdx = endIdx;
+            }
+        }
+
+        public class Namespace : AstNode
+        {
+            public readonly List<ClassNode> Classes;
+            public readonly List<FieldNode> Fields;
+            public readonly List<MethodNode> Methods;
+            public readonly List<Namespace> Namespaces;
+    
+            public Namespace(List<ClassNode> classes, List<FieldNode> fields, List<MethodNode> methods, List<Namespace> namespaces)
+            {
+                Classes = classes;
+                Fields = fields;
+                Methods = methods;
+                Namespaces = namespaces;
             }
         }
     }

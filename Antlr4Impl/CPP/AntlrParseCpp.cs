@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
+using antlr_parser.Antlr4Impl.C;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
 
@@ -12,7 +12,12 @@ namespace antlr_parser.Antlr4Impl.CPP
         {
             try
             {
-                char[] codeArray = source.ToCharArray();
+                
+                string preprocessedSource = MethodBodyRemovalResult
+                    .From(source, DirectivesRemover.FindBlocksToRemove(source))
+                    .ShortenedSource;
+                
+                char[] codeArray = preprocessedSource.ToCharArray();
                 AntlrInputStream inputStream = new AntlrInputStream(codeArray, codeArray.Length);
 
                 CPP14Lexer lexer = new CPP14Lexer(inputStream);
@@ -24,11 +29,9 @@ namespace antlr_parser.Antlr4Impl.CPP
 
                 // a translationunit is the highest level container -> start there
                 // do not call parser.translationUnit() more than once
-                TranslationUnitListener translationUnitListener = new TranslationUnitListener(filePath);
-                parser.translationUnit().EnterRule(translationUnitListener);
-
-
-                return new List<ClassInfo> {translationUnitListener.FileClassInfo};
+                CPP14Parser.TranslationUnitContext translationUnit = parser.translationUnit();
+                AstNode.FileNode fileNode = translationUnit.Accept(new CppAstVisitor(filePath)) as AstNode.FileNode;
+                return AstToClassInfoConverter.ToClassInfo(fileNode, SourceCodeLanguage.Cpp);
             }
             catch (Exception e)
             {
@@ -36,37 +39,6 @@ namespace antlr_parser.Antlr4Impl.CPP
             }
 
             return new List<ClassInfo>();
-        }
-        
-        class TranslationUnitListener : CPP14ParserBaseListener
-        {
-            public ClassInfo FileClassInfo;
-            readonly string filePath;
-
-            public TranslationUnitListener(string filePath)
-            {
-                this.filePath = filePath;
-            }
-
-            public override void EnterTranslationUnit(CPP14Parser.TranslationUnitContext context)
-            {
-                ClassName fileClassName = new ClassName(
-                    new FileName(filePath),
-                    new PackageName(""),
-                    Path.GetFileNameWithoutExtension(filePath));
-
-                FileClassInfo = new ClassInfo(
-                    fileClassName,
-                    new List<MethodInfo>(),
-                    new List<FieldInfo>(),
-                    AccessFlags.AccPublic,
-                    new List<ClassInfo>(),
-                    new SourceCodeSnippet("", SourceCodeLanguage.Cpp),
-                    false);
-                
-                DeclarationseqListener declarationseqListener = new DeclarationseqListener(FileClassInfo);
-                context.declarationseq().EnterRule(declarationseqListener);
-            }
         }
     }
 }
