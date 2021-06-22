@@ -18,5 +18,17 @@ namespace antlr_parser.tests.CPP
                 fun f(){}
             ".TrimIndent());
         }
+        
+        [Fact]
+        void ShouldRemoveBody()
+        {
+            string source = @"
+                bool DecodeBase64PSBT(PartiallySignedTransaction& psbt, const std::string& base64_tx, std::string& error) const {REMOVE}
+            ".TrimIndent();
+            var blocksToRemove = RegexBasedCppMethodBodyRemover.FindBlocksToRemove(source);
+            MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be(@"
+                bool DecodeBase64PSBT(PartiallySignedTransaction& psbt, const std::string& base64_tx, std::string& error) const {}
+            ".TrimIndent());
+        }
     }
 }
