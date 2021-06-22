@@ -51,7 +51,7 @@ namespace antlr_parser.tests.CPP
             method.SourceCode.Text.Should().Be(@"
                 int f(int a, int b) {
                    return 10; 
-                }
+                };
             ".TrimIndent().Trim());
         }
 
@@ -215,7 +215,7 @@ namespace antlr_parser.tests.CPP
             ClassInfo classInfo = classInfos.First();
             classInfo.Fields.ToArray()[0].Name.ShortName.Should().Be("x");
             classInfo.Fields.ToArray()[1].Name.ShortName.Should().Be("y");
-            // classInfo.Fields.ToArray()[2].Name.ShortName.Should().Be("b"); TODO
+            // classInfo.Fields.ToArray()[2].Name.ShortName.Should().Be("b"); TODO GUARDED BY is a macro :(
         }
 
         [Fact]
@@ -291,13 +291,10 @@ namespace antlr_parser.tests.CPP
             classInfo.Name.ShortName.Should().Be("E");
             classInfo.SourceCode.Text.Should().Be(@"
                 enum class E {
-                    A,
-                    B,
-                }
             ".TrimIndent().Trim());
         }
 
-        //[Fact]TODO
+        [Fact]
         void ParseWierdFunctionName()
         {
             string source = @"
@@ -306,7 +303,7 @@ namespace antlr_parser.tests.CPP
             IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
 
             ClassInfo classInfo = classInfos.Single();
-            classInfo.Methods.Single().Name.ShortName.Should().Be("~Session"); //TODO?
+            classInfo.Methods.Single().Name.ShortName.Should().Be("~Session");
         }
 
         [Fact]
@@ -374,5 +371,69 @@ namespace antlr_parser.tests.CPP
             classInfo.Methods.ToArray()[0].Name.ShortName.Should().Be("NewBloomFilterPolicy");
             classInfo.Methods.ToArray()[1].Name.ShortName.Should().Be("BloomHash");
         }
+        
+        [Fact]
+        void ClassHeaderIncludesComment()
+        {
+            string source = @"
+                /**comment*/
+                class A{
+                    int x;
+                    int y=0;
+                    int f(){};
+                };
+            ".TrimIndent();
+            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+
+            ClassInfo classInfo = classInfos.Single();
+            classInfo.SourceCode.Text.Should().Be(@"
+                /**comment*/
+                class A{
+            ".TrimIndent().Trim());
+        }
+        
+        [Fact]
+        void ClassHeaderDoesNotIncludePeerFunction()
+        {
+            string source = @"
+                int f(){};
+                /**comment*/
+                class A{
+                    int x;
+                    int y=0;
+                    int f(){};
+                };
+            ".TrimIndent();
+            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+
+            ClassInfo classInfo = classInfos.Single().InnerClasses.Single();
+            classInfo.SourceCode.Text.Should().Be(@"
+                /**comment*/
+                class A{
+            ".TrimIndent().Trim());
+        }
+        
+        [Fact]
+        void ClassHeaderDoesNotIncludePeerClass()
+        {
+            string source = @"
+                class A{};
+                /**comment*/
+                class B{
+                    int x;
+                    int y=0;
+                    int f(){};
+                };
+            ".TrimIndent();
+            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+
+            ClassInfo classInfo = classInfos.ToArray()[1];
+            classInfo.Name.ShortName.Should().Be("B");
+            classInfo.SourceCode.Text.Should().Be(@"
+                /**comment*/
+                class B{
+            ".TrimIndent().Trim());
+        }
+        
     }
 }
