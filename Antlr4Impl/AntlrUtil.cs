@@ -26,7 +26,12 @@ namespace antlr_parser.Antlr4Impl
         /// <param name="context">The context that contains the tokens</param>
         /// <returns>Original new-lined and indented text</returns>
         public static string GetFullText(this ParserRuleContext context)
-        {
+        { 
+            if (context == null)
+            {
+                return "";
+            }
+
             if (context.Start == null ||
                 context.Stop == null ||
                 context.Start.StartIndex < 0 ||
