@@ -29,7 +29,7 @@ namespace antlr_parser.Antlr4Impl.Java
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                PrimitiveLogger.Logger.Instance().Error($"Failed to parse Java file {filePath}", e);
             }
 
             return new List<ClassInfo>();

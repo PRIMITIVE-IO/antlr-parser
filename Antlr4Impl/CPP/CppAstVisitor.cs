@@ -124,11 +124,11 @@ namespace antlr_parser.Antlr4Impl.CPP
 
             try
             {
-                Console.WriteLine($"Cannot parse DeclarationContext: {context.GetFullText()}");
+                PrimitiveLogger.Logger.Instance().Warn($"Cannot parse DeclarationContext: {context.GetFullText()}");
             }
-            catch (Exception _)
+            catch (Exception e)
             {
-                Console.WriteLine($"Cannot parse DeclarationContext for unknown source in: {Path}");
+                PrimitiveLogger.Logger.Instance().Error($"Cannot parse DeclarationContext for unknown source in: {Path}", e);
             }
 
             return null;
@@ -344,7 +344,8 @@ namespace antlr_parser.Antlr4Impl.CPP
                 return node;
             }
 
-            Console.WriteLine($"Cannot parse MemberdeclarationContext: {context.GetFullText()}");
+            PrimitiveLogger.Logger.Instance().Warn($"Cannot parse MemberdeclarationContext: {context.GetFullText()}");
+
             return null;
         }
 
