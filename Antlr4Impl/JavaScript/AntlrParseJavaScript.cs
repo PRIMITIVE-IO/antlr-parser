@@ -32,9 +32,8 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             }
             catch (Exception e)
             {
-                Console.WriteLine($"file: {filePath}");
-                Console.WriteLine(source);
-                Console.WriteLine(e);
+                PrimitiveLogger.Logger.Instance().Error($"Failed to parse JavaScript file {filePath}", e);
+
                 return new List<ClassInfo>();
             }
         }

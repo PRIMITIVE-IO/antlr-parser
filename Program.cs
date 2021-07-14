@@ -4,8 +4,13 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using log4net;
+using log4net.Config;
+using log4net.Repository;
 using PrimitiveCodebaseElements.Primitive;
 using Argument = System.CommandLine.Argument;
+using FileInfo = System.IO.FileInfo;
 
 namespace antlr_parser
 {
@@ -18,6 +23,8 @@ namespace antlr_parser
 
         static void Main(string[] args)
         {
+            SetupLogger();
+
             // Create a root command with some options 
             RootCommand rootCommand = new RootCommand
             {
@@ -64,17 +71,23 @@ namespace antlr_parser
 
         static void PrintClass(ClassInfo classInfo)
         {
-            Console.WriteLine(classInfo.className.ShortName);
+            PrimitiveLogger.Logger.Instance().Info(classInfo.className.ShortName);
+
             foreach (ICodebaseElementInfo infoChild in classInfo.Children)
             {
-                Console.WriteLine(
-                    $"-{infoChild.Name.ShortName}");
+                PrimitiveLogger.Logger.Instance().Info($"-{infoChild.Name.ShortName}");
             }
 
             foreach (ClassInfo innerClass in classInfo.InnerClasses)
             {
                 PrintClass(innerClass);
             }
+        }
+
+        static void SetupLogger()
+        {
+            ILoggerRepository logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+            XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
         }
     }
 }

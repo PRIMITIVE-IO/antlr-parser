@@ -49,7 +49,7 @@ namespace antlr_parser.Antlr4Impl.C
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    PrimitiveLogger.Logger.Instance().Error("Failed to remove blocks", e);
                     return null;
                 }
             })

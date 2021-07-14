@@ -153,7 +153,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
                         }
                         else
                         {
-                            Console.WriteLine($"unknown modifier {modText}");
+                            PrimitiveLogger.Logger.Instance().Warn($"unknown modifier {modText}");
                         }
                     }
                 }

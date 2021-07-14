@@ -10,7 +10,7 @@ namespace antlr_parser.Antlr4Impl.C
     {
         public static IEnumerable<ClassInfo> OuterClassInfosFromSource(string source, string filePath)
         {
-            Console.WriteLine("Parsing file: {0}", filePath);
+            PrimitiveLogger.Logger.Instance().Info($"Parsing file: {filePath}");
             try
             {
                 string preprocessedSource = MethodBodyRemovalResult
@@ -44,7 +44,7 @@ namespace antlr_parser.Antlr4Impl.C
             }
             catch (Exception e)
             {
-                Console.WriteLine($"file: {filePath}, source: {source}, exception: {e}");
+                PrimitiveLogger.Logger.Instance().Error($"File: {filePath}, source: {source}, exception: {e}");
             }
 
             return new List<ClassInfo>();

@@ -29,7 +29,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                PrimitiveLogger.Logger.Instance().Error($"Failed to parse TS file {filePath}", e);
             }
 
             return new List<ClassInfo>();

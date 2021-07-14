@@ -30,7 +30,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                PrimitiveLogger.Logger.Instance().Error($"Failed to parse Solidity file {filePath}", e);
             }
 
             return null;

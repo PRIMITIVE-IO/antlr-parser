@@ -34,7 +34,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                PrimitiveLogger.Logger.Instance().Error($"Failed to parse Kotlin file {filePath}", e);
             }
 
             return null;
