@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using PrimitiveCodebaseElements.Primitive;
 
 namespace antlr_parser.Antlr4Impl.C
 {
     public class CVisitor : CBaseVisitor<AstNode>
     {
-        readonly string fileName;
-        private readonly MethodBodyRemovalResult methodBodyRemovalResult;
+        readonly string _filePath;
+        private readonly MethodBodyRemovalResult _methodBodyRemovalResult;
 
-        public CVisitor(string fileName, MethodBodyRemovalResult methodBodyRemovalResult)
+        public CVisitor(string filePath, MethodBodyRemovalResult methodBodyRemovalResult)
         {
-            this.fileName = fileName;
-            this.methodBodyRemovalResult = methodBodyRemovalResult;
+            _filePath = filePath;
+            _methodBodyRemovalResult = methodBodyRemovalResult;
         }
 
         public override AstNode VisitCompilationUnit(CParser.CompilationUnitContext context)
@@ -37,19 +38,21 @@ namespace antlr_parser.Antlr4Impl.C
 
             int headerEnd = methods.Select(it => it.StartIdx - 1)
                 .Concat(structs.Select(it => it.StartIdx - 1))
-                .DefaultIfEmpty(context.Stop?.StopIndex ?? 0)
+                .DefaultIfEmpty(_methodBodyRemovalResult.RestoreIdx(context.Stop?.StopIndex ?? 0))
                 .Min();
 
-            string header = methodBodyRemovalResult.RestoreOriginalSubstring(0, headerEnd)
+            string header = _methodBodyRemovalResult.ExtractOriginalSubstring(0, headerEnd)
                 .Trim();
 
             return new AstNode.FileNode(
-                fileName,
-                new AstNode.PackageNode(""),
-                structs,
-                new List<AstNode.FieldNode>(),
-                methods,
-                header
+                path: _filePath,
+                packageNode: new AstNode.PackageNode(""),
+                classes: structs,
+                fields: new List<AstNode.FieldNode>(),
+                methods: methods,
+                header: header,
+                language: SourceCodeLanguage.C,
+                isTest: false
             );
         }
 
@@ -84,10 +87,10 @@ namespace antlr_parser.Antlr4Impl.C
 
             int headerEnd = fields.Select(it => it.StartIdx - 1)
                 .Concat(innerClasses.Select(it => it.StartIdx - 1))
-                .DefaultIfEmpty(context.Stop?.StopIndex ?? 0)
+                .DefaultIfEmpty(_methodBodyRemovalResult.RestoreIdx(context.Stop?.StopIndex ?? 0))
                 .Min();
 
-            string header = methodBodyRemovalResult.RestoreOriginalSubstring(headerStart, headerEnd)
+            string header = _methodBodyRemovalResult.ExtractOriginalSubstring(headerStart, headerEnd)
                 .Trim();
 
             return new AstNode.ClassNode(
@@ -95,9 +98,9 @@ namespace antlr_parser.Antlr4Impl.C
                 new List<AstNode.MethodNode>(),
                 fields,
                 innerClasses,
-                "public",
-                context.Start.StartIndex,
-                context.Stop.StopIndex,
+                AccessFlags.AccPublic,
+                _methodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                _methodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex),
                 header
             );
         }
@@ -113,7 +116,7 @@ namespace antlr_parser.Antlr4Impl.C
             {
                 return structDeclarationListContext.structDeclaration()
                     .TakeWhile(it => it != self)
-                    .Select(it => it.Stop.StopIndex + 1)
+                    .Select(it => _methodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
                     .DefaultIfEmpty(-1)
                     .Max();
             }
@@ -122,7 +125,7 @@ namespace antlr_parser.Antlr4Impl.C
             {
                 return translationUnitContext.externalDeclaration()
                     .TakeWhile(it => it != self)
-                    .Select(it => it.Stop.StopIndex + 1)
+                    .Select(it => _methodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
                     .DefaultIfEmpty(-1)
                     .Max();
             }
@@ -139,10 +142,10 @@ namespace antlr_parser.Antlr4Impl.C
 
             return new AstNode.FieldNode(
                 fieldName,
-                "public",
+                AccessFlags.AccPublic,
                 context.GetFullText(),
-                context.Start.StartIndex,
-                context.Stop.StopIndex
+                _methodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                _methodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
             );
         }
 
@@ -193,15 +196,15 @@ namespace antlr_parser.Antlr4Impl.C
             string text = context.GetFullText();
             string fName = ExtractFunctionName(context.declarator().directDeclarator());
 
-            methodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex,
+            _methodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex,
                 out string removedSourceCode);
 
             return new AstNode.MethodNode(
                 fName,
-                "public",
+                AccessFlags.AccPublic,
                 text + removedSourceCode ?? "",
-                context.Start.StartIndex,
-                context.Stop.StopIndex
+                _methodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                    _methodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
             );
         }
 

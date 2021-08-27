@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using PrimitiveCodebaseElements.Primitive;
 
 namespace antlr_parser.Antlr4Impl
 {
@@ -7,37 +8,45 @@ namespace antlr_parser.Antlr4Impl
         public class FileNode : AstNode
         {
             public readonly string Header;
-            public readonly string Name;
+            public readonly string Path;
             public readonly PackageNode PackageNode;
             public readonly List<ClassNode> Classes;
             public readonly List<FieldNode> Fields;
             public readonly List<MethodNode> Methods;
             public readonly List<Namespace> Namespaces;
+            public readonly SourceCodeLanguage Language;
+            public readonly bool IsTest;
 
-            public FileNode(string name,
-                PackageNode packageNode,
-                List<ClassNode> classes,
-                List<FieldNode> fields,
-                List<MethodNode> methods,
-                string header) : this(name, packageNode, classes, fields, methods, header, new List<Namespace>())
-            {
-            }
-
-            public FileNode(string name,
+            public FileNode(string path,
                 PackageNode packageNode,
                 List<ClassNode> classes,
                 List<FieldNode> fields,
                 List<MethodNode> methods,
                 string header,
-                List<Namespace> namespaces)
+                SourceCodeLanguage language,
+                bool isTest) : this(path, packageNode, classes, fields, methods, header, new List<Namespace>(), language, isTest)
             {
-                Name = name;
+            }
+
+            public FileNode(string path,
+                PackageNode packageNode,
+                List<ClassNode> classes,
+                List<FieldNode> fields,
+                List<MethodNode> methods,
+                string header,
+                List<Namespace> namespaces,
+                SourceCodeLanguage language,
+                bool isTest)
+            {
+                Path = path;
                 PackageNode = packageNode;
                 Classes = classes;
                 Fields = fields;
                 Methods = methods;
                 Header = header;
                 Namespaces = namespaces;
+                Language = language;
+                IsTest = isTest;
             }
         }
 
@@ -57,7 +66,7 @@ namespace antlr_parser.Antlr4Impl
             public readonly List<MethodNode> Methods;
             public readonly List<FieldNode> Fields;
             public readonly List<ClassNode> InnerClasses;
-            public readonly string Modifier;
+            public readonly AccessFlags Modifier;
             public readonly int StartIdx;
             public readonly int EndIdx;
             public readonly string Header;
@@ -66,7 +75,7 @@ namespace antlr_parser.Antlr4Impl
                 List<MethodNode> methods,
                 List<FieldNode> fields,
                 List<ClassNode> innerClasses,
-                string modifier,
+                AccessFlags modifier,
                 int startIdx,
                 int endIdx,
                 string header
@@ -86,12 +95,12 @@ namespace antlr_parser.Antlr4Impl
         public class MethodNode : AstNode
         {
             public readonly string Name;
-            public readonly string AccFlag;
+            public readonly AccessFlags AccFlag;
             public readonly string SourceCode;
             public readonly int StartIdx;
             public readonly int EndIdx;
 
-            public MethodNode(string name, string accFlag, string sourceCode, int startIdx, int endIdx)
+            public MethodNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx)
             {
                 Name = name;
                 AccFlag = accFlag;
@@ -104,12 +113,12 @@ namespace antlr_parser.Antlr4Impl
         public class FieldNode : AstNode
         {
             public readonly string Name;
-            public readonly string AccFlag;
+            public readonly AccessFlags AccFlag;
             public readonly string SourceCode;
             public readonly int StartIdx;
             public readonly int EndIdx;
 
-            public FieldNode(string name, string accFlag, string sourceCode, int startIdx, int endIdx)
+            public FieldNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx)
             {
                 Name = name;
                 AccFlag = accFlag;

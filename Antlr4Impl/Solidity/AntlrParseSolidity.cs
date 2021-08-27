@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using antlr_parser.Antlr4Impl.dto;
+using antlr_parser.Antlr4Impl.dto.converter;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
 
@@ -35,6 +38,12 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
             return null;
         }
+        
+        public static FileDto Parse(string source, string filePath)
+        {
+            return ClassInfoToClassDtoConverter.ToParsingResultDto(OuterClassInfosFromSource(source, filePath).ToList(), source, filePath);
+        }
+
 
         class SourceUnitListener : SolidityBaseListener
         {

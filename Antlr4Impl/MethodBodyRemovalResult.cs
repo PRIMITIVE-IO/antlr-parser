@@ -96,20 +96,17 @@ namespace antlr_parser.Antlr4Impl
             OriginalSource = originalSource;
         }
 
-        /// <summary>
-        /// Restores original substring based on indices from "shortened" (without method bodies) source code 
-        /// </summary>
-        /// <param name="from">index in "shortened" source</param>
-        /// <param name="to">index in "shortened" source</param>
-        /// <returns>substring from an original source code, including removed blocks</returns>
-        public string RestoreOriginalSubstring(int from, int to)
+        public string ExtractOriginalSubstring(int from, int to)
         {
-            int fromIdx = RestoreIdx(from);
-            int toIdx = RestoreIdx(to);
-            return OriginalSource.Substring(fromIdx, toIdx - fromIdx + 1);
+            return OriginalSource.Substring(from, to - from + 1);
         }
 
-        int RestoreIdx(int idx)
+        /// <summary>
+        /// Restores original indices based on indices from "shortened" (without method bodies) source code 
+        /// </summary>
+        /// <param name="idx">index in "shortened" source</param>
+        /// <returns>index from an original source code, including removed blocks</returns>
+        public int RestoreIdx(int idx)
         {
             int acc = idx;
             foreach (Tuple<int, int> tuple in BlocksToRemove)

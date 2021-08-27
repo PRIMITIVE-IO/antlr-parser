@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using PrimitiveCodebaseElements.Primitive;
 
 namespace antlr_parser.Antlr4Impl.CPP
 {
@@ -36,7 +37,9 @@ namespace antlr_parser.Antlr4Impl.CPP
                 fields,
                 methods,
                 "",
-                namespaces
+                namespaces,
+                language: SourceCodeLanguage.Cpp,
+                isTest: false
             );
         }
 
@@ -83,10 +86,10 @@ namespace antlr_parser.Antlr4Impl.CPP
             {
                 return new AstNode.FieldNode(
                     String.Join(",", fieldNames),
-                    "",
+                    AccessFlags.AccPublic,
                     context.GetFullText(),
-                    context.Start.StartIndex,
-                    context.Stop.StopIndex
+                    MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                    MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
                 );
             }
 
@@ -108,17 +111,17 @@ namespace antlr_parser.Antlr4Impl.CPP
 
             if (methodName != null)
             {
-                string sourceCode = MethodBodyRemovalResult.RestoreOriginalSubstring(
-                        context.Start.StartIndex,
-                        context.Stop.StopIndex)
+                string sourceCode = MethodBodyRemovalResult.ExtractOriginalSubstring(
+                    MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                    MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex))
                     .TrimIndent().Trim();
 
                 return new AstNode.MethodNode(
                     methodName,
-                    "",
+                    AccessFlags.AccPublic,
                     sourceCode,
-                    context.Start.StartIndex,
-                    context.Stop.StopIndex
+                    MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                    MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
                 );
             }
 
@@ -128,7 +131,8 @@ namespace antlr_parser.Antlr4Impl.CPP
             }
             catch (Exception e)
             {
-                PrimitiveLogger.Logger.Instance().Error($"Cannot parse DeclarationContext for unknown source in: {Path}", e);
+                PrimitiveLogger.Logger.Instance()
+                    .Error($"Cannot parse DeclarationContext for unknown source in: {Path}", e);
             }
 
             return null;
@@ -177,9 +181,9 @@ namespace antlr_parser.Antlr4Impl.CPP
         {
             string name = context.Identifier().GetText();
             int headerStart = PreviousPeerEndPosition(context.Parent, context) + 1;
-            int headerEnd = context.Stop.StopIndex;
+            int headerEnd = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
-            string header = MethodBodyRemovalResult.RestoreOriginalSubstring(
+            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(
                     headerStart,
                     headerEnd)
                 .TrimIndent().Trim();
@@ -189,9 +193,9 @@ namespace antlr_parser.Antlr4Impl.CPP
                 new List<AstNode.MethodNode>(),
                 new List<AstNode.FieldNode>(),
                 new List<AstNode.ClassNode>(),
-                "",
-                context.Start.StartIndex,
-                context.Stop.StopIndex,
+                AccessFlags.AccPublic,
+                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex),
                 header
             );
         }
@@ -208,17 +212,17 @@ namespace antlr_parser.Antlr4Impl.CPP
 
             if (methodName != null)
             {
-                string sourceCode = MethodBodyRemovalResult.RestoreOriginalSubstring(
-                        context.Start.StartIndex,
-                        context.Stop.StopIndex)
+                string sourceCode = MethodBodyRemovalResult.ExtractOriginalSubstring(
+                    MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                    MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex))
                     .TrimIndent().Trim();
 
                 return new AstNode.MethodNode(
                     methodName,
-                    "",
+                    AccessFlags.AccPublic,
                     sourceCode,
-                    context.Start.StartIndex,
-                    context.Stop.StopIndex
+                    MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                    MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
                 );
             }
 
@@ -238,9 +242,9 @@ namespace antlr_parser.Antlr4Impl.CPP
             List<AstNode.ClassNode> classes = members.OfType<AstNode.ClassNode>().ToList();
 
             int headerStart = PreviousPeerEndPosition(context, context.Parent) + 1;
-            int headerEnd = context.LeftBrace().Symbol.StartIndex;
+            int headerEnd = MethodBodyRemovalResult.RestoreIdx(context.LeftBrace().Symbol.StartIndex);
 
-            string header = MethodBodyRemovalResult.RestoreOriginalSubstring(
+            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(
                     headerStart,
                     headerEnd)
                 .TrimIndent().Trim();
@@ -250,9 +254,9 @@ namespace antlr_parser.Antlr4Impl.CPP
                 methods,
                 fields,
                 classes,
-                "",
-                context.Start.StartIndex,
-                context.Stop.StopIndex,
+                AccessFlags.AccPublic,
+                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex),
                 header
             );
         }
@@ -260,9 +264,9 @@ namespace antlr_parser.Antlr4Impl.CPP
         public override AstNode VisitEnumSpecifier(CPP14Parser.EnumSpecifierContext context)
         {
             int headerStart = PreviousPeerEndPosition(context, context.Parent) + 1;
-            int headerEnd = context.LeftBrace().Symbol.StartIndex;
+            int headerEnd = MethodBodyRemovalResult.RestoreIdx(context.LeftBrace().Symbol.StartIndex);
 
-            string header = MethodBodyRemovalResult.RestoreOriginalSubstring(
+            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(
                     headerStart,
                     headerEnd)
                 .TrimIndent().Trim();
@@ -272,9 +276,9 @@ namespace antlr_parser.Antlr4Impl.CPP
                 new List<AstNode.MethodNode>(),
                 new List<AstNode.FieldNode>(),
                 new List<AstNode.ClassNode>(),
-                "",
-                context.Start.StartIndex,
-                context.Stop.StopIndex,
+                AccessFlags.AccPublic,
+                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex),
                 header
             );
         }
@@ -307,10 +311,10 @@ namespace antlr_parser.Antlr4Impl.CPP
             {
                 return new AstNode.FieldNode(
                     String.Join(",", fieldNames),
-                    "",
+                    AccessFlags.AccPublic,
                     context.GetFullText(),
-                    context.Start.StartIndex,
-                    context.Stop.StopIndex
+                    MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                    MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
                 );
             }
 
@@ -323,17 +327,17 @@ namespace antlr_parser.Antlr4Impl.CPP
 
             if (methodName != null)
             {
-                string sourceCode = MethodBodyRemovalResult.RestoreOriginalSubstring(
-                        context.Start.StartIndex,
-                        context.Stop.StopIndex)
+                string sourceCode = MethodBodyRemovalResult.ExtractOriginalSubstring(
+                        MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                        MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex))
                     .TrimIndent().Trim();
 
                 return new AstNode.MethodNode(
                     methodName,
-                    "",
+                    AccessFlags.AccPublic,
                     sourceCode,
-                    context.Start.StartIndex,
-                    context.Stop.StopIndex
+                    MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                    MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
                 );
             }
 
@@ -431,7 +435,7 @@ namespace antlr_parser.Antlr4Impl.CPP
                 return declarationseq.children
                     .TakeWhile(it => it != self)
                     .OfType<CPP14Parser.DeclarationContext>()
-                    .Select(it => it.Stop.StopIndex)
+                    .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex))
                     .DefaultIfEmpty(-1)
                     .Last();
             }

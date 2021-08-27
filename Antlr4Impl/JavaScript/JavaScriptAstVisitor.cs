@@ -1,19 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using PrimitiveCodebaseElements.Primitive;
 
 namespace antlr_parser.Antlr4Impl.JavaScript
 {
     public class JavaScriptAstVisitor : JavaScriptParserBaseVisitor<AstNode>
     {
-        readonly string FileName;
-        private readonly MethodBodyRemovalResult MethodBodyRemovalResult;
+        readonly string FilePath;
+        readonly MethodBodyRemovalResult MethodBodyRemovalResult;
 
-        public JavaScriptAstVisitor(string fileName, MethodBodyRemovalResult methodBodyRemovalResult)
+        public JavaScriptAstVisitor(string filePath, MethodBodyRemovalResult methodBodyRemovalResult)
         {
-            FileName = fileName;
+            FilePath = filePath;
             MethodBodyRemovalResult = methodBodyRemovalResult;
         }
 
@@ -50,19 +52,21 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             int headerEnd = classes.Select(it => it.StartIdx - 1)
                 .Concat(methods.Select(it => it.StartIdx - 1))
                 .Concat(fields.Select(it => it.StartIdx - 1))
-                .DefaultIfEmpty(context.Stop.StopIndex)
+                .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex))
                 .Min();
 
-            string header = MethodBodyRemovalResult.RestoreOriginalSubstring(0, headerEnd)
+            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(0, headerEnd)
                 .Trim();
 
             return new AstNode.FileNode(
-                FileName,
+                path: FilePath,
                 new AstNode.PackageNode(""),
                 classes,
                 fields,
                 methods,
-                header
+                header,
+                language: SourceCodeLanguage.Java,
+                isTest: false
             );
         }
 
@@ -82,7 +86,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
             return sourceElementsContext.sourceElement()
                 .TakeWhile(it => it != self)
-                .Select(it => it.Stop.StopIndex + 1)
+                .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
                 .DefaultIfEmpty(-1)
                 .Max();
         }
@@ -93,10 +97,10 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 out string removeSourceCode);
             return new AstNode.MethodNode(
                 context.identifier().GetFullText(),
-                "",
+                AccessFlags.None,
                 context.GetFullText() + (removeSourceCode ?? ""),
-                context.Start.StartIndex,
-                context.Stop.StopIndex
+                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
             );
         }
 
@@ -113,7 +117,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             int headerEnd = methodNodes.Select(it => it.StartIdx - 1)
                 .Concat(fieldNodes.Select(it => it.StartIdx - 1))
                 .Concat(innerClasses.Select(it => it.StartIdx - 1))
-                .DefaultIfEmpty(context.Stop.StopIndex)
+                .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex))
                 .Min();
 
             int headerStart = new[]
@@ -123,7 +127,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             }.Max();
 
 
-            string header = MethodBodyRemovalResult.RestoreOriginalSubstring(headerStart, headerEnd)
+            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(headerStart, headerEnd)
                 .Trim();
 
             return new AstNode.ClassNode(
@@ -131,9 +135,9 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 methodNodes,
                 fieldNodes,
                 innerClasses,
-                "",
-                context.Start.StartIndex,
-                context.Stop.StopIndex,
+                AccessFlags.None,
+                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex),
                 header
             );
         }
@@ -149,10 +153,10 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 out string removedSourceCode);
             return new AstNode.MethodNode(
                 context.propertyName().GetFullText(),
-                "",
+                AccessFlags.None,
                 context.GetFullText() + (removedSourceCode ?? ""),
-                context.Start.StartIndex,
-                context.Stop.StopIndex
+                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
             );
         }
 
@@ -180,10 +184,10 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
             return new AstNode.FieldNode(
                 name,
-                "",
+                AccessFlags.None,
                 context.GetFullText(),
-                context.Start.StartIndex,
-                context.Stop.StopIndex
+                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
             );
         }
     }

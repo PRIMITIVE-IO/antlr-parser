@@ -36,9 +36,9 @@ namespace antlr_parser.Antlr4Impl
 
             if (methods.Any() || fields.Any() || classes.Count == 0)
             {
-                string classNameFromFile = Path.GetFileNameWithoutExtension(astFileNode.Name);
+                string classNameFromFile = Path.GetFileNameWithoutExtension(astFileNode.Path);
                 ClassName className = new ClassName(
-                    new FileName(astFileNode.Name),
+                    new FileName(astFileNode.Path),
                     new PackageName(astFileNode.PackageNode.Name),
                     classNameFromFile);
 
@@ -51,7 +51,7 @@ namespace antlr_parser.Antlr4Impl
                         AccessFlags.AccPublic,
                         classes.Select(klass => ToClassInfo(
                             klass,
-                            astFileNode.Name,
+                            astFileNode.Path,
                             astFileNode.PackageNode.Name,
                             classNameFromFile,
                             language)),
@@ -62,7 +62,7 @@ namespace antlr_parser.Antlr4Impl
 
             return classes.Select(klass => ToClassInfo(
                     klass,
-                    astFileNode.Name,
+                    astFileNode.Path,
                     astFileNode.PackageNode.Name,
                     null,
                     language))
@@ -107,7 +107,7 @@ namespace antlr_parser.Antlr4Impl
                 className,
                 methodInfos,
                 fieldInfos,
-                ToAccessFlag(classNode.Modifier),
+                classNode.Modifier,
                 innerClasses,
                 new SourceCodeSnippet(classNode.Header, language),
                 false);
@@ -118,7 +118,7 @@ namespace antlr_parser.Antlr4Impl
             return new FieldInfo(
                 new FieldName(className, fieldNode.Name, VoidType.Signature),
                 className,
-                ToAccessFlag(fieldNode.AccFlag),
+                fieldNode.AccFlag,
                 new SourceCodeSnippet(fieldNode.SourceCode, language));
         }
 
@@ -126,29 +126,13 @@ namespace antlr_parser.Antlr4Impl
         {
             return new MethodInfo(
                 new MethodName(className, methodNode.Name, VoidType.Signature, new List<Argument>()),
-                ToAccessFlag(methodNode.AccFlag),
+                methodNode.AccFlag,
                 className,
                 new List<Argument>(),
                 VoidType,
                 new SourceCodeSnippet(methodNode.SourceCode, language)
             );
         }
-
-        static AccessFlags ToAccessFlag(string accFlag)
-        {
-            switch (accFlag)
-            {
-                case null:
-                case "public":
-                    return AccessFlags.AccPublic;
-                case "private":
-                    return AccessFlags.AccPrivate;
-                case "internal":
-                case "protected":
-                    return AccessFlags.AccProtected;
-                default:
-                    return AccessFlags.AccPublic;
-            }
-        }
+        
     }
 }

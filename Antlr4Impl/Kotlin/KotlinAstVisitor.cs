@@ -2,18 +2,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using PrimitiveCodebaseElements.Primitive;
 
 namespace antlr_parser.Antlr4Impl.Kotlin
 {
     public class KotlinVisitor : KotlinParserBaseVisitor<AstNode>
     {
-        readonly string fileName;
-        readonly MethodBodyRemovalResult methodBodyRemovalResult;
+        readonly string FilePath;
+        readonly MethodBodyRemovalResult MethodBodyRemovalResult;
 
-        public KotlinVisitor(string fileName, MethodBodyRemovalResult methodBodyRemovalResult)
+        public KotlinVisitor(string filePath, MethodBodyRemovalResult methodBodyRemovalResult)
         {
-            this.fileName = fileName;
-            this.methodBodyRemovalResult = methodBodyRemovalResult;
+            this.FilePath = filePath;
+            this.MethodBodyRemovalResult = methodBodyRemovalResult;
         }
 
         public override AstNode VisitKotlinFile(KotlinParser.KotlinFileContext context)
@@ -31,12 +32,12 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             int headerEnd = classes.Select(it => it.StartIdx - 1)
                 .Concat(methods.Select(it => it.StartIdx - 1))
                 .Concat(fields.Select(it => it.StartIdx - 1))
-                .DefaultIfEmpty(context.Stop.StopIndex)
+                .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex))
                 .Min();
 
-            string header = methodBodyRemovalResult.RestoreOriginalSubstring(0, headerEnd).Trim().TrimIndent();
+            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(0, headerEnd).Trim().TrimIndent();
 
-            return new AstNode.FileNode(fileName, pkg, classes, fields, methods, header);
+            return new AstNode.FileNode(path: FilePath,packageNode: pkg,classes: classes,fields: fields,methods: methods,header: header, language: SourceCodeLanguage.Kotlin, isTest: false);
         }
 
         public override AstNode VisitTopLevelObject(KotlinParser.TopLevelObjectContext context)
@@ -54,8 +55,8 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
         public override AstNode VisitFunctionDeclaration(KotlinParser.FunctionDeclarationContext context)
         {
-            string modifier = ExtractVisibilityModifier(context.modifierList());
-            methodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex, out string removedBody);
+            AccessFlags modifier = ExtractVisibilityModifier(context.modifierList());
+            MethodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex, out string removedBody);
             if (string.IsNullOrEmpty(removedBody))
             {
                 removedBody = "";
@@ -68,17 +69,30 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 context.identifier().GetFullText(),
                 modifier,
                 sourceCode,
-                context.Start.StartIndex,
-                context.Stop.StopIndex
+                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                    MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
             );
         }
 
-        static string ExtractVisibilityModifier(KotlinParser.ModifierListContext ctx)
+        static AccessFlags ExtractVisibilityModifier(KotlinParser.ModifierListContext ctx)
         {
-            return ctx?.modifier()
+            string accFlag = ctx?.modifier()
                 ?.Select(it => it.visibilityModifier())
                 .FirstOrDefault()
                 ?.GetFullText();
+            
+            switch (accFlag)
+            {
+                case null:
+                case "public":
+                    return AccessFlags.AccPublic;
+                case "private":
+                    return AccessFlags.AccPrivate;
+                case "internal":
+                    return AccessFlags.AccProtected;
+                default:
+                    return AccessFlags.AccPublic;
+            }
         }
 
         public override AstNode VisitPackageHeader(KotlinParser.PackageHeaderContext context)
@@ -88,7 +102,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
         public override AstNode VisitClassDeclaration(KotlinParser.ClassDeclarationContext context)
         {
-            string modifier = ExtractVisibilityModifier(context.modifierList());
+            AccessFlags modifier = ExtractVisibilityModifier(context.modifierList());
             List<AstNode> parsedMembers = context.classBody()?.classMemberDeclaration()
                 ?.Select(decl => decl.Accept(this))
                 .Where(it => it != null)
@@ -102,7 +116,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             int headerEndIdx = innerClasses.Select(it => it.StartIdx - 1)
                 .Concat(methodNodes.Select(it => it.StartIdx - 1))
                 .Concat(fieldNodes.Select(it => it.StartIdx - 1))
-                .DefaultIfEmpty(context.Stop.StopIndex)
+                .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex))
                 .Min();
 
             int headerStart = new[]
@@ -112,7 +126,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 0
             }.Max();
 
-            string header = methodBodyRemovalResult.RestoreOriginalSubstring(headerStart, headerEndIdx)
+            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(headerStart, headerEndIdx)
                 .TrimIndent()
                 .Trim();
 
@@ -122,8 +136,8 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 fieldNodes,
                 innerClasses,
                 modifier,
-                context.Start.StartIndex,
-                context.Stop.StartIndex,
+                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                MethodBodyRemovalResult.RestoreIdx( context.Stop.StartIndex),
                 header
             );
         }
@@ -137,7 +151,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
             if (parent is KotlinParser.ClassBodyContext)
             {
-                return (parent as KotlinParser.ClassBodyContext).Start.StartIndex + 1; // +1 to exclude '{'
+                return MethodBodyRemovalResult.RestoreIdx((parent as KotlinParser.ClassBodyContext).Start.StartIndex + 1); // +1 to exclude '{'
             }
 
             return OutboundClassBodyStartPosition(parent.Parent);
@@ -163,21 +177,21 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                     it is KotlinParser.TopLevelObjectContext)
                 .TakeWhile(it => it != self)
                 .OfType<ParserRuleContext>()
-                .Select(it => it.Stop.StopIndex + 1)
+                .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
                 .DefaultIfEmpty(-1)
                 .Max();
         }
 
         public override AstNode VisitPropertyDeclaration(KotlinParser.PropertyDeclarationContext context)
         {
-            string modifier = ExtractVisibilityModifier(context.modifierList());
+            AccessFlags modifier = ExtractVisibilityModifier(context.modifierList());
             string sourceCode = context.GetFullText();
             return new AstNode.FieldNode(
                 context.variableDeclaration().simpleIdentifier().GetFullText(),
                 modifier,
                 sourceCode,
-                context.Start.StartIndex,
-                context.Stop.StopIndex
+                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
             );
         }
 

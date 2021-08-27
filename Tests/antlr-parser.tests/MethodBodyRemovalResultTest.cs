@@ -82,9 +82,9 @@ namespace antlr_parser.tests
             //Act
             MethodBodyRemovalResult result = MethodBodyRemovalResult.From(source, blocksToRemove);
             
-            result.RestoreOriginalSubstring(1, 8).Should().Be("fun f(){ REMOVE }\n");
-            result.RestoreOriginalSubstring(9, 16).Should().Be("fun g() { REMOVE }\n");
-            result.RestoreOriginalSubstring(17, 24).Should().Be("fun h() { REMOVE }\n");
+            result.ExtractOriginalSubstring(result.RestoreIdx(1), result.RestoreIdx(8)).Should().Be("fun f(){ REMOVE }\n");
+            result.ExtractOriginalSubstring(result.RestoreIdx(9), result.RestoreIdx(16)).Should().Be("fun g() { REMOVE }\n");
+            result.ExtractOriginalSubstring(result.RestoreIdx(17),result.RestoreIdx( 24)).Should().Be("fun h() { REMOVE }\n");
 
         }
     }
