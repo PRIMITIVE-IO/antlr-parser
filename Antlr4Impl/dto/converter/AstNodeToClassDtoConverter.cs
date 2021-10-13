@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using PrimitiveCodebaseElements.Primitive.dto;
 
 namespace antlr_parser.Antlr4Impl.dto.converter
 {
@@ -11,7 +12,6 @@ namespace antlr_parser.Antlr4Impl.dto.converter
         public static FileDto ToFileDto(AstNode.FileNode fileNode, string sourceText)
         {
             return new FileDto(
-                fileName: fileNode.Path,
                 text: sourceText,
                 path: fileNode.Path,
                 isTest: false,
@@ -38,20 +38,25 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                     fileNode.PackageNode.Name,
                     classNode.Name,
                     fullyQualifiedName,
-                    classNode.Methods.Select(it => ToDto(it)).ToList(),
+                    classNode.Methods.Select(it => ToDto(it, classNode.Name)).ToList(),
                     classNode.Fields.Select(it => ToDto(it)).ToList(),
                     classNode.Modifier,
                     classNode.StartIdx,
                     classNode.EndIdx,
                     classNode.Header
                 )
-            }.Concat(classNode.InnerClasses.SelectMany(it => ToDto(it, fileNode, fullyQualifiedName)).ToList()
-            ).ToList();
+            }
+                .Concat(classNode.InnerClasses.SelectMany(it => ToDto(it, fileNode, fullyQualifiedName)))
+                .ToList();
         }
 
-        static MethodDto ToDto(AstNode.MethodNode methodNode)
+        static MethodDto ToDto(AstNode.MethodNode methodNode, string classFqn)
         {
+
+            string signature = MethodDto.MethodSignature(classFqn, methodNode.Name, new List<ArgumentDto>());
+            
             return new MethodDto(
+                signature: signature,
                 name: methodNode.Name,
                 accFlag: methodNode.AccFlag,
                 arguments: new List<ArgumentDto>(),

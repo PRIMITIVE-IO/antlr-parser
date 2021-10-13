@@ -5,6 +5,8 @@ using antlr_parser.Antlr4Impl.dto;
 using antlr_parser.Antlr4Impl.dto.converter;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
+using PrimitiveCodebaseElements.Primitive.dto;
+using PrimitiveCodebaseElements.Primitive.dto.converter;
 
 namespace antlr_parser.Antlr4Impl.TypeScript
 {

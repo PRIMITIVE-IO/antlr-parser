@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using antlr_parser.Antlr4Impl.dto;
 using antlr_parser.Antlr4Impl.dto.converter;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
+using PrimitiveCodebaseElements.Primitive.dto;
 
 namespace antlr_parser.Antlr4Impl.C
 {
