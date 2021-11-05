@@ -17,7 +17,7 @@ pipelines:
           - export VERSION_NUMBER=${BITBUCKET_TAG/v-/}
           - apt-get update -y
           - apt-get install -y xmlstarlet
-          - xmlstarlet ed --inplace -u "//Project//PropertyGroup/Version" -v $VERSION_NUMBER $SOLUTION_NAME.csproj
+          - xmlstarlet ed --inplace -u "//Project//PropertyGroup/Version" -v $VERSION_NUMBER antlr-parser/$SOLUTION_NAME.csproj
           - dotnet restore $SOLUTION_NAME.sln
           - dotnet build --no-restore $SOLUTION_NAME.sln --configuration $CONFIGURATION
-          - dotnet nuget push -s $SERVER_URL -k $API_KEY bin/$CONFIGURATION/$SOLUTION_NAME.$VERSION_NUMBER.nupkg
+          - dotnet nuget push -s $SERVER_URL -k $API_KEY antlr-parser/bin/$CONFIGURATION/$SOLUTION_NAME.$VERSION_NUMBER.nupkg

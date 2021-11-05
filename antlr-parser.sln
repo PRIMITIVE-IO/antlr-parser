@@ -3,12 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "antlr-parser", "antlr-parser.csproj", "{447C91D9-9350-49D1-9E37-1FFDC38A69A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "antlr-parser", "antlr-parser\antlr-parser.csproj", "{447C91D9-9350-49D1-9E37-1FFDC38A69A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "antlr-parser.tests", "Tests\antlr-parser.tests\antlr-parser.tests.csproj", "{F5CF85CD-3EEC-4296-A9F0-235C81E63D1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "antlr-parser.tests", "antlr-parser.tests\antlr-parser.tests.csproj", "{F5CF85CD-3EEC-4296-A9F0-235C81E63D1B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{447C91D9-9350-49D1-9E37-1FFDC38A69A1} = {447C91D9-9350-49D1-9E37-1FFDC38A69A1}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "antlr-parser.runner", "antlr-parser.runner\antlr-parser.runner.csproj", "{9AA3BFE2-CAF3-4F90-9DCC-BECC919E089F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +26,10 @@ Global
 		{F5CF85CD-3EEC-4296-A9F0-235C81E63D1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5CF85CD-3EEC-4296-A9F0-235C81E63D1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5CF85CD-3EEC-4296-A9F0-235C81E63D1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AA3BFE2-CAF3-4F90-9DCC-BECC919E089F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AA3BFE2-CAF3-4F90-9DCC-BECC919E089F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AA3BFE2-CAF3-4F90-9DCC-BECC919E089F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AA3BFE2-CAF3-4F90-9DCC-BECC919E089F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
