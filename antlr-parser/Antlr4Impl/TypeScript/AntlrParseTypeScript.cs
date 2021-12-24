@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using antlr_parser.Antlr4Impl.dto;
 using antlr_parser.Antlr4Impl.dto.converter;
+using antlr_parser.Antlr4Impl.JavaScript;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
-using PrimitiveCodebaseElements.Primitive.dto.converter;
 
 namespace antlr_parser.Antlr4Impl.TypeScript
 {
@@ -14,9 +12,23 @@ namespace antlr_parser.Antlr4Impl.TypeScript
     {
         public static IEnumerable<ClassInfo> OuterClassInfosFromSource(string source, string filePath)
         {
+            return AstToClassInfoConverter.ToClassInfo(ParseFileNode(source, filePath), SourceCodeLanguage.TypeScript);
+        }
+
+        public static FileDto Parse(string source, string filePath)
+        {
+            return AstNodeToClassDtoConverter.ToFileDto(ParseFileNode(source, filePath), source);
+
+        }
+
+        public static AstNode.FileNode ParseFileNode(string source, string filePath)
+            {
             try
             {
-                char[] codeArray = source.ToCharArray();
+                List<Tuple<int, int>> blocksToRemove = RegexBasedTypeScriptMethodBodyRemover.FindBlocksToRemove(source);
+                MethodBodyRemovalResult removalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+                
+                char[] codeArray = removalResult.ShortenedSource.ToCharArray();
                 AntlrInputStream inputStream = new AntlrInputStream(codeArray, codeArray.Length);
 
                 TypeScriptLexer lexer = new TypeScriptLexer(inputStream);
@@ -25,25 +37,16 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
                 parser.RemoveErrorListeners();
                 parser.AddErrorListener(new ErrorListener()); // add ours
-
-                // a program is the highest level container -> start there
-                // do not call parser.program() more than once
-                ProgramListener programListener = new ProgramListener(filePath);
-                parser.program().EnterRule(programListener);
-                return new List<ClassInfo> {programListener.FileClassInfo};
+                
+                TypeScriptVisitor visitor = new TypeScriptVisitor(filePath, removalResult);
+                AstNode.FileNode res = parser.program().Accept(visitor) as AstNode.FileNode;
+                return res;
             }
             catch (Exception e)
             {
                 PrimitiveLogger.Logger.Instance().Error($"Failed to parse TS file {filePath}", e);
+                return null;
             }
-
-            return new List<ClassInfo>();
         }
-        
-        public static FileDto Parse(string source, string filePath)
-        {
-            return ClassInfoToClassDtoConverter.ToParsingResultDto(OuterClassInfosFromSource(source, filePath).ToList(), source, filePath);
-        }
-
     }
 }

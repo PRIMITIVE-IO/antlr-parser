@@ -17,14 +17,13 @@ namespace antlr_parser.Antlr4Impl
         /// <param name="extractor"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        static IEnumerable<T> ExtractNested<T>(List<AstNode.Namespace> ns, Func<AstNode.Namespace, IEnumerable<T>> extractor)
+        public static IEnumerable<T> ExtractNested<T>(List<AstNode.Namespace> ns, Func<AstNode.Namespace, IEnumerable<T>> extractor)
         {
             return ns.SelectMany(it => extractor(it).Concat(ExtractNested(it.Namespaces, extractor)));
         }
 
         public static List<ClassInfo> ToClassInfo(AstNode.FileNode astFileNode, SourceCodeLanguage language)
         {
-            
             List<AstNode.MethodNode> nsMethods = ExtractNested(astFileNode.Namespaces, ns => ns.Methods).ToList();
             List<AstNode.ClassNode> nsclasses = ExtractNested(astFileNode.Namespaces, ns => ns.Classes).ToList();
             List<AstNode.FieldNode> nsFields = ExtractNested(astFileNode.Namespaces, ns => ns.Fields).ToList();
@@ -133,6 +132,5 @@ namespace antlr_parser.Antlr4Impl
                 new SourceCodeSnippet(methodNode.SourceCode, language)
             );
         }
-        
     }
 }

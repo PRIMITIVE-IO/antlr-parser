@@ -1,0 +1,216 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using PrimitiveCodebaseElements.Primitive;
+
+namespace antlr_parser.Antlr4Impl.TypeScript
+{
+    public class TypeScriptVisitor : TypeScriptParserBaseVisitor<AstNode>
+    {
+        private readonly string Path;
+        private readonly MethodBodyRemovalResult MethodBodyRemovalResult;
+
+        public TypeScriptVisitor(string path, MethodBodyRemovalResult methodBodyRemovalResult)
+        {
+            Path = path;
+            MethodBodyRemovalResult = methodBodyRemovalResult;
+        }
+
+        public override AstNode VisitProgram(TypeScriptParser.ProgramContext context)
+        {
+            List<AstNode> children = context.sourceElements()
+                .sourceElement()
+                .Select(it => it.Accept(this))
+                .ToList();
+
+            List<AstNode.ClassNode> classes = children.OfType<AstNode.ClassNode>().ToList();
+            List<AstNode.FieldNode> fields = children.OfType<AstNode.FieldNode>().ToList();
+            List<AstNode.MethodNode> methods = children.OfType<AstNode.MethodNode>().ToList();
+            List<AstNode.Namespace> namespaces = children.OfType<AstNode.Namespace>().ToList();
+
+            int headerEnd = classes.Select(it => it.StartIdx - 1)
+                .Concat(methods.Select(it => it.StartIdx - 1))
+                .Concat(fields.Select(it => it.StartIdx - 1))
+                .DefaultIfEmpty(context.Stop.StopIndex)
+                .Min();
+
+            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(
+                    0,
+                    MethodBodyRemovalResult.RestoreIdx(headerEnd)
+                )
+                .Trim()
+                .TrimIndent();
+
+            return new AstNode.FileNode(
+                path: Path,
+                packageNode: new AstNode.PackageNode(null),
+                classes: classes,
+                fields: fields,
+                methods: methods,
+                header: header,
+                language: SourceCodeLanguage.TypeScript,
+                isTest: false,
+                namespaces: namespaces
+            );
+        }
+
+        public override AstNode VisitNamespaceDeclaration(TypeScriptParser.NamespaceDeclarationContext context)
+        {
+            List<AstNode> children = context.children
+                .Select(it => it.Accept(this))
+                .ToList();
+
+            return new AstNode.Namespace(
+                classes: children.OfType<AstNode.ClassNode>().ToList(),
+                fields: children.OfType<AstNode.FieldNode>().ToList(),
+                methods: children.OfType<AstNode.MethodNode>().ToList(),
+                namespaces: children.OfType<AstNode.Namespace>().ToList()
+            );
+        }
+
+        public override AstNode VisitClassDeclaration(TypeScriptParser.ClassDeclarationContext context)
+        {
+            List<AstNode> children = context.children
+                .SelectMany(it => it.Accept(this)?.AsList() ?? new List<AstNode>())
+                .ToList();
+
+            List<AstNode.FieldNode> fields = children.OfType<AstNode.FieldNode>().ToList();
+            List<AstNode.MethodNode> methods = children.OfType<AstNode.MethodNode>().ToList();
+            List<AstNode.ClassNode> innerClasses = children.OfType<AstNode.ClassNode>().ToList();
+
+            int headerEndIdx = innerClasses.Select(it => it.StartIdx - 1)
+                .Concat(methods.Select(it => it.StartIdx - 1))
+                .Concat(fields.Select(it => it.StartIdx - 1))
+                .DefaultIfEmpty(context.Stop.StopIndex)
+                .Min();
+
+            int headerStart = context.Start.StartIndex;
+
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(headerStart);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(headerEndIdx);
+            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(
+                    startIdx,
+                    endIdx
+                )
+                .TrimIndent()
+                .Trim();
+
+            return new AstNode.ClassNode(
+                name: context.Identifier().ToString(),
+                methods: methods,
+                fields: fields,
+                innerClasses: innerClasses,
+                modifier: AccessFlags.None,
+                startIdx: startIdx,
+                endIdx: endIdx,
+                header: header
+            );
+        }
+
+        public override AstNode VisitMethodDeclarationExpression(
+            TypeScriptParser.MethodDeclarationExpressionContext context)
+        {
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+            
+            string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx);
+
+            AccessFlags accessFlags = AccessFlagsFrom(context.propertyMemberBase().accessibilityModifier()?.GetText());
+
+            return new AstNode.MethodNode(
+                name: context.propertyName().identifierName().Identifier().ToString(),
+                sourceCode: source,
+                accFlag: accessFlags,
+                startIdx: startIdx,
+                endIdx: endIdx
+            );
+        }
+
+        public override AstNode VisitFunctionDeclaration(TypeScriptParser.FunctionDeclarationContext context)
+        {
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);        
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);            
+                                                                                                
+            string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx); 
+
+
+            return new AstNode.MethodNode(
+                name: context.Identifier().GetText(),
+                sourceCode: source,
+                accFlag: AccessFlags.None,
+                startIdx: startIdx,
+                endIdx: endIdx
+            );
+        }
+
+
+        public override AstNode VisitPropertyDeclarationExpression(
+            TypeScriptParser.PropertyDeclarationExpressionContext context)
+        {
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);        
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);            
+                                                                                                
+            string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx); 
+
+            AccessFlags accessFlags = AccessFlagsFrom(context.propertyMemberBase().accessibilityModifier()?.GetText());
+
+            return new AstNode.FieldNode(
+                name: context.propertyName().identifierName().Identifier().ToString(),
+                accessFlags,
+                sourceCode: source,
+                startIdx: startIdx,
+                endIdx: endIdx
+            );
+        }
+
+        public override AstNode VisitVariableDeclaration(TypeScriptParser.VariableDeclarationContext context)
+        {
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);        
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);            
+                                                                                                
+            string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx); 
+
+            return new AstNode.FieldNode(
+                name: context.identifierOrKeyWord()?.Identifier().ToString(),
+                accFlag: AccessFlags.None,
+                sourceCode: source,
+                startIdx: startIdx,
+                endIdx: endIdx
+            );
+        }
+
+        protected override AstNode AggregateResult(AstNode aggregate, AstNode nextResult)
+        {
+            return AstNode.NodeList.Combine(aggregate, nextResult);
+        }
+
+        public override AstNode VisitConstructorDeclaration(TypeScriptParser.ConstructorDeclarationContext context)
+        {
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);        
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);            
+                                                                                                
+            string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx)
+                .TrimIndent(); 
+
+            AccessFlags accessFlags = AccessFlagsFrom(context.accessibilityModifier()?.GetText());
+
+            return new AstNode.MethodNode(
+                name: "constructor",
+                accFlag: accessFlags,
+                sourceCode: source,
+                startIdx: startIdx,
+                endIdx: endIdx
+            );
+        }
+
+        private AccessFlags AccessFlagsFrom(string text)
+        {
+            switch (text)
+            {
+                case "public": return AccessFlags.AccPublic;
+                case "private": return AccessFlags.AccPrivate;
+                default: return AccessFlags.None;
+            }
+        }
+    }
+}

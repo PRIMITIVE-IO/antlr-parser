@@ -1,10 +1,16 @@
 using System.Collections.Generic;
+using System.Linq;
 using PrimitiveCodebaseElements.Primitive;
 
 namespace antlr_parser.Antlr4Impl
 {
     public class AstNode
     {
+        public virtual List<AstNode> AsList()
+        {
+            return new List<AstNode> { this };
+        }
+        
         public class FileNode : AstNode
         {
             public readonly string Header;
@@ -24,7 +30,8 @@ namespace antlr_parser.Antlr4Impl
                 List<MethodNode> methods,
                 string header,
                 SourceCodeLanguage language,
-                bool isTest) : this(path, packageNode, classes, fields, methods, header, new List<Namespace>(), language, isTest)
+                bool isTest) : this(path, packageNode, classes, fields, methods, header, new List<Namespace>(),
+                language, isTest)
             {
             }
 
@@ -134,13 +141,49 @@ namespace antlr_parser.Antlr4Impl
             public readonly List<FieldNode> Fields;
             public readonly List<MethodNode> Methods;
             public readonly List<Namespace> Namespaces;
-    
-            public Namespace(List<ClassNode> classes, List<FieldNode> fields, List<MethodNode> methods, List<Namespace> namespaces)
+
+            public Namespace(List<ClassNode> classes, List<FieldNode> fields, List<MethodNode> methods,
+                List<Namespace> namespaces)
             {
                 Classes = classes;
                 Fields = fields;
                 Methods = methods;
                 Namespaces = namespaces;
+            }
+        }
+
+        public class NodeList : AstNode
+        {
+            public readonly List<AstNode> Nodes;
+
+            public NodeList(List<AstNode> nodes)
+            {
+                Nodes = nodes;
+            }
+
+            public override List<AstNode> AsList()
+            {
+                return Nodes;
+            }
+
+            public static AstNode Combine(AstNode aggregate, AstNode element)
+            {
+                if (aggregate == null)
+                {
+                    return element;
+                }
+
+                if (element == null)
+                {
+                    return aggregate;
+                }
+
+                if (aggregate is NodeList list)
+                {
+                    return new NodeList(list.Nodes.Concat(new List<AstNode> { element }).ToList());
+                }
+
+                return new NodeList(new List<AstNode> { aggregate, element });
             }
         }
     }
