@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using PrimitiveCodebaseElements.Primitive;
+using PrimitiveCodebaseElements.Primitive.dto;
+using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
 
 namespace antlr_parser.Antlr4Impl.TypeScript
 {
@@ -9,11 +11,13 @@ namespace antlr_parser.Antlr4Impl.TypeScript
     {
         private readonly string Path;
         private readonly MethodBodyRemovalResult MethodBodyRemovalResult;
+        private readonly IndexToLocationConverter IndexToLocationConverter;
 
         public TypeScriptVisitor(string path, MethodBodyRemovalResult methodBodyRemovalResult)
         {
             Path = path;
             MethodBodyRemovalResult = methodBodyRemovalResult;
+            IndexToLocationConverter = new IndexToLocationConverter(methodBodyRemovalResult.OriginalSource);
         }
 
         public override AstNode VisitProgram(TypeScriptParser.ProgramContext context)
@@ -34,12 +38,14 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 .DefaultIfEmpty(context.Stop.StopIndex)
                 .Min();
 
-            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(
-                    0,
-                    MethodBodyRemovalResult.RestoreIdx(headerEnd)
-                )
+            int headerEndIdxRestored = MethodBodyRemovalResult.RestoreIdx(headerEnd);
+
+            string header = MethodBodyRemovalResult
+                .ExtractOriginalSubstring(0, headerEndIdxRestored)
                 .Trim()
                 .TrimIndent();
+
+            CodeLocation headerEndLocationRestored = IndexToLocationConverter.IdxToLocation(headerEndIdxRestored);
 
             return new AstNode.FileNode(
                 path: Path,
@@ -50,7 +56,8 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 header: header,
                 language: SourceCodeLanguage.TypeScript,
                 isTest: false,
-                namespaces: namespaces
+                namespaces: namespaces,
+                codeRange: new CodeRange(new CodeLocation(1, 1), headerEndLocationRestored)
             );
         }
 
@@ -88,12 +95,13 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
             int startIdx = MethodBodyRemovalResult.RestoreIdx(headerStart);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(headerEndIdx);
-            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(
-                    startIdx,
-                    endIdx
-                )
+
+            string header = MethodBodyRemovalResult
+                .ExtractOriginalSubstring(startIdx, endIdx)
                 .TrimIndent()
                 .Trim();
+
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 
             return new AstNode.ClassNode(
                 name: context.Identifier().ToString(),
@@ -103,7 +111,8 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 modifier: AccessFlags.None,
                 startIdx: startIdx,
                 endIdx: endIdx,
-                header: header
+                header: header,
+                codeRange: codeRange
             );
         }
 
@@ -112,34 +121,39 @@ namespace antlr_parser.Antlr4Impl.TypeScript
         {
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
-            
+
             string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx);
 
             AccessFlags accessFlags = AccessFlagsFrom(context.propertyMemberBase().accessibilityModifier()?.GetText());
+
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 
             return new AstNode.MethodNode(
                 name: context.propertyName().identifierName().Identifier().ToString(),
                 sourceCode: source,
                 accFlag: accessFlags,
                 startIdx: startIdx,
-                endIdx: endIdx
+                endIdx: endIdx,
+                codeRange: codeRange
             );
         }
 
         public override AstNode VisitFunctionDeclaration(TypeScriptParser.FunctionDeclarationContext context)
         {
-            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);        
-            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);            
-                                                                                                
-            string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx); 
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
+            string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx);
+
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 
             return new AstNode.MethodNode(
                 name: context.Identifier().GetText(),
                 sourceCode: source,
                 accFlag: AccessFlags.None,
                 startIdx: startIdx,
-                endIdx: endIdx
+                endIdx: endIdx,
+                codeRange: codeRange
             );
         }
 
@@ -147,35 +161,41 @@ namespace antlr_parser.Antlr4Impl.TypeScript
         public override AstNode VisitPropertyDeclarationExpression(
             TypeScriptParser.PropertyDeclarationExpressionContext context)
         {
-            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);        
-            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);            
-                                                                                                
-            string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx); 
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+
+            string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx);
 
             AccessFlags accessFlags = AccessFlagsFrom(context.propertyMemberBase().accessibilityModifier()?.GetText());
+
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 
             return new AstNode.FieldNode(
                 name: context.propertyName().identifierName().Identifier().ToString(),
                 accessFlags,
                 sourceCode: source,
                 startIdx: startIdx,
-                endIdx: endIdx
+                endIdx: endIdx,
+                codeRange: codeRange
             );
         }
 
         public override AstNode VisitVariableDeclaration(TypeScriptParser.VariableDeclarationContext context)
         {
-            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);        
-            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);            
-                                                                                                
-            string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx); 
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+
+            string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx);
+
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 
             return new AstNode.FieldNode(
                 name: context.identifierOrKeyWord()?.Identifier().ToString(),
                 accFlag: AccessFlags.None,
                 sourceCode: source,
                 startIdx: startIdx,
-                endIdx: endIdx
+                endIdx: endIdx,
+                codeRange: codeRange
             );
         }
 
@@ -186,20 +206,23 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
         public override AstNode VisitConstructorDeclaration(TypeScriptParser.ConstructorDeclarationContext context)
         {
-            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);        
-            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);            
-                                                                                                
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+
             string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx)
-                .TrimIndent(); 
+                .TrimIndent();
 
             AccessFlags accessFlags = AccessFlagsFrom(context.accessibilityModifier()?.GetText());
+            
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 
             return new AstNode.MethodNode(
                 name: "constructor",
                 accFlag: accessFlags,
                 sourceCode: source,
                 startIdx: startIdx,
-                endIdx: endIdx
+                endIdx: endIdx,
+                codeRange: codeRange
             );
         }
 

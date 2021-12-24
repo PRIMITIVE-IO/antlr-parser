@@ -4,6 +4,8 @@ using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using PrimitiveCodebaseElements.Primitive;
+using PrimitiveCodebaseElements.Primitive.dto;
+using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
 
 namespace antlr_parser.Antlr4Impl.C
 {
@@ -11,11 +13,13 @@ namespace antlr_parser.Antlr4Impl.C
     {
         readonly string _filePath;
         private readonly MethodBodyRemovalResult _methodBodyRemovalResult;
+        private readonly IndexToLocationConverter IndexToLocationConverter;
 
         public CVisitor(string filePath, MethodBodyRemovalResult methodBodyRemovalResult)
         {
             _filePath = filePath;
             _methodBodyRemovalResult = methodBodyRemovalResult;
+            IndexToLocationConverter = new IndexToLocationConverter(methodBodyRemovalResult.OriginalSource);
         }
 
         public override AstNode VisitCompilationUnit(CParser.CompilationUnitContext context)
@@ -44,6 +48,8 @@ namespace antlr_parser.Antlr4Impl.C
             string header = _methodBodyRemovalResult.ExtractOriginalSubstring(0, headerEnd)
                 .Trim();
 
+            CodeLocation headerEndLocation = IndexToLocationConverter.IdxToLocation(headerEnd);
+
             return new AstNode.FileNode(
                 path: _filePath,
                 packageNode: new AstNode.PackageNode(""),
@@ -51,8 +57,10 @@ namespace antlr_parser.Antlr4Impl.C
                 fields: new List<AstNode.FieldNode>(),
                 methods: methods,
                 header: header,
+                namespaces: new List<AstNode.Namespace>(),
                 language: SourceCodeLanguage.C,
-                isTest: false
+                isTest: false,
+                codeRange: new CodeRange(new CodeLocation(1, 1), headerEndLocation)
             );
         }
 
@@ -93,6 +101,8 @@ namespace antlr_parser.Antlr4Impl.C
             string header = _methodBodyRemovalResult.ExtractOriginalSubstring(headerStart, headerEnd)
                 .Trim();
 
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(headerStart, headerEnd);
+
             return new AstNode.ClassNode(
                 name,
                 new List<AstNode.MethodNode>(),
@@ -101,7 +111,8 @@ namespace antlr_parser.Antlr4Impl.C
                 AccessFlags.AccPublic,
                 _methodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
                 _methodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex),
-                header
+                header,
+                codeRange
             );
         }
 
@@ -140,12 +151,17 @@ namespace antlr_parser.Antlr4Impl.C
                                ?? ExtractReferenceFieldName(context)
                                ?? ExtractMultiName(context);
 
+            int startIdx = _methodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            int endIdx = _methodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+
             return new AstNode.FieldNode(
                 fieldName,
                 AccessFlags.AccPublic,
                 context.GetFullText(),
-                _methodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
-                _methodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
+                startIdx,
+                endIdx,
+                codeRange
             );
         }
 
@@ -199,12 +215,17 @@ namespace antlr_parser.Antlr4Impl.C
             _methodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex,
                 out string removedSourceCode);
 
+            int startIdx = _methodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            int endIdx = _methodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+
             return new AstNode.MethodNode(
                 fName,
                 AccessFlags.AccPublic,
                 text + removedSourceCode ?? "",
-                _methodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
-                    _methodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
+                startIdx: startIdx,
+                endIdx: endIdx,
+                codeRange: codeRange
             );
         }
 

@@ -3,6 +3,7 @@ using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using PrimitiveCodebaseElements.Primitive;
+using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
 
 namespace antlr_parser.Antlr4Impl.Kotlin
 {
@@ -10,11 +11,13 @@ namespace antlr_parser.Antlr4Impl.Kotlin
     {
         readonly string FilePath;
         readonly MethodBodyRemovalResult MethodBodyRemovalResult;
+        private readonly IndexToLocationConverter IndexToLocationConverter;
 
         public KotlinVisitor(string filePath, MethodBodyRemovalResult methodBodyRemovalResult)
         {
-            this.FilePath = filePath;
-            this.MethodBodyRemovalResult = methodBodyRemovalResult;
+            FilePath = filePath;
+            MethodBodyRemovalResult = methodBodyRemovalResult;
+            IndexToLocationConverter = new IndexToLocationConverter(methodBodyRemovalResult.OriginalSource);
         }
 
         public override AstNode VisitKotlinFile(KotlinParser.KotlinFileContext context)
@@ -37,7 +40,19 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
             string header = MethodBodyRemovalResult.ExtractOriginalSubstring(0, headerEnd).Trim().TrimIndent();
 
-            return new AstNode.FileNode(path: FilePath,packageNode: pkg,classes: classes,fields: fields,methods: methods,header: header, language: SourceCodeLanguage.Kotlin, isTest: false);
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(0, headerEnd);
+            return new AstNode.FileNode(
+                path: FilePath,
+                packageNode: pkg,
+                classes: classes,
+                fields: fields,
+                methods: methods,
+                header: header,
+                namespaces: new List<AstNode.Namespace>(),
+                language: SourceCodeLanguage.Kotlin,
+                isTest: false,
+                codeRange: codeRange
+            );
         }
 
         public override AstNode VisitTopLevelObject(KotlinParser.TopLevelObjectContext context)
@@ -65,12 +80,17 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             string sourceCode = context.GetFullText() + removedBody;
 
             sourceCode = StringUtil.TrimIndent(sourceCode);
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+
             return new AstNode.MethodNode(
                 context.identifier().GetFullText(),
                 modifier,
                 sourceCode,
-                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
-                    MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
+                startIdx: startIdx,
+                endIdx: endIdx,
+                codeRange: codeRange
             );
         }
 
@@ -80,7 +100,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 ?.Select(it => it.visibilityModifier())
                 .FirstOrDefault()
                 ?.GetFullText();
-            
+
             switch (accFlag)
             {
                 case null:
@@ -130,15 +150,20 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 .TrimIndent()
                 .Trim();
 
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StartIndex);
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
             return new AstNode.ClassNode(
                 context.simpleIdentifier().GetFullText(),
                 methodNodes,
                 fieldNodes,
                 innerClasses,
                 modifier,
-                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
-                MethodBodyRemovalResult.RestoreIdx( context.Stop.StartIndex),
-                header
+                startIdx: startIdx,
+                endIdx: endIdx,
+                header: header,
+                codeRange: codeRange
             );
         }
 
@@ -151,7 +176,8 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
             if (parent is KotlinParser.ClassBodyContext)
             {
-                return MethodBodyRemovalResult.RestoreIdx((parent as KotlinParser.ClassBodyContext).Start.StartIndex + 1); // +1 to exclude '{'
+                return MethodBodyRemovalResult.RestoreIdx(
+                    (parent as KotlinParser.ClassBodyContext).Start.StartIndex + 1); // +1 to exclude '{'
             }
 
             return OutboundClassBodyStartPosition(parent.Parent);
@@ -186,12 +212,17 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         {
             AccessFlags modifier = ExtractVisibilityModifier(context.modifierList());
             string sourceCode = context.GetFullText();
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+
             return new AstNode.FieldNode(
                 context.variableDeclaration().simpleIdentifier().GetFullText(),
                 modifier,
                 sourceCode,
-                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
-                MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
+                startIdx: startIdx,
+                endIdx: endIdx,
+                codeRange: codeRange
             );
         }
 

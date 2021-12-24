@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Antlr4.Runtime;
 using JetBrains.Annotations;
 using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
@@ -42,7 +41,8 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                     modifier: AccessFlags.None,
                     startIdx: 0,
                     endIdx: fileNode.Header.Length - 1, //TODO
-                    header: fileNode.Header
+                    header: fileNode.Header,
+                    codeRange: fileNode.CodeRange
                 ));
                 fakePresent = true;
             }
@@ -73,7 +73,8 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                         classNode.StartIdx,
                         classNode.EndIdx,
                         classNode.Header,
-                        parentClassFqn: parentFqn
+                        parentClassFqn: parentFqn,
+                        codeRange: classNode.CodeRange
                     )
                 }
                 .Concat(classNode.InnerClasses.SelectMany(it => ToDto(it, fileNode, fullyQualifiedName)))
@@ -92,7 +93,8 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                 returnType: "void",
                 sourceCode: methodNode.SourceCode,
                 startIdx: methodNode.StartIdx,
-                endIdx: methodNode.EndIdx
+                endIdx: methodNode.EndIdx,
+                codeRange: methodNode.CodeRange
             );
         }
 
@@ -104,7 +106,8 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                 accFlag: fieldNode.AccFlag,
                 sourceCode: fieldNode.SourceCode,
                 startIdx: fieldNode.StartIdx,
-                endIdx: fieldNode.EndIdx
+                endIdx: fieldNode.EndIdx,
+                codeRange: fieldNode.CodeRange
             );
         }
     }

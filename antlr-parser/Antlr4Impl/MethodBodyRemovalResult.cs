@@ -7,7 +7,7 @@ namespace antlr_parser.Antlr4Impl
     public class MethodBodyRemovalResult
     {
         public readonly string ShortenedSource;
-        public readonly string OriginalSource; 
+        public readonly string OriginalSource;
         readonly List<Tuple<int, int>> BlocksToRemove;
 
         /// <summary>

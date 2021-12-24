@@ -5,6 +5,8 @@ using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using PrimitiveCodebaseElements.Primitive;
+using PrimitiveCodebaseElements.Primitive.dto;
+using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
 
 namespace antlr_parser.Antlr4Impl.JavaScript
 {
@@ -12,11 +14,13 @@ namespace antlr_parser.Antlr4Impl.JavaScript
     {
         readonly string FilePath;
         readonly MethodBodyRemovalResult MethodBodyRemovalResult;
+        private readonly IndexToLocationConverter IndexToLocationConverter;
 
         public JavaScriptAstVisitor(string filePath, MethodBodyRemovalResult methodBodyRemovalResult)
         {
             FilePath = filePath;
             MethodBodyRemovalResult = methodBodyRemovalResult;
+            IndexToLocationConverter = new IndexToLocationConverter(methodBodyRemovalResult.OriginalSource);
         }
 
         public override AstNode VisitProgram(JavaScriptParser.ProgramContext context)
@@ -58,6 +62,8 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             string header = MethodBodyRemovalResult.ExtractOriginalSubstring(0, headerEnd)
                 .Trim();
 
+            CodeLocation headerEndLocation = IndexToLocationConverter.IdxToLocation(headerEnd);
+
             return new AstNode.FileNode(
                 path: FilePath,
                 new AstNode.PackageNode(""),
@@ -66,7 +72,9 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 methods,
                 header,
                 language: SourceCodeLanguage.Java,
-                isTest: false
+                isTest: false,
+                codeRange: new CodeRange(new CodeLocation(1, 1), headerEndLocation),
+                namespaces: new List<AstNode.Namespace>()
             );
         }
 
@@ -95,12 +103,18 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         {
             MethodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex,
                 out string removeSourceCode);
+            
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+
             return new AstNode.MethodNode(
                 context.identifier().GetFullText(),
                 AccessFlags.None,
                 context.GetFullText() + (removeSourceCode ?? ""),
-                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
-                MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
+                startIdx: startIdx,
+                endIdx: endIdx,
+                codeRange: codeRange
             );
         }
 
@@ -114,10 +128,12 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             List<AstNode.FieldNode> fieldNodes = classElements.OfType<AstNode.FieldNode>().ToList();
             List<AstNode.ClassNode> innerClasses = classElements.OfType<AstNode.ClassNode>().ToList();
 
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+            
             int headerEnd = methodNodes.Select(it => it.StartIdx - 1)
                 .Concat(fieldNodes.Select(it => it.StartIdx - 1))
                 .Concat(innerClasses.Select(it => it.StartIdx - 1))
-                .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex))
+                .DefaultIfEmpty(endIdx)
                 .Min();
 
             int headerStart = new[]
@@ -130,15 +146,19 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             string header = MethodBodyRemovalResult.ExtractOriginalSubstring(headerStart, headerEnd)
                 .Trim();
 
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+
             return new AstNode.ClassNode(
                 context.identifier().GetFullText(),
                 methodNodes,
                 fieldNodes,
                 innerClasses,
                 AccessFlags.None,
-                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
-                MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex),
-                header
+                startIdx,
+                endIdx,
+                header,
+                codeRange: codeRange
             );
         }
 
@@ -151,12 +171,18 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         {
             MethodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex,
                 out string removedSourceCode);
+            
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+            
             return new AstNode.MethodNode(
                 context.propertyName().GetFullText(),
                 AccessFlags.None,
                 context.GetFullText() + (removedSourceCode ?? ""),
-                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
-                MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
+                startIdx: startIdx,
+                endIdx: endIdx,
+                codeRange: codeRange
             );
         }
 
@@ -182,12 +208,18 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             }
 
 
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+
             return new AstNode.FieldNode(
                 name,
                 AccessFlags.None,
                 context.GetFullText(),
-                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
-                MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
+                startIdx: startIdx,
+                endIdx: endIdx,
+                codeRange: codeRange
             );
         }
     }

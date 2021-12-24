@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using PrimitiveCodebaseElements.Primitive;
+using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
 
 namespace antlr_parser.Antlr4Impl
 {
@@ -22,18 +24,7 @@ namespace antlr_parser.Antlr4Impl
             public readonly List<Namespace> Namespaces;
             public readonly SourceCodeLanguage Language;
             public readonly bool IsTest;
-
-            public FileNode(string path,
-                PackageNode packageNode,
-                List<ClassNode> classes,
-                List<FieldNode> fields,
-                List<MethodNode> methods,
-                string header,
-                SourceCodeLanguage language,
-                bool isTest) : this(path, packageNode, classes, fields, methods, header, new List<Namespace>(),
-                language, isTest)
-            {
-            }
+            [CanBeNull] public readonly CodeRange CodeRange;
 
             public FileNode(string path,
                 PackageNode packageNode,
@@ -43,7 +34,8 @@ namespace antlr_parser.Antlr4Impl
                 string header,
                 List<Namespace> namespaces,
                 SourceCodeLanguage language,
-                bool isTest)
+                bool isTest,
+                CodeRange codeRange)
             {
                 Path = path;
                 PackageNode = packageNode;
@@ -54,6 +46,7 @@ namespace antlr_parser.Antlr4Impl
                 Namespaces = namespaces;
                 Language = language;
                 IsTest = isTest;
+                CodeRange = codeRange;
             }
         }
 
@@ -77,6 +70,7 @@ namespace antlr_parser.Antlr4Impl
             public readonly int StartIdx;
             public readonly int EndIdx;
             public readonly string Header;
+            [CanBeNull] public readonly CodeRange CodeRange;
 
             public ClassNode(string name,
                 List<MethodNode> methods,
@@ -85,7 +79,8 @@ namespace antlr_parser.Antlr4Impl
                 AccessFlags modifier,
                 int startIdx,
                 int endIdx,
-                string header
+                string header,
+                [CanBeNull] CodeRange codeRange
             )
             {
                 Name = name;
@@ -96,6 +91,7 @@ namespace antlr_parser.Antlr4Impl
                 StartIdx = startIdx;
                 EndIdx = endIdx;
                 Header = header;
+                CodeRange = codeRange;
             }
         }
 
@@ -106,13 +102,15 @@ namespace antlr_parser.Antlr4Impl
             public readonly string SourceCode;
             public readonly int StartIdx;
             public readonly int EndIdx;
+            [CanBeNull] public readonly CodeRange CodeRange;
 
-            public MethodNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx)
+            public MethodNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx, [CanBeNull] CodeRange codeRange)
             {
                 Name = name;
                 AccFlag = accFlag;
                 SourceCode = sourceCode;
                 EndIdx = endIdx;
+                CodeRange = codeRange;
                 StartIdx = startIdx;
             }
         }
@@ -124,14 +122,16 @@ namespace antlr_parser.Antlr4Impl
             public readonly string SourceCode;
             public readonly int StartIdx;
             public readonly int EndIdx;
+            [CanBeNull] public readonly CodeRange CodeRange;
 
-            public FieldNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx)
+            public FieldNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx, [CanBeNull] CodeRange codeRange)
             {
                 Name = name;
                 AccFlag = accFlag;
                 SourceCode = sourceCode;
                 StartIdx = startIdx;
                 EndIdx = endIdx;
+                CodeRange = codeRange;
             }
         }
 
