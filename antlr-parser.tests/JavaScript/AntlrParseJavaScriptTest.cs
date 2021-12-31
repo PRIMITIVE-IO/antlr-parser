@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using antlr_parser.tests;
 using FluentAssertions;
 using PrimitiveCodebaseElements.Primitive;
+using PrimitiveCodebaseElements.Primitive.dto;
 using Xunit;
 
 namespace antlr_parser.Antlr4Impl.JavaScript
@@ -85,7 +87,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             script.Fields.First().Name.ShortName.Should().Be("x");
             script.Fields.First().SourceCode.Text.Should().Be("x = 10");
         }
-        
+
         [Fact]
         public void ParseDeconstructedFields()
         {
@@ -101,7 +103,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             script.Fields.First().Name.ShortName.Should().Be("x");
             script.Fields.First().SourceCode.Text.Should().Be("{ y: { x } } = obj");
         }
-        
+
         [Fact]
         public void ParseDeconstructedFieldsAsSingleFieldInfo()
         {
@@ -117,7 +119,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             script.Fields.First().Name.ShortName.Should().Be("x,y");
             script.Fields.First().SourceCode.Text.Should().Be("{ a: { x, y } } = obj");
         }
-        
+
         [Fact]
         public void ParseDeconstructedArray()
         {
@@ -133,7 +135,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             script.Fields.First().Name.ShortName.Should().Be("x,y");
             script.Fields.First().SourceCode.Text.Should().Be("[x, ...y] = obj");
         }
-        
+
         [Fact]
         public void ParseDeconstructedArrayAndObject()
         {
@@ -149,6 +151,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             script.Fields.First().Name.ShortName.Should().Be("x,y");
             script.Fields.First().SourceCode.Text.Should().Be("{ a: [x, ...y]} = obj");
         }
+
         [Fact]
         public void ParseDeconstructedArrayAndObject2()
         {
@@ -164,7 +167,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             script.Fields.First().Name.ShortName.Should().Be("x,y,z");
             script.Fields.First().SourceCode.Text.Should().Be("{ a: [{x}, ...y], z} = obj");
         }
-        
+
         [Fact]
         public void FirstClassHeader()
         {
@@ -184,7 +187,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 class A {
             ".TrimIndent().Trim());
         }
-        
+
         [Fact]
         public void SecondClassHeader()
         {
@@ -197,7 +200,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 class B {}
             ".TrimIndent();
             IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
-            
+
             ClassInfo classB = res.ToArray()[1];
 
             classB.SourceCode.Text.Should().Be(@"
@@ -205,7 +208,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 class B {}
             ".TrimIndent().Trim());
         }
-        
+
         [Fact]
         public void FakeClassHeader()
         {
@@ -215,7 +218,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 function f(){}
             ".TrimIndent();
             IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
-            
+
             ClassInfo fakeClass = res.First();
 
             fakeClass.SourceCode.Text.Should().Be(@"
@@ -223,7 +226,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 /**comment1*/
             ".TrimIndent().Trim());
         }
-        
+
         [Fact]
         public void InnerClassHeader()
         {
@@ -235,19 +238,31 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 class A {}
             ".TrimIndent();
             IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
-            
+
             ClassInfo fakeClass = res.First();
 
             fakeClass.SourceCode.Text.Should().Be(@"
                 requires('')
                 /**comment1*/
             ".TrimIndent().Trim());
-            
+
             fakeClass.InnerClasses.Single().SourceCode.Text.Should().Be(@"
                 /**comment2*/
                 class A {}
             ".TrimIndent().Trim());
         }
-        
+
+        [Fact]
+        public void MultilineFunction()
+        {
+            string source = @"
+                function f(){
+                   return 10;
+                }
+            ".TrimIndent();
+            FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
+
+            res.Classes[0].Methods[0].CodeRange.Should().Be(TestUtils.CodeRange(2, 1, 4, 2));
+        }
     }
 }

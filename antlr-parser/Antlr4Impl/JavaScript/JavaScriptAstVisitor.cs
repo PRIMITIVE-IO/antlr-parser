@@ -105,7 +105,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 out string removeSourceCode);
             
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
-            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex + 1);
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 
             return new AstNode.MethodNode(
@@ -173,7 +173,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 out string removedSourceCode);
             
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
-            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex + 1);
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
             
             return new AstNode.MethodNode(

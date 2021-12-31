@@ -32,13 +32,11 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             List<AstNode.MethodNode> methods = children.OfType<AstNode.MethodNode>().ToList();
             List<AstNode.Namespace> namespaces = children.OfType<AstNode.Namespace>().ToList();
 
-            int headerEnd = classes.Select(it => it.StartIdx - 1)
+            int headerEndIdxRestored = classes.Select(it => it.StartIdx - 1)
                 .Concat(methods.Select(it => it.StartIdx - 1))
                 .Concat(fields.Select(it => it.StartIdx - 1))
-                .DefaultIfEmpty(context.Stop.StopIndex)
+                .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex))
                 .Min();
-
-            int headerEndIdxRestored = MethodBodyRemovalResult.RestoreIdx(headerEnd);
 
             string header = MethodBodyRemovalResult
                 .ExtractOriginalSubstring(0, headerEndIdxRestored)
