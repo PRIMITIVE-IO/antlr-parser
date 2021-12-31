@@ -15,7 +15,7 @@ namespace antlr_parser.Antlr4Impl.dto.converter
             return new FileDto(
                 text: sourceText,
                 path: fileNode.Path,
-                isTest: false,
+                isTest: fileNode.IsTest,
                 classes: ExtractClassDtos(fileNode),
                 language: fileNode.Language
             );

@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using antlr_parser.Antlr4Impl.dto.converter;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
-using PrimitiveCodebaseElements.Primitive.dto.converter;
+using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
 
 namespace antlr_parser.Antlr4Impl.Java
 {
@@ -12,9 +13,32 @@ namespace antlr_parser.Antlr4Impl.Java
     {
         public static IEnumerable<ClassInfo> OuterClassInfosFromSource(string source, string filePath)
         {
+            return AstToClassInfoConverter.ToClassInfo(parseFileNode(source, filePath), SourceCodeLanguage.Java);
+        }
+
+        public static FileDto Parse(string source, string filePath)
+        {
             try
             {
-                char[] codeArray = source.ToCharArray();
+                return AstNodeToClassDtoConverter.ToFileDto(parseFileNode(source, filePath), source);
+            }
+            catch (Exception e)
+            {
+                PrimitiveLogger.Logger.Instance().Error($"Failed to parse Java file {filePath}", e);
+            }
+
+            return null;
+        }
+
+        static AstNode.FileNode parseFileNode(string source, string filePath)
+        {
+            try
+            {
+                List<Tuple<int, int>> blocksToRemove = RegexBasedJavaMethodBodyRemover.FindBlocksToRemove(source);
+
+                MethodBodyRemovalResult methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+
+                char[] codeArray = methodBodyRemovalResult.ShortenedSource.ToCharArray();
                 AntlrInputStream inputStream = new AntlrInputStream(codeArray, codeArray.Length);
 
                 JavaLexer lexer = new JavaLexer(inputStream);
@@ -26,22 +50,31 @@ namespace antlr_parser.Antlr4Impl.Java
 
                 // a compilation unit is the highest level container -> start there
                 // do not call parser.compilationUnit() more than once
-                CompilationUnitListener compilationUnitListener = new CompilationUnitListener(filePath);
-                parser.compilationUnit().EnterRule(compilationUnitListener);
-                return compilationUnitListener.OuterClassInfos;
+                return parser.compilationUnit().Accept(new JavaAstVisitor(methodBodyRemovalResult, filePath)) as
+                    AstNode.FileNode;
             }
             catch (Exception e)
             {
                 PrimitiveLogger.Logger.Instance().Error($"Failed to parse Java file {filePath}", e);
+
+                string[] lines = source.Split('\n');
+
+                return new AstNode.FileNode(
+                    path: filePath,
+                    packageNode: null,
+                    classes: new List<AstNode.ClassNode>(),
+                    fields: new List<AstNode.FieldNode>(),
+                    methods: new List<AstNode.MethodNode>(),
+                    header: source,
+                    namespaces: new List<AstNode.Namespace>(),
+                    language: SourceCodeLanguage.Java,
+                    isTest: false,
+                    codeRange: new CodeRange(
+                        new CodeLocation(1, 1),
+                        new CodeLocation(lines.Length, lines.Last().Length)
+                    )
+                );
             }
-
-            return new List<ClassInfo>();
-        }
-
-        public static FileDto Parse(string source, string filePath)
-        {
-            return ClassInfoToClassDtoConverter.ToParsingResultDto(OuterClassInfosFromSource(source, filePath).ToList(),
-                source, filePath);
         }
     }
 }
