@@ -12,16 +12,15 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         //group 3 matches spaces before the last curly
         //group 4 matches the last curly
         /*
-         raw regex:
-            (function\*?)?\s*(\w)+\s*\([\w,\s,\,:,\[,\],\{,\},\.,=]*\)(\s*)(\{)
          test cases for regex:
             function f(_x_y){
             function* fff(x, y, z =) {
             f(){
             f (a:{b,c,[d,...rest]}){
+            function generateAssets(repo, outputName, commit = """", diffs = [], iGenerateDB = false, createDBcallback = null) {
         */
         static readonly Regex KotlinFunctionDeclarationRegex = new Regex(
-            "(function\\*?)?\\s*(\\w)+\\s*\\([\\w,\\s,\\,:,\\[,\\],\\{,\\},\\.,=]*\\)(\\s*)(\\{)");
+            @"(function\*?)?\s*(\w)+\s*\([\w,\s,\,:,\[,\],\{,\},\.,=""]*\)(\s*)(\{)");
 
         /// <summary>
         /// Identifies a function or method body that is defined with opening and closing curly braces, and removes the

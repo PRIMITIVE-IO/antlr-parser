@@ -27,6 +27,16 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             blocksToRemove.Count.Should().Be(1);
             blocksToRemove[0].Item1.Should().Be(13);
             blocksToRemove[0].Item2.Should().Be(15);
+        }   
+
+        [Fact]
+        public void FunctionDeclarationWithDoubleQuotes()
+        {
+            string source = @"function generateAssets(repo, outputName, commit = """", diffs = [], iGenerateDB = false, createDBcallback = null) {
+}".TrimIndent();
+            List<Tuple<int,int>> blocksToRemove = RegexBasedJavaScriptMethodBodyRemover.FindBlocksToRemove(source);
+
+            blocksToRemove.Count.Should().Be(1);
         }     
     }
 }
