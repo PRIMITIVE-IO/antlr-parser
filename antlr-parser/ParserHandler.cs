@@ -5,9 +5,9 @@ using antlr_parser.Antlr4Impl.CPP;
 using antlr_parser.Antlr4Impl.Java;
 using antlr_parser.Antlr4Impl.JavaScript;
 using antlr_parser.Antlr4Impl.Kotlin;
-using antlr_parser.Antlr4Impl.Solidity;
 using antlr_parser.Antlr4Impl.TypeScript;
-using PrimitiveCodebaseElements.Primitive;
+using JetBrains.Annotations;
+using PrimitiveCodebaseElements.Primitive.dto;
 
 namespace antlr_parser
 {
@@ -41,57 +41,56 @@ namespace antlr_parser
                 ".so", ".lib", ".a" // Linux
             };
 
-        public static IEnumerable<ClassInfo> ClassInfoFromSourceText(
+        [CanBeNull]
+        public static FileDto FileDtoFromSourceText(
             string filePath,
             string sourceExtension,
             string sourceText)
         {
-            if (!SupportedParsableFiles.Contains(sourceExtension)) return new List<ClassInfo>();
+            if (!SupportedParsableFiles.Contains(sourceExtension)) return null;
 
             switch (sourceExtension)
             {
                 case ".java":
-                    return AntlrParseJava.OuterClassInfosFromSource(
+                    return AntlrParseJava.Parse(
                         sourceText,
                         filePath);
                 case ".js":
                 case ".jsx":
-                    return AntlrParseJavaScript.OuterClassInfosFromSource(
+                    return AntlrParseJavaScript.Parse(
                         sourceText,
                         filePath);
                 case ".ts":
-                    return AntlrParseTypeScript.OuterClassInfosFromSource(
+                    return AntlrParseTypeScript.Parse(
                         sourceText, 
                         filePath);
                 case ".cs":
-                    return new List<ClassInfo>();
+                    return null;
                 // cs
                 case ".h": 
                 case ".c":
                     // C
-                    return AntlrParseC.OuterClassInfosFromSource(sourceText, filePath);
+                    return AntlrParseC.Parse(sourceText, filePath);
                 case ".cpp":
                 case ".hxx":
                 case ".hpp":
                 case ".m":
                 case ".cc":
                     //cpp
-                    return AntlrParseCpp.OuterClassInfosFromSource(sourceText, filePath);
+                    return AntlrParseCpp.Parse(sourceText, filePath);
                 case ".py":
                 case ".py3":
                     // python
-                    return new List<ClassInfo>();
+                    return null;
                 case ".kt":
-                    return AntlrParseKotlin.OuterClassInfosFromSource(
+                    return AntlrParseKotlin.Parse(
                         sourceText,
                         filePath);
                 case ".sol":
-                    return AntlrParseSolidity.OuterClassInfosFromSource(
-                        sourceText, 
-                        filePath);
+                    return null;//TODO implement solidity
             }
 
-            return new List<ClassInfo>();
+            return null;
         }
 
         public static string GetTextFromFilePath(string filePath)

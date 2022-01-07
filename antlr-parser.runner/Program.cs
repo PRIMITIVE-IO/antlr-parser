@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 using log4net;
 using log4net.Config;
 using log4net.Repository;
-using PrimitiveCodebaseElements.Primitive;
+using PrimitiveCodebaseElements.Primitive.dto;
 using Argument = System.CommandLine.Argument;
 using FileInfo = System.IO.FileInfo;
 
@@ -45,10 +45,11 @@ namespace antlr_parser
         static void Parse(Args args)
         {
             FilePathsFrom(args.InputPath)
-                .AsParallel()
                 .Where(filePath => ParserHandler.SupportedParsableFiles.Contains(Path.GetExtension(filePath)))
-                .SelectMany(ParseFile)
-                .ForAll(PrintClass);
+                .Select(ParseFile)
+                .Where(it => it != null)
+                .ToList()
+                .ForEach(PrintFileDto);
         }
 
         static IEnumerable<string> FilePathsFrom(string inputPath)
@@ -61,26 +62,31 @@ namespace antlr_parser
             return new[] {inputPath};
         }
 
-        static IEnumerable<ClassInfo> ParseFile(string filePath)
+        [CanBeNull]
+        static FileDto ParseFile(string filePath)
         {
-            return ParserHandler.ClassInfoFromSourceText(
+            return ParserHandler.FileDtoFromSourceText(
                 filePath,
                 Path.GetExtension(filePath),
                 ParserHandler.GetTextFromFilePath(filePath));
         }
 
-        static void PrintClass(ClassInfo classInfo)
+        static void PrintFileDto(FileDto fileDto)
         {
-            PrimitiveLogger.Logger.Instance().Info(classInfo.className.ShortName);
 
-            foreach (ICodebaseElementInfo infoChild in classInfo.Children)
+            foreach (ClassDto classDto in fileDto.Classes)
             {
-                PrimitiveLogger.Logger.Instance().Info($"-{infoChild.Name.ShortName}");
-            }
+                PrimitiveLogger.Logger.Instance().Info("class: "+classDto.FullyQualifiedName);
 
-            foreach (ClassInfo innerClass in classInfo.InnerClasses)
-            {
-                PrintClass(innerClass);
+                foreach (FieldDto field in classDto.Fields)
+                {
+                    PrimitiveLogger.Logger.Instance().Info($"    field: {field.Name}: {field.SourceCode}");
+                }
+
+                foreach (MethodDto method in classDto.Methods)
+                {
+                    PrimitiveLogger.Logger.Instance().Info($"    method: {method.Name}: {method.SourceCode}");
+                }
             }
         }
 
