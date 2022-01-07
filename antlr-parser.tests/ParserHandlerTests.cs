@@ -3,6 +3,8 @@ using System.Linq;
 using antlr_parser.Antlr4Impl;
 using FluentAssertions;
 using PrimitiveCodebaseElements.Primitive;
+using PrimitiveCodebaseElements.Primitive.dto;
+using PrimitiveCodebaseElements.Primitive.dto.converter;
 using Xunit;
 
 namespace antlr_parser.tests
@@ -21,23 +23,29 @@ namespace antlr_parser.tests
         public void ParserHandlerShouldReturnCollectionWithOneElement()
         {
             //Act
-            IEnumerable<ClassInfo> result = ParserHandler.ClassInfoFromSourceText("test.java", ".java", testJavaClassSourceCode);
+            IEnumerable<ClassInfo> result = FileDtoToClassInfoConverter.ToClassInfos(new List<FileDto>
+            {
+                ParserHandler.FileDtoFromSourceText("test.java", ".java", testJavaClassSourceCode)
+            });
 
             //Verify
             result.Should().NotBeNull();
-            result.Count().Should().Be(1);
+            result.Count().Should().Be(2);
         }
 
         [Fact]
         public void ParserHandlerShouldReturnCollectionWithAnyClassInfoWithClassName()
         {
             //Act
-            IEnumerable<ClassInfo> result = ParserHandler.ClassInfoFromSourceText("test.java", ".java", testJavaClassSourceCode);
+            IEnumerable<ClassInfo> result = FileDtoToClassInfoConverter.ToClassInfos(new List<FileDto>
+            {
+                ParserHandler.FileDtoFromSourceText("test.java", ".java", testJavaClassSourceCode)
+            });
 
             //Verify
             result.ToList().First().Children.Any(x => x.Name.ShortName == "doWork").Should().BeTrue();
-        }   
-        
+        }
+
         [Fact]
         public void KotlinClassHasHeader()
         {
@@ -56,8 +64,11 @@ namespace antlr_parser.tests
                 fun outerFunction() { }
 
             ".TrimIndent();
-            
-            IEnumerable<ClassInfo> result = ParserHandler.ClassInfoFromSourceText("kotlin.kt", ".kt", source);
+
+            IEnumerable<ClassInfo> result = FileDtoToClassInfoConverter.ToClassInfos(new List<FileDto>
+            {
+                ParserHandler.FileDtoFromSourceText("kotlin.kt", ".kt", source)
+            });
 
             //Verify
             ClassInfo fileInfo = result.ToList().First();
