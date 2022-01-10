@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
@@ -76,16 +77,16 @@ namespace antlr_parser
 
             foreach (ClassDto classDto in fileDto.Classes)
             {
-                PrimitiveLogger.Logger.Instance().Info("class: "+classDto.FullyQualifiedName);
+                Console.WriteLine("class: "+classDto.FullyQualifiedName);
 
                 foreach (FieldDto field in classDto.Fields)
                 {
-                    PrimitiveLogger.Logger.Instance().Info($"    field: {field.Name}: {field.SourceCode}");
+                    Console.WriteLine($"    field: {field.Name}: {field.SourceCode}");
                 }
 
                 foreach (MethodDto method in classDto.Methods)
                 {
-                    PrimitiveLogger.Logger.Instance().Info($"    method: {method.Name}: {method.SourceCode}");
+                    Console.WriteLine($"    method: {method.Name}: {method.SourceCode}");
                 }
             }
         }
