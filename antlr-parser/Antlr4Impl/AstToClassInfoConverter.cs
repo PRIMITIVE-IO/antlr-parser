@@ -75,16 +75,11 @@ namespace antlr_parser.Antlr4Impl
             string parentClassName,
             SourceCodeLanguage language)
         {
-            string stringClassName;
-            switch (parentClassName)
+            string stringClassName = parentClassName switch
             {
-                case null:
-                    stringClassName = classNode.Name;
-                    break;
-                default:
-                    stringClassName = $"{parentClassName}${classNode.Name}";
-                    break;
-            }
+                null => classNode.Name,
+                _ => $"{parentClassName}${classNode.Name}"
+            };
 
             ClassName className = new ClassName(
                 new FileName(fileName),

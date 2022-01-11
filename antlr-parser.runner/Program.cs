@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -30,9 +30,6 @@ namespace antlr_parser
             RootCommand rootCommand = new RootCommand
             {
                 new Argument("InputPath")
-                {
-                    ArgumentType = typeof(string)
-                }
             };
 
             rootCommand.Description = "Parse Files";

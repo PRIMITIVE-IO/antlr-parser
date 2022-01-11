@@ -6,7 +6,7 @@ using PrimitiveCodebaseElements.Primitive;
 
 namespace antlr_parser.Antlr4Impl.TypeScript
 {
-    public class RegexBasedTypeScriptMethodBodyRemover
+    public static class RegexBasedTypeScriptMethodBodyRemover
     {
         //matches functions having open curly braces, like: "function f(x, y) {"
         //group 3 matches spaces before the last curly

@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Linq;
 using antlr_parser.Antlr4Impl;
 using antlr_parser.Antlr4Impl.Kotlin;
 using FluentAssertions;
+using PrimitiveCodebaseElements.Primitive;
 using Xunit;
 
 namespace antlr_parser.tests.Kotlin
@@ -14,8 +16,8 @@ namespace antlr_parser.tests.Kotlin
             string source = @"
                 class X
             ";
-            var res = AntlrParseKotlin.OuterClassInfosFromSource(source, "path");
-            var topClass = res.First();
+            IEnumerable<ClassInfo> res = AntlrParseKotlin.OuterClassInfosFromSource(source, "path");
+            ClassInfo topClass = res.First();
             topClass.Name.ShortName.Should().Be("X");
             topClass.InnerClasses.Should().BeEmpty();
         }
@@ -27,8 +29,8 @@ namespace antlr_parser.tests.Kotlin
                 class X{}
                 fun f(){}
             ";
-            var res = AntlrParseKotlin.OuterClassInfosFromSource(source, "path");
-            var fakeClass = res.First();
+            IEnumerable<ClassInfo> res = AntlrParseKotlin.OuterClassInfosFromSource(source, "path");
+            ClassInfo fakeClass = res.First();
             fakeClass.Name.ShortName.Should().Be("path");
             fakeClass.Methods.Count().Should().Be(1);
             fakeClass.InnerClasses.First().Name.ShortName.Should().Be("X");
@@ -47,8 +49,8 @@ namespace antlr_parser.tests.Kotlin
                 }
             ".TrimIndent();
             
-            var res = AntlrParseKotlin.OuterClassInfosFromSource(source, "path");
-            var topClass = res.First();
+            IEnumerable<ClassInfo> res = AntlrParseKotlin.OuterClassInfosFromSource(source, "path");
+            ClassInfo topClass = res.First();
             topClass.SourceCode.Text.Should().Be(@"
                 package x
                 import y
@@ -68,8 +70,8 @@ namespace antlr_parser.tests.Kotlin
                     }
                 }
             ".TrimIndent();
-            var res = AntlrParseKotlin.OuterClassInfosFromSource(source, "path");
-            var innerClass = res.First().InnerClasses.First();
+            IEnumerable<ClassInfo> res = AntlrParseKotlin.OuterClassInfosFromSource(source, "path");
+            ClassInfo innerClass = res.First().InnerClasses.First();
             innerClass.SourceCode.Text.Should().Be(@"
                 /**comment*/
                 class Y {
@@ -84,8 +86,8 @@ namespace antlr_parser.tests.Kotlin
                 /**comment*/
                 class Y {}
             ";
-            var res = AntlrParseKotlin.OuterClassInfosFromSource(source, "path");
-            var secondClass = res.Skip(1).First();
+            IEnumerable<ClassInfo> res = AntlrParseKotlin.OuterClassInfosFromSource(source, "path");
+            ClassInfo secondClass = res.Skip(1).First();
             secondClass.SourceCode.Text.Should().Be(@"
                 /**comment*/
                 class Y {}

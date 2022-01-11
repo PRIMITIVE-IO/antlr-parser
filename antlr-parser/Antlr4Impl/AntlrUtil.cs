@@ -66,20 +66,16 @@ namespace antlr_parser.Antlr4Impl
             if (firstNonWhitespaceIndex == -1) return s;
 
             IEnumerable<string> unindentedLines = lines.Select(it => UnindentLine(it, firstNonWhitespaceIndex));
-            return String.Join("\n", unindentedLines);
+            return string.Join("\n", unindentedLines);
         }
 
         static string UnindentLine(string line, int firstNonWhitespaceIndex)
         {
             if (firstNonWhitespaceIndex < line.Length)
             {
-                if (line.Substring(0, firstNonWhitespaceIndex).Trim().Length != 0)
-                {
-                    //indentation contains some chars (if this is first line)
-                    return line;
-                }
-
-                return line.Substring(firstNonWhitespaceIndex, line.Length - firstNonWhitespaceIndex);
+                return line[..firstNonWhitespaceIndex].Trim().Length != 0 
+                    ? line 
+                    : line.Substring(firstNonWhitespaceIndex, line.Length - firstNonWhitespaceIndex);
             }
 
             return line.Trim().Length == 0 ? "" : line;

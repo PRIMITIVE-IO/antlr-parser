@@ -13,14 +13,14 @@ namespace antlr_parser.Antlr4Impl.Java
     {
         public static IEnumerable<ClassInfo> OuterClassInfosFromSource(string source, string filePath)
         {
-            return AstToClassInfoConverter.ToClassInfo(parseFileNode(source, filePath), SourceCodeLanguage.Java);
+            return AstToClassInfoConverter.ToClassInfo(ParseFileNode(source, filePath), SourceCodeLanguage.Java);
         }
 
         public static FileDto Parse(string source, string filePath)
         {
             try
             {
-                return AstNodeToClassDtoConverter.ToFileDto(parseFileNode(source, filePath), source);
+                return AstNodeToClassDtoConverter.ToFileDto(ParseFileNode(source, filePath), source);
             }
             catch (Exception e)
             {
@@ -30,7 +30,7 @@ namespace antlr_parser.Antlr4Impl.Java
             return null;
         }
 
-        static AstNode.FileNode parseFileNode(string source, string filePath)
+        static AstNode.FileNode ParseFileNode(string source, string filePath)
         {
             try
             {

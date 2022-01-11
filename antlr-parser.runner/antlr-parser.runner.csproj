@@ -2,13 +2,15 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>antlr_parser.runner</RootNamespace>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
 
 
   <ItemGroup>
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21216.1" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta2.21617.1" />
+    <PackageReference Include="System.CommandLine.NamingConventionBinder" Version="2.0.0-beta2.21617.1" />
   </ItemGroup>
 
 

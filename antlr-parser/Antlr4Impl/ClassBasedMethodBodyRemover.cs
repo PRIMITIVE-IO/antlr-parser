@@ -17,7 +17,7 @@ namespace antlr_parser.Antlr4Impl
     /// 
     /// will produce list of start and end positions for all `{ REMOVE }` blocks
     /// </summary>
-    public class ClassBasedMethodBodyRemover
+    public static class ClassBasedMethodBodyRemover
     {
         public static List<Tuple<int, int>> FindBlocksToRemove(string s)
         {

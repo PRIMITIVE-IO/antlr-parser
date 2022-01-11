@@ -2,7 +2,7 @@ using PrimitiveCodebaseElements.Primitive.dto;
 
 namespace antlr_parser.tests
 {
-    public class TestUtils
+    public static class TestUtils
     {
         public static CodeRange CodeRange(int lineStart, int columnStart, int lineEnd, int columnEnd)
         {

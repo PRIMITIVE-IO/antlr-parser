@@ -67,9 +67,9 @@ namespace antlr_parser.Antlr4Impl.CPP
         {
             AstNode node2 = new List<Func<ParserRuleContext>>
                 {
-                    () => context.templateDeclaration(),
-                    () => context.namespaceDefinition(),
-                    () => context.functionDefinition(),
+                    context.templateDeclaration,
+                    context.namespaceDefinition,
+                    context.functionDefinition,
                 }
                 .Select(it => it()?.Accept(this))
                 .FirstOrDefault(it => it != null);
@@ -89,10 +89,10 @@ namespace antlr_parser.Antlr4Impl.CPP
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
-            if (fieldNames.Count() != 0)
+            if (fieldNames.Any())
             {
                 return new AstNode.FieldNode(
-                    String.Join(",", fieldNames),
+                    string.Join(",", fieldNames),
                     AccessFlags.AccPublic,
                     context.GetFullText(),
                     startIdx,
@@ -222,28 +222,26 @@ namespace antlr_parser.Antlr4Impl.CPP
                                 ?? ExtractDestructorName(context.declarator())
                 ;
 
-            if (methodName != null)
-            {
-                int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
-                int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
-                CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+            if (methodName == null) return null;
+            
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 
-                string sourceCode = MethodBodyRemovalResult
-                    .ExtractOriginalSubstring(startIdx, endIdx)
-                    .TrimIndent()
-                    .Trim();
+            string sourceCode = MethodBodyRemovalResult
+                .ExtractOriginalSubstring(startIdx, endIdx)
+                .TrimIndent()
+                .Trim();
 
-                return new AstNode.MethodNode(
-                    methodName,
-                    AccessFlags.AccPublic,
-                    sourceCode,
-                    startIdx,
-                    endIdx,
-                    codeRange: codeRange
-                );
-            }
+            return new AstNode.MethodNode(
+                methodName,
+                AccessFlags.AccPublic,
+                sourceCode,
+                startIdx,
+                endIdx,
+                codeRange: codeRange
+            );
 
-            return null;
         }
 
         public override AstNode VisitClassSpecifier(CPP14Parser.ClassSpecifierContext context)
@@ -304,7 +302,7 @@ namespace antlr_parser.Antlr4Impl.CPP
             );
         }
 
-        string ExtractFieldNameOrNull(CPP14Parser.DeclaratorContext context)
+        static string ExtractFieldNameOrNull(CPP14Parser.DeclaratorContext context)
         {
             return context?.pointerDeclarator()
                 ?.noPointerDeclarator()
@@ -335,7 +333,7 @@ namespace antlr_parser.Antlr4Impl.CPP
             if (fieldNames.Count != 0)
             {
                 return new AstNode.FieldNode(
-                    String.Join(",", fieldNames),
+                    string.Join(",", fieldNames),
                     AccessFlags.AccPublic,
                     context.GetFullText(),
                     startIdx,
@@ -380,7 +378,7 @@ namespace antlr_parser.Antlr4Impl.CPP
             return null;
         }
 
-        CPP14Parser.IdExpressionContext ExtractIdExpression(CPP14Parser.DeclaratorContext declarator)
+        static CPP14Parser.IdExpressionContext ExtractIdExpression(CPP14Parser.DeclaratorContext declarator)
         {
             return declarator
                 ?.pointerDeclarator()
@@ -390,7 +388,7 @@ namespace antlr_parser.Antlr4Impl.CPP
                 ?.idExpression();
         }
 
-        string ExtractDestructorName(CPP14Parser.DeclaratorContext declarator)
+        static string ExtractDestructorName(CPP14Parser.DeclaratorContext declarator)
         {
             return ExtractIdExpression(declarator)
                 ?.qualifiedId()
@@ -398,7 +396,7 @@ namespace antlr_parser.Antlr4Impl.CPP
                 ?.GetText();
         }
 
-        string ExtractUnqualifiedMethodName(CPP14Parser.DeclaratorContext declarator)
+        static string ExtractUnqualifiedMethodName(CPP14Parser.DeclaratorContext declarator)
         {
             return ExtractIdExpression(declarator)
                 ?.unqualifiedId()
@@ -406,7 +404,7 @@ namespace antlr_parser.Antlr4Impl.CPP
                 ?.GetText();
         }
 
-        string ExtractQualifiedMethodName(CPP14Parser.DeclaratorContext declarator)
+        static string ExtractQualifiedMethodName(CPP14Parser.DeclaratorContext declarator)
         {
             return ExtractIdExpression(declarator)
                 ?.qualifiedId()
@@ -415,7 +413,7 @@ namespace antlr_parser.Antlr4Impl.CPP
                 ?.GetText();
         }
 
-        string ExtractUnqualifiedOperatorName(CPP14Parser.DeclaratorContext declarator)
+        static string ExtractUnqualifiedOperatorName(CPP14Parser.DeclaratorContext declarator)
         {
             return ExtractIdExpression(declarator)
                 ?.unqualifiedId()
@@ -424,7 +422,7 @@ namespace antlr_parser.Antlr4Impl.CPP
                 ?.GetText();
         }
 
-        string ExtractQualifiedOperatorName(CPP14Parser.DeclaratorContext declarator)
+        static string ExtractQualifiedOperatorName(CPP14Parser.DeclaratorContext declarator)
         {
             return ExtractIdExpression(declarator)
                 ?.qualifiedId()
@@ -434,7 +432,7 @@ namespace antlr_parser.Antlr4Impl.CPP
                 ?.GetText();
         }
 
-        string ExtractConversionOperatorName(CPP14Parser.DeclaratorContext declarator)
+        static string ExtractConversionOperatorName(CPP14Parser.DeclaratorContext declarator)
         {
             return ExtractIdExpression(declarator)
                 ?.qualifiedId()
@@ -451,23 +449,17 @@ namespace antlr_parser.Antlr4Impl.CPP
 
         int PreviousPeerEndPosition(RuleContext parent, IParseTree self)
         {
-            if (parent == null)
+            return parent switch
             {
-                return -1;
-            }
-
-            if (parent is CPP14Parser.DeclarationseqContext)
-            {
-                CPP14Parser.DeclarationseqContext declarationseq = parent as CPP14Parser.DeclarationseqContext;
-                return declarationseq.children
+                null => -1,
+                CPP14Parser.DeclarationseqContext declarationseqContext => declarationseqContext.children
                     .TakeWhile(it => it != self)
                     .OfType<CPP14Parser.DeclarationContext>()
                     .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex))
                     .DefaultIfEmpty(-1)
-                    .Last();
-            }
-
-            return PreviousPeerEndPosition(parent.Parent, parent);
+                    .Last(),
+                _ => PreviousPeerEndPosition(parent.Parent, parent)
+            };
         }
     }
 }

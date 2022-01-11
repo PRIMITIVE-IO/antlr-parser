@@ -92,43 +92,41 @@ namespace antlr_parser.Antlr4Impl.Java
 
         static int? NearestPeerEndIdx(RuleContext context, int selfStartIdx)
         {
-            switch (context.Parent)
+            return context.Parent switch
             {
-                case JavaParser.CompilationUnitContext c: return null;
-                case JavaParser.InterfaceBodyContext c:
-                    return c.interfaceBodyDeclaration()
-                        .Select(it => it.Stop.StopIndex as int?)
-                        .TakeWhile(it => it < selfStartIdx)
-                        .Max();
-                case JavaParser.ClassBodyContext c:
-                    return c.classBodyDeclaration()
-                        .Select(it => it.Stop.StopIndex as int?)
-                        .TakeWhile(it => it < selfStartIdx)
-                        .Max();
-                default: return NearestPeerEndIdx(context.Parent, selfStartIdx);
-            }
+                JavaParser.CompilationUnitContext c => null,
+                JavaParser.InterfaceBodyContext c => c.interfaceBodyDeclaration()
+                    .Select(it => it.Stop.StopIndex as int?)
+                    .TakeWhile(it => it < selfStartIdx)
+                    .Max(),
+                JavaParser.ClassBodyContext c => c.classBodyDeclaration()
+                    .Select(it => it.Stop.StopIndex as int?)
+                    .TakeWhile(it => it < selfStartIdx)
+                    .Max(),
+                _ => NearestPeerEndIdx(context.Parent, selfStartIdx)
+            };
         }
 
         static int? EnclosingClassHeaderEnd(RuleContext context)
         {
-            switch (context.Parent)
+            return context.Parent switch
             {
-                case JavaParser.InterfaceDeclarationContext c: return c.interfaceBody().LBRACE().Symbol.StartIndex;
-                case JavaParser.ClassDeclarationContext c: return c.classBody().LBRACE().Symbol.StartIndex;
-                case JavaParser.CompilationUnitContext _: return null;
-                default: return EnclosingClassHeaderEnd(context.Parent);
-            }
+                JavaParser.InterfaceDeclarationContext c => c.interfaceBody().LBRACE().Symbol.StartIndex,
+                JavaParser.ClassDeclarationContext c => c.classBody().LBRACE().Symbol.StartIndex,
+                JavaParser.CompilationUnitContext _ => null,
+                _ => EnclosingClassHeaderEnd(context.Parent)
+            };
         }
 
         static AccessFlags AccessFlag(string modifier)
         {
-            switch (modifier)
+            return modifier switch
             {
-                case "private": return AccessFlags.AccPrivate;
-                case "protected": return AccessFlags.AccProtected;
-                case "public": return AccessFlags.AccPublic;
-                default: return AccessFlags.None;
-            }
+                "private" => AccessFlags.AccPrivate,
+                "protected" => AccessFlags.AccProtected,
+                "public" => AccessFlags.AccPublic,
+                _ => AccessFlags.None
+            };
         }
 
 

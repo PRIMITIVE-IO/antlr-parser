@@ -6,7 +6,7 @@ using PrimitiveCodebaseElements.Primitive;
 
 namespace antlr_parser.Antlr4Impl.Java
 {
-    public class RegexBasedJavaMethodBodyRemover
+    public static class RegexBasedJavaMethodBodyRemover
     {
         //matches functions having open curly braces, like: "function f(x, y) {"
         //group 10 matches the last curly
@@ -18,7 +18,7 @@ namespace antlr_parser.Antlr4Impl.Java
             final public string f(s[] x, List<Z> a){              
         */
 
-        readonly static Regex MethodDeclarationRegex = new Regex(
+        static readonly Regex MethodDeclarationRegex = new Regex(
             @"(public |private |protected |static |final )?(public |private |protected |static |final )?(public |private |protected |static |final )?(public |private |protected |static |final )?(<[A-Za-z0-9_]*> )?([A-Za-z0-9_\[\]<>]*) ([A-Za-z0-9_]*)(\s)*\(([A-Za-z\[\]<>,\s]*)\)\s*(\{)"
         );
 

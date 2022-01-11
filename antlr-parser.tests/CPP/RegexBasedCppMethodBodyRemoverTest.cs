@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using antlr_parser.Antlr4Impl;
 using antlr_parser.Antlr4Impl.C;
 using FluentAssertions;
@@ -13,7 +15,7 @@ namespace antlr_parser.tests.CPP
             string source = @"
                 fun f(){REMOVE}
             ".TrimIndent();
-            var blocksToRemove = RegexBasedCppMethodBodyRemover.FindBlocksToRemove(source);
+            List<Tuple<int, int>> blocksToRemove = RegexBasedCppMethodBodyRemover.FindBlocksToRemove(source);
             MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be(@"
                 fun f(){}
             ".TrimIndent());
@@ -25,7 +27,7 @@ namespace antlr_parser.tests.CPP
             string source = @"
                 bool DecodeBase64PSBT(PartiallySignedTransaction& psbt, const std::string& base64_tx, std::string& error) const {REMOVE}
             ".TrimIndent();
-            var blocksToRemove = RegexBasedCppMethodBodyRemover.FindBlocksToRemove(source);
+            List<Tuple<int, int>> blocksToRemove = RegexBasedCppMethodBodyRemover.FindBlocksToRemove(source);
             MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be(@"
                 bool DecodeBase64PSBT(PartiallySignedTransaction& psbt, const std::string& base64_tx, std::string& error) const {}
             ".TrimIndent());

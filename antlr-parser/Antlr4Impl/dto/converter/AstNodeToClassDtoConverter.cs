@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,7 +7,7 @@ using PrimitiveCodebaseElements.Primitive.dto;
 
 namespace antlr_parser.Antlr4Impl.dto.converter
 {
-    public class AstNodeToClassDtoConverter
+    public static class AstNodeToClassDtoConverter
     {
         public static FileDto ToFileDto(AstNode.FileNode fileNode, string sourceText)
         {
@@ -37,7 +36,7 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                     name: Path.GetFileNameWithoutExtension(fileNode.Path),
                     fullyQualifiedName: fileNode.Path,
                     methods: fileNode.Methods.Select(it => ToDto(it, fileNode.Path)).ToList(),
-                    fields: fileNode.Fields.Select(it => ToDto(it)).ToList(),
+                    fields: fileNode.Fields.Select(ToDto).ToList(),
                     modifier: AccessFlags.None,
                     startIdx: 0,
                     endIdx: fileNode.Header.Length - 1, //TODO
@@ -54,10 +53,10 @@ namespace antlr_parser.Antlr4Impl.dto.converter
             return classes;
         }
 
-        static List<ClassDto> ToDto(AstNode.ClassNode classNode, AstNode.FileNode fileNode,
+        static IEnumerable<ClassDto> ToDto(AstNode.ClassNode classNode, AstNode.FileNode fileNode,
             [CanBeNull] string parentFqn)
         {
-            string fullyQualifiedName = String.Join(".",
+            string fullyQualifiedName = string.Join(".",
                 new List<string> { parentFqn ?? fileNode.PackageNode?.Name, classNode.Name }.Where(it => it != null));
 
             return new List<ClassDto>
@@ -68,7 +67,7 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                         classNode.Name,
                         fullyQualifiedName,
                         classNode.Methods.Select(it => ToDto(it, classNode.Name)).ToList(),
-                        classNode.Fields.Select(it => ToDto(it)).ToList(),
+                        classNode.Fields.Select(ToDto).ToList(),
                         classNode.Modifier,
                         classNode.StartIdx,
                         classNode.EndIdx,

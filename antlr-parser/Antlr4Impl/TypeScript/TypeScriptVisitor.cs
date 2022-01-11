@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using PrimitiveCodebaseElements.Primitive;
@@ -226,12 +225,12 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
         private AccessFlags AccessFlagsFrom(string text)
         {
-            switch (text)
+            return text switch
             {
-                case "public": return AccessFlags.AccPublic;
-                case "private": return AccessFlags.AccPrivate;
-                default: return AccessFlags.None;
-            }
+                "public" => AccessFlags.AccPublic,
+                "private" => AccessFlags.AccPrivate,
+                _ => AccessFlags.None
+            };
         }
     }
 }

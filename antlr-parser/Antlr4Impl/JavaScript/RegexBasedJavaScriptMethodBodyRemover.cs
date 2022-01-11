@@ -6,7 +6,7 @@ using PrimitiveCodebaseElements.Primitive;
 
 namespace antlr_parser.Antlr4Impl.JavaScript
 {
-    public class RegexBasedJavaScriptMethodBodyRemover
+    public static class RegexBasedJavaScriptMethodBodyRemover
     {
         //matches functions having open curly braces, like: "function f(x, y) {"
         //group 3 matches spaces before the last curly

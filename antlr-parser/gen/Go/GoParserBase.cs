@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
 using Antlr4.Runtime;
 
 namespace GoParseTree
@@ -64,7 +62,7 @@ namespace GoParseTree
             }
 
             // Get the token's text and type.
-            String text = ahead.Text;
+            string text = ahead.Text;
             int type = ahead.Type;
 
             // Check if the token is, or contains a line terminator.

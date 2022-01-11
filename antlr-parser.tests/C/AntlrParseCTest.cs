@@ -114,7 +114,7 @@ namespace antlr_parser.tests.C
         }
 
         [Fact]
-        void parseTwoFunctions()
+        void ParseTwoFunctions()
         {
             string source = @"
                 /**

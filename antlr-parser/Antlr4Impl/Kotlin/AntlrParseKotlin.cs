@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using antlr_parser.Antlr4Impl.dto;
 using antlr_parser.Antlr4Impl.dto.converter;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
@@ -14,7 +13,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         {
             try
             {
-                var astFileNode = ParseFileNode(source, filePath);
+                AstNode.FileNode astFileNode = ParseFileNode(source, filePath);
 
                 return AstToClassInfoConverter.ToClassInfo(astFileNode, SourceCodeLanguage.Kotlin);
             }

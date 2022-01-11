@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using antlr_parser.Antlr4Impl.dto.converter;
-using antlr_parser.Antlr4Impl.JavaScript;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
@@ -18,16 +17,15 @@ namespace antlr_parser.Antlr4Impl.TypeScript
         public static FileDto Parse(string source, string filePath)
         {
             return AstNodeToClassDtoConverter.ToFileDto(ParseFileNode(source, filePath), source);
-
         }
 
-        public static AstNode.FileNode ParseFileNode(string source, string filePath)
-            {
+        private static AstNode.FileNode ParseFileNode(string source, string filePath)
+        {
             try
             {
                 List<Tuple<int, int>> blocksToRemove = RegexBasedTypeScriptMethodBodyRemover.FindBlocksToRemove(source);
                 MethodBodyRemovalResult removalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
-                
+
                 char[] codeArray = removalResult.ShortenedSource.ToCharArray();
                 AntlrInputStream inputStream = new AntlrInputStream(codeArray, codeArray.Length);
 
@@ -37,7 +35,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
                 parser.RemoveErrorListeners();
                 parser.AddErrorListener(new ErrorListener()); // add ours
-                
+
                 TypeScriptVisitor visitor = new TypeScriptVisitor(filePath, removalResult);
                 AstNode.FileNode res = parser.program().Accept(visitor) as AstNode.FileNode;
                 return res;

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
@@ -80,23 +78,24 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         int PreviousPeerEndPosition(RuleContext parent, IParseTree self)
         {
-            if (parent == null)
+            switch (parent)
             {
-                return -1;
+                case null:
+                    return -1;
+                case JavaScriptParser.StatementContext _:
+                case JavaScriptParser.SourceElementContext _:
+                    return PreviousPeerEndPosition(parent.Parent, parent);
+                default:
+                {
+                    JavaScriptParser.SourceElementsContext sourceElementsContext = parent as JavaScriptParser.SourceElementsContext;
+
+                    return sourceElementsContext.sourceElement()
+                        .TakeWhile(it => it != self)
+                        .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
+                        .DefaultIfEmpty(-1)
+                        .Max();
+                }
             }
-
-            if (parent is JavaScriptParser.StatementContext || parent is JavaScriptParser.SourceElementContext)
-            {
-                return PreviousPeerEndPosition(parent.Parent, parent);
-            }
-
-            JavaScriptParser.SourceElementsContext sourceElementsContext = parent as JavaScriptParser.SourceElementsContext;
-
-            return sourceElementsContext.sourceElement()
-                .TakeWhile(it => it != self)
-                .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
-                .DefaultIfEmpty(-1)
-                .Max();
         }
 
         public override AstNode VisitFunctionDeclaration(JavaScriptParser.FunctionDeclarationContext context)
@@ -199,12 +198,12 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
             if (x.arrayLiteral() != null)
             {
-                name = String.Join(",", x.arrayLiteral().Accept(new DeconstructionAssignmentVisitor()));
+                name = string.Join(",", x.arrayLiteral().Accept(new DeconstructionAssignmentVisitor()));
             }
 
             if (x.objectLiteral() != null)
             {
-                name = String.Join(",", x.objectLiteral().Accept(new DeconstructionAssignmentVisitor()));
+                name = string.Join(",", x.objectLiteral().Accept(new DeconstructionAssignmentVisitor()));
             }
 
 
@@ -224,7 +223,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         }
     }
 
-    public class DeconstructionAssignmentVisitor : JavaScriptParserBaseVisitor<List<String>>
+    public class DeconstructionAssignmentVisitor : JavaScriptParserBaseVisitor<List<string>>
     {
         public override List<string> VisitObjectLiteral(JavaScriptParser.ObjectLiteralContext context)
         {

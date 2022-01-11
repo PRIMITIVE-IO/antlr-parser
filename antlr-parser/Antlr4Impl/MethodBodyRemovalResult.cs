@@ -72,18 +72,18 @@ namespace antlr_parser.Antlr4Impl
             int lastIndexForRemoval = -1;
             foreach (Tuple<int, int> blockForRemoval in blocksForRemoval)
             {
-                Tuple<int, int> fromTo = blockForRemoval;
-                if (fromTo.Item1 > lastIndexForRemoval)
-                {
-                    res.Add(blockForRemoval);
-                    lastIndexForRemoval = fromTo.Item2;
-                }
+                (int fromIndex, int toIndex) = blockForRemoval;
+                
+                if (fromIndex <= lastIndexForRemoval) continue;
+                
+                res.Add(blockForRemoval);
+                lastIndexForRemoval = toIndex;
             }
 
             return res.ToList();
         }
 
-        public MethodBodyRemovalResult(
+        private MethodBodyRemovalResult(
             string shortenedSource,
             string originalSource,
             Dictionary<int, string> idxToRemovedMethodBody,
@@ -109,11 +109,11 @@ namespace antlr_parser.Antlr4Impl
         public int RestoreIdx(int idx)
         {
             int acc = idx;
-            foreach (Tuple<int, int> tuple in BlocksToRemove)
+            foreach ((int item1, int item2) in BlocksToRemove)
             {
-                if (acc < tuple.Item1) break;
+                if (acc < item1) break;
 
-                acc += tuple.Item2 - tuple.Item1 + 1;
+                acc += item2 - item1 + 1;
             }
 
             return acc;

@@ -1,8 +1,8 @@
-using System.Linq;
 using antlr_parser.Antlr4Impl;
 using antlr_parser.Antlr4Impl.TypeScript;
 using FluentAssertions;
 using PrimitiveCodebaseElements.Primitive;
+using PrimitiveCodebaseElements.Primitive.dto;
 using Xunit;
 
 namespace antlr_parser.tests.TypeScript
@@ -12,7 +12,7 @@ namespace antlr_parser.tests.TypeScript
         [Fact]
         public void SmokeTest()
         {
-            var res = AntlrParseTypeScript.Parse(
+            FileDto res = AntlrParseTypeScript.Parse(
                 source: @"
                 namespace testNamespace {
                     class Employee {
@@ -38,12 +38,12 @@ namespace antlr_parser.tests.TypeScript
             res.Classes[0].Fields.Count.Should().Be(2);
             res.Classes[0].Header.Should().Be("class Employee {");
 
-            var empCodeField = res.Classes[0].Fields[0];
+            FieldDto empCodeField = res.Classes[0].Fields[0];
             empCodeField.Name.Should().Be("empCode");
             empCodeField.SourceCode.Should().Be("public empCode: number;");
             empCodeField.AccFlag.Should().Be(AccessFlags.AccPublic);
 
-            var empNameField = res.Classes[0].Fields[1];
+            FieldDto empNameField = res.Classes[0].Fields[1];
             empNameField.Name.Should().Be("empName");
             empNameField.AccFlag.Should().Be(AccessFlags.None);
 
@@ -63,7 +63,7 @@ namespace antlr_parser.tests.TypeScript
         [Fact]
         public void CreateFakeClasses()
         {
-            var res = AntlrParseTypeScript.Parse(
+            FileDto res = AntlrParseTypeScript.Parse(
                 source: @"
                     // Named function
                     function add(x, y) {

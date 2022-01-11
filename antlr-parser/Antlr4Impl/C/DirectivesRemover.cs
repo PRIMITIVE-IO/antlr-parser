@@ -9,7 +9,7 @@ namespace antlr_parser.Antlr4Impl.C
     /// Removes preprocessor directives (#if, #ifdef, #ifndef, #else, #elif, #endif) alongside with their ELSE brances
     /// and keeps only THEN blocks. Works with nested directives as well. 
     /// </summary>
-    public class DirectivesRemover
+    public static class DirectivesRemover
     {
         //matches text from # to end of a line
         static readonly Regex IfRegex = new Regex("^[ \\t]*#if((n)?def)?.*?$", RegexOptions.Multiline);

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using antlr_parser.Antlr4Impl;
 using FluentAssertions;
 using PrimitiveCodebaseElements.Primitive.dto;
@@ -21,7 +19,7 @@ namespace antlr_parser.tests
                 }
             ".TrimIndent();
 
-            var converter = new IndexToLocationConverter(source);
+            IndexToLocationConverter converter = new IndexToLocationConverter(source);
             
             //Act
             converter.IdxToLocation(0).Should().Be(new CodeLocation(1, 1)); //very first \n symbol

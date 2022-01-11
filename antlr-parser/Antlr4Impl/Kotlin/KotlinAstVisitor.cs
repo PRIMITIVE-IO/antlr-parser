@@ -79,7 +79,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
             string sourceCode = context.GetFullText() + removedBody;
 
-            sourceCode = StringUtil.TrimIndent(sourceCode);
+            sourceCode = sourceCode.TrimIndent();
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
@@ -185,27 +185,20 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
         int PreviousPeerEndPosition(RuleContext parent, IParseTree self)
         {
-            if (parent == null)
+            return parent switch
             {
-                return -1;
-            }
-
-            if (parent is KotlinParser.TopLevelObjectContext)
-            {
-                return PreviousPeerEndPosition(parent.Parent, parent);
-            }
-
-            return (parent as ParserRuleContext).children
-                .Where(it =>
-                    it is KotlinParser.ClassDeclarationContext ||
-                    it is KotlinParser.FunctionDeclarationContext ||
-                    it is KotlinParser.PropertyDeclarationContext ||
-                    it is KotlinParser.TopLevelObjectContext)
-                .TakeWhile(it => it != self)
-                .OfType<ParserRuleContext>()
-                .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
-                .DefaultIfEmpty(-1)
-                .Max();
+                null => -1,
+                KotlinParser.TopLevelObjectContext _ => PreviousPeerEndPosition(parent.Parent, parent),
+                _ => (parent as ParserRuleContext).children
+                    .Where(it =>
+                        it is KotlinParser.ClassDeclarationContext || it is KotlinParser.FunctionDeclarationContext ||
+                        it is KotlinParser.PropertyDeclarationContext || it is KotlinParser.TopLevelObjectContext)
+                    .TakeWhile(it => it != self)
+                    .OfType<ParserRuleContext>()
+                    .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
+                    .DefaultIfEmpty(-1)
+                    .Max()
+            };
         }
 
         public override AstNode VisitPropertyDeclaration(KotlinParser.PropertyDeclarationContext context)
