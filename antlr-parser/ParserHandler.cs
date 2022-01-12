@@ -5,6 +5,7 @@ using antlr_parser.Antlr4Impl.CPP;
 using antlr_parser.Antlr4Impl.Java;
 using antlr_parser.Antlr4Impl.JavaScript;
 using antlr_parser.Antlr4Impl.Kotlin;
+using antlr_parser.Antlr4Impl.Solidity;
 using antlr_parser.Antlr4Impl.TypeScript;
 using JetBrains.Annotations;
 using PrimitiveCodebaseElements.Primitive.dto;
@@ -17,7 +18,7 @@ namespace antlr_parser
         public static readonly HashSet<string> SupportedParsableFiles =
             new HashSet<string>
             {
-                ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3", ".js", ".jsx", ".kt", 
+                ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3", ".js", ".jsx", ".kt",
                 ".sol", ".ts"
             };
 
@@ -28,11 +29,11 @@ namespace antlr_parser
                 ".sc", ".rs", ".go", ".class", ".clj", ".cxx", ".el", ".lua", ".m4", ".php", ".pl", ".po", ".rb", ".sh",
                 ".swift", ".vb",
                 // other data formats
-                ".txt", ".md", ".html", ".json", ".xml", ".sql", ".yaml", ".hbs", ".sh", ".vcxproj", ".xcodeproj", 
+                ".txt", ".md", ".html", ".json", ".xml", ".sql", ".yaml", ".hbs", ".sh", ".vcxproj", ".xcodeproj",
                 ".csproj", ".xml", ".diff", ".patch", ".log", ".rtf", ".tex", ".odt", ".org", ".pdf", ".rst", ".wpd",
                 ".wps"
             };
-        
+
         public static readonly HashSet<string> SupportedLibraryFiles =
             new HashSet<string>
             {
@@ -62,12 +63,12 @@ namespace antlr_parser
                         filePath);
                 case ".ts":
                     return AntlrParseTypeScript.Parse(
-                        sourceText, 
+                        sourceText,
                         filePath);
                 case ".cs":
                     return null;
                 // cs
-                case ".h": 
+                case ".h":
                 case ".c":
                     // C
                     return AntlrParseC.Parse(sourceText, filePath);
@@ -87,7 +88,9 @@ namespace antlr_parser
                         sourceText,
                         filePath);
                 case ".sol":
-                    return null;//TODO implement solidity
+                    return AntlrParseSolidity.Parse(
+                        sourceText,
+                        filePath);
             }
 
             return null;

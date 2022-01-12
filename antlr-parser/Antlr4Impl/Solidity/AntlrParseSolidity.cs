@@ -1,21 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using antlr_parser.Antlr4Impl.dto;
 using antlr_parser.Antlr4Impl.dto.converter;
 using Antlr4.Runtime;
-using PrimitiveCodebaseElements.Primitive;
+using JetBrains.Annotations;
 using PrimitiveCodebaseElements.Primitive.dto;
-using PrimitiveCodebaseElements.Primitive.dto.converter;
 
 namespace antlr_parser.Antlr4Impl.Solidity
 {
     public static class AntlrParseSolidity
     {
-        public static IEnumerable<ClassInfo> OuterClassInfosFromSource(string source, string filePath)
+
+        [CanBeNull]
+        public static FileDto Parse(string source, string filePath)
         {
             try
             {
+                MethodBodyRemovalResult methodBodyRemovalResult = MethodBodyRemovalResult.From(source, new List<Tuple<int, int>>());
+
                 char[] codeArray = source.ToCharArray();
                 AntlrInputStream inputStream = new AntlrInputStream(codeArray, codeArray.Length);
 
@@ -28,10 +29,8 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
                 // a sourceUnit is the highest level container -> start there
                 // do not call parser.sourceUnit() more than once
-                SourceUnitListener sourceUnitListener = new SourceUnitListener(filePath);
-                parser.sourceUnit().EnterRule(sourceUnitListener);
-
-                return sourceUnitListener.ClassInfos;
+                AstNode.FileNode fileNode = parser.sourceUnit().Accept(new SolidityAstVisitor(filePath, methodBodyRemovalResult)) as AstNode.FileNode;
+                return AstNodeToClassDtoConverter.ToFileDto(fileNode, source);
             }
             catch (Exception e)
             {
@@ -39,35 +38,6 @@ namespace antlr_parser.Antlr4Impl.Solidity
             }
 
             return null;
-        }
-        
-        public static FileDto Parse(string source, string filePath)
-        {
-            return ClassInfoToClassDtoConverter.ToParsingResultDto(OuterClassInfosFromSource(source, filePath).ToList(), source, filePath);
-        }
-
-
-        class SourceUnitListener : SolidityBaseListener
-        {
-            public readonly List<ClassInfo> ClassInfos = new List<ClassInfo>();
-            readonly string filePath;
-
-            public SourceUnitListener(string filePath)
-            {
-                this.filePath = filePath;
-            }
-
-            public override void EnterSourceUnit(SolidityParser.SourceUnitContext context)
-            {
-                foreach (SolidityParser.ContractDefinitionContext contractDefinitionContext in context
-                    .contractDefinition())
-                {
-                    ContractDefinitionListener contractDefinitionListener =
-                        new ContractDefinitionListener(filePath);
-                    contractDefinitionContext.EnterRule(contractDefinitionListener);
-                    ClassInfos.Add(contractDefinitionListener.ContractClassInfo);
-                }
-            }
         }
     }
 }

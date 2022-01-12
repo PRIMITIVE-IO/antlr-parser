@@ -17,7 +17,7 @@ namespace antlr_parser.Antlr4Impl
         {
             public readonly string Header;
             public readonly string Path;
-            public readonly PackageNode PackageNode;
+            [CanBeNull] public readonly PackageNode PackageNode;
             public readonly List<ClassNode> Classes;
             public readonly List<FieldNode> Fields;
             public readonly List<MethodNode> Methods;
@@ -27,7 +27,7 @@ namespace antlr_parser.Antlr4Impl
             [CanBeNull] public readonly CodeRange CodeRange;
 
             public FileNode(string path,
-                PackageNode packageNode,
+                [CanBeNull] PackageNode packageNode,
                 List<ClassNode> classes,
                 List<FieldNode> fields,
                 List<MethodNode> methods,

@@ -33,7 +33,7 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                 
                 classes.Add(new ClassDto(
                     path: fileNode.Path,
-                    packageName: fileNode.PackageNode.Name,
+                    packageName: fileNode.PackageNode?.Name,
                     name: Path.GetFileNameWithoutExtension(fileNode.Path),
                     fullyQualifiedName: fileNode.Path,
                     methods: fileNode.Methods.Select(it => ToDto(it, fileNode.Path)).ToList(),
@@ -58,13 +58,13 @@ namespace antlr_parser.Antlr4Impl.dto.converter
             [CanBeNull] string parentFqn)
         {
             string fullyQualifiedName = String.Join(".",
-                new List<string> { parentFqn ?? fileNode.PackageNode.Name, classNode.Name }.Where(it => it != null));
+                new List<string> { parentFqn ?? fileNode.PackageNode?.Name, classNode.Name }.Where(it => it != null));
 
             return new List<ClassDto>
                 {
                     new ClassDto(
                         fileNode.Path,
-                        fileNode.PackageNode.Name,
+                        fileNode.PackageNode?.Name,
                         classNode.Name,
                         fullyQualifiedName,
                         classNode.Methods.Select(it => ToDto(it, classNode.Name)).ToList(),
