@@ -18,14 +18,14 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                     f(x){ return 10}
                 }
             ".TrimIndent();
-            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
-            res.Count().Should().Be(1);
+            FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
+            res.Classes.Should().HaveCount(1);
 
-            ClassInfo klass = res.First();
-            klass.Name.ShortName.Should().Be("C");
+            ClassDto klass = res.Classes.First();
+            klass.Name.Should().Be("C");
             klass.Methods.Count().Should().Be(1);
-            MethodInfo method = klass.Methods.First();
-            method.Name.ShortName.Should().Be("f");
+            MethodDto method = klass.Methods.First();
+            method.Name.Should().Be("f");
         }
 
         [Fact]
@@ -36,14 +36,14 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                     f(x)
                 }
             ".TrimIndent();
-            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
-            res.Count().Should().Be(1);
+            FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
+            res.Classes.Count().Should().Be(1);
 
-            ClassInfo klass = res.First();
-            klass.Name.ShortName.Should().Be("C");
+            ClassDto klass = res.Classes.First();
+            klass.Name.Should().Be("C");
             klass.Methods.Count().Should().Be(1);
-            MethodInfo method = klass.Methods.First();
-            method.Name.ShortName.Should().Be("f");
+            MethodDto method = klass.Methods.First();
+            method.Name.Should().Be("f");
         }
 
         [Fact]
@@ -55,21 +55,20 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                     g(x) { return 20; }
                 }
             ".TrimIndent();
-            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
-            res.Count().Should().Be(1);
-            ClassInfo script = res.First();
-            script.Name.ShortName.Should().Be("path");
+            FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
+            res.Classes.Should().HaveCount(2);
+            ClassDto script = res.Classes[0];
+            script.Name.Should().Be("path");
 
             script.Methods.Count().Should().Be(1);
-            script.Methods.First().Name.ShortName.Should().Be("f");
-            script.Methods.First().SourceCode.Text.Should().Be("function f(x){ return 10; }");
-            script.InnerClasses.Count().Should().Be(1);
-            ClassInfo klass = script.InnerClasses.First();
-            klass.Name.ShortName.Should().Be("C");
+            script.Methods.First().Name.Should().Be("f");
+            script.Methods.First().SourceCode.Should().Be("function f(x){ return 10; }");
+            ClassDto klass = res.Classes[1];
+            klass.Name.Should().Be("C");
             klass.Methods.Count().Should().Be(1);
-            MethodInfo method = klass.Methods.First();
-            method.Name.ShortName.Should().Be("g");
-            method.SourceCode.Text.Should().Be("g(x) { return 20; }");
+            MethodDto method = klass.Methods.First();
+            method.Name.Should().Be("g");
+            method.SourceCode.Should().Be("g(x) { return 20; }");
         }
 
         [Fact]
@@ -78,14 +77,14 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             string source = @"
                 var x = 10;
             ".TrimIndent();
-            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
-            res.Count().Should().Be(1);
-            ClassInfo script = res.First();
-            script.Name.ShortName.Should().Be("path");
+            FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
+            res.Classes.Count().Should().Be(1);
+            ClassDto script = res.Classes.First();
+            script.Name.Should().Be("path");
 
             script.Fields.Count().Should().Be(1);
-            script.Fields.First().Name.ShortName.Should().Be("x");
-            script.Fields.First().SourceCode.Text.Should().Be("x = 10");
+            script.Fields.First().Name.Should().Be("x");
+            script.Fields.First().SourceCode.Should().Be("x = 10");
         }
 
         [Fact]
@@ -94,14 +93,14 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             string source = @"
                 const { y: { x } } = obj;
             ".TrimIndent();
-            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
-            res.Count().Should().Be(1);
-            ClassInfo script = res.First();
-            script.Name.ShortName.Should().Be("path");
+            FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
+            res.Classes.Count().Should().Be(1);
+            ClassDto script = res.Classes.First();
+            script.Name.Should().Be("path");
 
             script.Fields.Count().Should().Be(1);
-            script.Fields.First().Name.ShortName.Should().Be("x");
-            script.Fields.First().SourceCode.Text.Should().Be("{ y: { x } } = obj");
+            script.Fields.First().Name.Should().Be("x");
+            script.Fields.First().SourceCode.Should().Be("{ y: { x } } = obj");
         }
 
         [Fact]
@@ -110,14 +109,14 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             string source = @"
                 const { a: { x, y } } = obj;
             ".TrimIndent();
-            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
-            res.Count().Should().Be(1);
-            ClassInfo script = res.First();
-            script.Name.ShortName.Should().Be("path");
+            FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
+            res.Classes.Count().Should().Be(1);
+            ClassDto script = res.Classes.First();
+            script.Name.Should().Be("path");
 
             script.Fields.Count().Should().Be(1);
-            script.Fields.First().Name.ShortName.Should().Be("x,y");
-            script.Fields.First().SourceCode.Text.Should().Be("{ a: { x, y } } = obj");
+            script.Fields.First().Name.Should().Be("x,y");
+            script.Fields.First().SourceCode.Should().Be("{ a: { x, y } } = obj");
         }
 
         [Fact]
@@ -126,14 +125,14 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             string source = @"
                 const [x, ...y] = obj;
             ".TrimIndent();
-            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
-            res.Count().Should().Be(1);
-            ClassInfo script = res.First();
-            script.Name.ShortName.Should().Be("path");
+            FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
+            res.Classes.Count().Should().Be(1);
+            ClassDto script = res.Classes.First();
+            script.Name.Should().Be("path");
 
             script.Fields.Count().Should().Be(1);
-            script.Fields.First().Name.ShortName.Should().Be("x,y");
-            script.Fields.First().SourceCode.Text.Should().Be("[x, ...y] = obj");
+            script.Fields.First().Name.Should().Be("x,y");
+            script.Fields.First().SourceCode.Should().Be("[x, ...y] = obj");
         }
 
         [Fact]
@@ -142,14 +141,14 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             string source = @"
                 const { a: [x, ...y]} = obj;
             ".TrimIndent();
-            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
-            res.Count().Should().Be(1);
-            ClassInfo script = res.First();
-            script.Name.ShortName.Should().Be("path");
+            FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
+            res.Classes.Count().Should().Be(1);
+            ClassDto script = res.Classes.First();
+            script.Name.Should().Be("path");
 
             script.Fields.Count().Should().Be(1);
-            script.Fields.First().Name.ShortName.Should().Be("x,y");
-            script.Fields.First().SourceCode.Text.Should().Be("{ a: [x, ...y]} = obj");
+            script.Fields.First().Name.Should().Be("x,y");
+            script.Fields.First().SourceCode.Should().Be("{ a: [x, ...y]} = obj");
         }
 
         [Fact]
@@ -158,14 +157,14 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             string source = @"
                 const { a: [{x}, ...y], z} = obj;
             ".TrimIndent();
-            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
-            res.Count().Should().Be(1);
-            ClassInfo script = res.First();
-            script.Name.ShortName.Should().Be("path");
+            FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
+            res.Classes.Count().Should().Be(1);
+            ClassDto script = res.Classes.First();
+            script.Name.Should().Be("path");
 
             script.Fields.Count().Should().Be(1);
-            script.Fields.First().Name.ShortName.Should().Be("x,y,z");
-            script.Fields.First().SourceCode.Text.Should().Be("{ a: [{x}, ...y], z} = obj");
+            script.Fields.First().Name.Should().Be("x,y,z");
+            script.Fields.First().SourceCode.Should().Be("{ a: [{x}, ...y], z} = obj");
         }
 
         [Fact]
@@ -178,11 +177,11 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                     f(x){return 10}
                 }
             ".TrimIndent();
-            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
-            res.Count().Should().Be(1);
-            ClassInfo classInfo = res.First();
+            FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
+            res.Classes.Count().Should().Be(1);
+            ClassDto classInfo = res.Classes.First();
 
-            classInfo.SourceCode.Text.Should().Be(@"
+            classInfo.Header.Should().Be(@"
                 /**comment*/
                 class A {
             ".TrimIndent().Trim());
@@ -199,11 +198,11 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 /**comment2*/
                 class B {}
             ".TrimIndent();
-            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
+            FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
 
-            ClassInfo classB = res.ToArray()[1];
+            ClassDto classB = res.Classes.ToArray()[1];
 
-            classB.SourceCode.Text.Should().Be(@"
+            classB.Header.Should().Be(@"
                 /**comment2*/
                 class B {}
             ".TrimIndent().Trim());
@@ -217,11 +216,11 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 /**comment1*/
                 function f(){}
             ".TrimIndent();
-            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
+            FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
 
-            ClassInfo fakeClass = res.First();
+            ClassDto fakeClass = res.Classes.First();
 
-            fakeClass.SourceCode.Text.Should().Be(@"
+            fakeClass.Header.Should().Be(@"
                 requires('')
                 /**comment1*/
             ".TrimIndent().Trim());
@@ -237,16 +236,16 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 /**comment2*/
                 class A {}
             ".TrimIndent();
-            IEnumerable<ClassInfo> res = AntlrParseJavaScript.OuterClassInfosFromSource(source, "any/path");
+            FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
 
-            ClassInfo fakeClass = res.First();
+            ClassDto fakeClass = res.Classes[0];
 
-            fakeClass.SourceCode.Text.Should().Be(@"
+            fakeClass.Header.Should().Be(@"
                 requires('')
                 /**comment1*/
             ".TrimIndent().Trim());
 
-            fakeClass.InnerClasses.Single().SourceCode.Text.Should().Be(@"
+            res.Classes[1].Header.Should().Be(@"
                 /**comment2*/
                 class A {}
             ".TrimIndent().Trim());

@@ -2,27 +2,12 @@ using System;
 using System.Collections.Generic;
 using antlr_parser.Antlr4Impl.dto.converter;
 using Antlr4.Runtime;
-using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
 
 namespace antlr_parser.Antlr4Impl.C
 {
     public static class AntlrParseC
     {
-        public static IEnumerable<ClassInfo> OuterClassInfosFromSource(string source, string filePath)
-        {
-            PrimitiveLogger.Logger.Instance().Info($"Parsing file: {filePath}");
-            try
-            {
-                return AstToClassInfoConverter.ToClassInfo(ParseFileNode(source, filePath), SourceCodeLanguage.C);
-            }
-            catch (Exception e)
-            {
-                PrimitiveLogger.Logger.Instance().Error($"File: {filePath}, source: {source}, exception: {e}");
-            }
-
-            return new List<ClassInfo>();
-        }
 
         public static FileDto Parse(string source, string filePath)
         {

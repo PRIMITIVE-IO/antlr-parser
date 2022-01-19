@@ -31,10 +31,10 @@ namespace antlr_parser.tests.Java
                 }
             ".TrimIndent();
 
-            var fileDto = AntlrParseJava.Parse(source, "some/path");
+            FileDto fileDto = AntlrParseJava.Parse(source, "some/path");
 
             fileDto.Classes.Should().HaveCount(1);
-            var myClass = fileDto.Classes[0];
+            ClassDto myClass = fileDto.Classes[0];
             myClass.Name.Should().Be("MyClass");
             myClass.Modifier.Should().Be(AccessFlags.AccPublic);
             myClass.Fields.Should().HaveCount(1);
@@ -44,7 +44,7 @@ namespace antlr_parser.tests.Java
                 public class MyClass {".TrimIndent());
             myClass.CodeRange.Should().Be(TestUtils.CodeRange(1, 1, 5, 22));
 
-            var myField = myClass.Fields[0];
+            FieldDto myField = myClass.Fields[0];
             myField.Name.Should().Be("myField");
             myField.AccFlag.Should().Be(AccessFlags.AccPublic);
             myField.SourceCode.Should().Be(@"//field comment
@@ -52,7 +52,7 @@ namespace antlr_parser.tests.Java
             myField.CodeRange.Should().Be(TestUtils.CodeRange(5, 23, 7, 26));
 
             myClass.Methods.Should().HaveCount(2);
-            var constructor = myClass.Methods[0];
+            MethodDto constructor = myClass.Methods[0];
             constructor.Name.Should().Be("MyClass");
             constructor.AccFlag.Should().Be(AccessFlags.AccPublic);
             constructor.SourceCode.Should().Be(@"//constructor comment
@@ -60,7 +60,7 @@ namespace antlr_parser.tests.Java
                     }".TrimIndent());
             constructor.CodeRange.Should().Be(TestUtils.CodeRange(7, 27, 10, 5));
 
-            var myMethod = myClass.Methods[1];
+            MethodDto myMethod = myClass.Methods[1];
             myMethod.Name.Should().Be("myMethod");
             myMethod.AccFlag.Should().Be(AccessFlags.AccPublic);
             myMethod.SourceCode.Should().Be(@"//method comment
@@ -93,10 +93,10 @@ namespace antlr_parser.tests.Java
                 }
             ".TrimIndent();
 
-            var fileDto = AntlrParseJava.Parse(source, "some/path");
+            FileDto fileDto = AntlrParseJava.Parse(source, "some/path");
 
             fileDto.Classes.Should().HaveCount(1);
-            var myEnum = fileDto.Classes[0];
+            ClassDto myEnum = fileDto.Classes[0];
             myEnum.Header.Should().Be(@"package MyPackage;
 
                 // enum comment
@@ -108,7 +108,7 @@ namespace antlr_parser.tests.Java
 
             myEnum.Fields.Should().HaveCount(1);
             myEnum.Methods.Should().HaveCount(2); //method and constructor
-            var constructor = myEnum.Methods[0];
+            MethodDto constructor = myEnum.Methods[0];
             constructor.Name.Should().Be("MyEnum");
         }
 
@@ -128,12 +128,12 @@ namespace antlr_parser.tests.Java
                 }
             ".TrimIndent();
 
-            var fileDto = AntlrParseJava.Parse(source, "some/path");
+            FileDto fileDto = AntlrParseJava.Parse(source, "some/path");
 
             fileDto.Classes.Should().HaveCount(2);
-            var myClass = fileDto.Classes[0];
+            ClassDto myClass = fileDto.Classes[0];
             myClass.Name.Should().Be("MyClass");
-            var innerClass = fileDto.Classes[1];
+            ClassDto innerClass = fileDto.Classes[1];
             innerClass.ParentClassFqn.Should().Be("MyPackage.MyClass");
             innerClass.Name.Should().Be("InnerClass");
             innerClass.FullyQualifiedName.Should().Be("MyPackage.MyClass.InnerClass");
@@ -155,14 +155,14 @@ namespace antlr_parser.tests.Java
                 }
             ".TrimIndent();
 
-            var fileDto = AntlrParseJava.Parse(source, "some/path");
+            FileDto fileDto = AntlrParseJava.Parse(source, "some/path");
             fileDto.Classes.Should().HaveCount(1);
-            var myInterface = fileDto.Classes[0];
+            ClassDto myInterface = fileDto.Classes[0];
             myInterface.Name.Should().Be("MyInterface");
             myInterface.Modifier.Should().Be(AccessFlags.AccPublic);
             myInterface.Methods.Should().HaveCount(1);
             
-            var myMethod = myInterface.Methods[0];
+            MethodDto myMethod = myInterface.Methods[0];
             myMethod.Name.Should().Be("myMethod");
             myMethod.AccFlag.Should().Be(AccessFlags.AccPublic);
             myMethod.SourceCode.Should().Be(@"//method comment

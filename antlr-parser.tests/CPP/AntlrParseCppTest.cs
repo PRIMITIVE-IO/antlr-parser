@@ -5,6 +5,7 @@ using antlr_parser.Antlr4Impl;
 using antlr_parser.Antlr4Impl.CPP;
 using FluentAssertions;
 using PrimitiveCodebaseElements.Primitive;
+using PrimitiveCodebaseElements.Primitive.dto;
 using Xunit;
 
 namespace antlr_parser.tests.CPP
@@ -19,14 +20,14 @@ namespace antlr_parser.tests.CPP
                    return 10; 
                 }
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.First();
-            classInfo.Name.ShortName.Should().Be("path");
-            MethodInfo method = classInfo.Methods.Single();
+            ClassDto classInfo = classInfos.Classes.First();
+            classInfo.Name.Should().Be("path");
+            MethodDto method = classInfo.Methods.Single();
 
-            method.Name.ShortName.Should().Be("f");
-            method.SourceCode.Text.Should().Be(@"
+            method.Name.Should().Be("f");
+            method.SourceCode.Should().Be(@"
                 int f(int a, int b) {
                    return 10; 
                 }
@@ -41,14 +42,14 @@ namespace antlr_parser.tests.CPP
                    return 10; 
                 };
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.First();
-            classInfo.Name.ShortName.Should().Be("path");
-            MethodInfo method = classInfo.Methods.Single();
+            ClassDto classInfo = classInfos.Classes.First();
+            classInfo.Name.Should().Be("path");
+            MethodDto method = classInfo.Methods.Single();
 
-            method.Name.ShortName.Should().Be("f");
-            method.SourceCode.Text.Should().Be(@"
+            method.Name.Should().Be("f");
+            method.SourceCode.Should().Be(@"
                 int f(int a, int b) {
                    return 10; 
                 };
@@ -61,14 +62,14 @@ namespace antlr_parser.tests.CPP
             string source = @"
                 int f(int a, int b);
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.First();
-            classInfo.Name.ShortName.Should().Be("path");
-            MethodInfo method = classInfo.Methods.Single();
+            ClassDto classInfo = classInfos.Classes.First();
+            classInfo.Name.Should().Be("path");
+            MethodDto method = classInfo.Methods.Single();
 
-            method.Name.ShortName.Should().Be("f");
-            method.SourceCode.Text.Should().Be(@"
+            method.Name.Should().Be("f");
+            method.SourceCode.Should().Be(@"
                 int f(int a, int b);
             ".TrimIndent().Trim());
         }
@@ -84,21 +85,21 @@ namespace antlr_parser.tests.CPP
                     }
                 };
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.First();
-            classInfo.Name.ShortName.Should().Be("A");
-            MethodInfo method = classInfo.Methods.Single();
+            ClassDto classInfo = classInfos.Classes.First();
+            classInfo.Name.Should().Be("A");
+            MethodDto method = classInfo.Methods.Single();
 
-            method.Name.ShortName.Should().Be("f");
-            method.SourceCode.Text.Should().Be(@"
+            method.Name.Should().Be("f");
+            method.SourceCode.Should().Be(@"
                 int f(int a, int b) {
                    return 10; 
                 }
             ".TrimIndent().Trim());
 
-            FieldInfo field = classInfo.Fields.Single();
-            field.Name.ShortName.Should().Be("x");
+            FieldDto field = classInfo.Fields.Single();
+            field.Name.Should().Be("x");
         }
 
         [Fact]
@@ -110,15 +111,15 @@ namespace antlr_parser.tests.CPP
                     class C;
                 };
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.First();
-            classInfo.Name.ShortName.Should().Be("A");
+            ClassDto classInfo = classInfos.Classes.First();
+            classInfo.Name.Should().Be("A");
 
-            ClassInfo nestedClass = classInfo.InnerClasses.ToArray()[0];
-            nestedClass.Name.ShortName.Should().Be("B");
-            ClassInfo nestedClassWithForwardDeclaration = classInfo.InnerClasses.ToArray()[1];
-            nestedClassWithForwardDeclaration.Name.ShortName.Should().Be("C");
+            ClassDto nestedClass = classInfos.Classes[1];
+            nestedClass.Name.Should().Be("B");
+            ClassDto nestedClassWithForwardDeclaration = classInfos.Classes[2];
+            nestedClassWithForwardDeclaration.Name.Should().Be("C");
         }
 
         [Fact]
@@ -127,10 +128,10 @@ namespace antlr_parser.tests.CPP
             string source = @"
                 class A;
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.First();
-            classInfo.Name.ShortName.Should().Be("A");
+            ClassDto classInfo = classInfos.Classes.First();
+            classInfo.Name.Should().Be("A");
         }
 
         [Fact]
@@ -141,11 +142,11 @@ namespace antlr_parser.tests.CPP
                     int x;
                 };
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.First();
-            classInfo.Name.ShortName.Should().Be("A");
-            classInfo.Fields.Single().Name.ShortName.Should().Be("x");
+            ClassDto classInfo = classInfos.Classes.First();
+            classInfo.Name.Should().Be("A");
+            classInfo.Fields.Single().Name.Should().Be("x");
         }
 
         [Fact]
@@ -160,14 +161,14 @@ namespace antlr_parser.tests.CPP
                     int h(){return 0;};
                 };
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.First();
-            classInfo.Name.ShortName.Should().Be("A");
-            classInfo.Fields.ToArray()[0].Name.ShortName.Should().Be("x");
-            classInfo.Fields.ToArray()[1].Name.ShortName.Should().Be("y");
-            classInfo.Methods.ToArray()[0].Name.ShortName.Should().Be("f");
-            classInfo.Methods.ToArray()[1].Name.ShortName.Should().Be("h");
+            ClassDto classInfo = classInfos.Classes.First();
+            classInfo.Name.Should().Be("A");
+            classInfo.Fields.ToArray()[0].Name.Should().Be("x");
+            classInfo.Fields.ToArray()[1].Name.Should().Be("y");
+            classInfo.Methods.ToArray()[0].Name.Should().Be("f");
+            classInfo.Methods.ToArray()[1].Name.Should().Be("h");
         }
 
         [Fact]
@@ -178,11 +179,11 @@ namespace antlr_parser.tests.CPP
                     double f();
                 };
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.First();
-            classInfo.Name.ShortName.Should().Be("A");
-            classInfo.Methods.Single().Name.ShortName.Should().Be("f");
+            ClassDto classInfo = classInfos.Classes.First();
+            classInfo.Name.Should().Be("A");
+            classInfo.Methods.Single().Name.Should().Be("f");
         }
 
         [Fact]
@@ -194,12 +195,12 @@ namespace antlr_parser.tests.CPP
                     void f(int i);
                 };
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.First();
-            classInfo.Name.ShortName.Should().Be("S");
-            classInfo.Fields.Single().Name.ShortName.Should().Be("x");
-            classInfo.Methods.Single().Name.ShortName.Should().Be("f");
+            ClassDto classInfo = classInfos.Classes.First();
+            classInfo.Name.Should().Be("S");
+            classInfo.Fields.Single().Name.Should().Be("x");
+            classInfo.Methods.Single().Name.Should().Be("f");
         }
 
         [Fact]
@@ -210,12 +211,12 @@ namespace antlr_parser.tests.CPP
                     int y = 0;
                     static a b GUARDED_BY(c) = 0;
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.First();
-            classInfo.Fields.ToArray()[0].Name.ShortName.Should().Be("x");
-            classInfo.Fields.ToArray()[1].Name.ShortName.Should().Be("y");
-            // classInfo.Fields.ToArray()[2].Name.ShortName.Should().Be("b"); TODO GUARDED BY is a macro :(
+            ClassDto classInfo = classInfos.Classes.First();
+            classInfo.Fields.ToArray()[0].Name.Should().Be("x");
+            classInfo.Fields.ToArray()[1].Name.Should().Be("y");
+            // classInfo.Fields.ToArray()[2].Name.Should().Be("b"); TODO GUARDED BY is a macro :(
         }
 
         [Fact]
@@ -227,10 +228,10 @@ namespace antlr_parser.tests.CPP
                        
                     }
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.First();
-            classInfo.Methods.Single().Name.ShortName.Should().Be("T1");
+            ClassDto classInfo = classInfos.Classes.First();
+            classInfo.Methods.Single().Name.Should().Be("T1");
         }
 
         [Fact]
@@ -241,10 +242,10 @@ namespace antlr_parser.tests.CPP
                  
                 }
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.First();
-            classInfo.Methods.Single().Name.ShortName.Should().Be("()");
+            ClassDto classInfo = classInfos.Classes.First();
+            classInfo.Methods.Single().Name.Should().Be("()");
         }
 
         [Fact]
@@ -255,10 +256,10 @@ namespace antlr_parser.tests.CPP
                     class A{};
                 }
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.Single();
-            classInfo.Name.ShortName.Should().Be("A");
+            ClassDto classInfo = classInfos.Classes.Single();
+            classInfo.Name.Should().Be("A");
         }
 
         [Fact]
@@ -270,10 +271,10 @@ namespace antlr_parser.tests.CPP
                     
                 }
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.Single();
-            classInfo.Methods.Single().Name.ShortName.Should().Be("<<");
+            ClassDto classInfo = classInfos.Classes.Single();
+            classInfo.Methods.Single().Name.Should().Be("<<");
         }
 
         [Fact]
@@ -285,11 +286,11 @@ namespace antlr_parser.tests.CPP
                     B,
                 };
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.Single();
-            classInfo.Name.ShortName.Should().Be("E");
-            classInfo.SourceCode.Text.Should().Be(@"
+            ClassDto classInfo = classInfos.Classes.Single();
+            classInfo.Name.Should().Be("E");
+            classInfo.Header.Should().Be(@"
                 enum class E {
             ".TrimIndent().Trim());
         }
@@ -300,10 +301,10 @@ namespace antlr_parser.tests.CPP
             string source = @"
                 Session::~Session(){}
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.Single();
-            classInfo.Methods.Single().Name.ShortName.Should().Be("~Session");
+            ClassDto classInfo = classInfos.Classes.Single();
+            classInfo.Methods.Single().Name.Should().Be("~Session");
         }
 
         [Fact]
@@ -314,10 +315,10 @@ namespace antlr_parser.tests.CPP
                 {
                 }
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.Single();
-            classInfo.Methods.Single().Name.ShortName.Should().Be("bool");
+            ClassDto classInfo = classInfos.Classes.Single();
+            classInfo.Methods.Single().Name.Should().Be("bool");
         }     
         [Fact]
         void StaticConst()
@@ -325,10 +326,10 @@ namespace antlr_parser.tests.CPP
             string source = @"
                 static const size_t MAX_GETUTXOS_OUTPOINTS = 15;
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.Single();
-            classInfo.Fields.Single().Name.ShortName.Should().Be("MAX_GETUTXOS_OUTPOINTS");
+            ClassDto classInfo = classInfos.Classes.Single();
+            classInfo.Fields.Single().Name.Should().Be("MAX_GETUTXOS_OUTPOINTS");
         }
 
         //[Fact]TODO
@@ -339,37 +340,36 @@ namespace antlr_parser.tests.CPP
                     bool (*handler)(const std::any& context, HTTPRequest* req, const std::string& strReq);
                 };
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             throw new Exception();
         }
 
-        [Fact]
+        //[Fact] TODO
         void NestedNamespaces()
         {
             string source = @"
                 namespace leveldb
                 {
                     namespace {
-                    static uint32_t BloomHash(const Slice & key) {
-                        return Hash(key.data(), key.size(), 0xbc9f1d34);
+                        static uint32_t BloomHash(const Slice & key) {
+                            return Hash(key.data(), key.size(), 0xbc9f1d34);
+                        }
+
+                    } // namespace
+
+                    const FilterPolicy* NewBloomFilterPolicy(int bits_per_key) {
+                        return new BloomFilterPolicy(bits_per_key);
                     }
-
-                } // namespace
-
-                const FilterPolicy* NewBloomFilterPolicy(int bits_per_key) {
-                    return new BloomFilterPolicy(bits_per_key);
-                }
 
                 } // namespace leveldb
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.Single();
-            classInfo.Name.ShortName.Should().Be("path");
-            classInfo.InnerClasses.Should().BeEmpty();
-            classInfo.Methods.ToArray()[0].Name.ShortName.Should().Be("NewBloomFilterPolicy");
-            classInfo.Methods.ToArray()[1].Name.ShortName.Should().Be("BloomHash");
+            ClassDto classInfo = classInfos.Classes[0];
+            classInfo.Name.Should().Be("path");
+            classInfo.Methods.ToArray()[0].Name.Should().Be("NewBloomFilterPolicy");
+            classInfo.Methods.ToArray()[1].Name.Should().Be("BloomHash");
         }
         
         [Fact]
@@ -383,10 +383,10 @@ namespace antlr_parser.tests.CPP
                     int f(){};
                 };
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.Single();
-            classInfo.SourceCode.Text.Should().Be(@"
+            ClassDto classInfo = classInfos.Classes.Single();
+            classInfo.Header.Should().Be(@"
                 /**comment*/
                 class A{
             ".TrimIndent().Trim());
@@ -404,10 +404,10 @@ namespace antlr_parser.tests.CPP
                     int f(){};
                 };
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.Single().InnerClasses.Single();
-            classInfo.SourceCode.Text.Should().Be(@"
+            ClassDto classInfo = classInfos.Classes[1];
+            classInfo.Header.Should().Be(@"
                 /**comment*/
                 class A{
             ".TrimIndent().Trim());
@@ -425,11 +425,11 @@ namespace antlr_parser.tests.CPP
                     int f(){};
                 };
             ".TrimIndent();
-            IEnumerable<ClassInfo> classInfos = AntlrParseCpp.OuterClassInfosFromSource(source, "path");
+            FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-            ClassInfo classInfo = classInfos.ToArray()[1];
-            classInfo.Name.ShortName.Should().Be("B");
-            classInfo.SourceCode.Text.Should().Be(@"
+            ClassDto classInfo = classInfos.Classes.ToArray()[1];
+            classInfo.Name.Should().Be("B");
+            classInfo.Header.Should().Be(@"
                 /**comment*/
                 class B{
             ".TrimIndent().Trim());

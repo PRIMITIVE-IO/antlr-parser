@@ -11,10 +11,6 @@ namespace antlr_parser.Antlr4Impl.Java
 {
     public static class AntlrParseJava
     {
-        public static IEnumerable<ClassInfo> OuterClassInfosFromSource(string source, string filePath)
-        {
-            return AstToClassInfoConverter.ToClassInfo(ParseFileNode(source, filePath), SourceCodeLanguage.Java);
-        }
 
         public static FileDto Parse(string source, string filePath)
         {

@@ -22,15 +22,13 @@ namespace antlr_parser.Antlr4Impl.dto.converter
 
         static List<ClassDto> ExtractClassDtos(AstNode.FileNode fileNode)
         {
-            IEnumerable<AstNode.ClassNode> classesFromNestedNamespaces =
-                AstToClassInfoConverter.ExtractNested(fileNode.Namespaces, it => it.Classes);
+            IEnumerable<ClassDto> classesFromNestedNamespaces = ExtractNested(fileNode.Namespaces, fileNode);
 
             List<ClassDto> classes = new List<ClassDto>();
             bool fakePresent = false;
             if (fileNode.Fields.Count + fileNode.Methods.Count != 0)
             {
-                
-                classes.Add(new ClassDto(
+                classes.Add( new ClassDto(
                     path: fileNode.Path,
                     packageName: fileNode.PackageNode?.Name,
                     name: Path.GetFileNameWithoutExtension(fileNode.Path),
@@ -46,11 +44,60 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                 fakePresent = true;
             }
 
-            classes.AddRange(fileNode.Classes
+            IEnumerable<ClassDto> classes2 = fileNode.Classes
+                .SelectMany(classNode => ToDto(classNode, fileNode, fakePresent ? fileNode.Path : null));
+
+            return classes
+                .Concat(classes2)
                 .Concat(classesFromNestedNamespaces)
-                .SelectMany(classNode => ToDto(classNode, fileNode, fakePresent ? fileNode.Path : null))
+                .ToList();
+        }
+
+        /// <summary>
+        /// extracts nested fields,methods or classes from list of namespaces
+        /// </summary>
+        /// <param name="namespaces"></param>
+        /// <param name="extractor"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        static IEnumerable<ClassDto> ExtractNested(List<AstNode.Namespace> namespaces, AstNode.FileNode fileNode)
+        {
+            return namespaces.SelectMany(nnmspace =>
+                {
+                    List<ClassDto> fakeClass = ExtractFakeClass(nnmspace, fileNode);
+
+                    IEnumerable<ClassDto> classes = nnmspace.Classes.SelectMany(it => ToDto(it, fileNode, parentFqn: null));
+                    IEnumerable<ClassDto> nested = ExtractNested(nnmspace.Namespaces, fileNode);
+
+                    return fakeClass.Concat(classes).Concat(nested);
+                }
             );
-            return classes;
+        }
+
+        static List<ClassDto> ExtractFakeClass(AstNode.Namespace ns, AstNode.FileNode fileNode)
+        {
+            if (ns.Fields.Count + ns.Methods.Count > 0)
+            {
+                return new List<ClassDto>
+                {
+                    //TODO implement fake classes for namespaces
+                    new ClassDto(
+                        path: fileNode.Path,
+                        packageName: fileNode.PackageNode?.Name, //ns.Name,
+                        name: fileNode.Path,//ns.Name,
+                        fullyQualifiedName: fileNode.Path,//parent + ns.Name,
+                        methods: ns.Methods.Select(it => ToDto(it, fileNode.Path)).ToList(),
+                        fields: ns.Fields.Select(it => ToDto(it)).ToList(),
+                        modifier: AccessFlags.None,
+                        startIdx: 0,//ns.StartIdx,
+                        endIdx: fileNode.Header.Length ,//ns.EndIdx,
+                        header: fileNode.Header,//ns.Header,
+                        codeRange: fileNode.CodeRange//ns.CodeRange
+                    )
+                };
+            }
+        
+            return new List<ClassDto>();
         }
 
         static IEnumerable<ClassDto> ToDto(AstNode.ClassNode classNode, AstNode.FileNode fileNode,

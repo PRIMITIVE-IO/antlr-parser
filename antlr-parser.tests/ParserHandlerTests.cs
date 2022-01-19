@@ -23,27 +23,21 @@ namespace antlr_parser.tests
         public void ParserHandlerShouldReturnCollectionWithOneElement()
         {
             //Act
-            IEnumerable<ClassInfo> result = FileDtoToClassInfoConverter.ToClassInfos(new List<FileDto>
-            {
-                ParserHandler.FileDtoFromSourceText("test.java", ".java", testJavaClassSourceCode)
-            });
+            FileDto result = ParserHandler.FileDtoFromSourceText("test.java", ".java", testJavaClassSourceCode);
 
             //Verify
             result.Should().NotBeNull();
-            result.Count().Should().Be(2);
+            result.Classes.Count().Should().Be(2);
         }
 
         [Fact]
         public void ParserHandlerShouldReturnCollectionWithAnyClassInfoWithClassName()
         {
             //Act
-            IEnumerable<ClassInfo> result = FileDtoToClassInfoConverter.ToClassInfos(new List<FileDto>
-            {
-                ParserHandler.FileDtoFromSourceText("test.java", ".java", testJavaClassSourceCode)
-            });
+            FileDto result = ParserHandler.FileDtoFromSourceText("test.java", ".java", testJavaClassSourceCode);
 
             //Verify
-            result.ToList().First().Children.Any(x => x.Name.ShortName == "doWork").Should().BeTrue();
+            result.Classes[0].Methods.Any(x => x.Name == "doWork").Should().BeTrue();
         }
 
         [Fact]
@@ -63,30 +57,27 @@ namespace antlr_parser.tests
                 
                 fun outerFunction() { }
 
-            ".TrimIndent();
-
-            IEnumerable<ClassInfo> result = FileDtoToClassInfoConverter.ToClassInfos(new List<FileDto>
-            {
-                ParserHandler.FileDtoFromSourceText("kotlin.kt", ".kt", source)
-            });
+            ".TrimIndent(); 
+            
+            FileDto result = ParserHandler.FileDtoFromSourceText("kotlin.kt", ".kt", source);
 
             //Verify
-            ClassInfo fileInfo = result.ToList().First();
-            fileInfo.SourceCode.Text.Should().Be(
+            ClassDto fileInfo = result.Classes.First();
+            fileInfo.Header.Should().Be(
                 @"package pkg
 
                   /** comment */".TrimIndent());
 
-            ClassInfo classInfo = fileInfo.InnerClasses.Single();
-            classInfo.Name.ShortName.Should().Be("C");
-            classInfo.SourceCode.Text.Should().Be(@"
+            ClassDto classInfo = result.Classes[1];
+            classInfo.Name.Should().Be("C");
+            classInfo.Header.Should().Be(@"
                 package pkg
                 
                 /** comment */
                 class C {
             ".TrimIndent().Trim());
 
-            classInfo.Methods.Single().SourceCode.Text.Should().Be("fun method() {\n  println()\n}");
+            classInfo.Methods.Single().SourceCode.Should().Be("fun method() {\n  println()\n}");
         }
     }
 }

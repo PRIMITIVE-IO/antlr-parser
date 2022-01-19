@@ -2,17 +2,12 @@ using System;
 using System.Collections.Generic;
 using antlr_parser.Antlr4Impl.dto.converter;
 using Antlr4.Runtime;
-using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
 
 namespace antlr_parser.Antlr4Impl.TypeScript
 {
     public static class AntlrParseTypeScript
     {
-        public static IEnumerable<ClassInfo> OuterClassInfosFromSource(string source, string filePath)
-        {
-            return AstToClassInfoConverter.ToClassInfo(ParseFileNode(source, filePath), SourceCodeLanguage.TypeScript);
-        }
 
         public static FileDto Parse(string source, string filePath)
         {

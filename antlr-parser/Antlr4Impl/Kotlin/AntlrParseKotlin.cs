@@ -2,28 +2,12 @@ using System;
 using System.Collections.Generic;
 using antlr_parser.Antlr4Impl.dto.converter;
 using Antlr4.Runtime;
-using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
 
 namespace antlr_parser.Antlr4Impl.Kotlin
 {
     public static class AntlrParseKotlin
     {
-        public static IEnumerable<ClassInfo> OuterClassInfosFromSource(string source, string filePath)
-        {
-            try
-            {
-                AstNode.FileNode astFileNode = ParseFileNode(source, filePath);
-
-                return AstToClassInfoConverter.ToClassInfo(astFileNode, SourceCodeLanguage.Kotlin);
-            }
-            catch (Exception e)
-            {
-                PrimitiveLogger.Logger.Instance().Error($"Failed to parse Kotlin file {filePath}", e);
-            }
-
-            return null;
-        }
 
         public static FileDto Parse(string source, string filePath)
         {

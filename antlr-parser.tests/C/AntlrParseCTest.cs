@@ -5,12 +5,17 @@ using antlr_parser.Antlr4Impl;
 using antlr_parser.Antlr4Impl.C;
 using FluentAssertions;
 using PrimitiveCodebaseElements.Primitive;
+using PrimitiveCodebaseElements.Primitive.dto;
 using Xunit;
 
 namespace antlr_parser.tests.C
 {
     public class AntlrParseCTest
     {
+        public AntlrParseCTest()
+        {
+        }
+
         [Fact]
         void ParseFunctions()
         {
@@ -23,11 +28,11 @@ namespace antlr_parser.tests.C
                 }"
                 .TrimIndent();
 
-            IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path");
+            FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
-            MethodInfo method = classInfos.Single().Methods.Single();
-            method.Name.ShortName.Should().Be("addNumbers");
-            method.SourceCode.Text.Should().Be(source.TrimStart('\n'));
+            MethodDto method = fileDto.Classes[0].Methods[0];
+            method.Name.Should().Be("addNumbers");
+            method.SourceCode.Should().Be(source.TrimStart('\n'));
         }
 
         [Fact]
@@ -38,15 +43,14 @@ namespace antlr_parser.tests.C
                 {
                     dataType member1;
                 };".TrimIndent();
-            IEnumerable<ClassInfo> classInfos =
-                AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
+            FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
-            classInfos.Count().Should().Be(1);
-            ClassInfo classInfo = classInfos.Single();
-            classInfo.className.ShortName.Should().Be("structureName");
-            classInfo.Fields.First().FieldName.ShortName.Should().Be("member1");
+            fileDto.Classes.Should().HaveCount(1);
+            ClassDto classInfo = fileDto.Classes[0];
+            classInfo.Name.Should().Be("structureName");
+            classInfo.Fields.First().Name.Should().Be("member1");
         }
-        
+
         [Fact]
         void ParseStructArrayField()
         {
@@ -55,13 +59,12 @@ namespace antlr_parser.tests.C
                 {
                     dataType member1[10];
                 };".TrimIndent();
-            IEnumerable<ClassInfo> classInfos =
-                AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
+            FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
-            classInfos.Count().Should().Be(1);
-            ClassInfo classInfo = classInfos.Single();
-            classInfo.className.ShortName.Should().Be("structureName");
-            classInfo.Fields.First().FieldName.ShortName.Should().Be("member1");
+            fileDto.Classes.Should().HaveCount(1);
+            ClassDto classInfo = fileDto.Classes[0];
+            classInfo.Name.Should().Be("structureName");
+            classInfo.Fields.First().Name.Should().Be("member1");
         }
 
         [Fact]
@@ -75,16 +78,26 @@ namespace antlr_parser.tests.C
                       int dd;  
                     }doj;  
                 };".TrimIndent();
-            IEnumerable<ClassInfo> classInfos =
-                AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
+            FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
-            classInfos.Count().Should().Be(1);
-            ClassInfo employeeClass = classInfos.Single();
-            employeeClass.className.ShortName.Should().Be("Employee");
-            employeeClass.Fields.Single().FieldName.ShortName.Should().Be("doj");
-            employeeClass.InnerClasses.Count().Should().Be(1);
-            ClassInfo dateClass = employeeClass.InnerClasses.First();
-            dateClass.className.ShortName.Should().Be("Date");
+            fileDto.Classes.Should().HaveCount(2);
+            ClassDto employeeClass = fileDto.Classes[0];
+            employeeClass.Name.Should().Be("Employee");
+            employeeClass.Fields.Single().Name.Should().Be("doj");
+            ClassDto dateClass = fileDto.Classes[1];
+            dateClass.Name.Should().Be("Date");
+        }
+        
+        //TODO [Fact]
+        public void ClassNameWithoutNamespace()
+        {
+            string source = @"
+                struct Employee  
+                {     
+                    int x;
+                };".TrimIndent();
+            FileDto fileDto = AntlrParseC.Parse(source, "file/path");
+            fileDto.Classes[0].FullyQualifiedName.Should().Be("Employee");
         }
 
         [Fact]
@@ -108,9 +121,9 @@ namespace antlr_parser.tests.C
                 #include ""CxxSymbolsX.h""
                 #include ""HeaderX.h""
                 #include ""SymbolsX.h""
-            ".TrimIndent(); 
-            IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
-            classInfos.Count().Should().Be(1);
+            ".TrimIndent();
+            FileDto fileDto = AntlrParseC.Parse(source, "file/path");
+            fileDto.Classes.Should().HaveCount(0);
         }
 
         [Fact]
@@ -154,14 +167,14 @@ namespace antlr_parser.tests.C
                   );
                 }
             ".TrimIndent();
-            
-            IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
 
-            IEnumerable<MethodInfo> methodInfos = classInfos.First().Methods;
+            FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
-           // methodInfos.Count().Should().Be(2);
-            MethodInfo vaweMethod = methodInfos.Single(it=> it.Name.ShortName == "AudioDecodeWave");
-            methodInfos.Single(it => it.Name.ShortName == "AudioDecodeMp3");
+            List<MethodDto> methodInfos = fileDto.Classes[0].Methods;
+
+            // methodInfos.Count().Should().Be(2);
+            MethodDto vaweMethod = methodInfos.Single(it => it.Name == "AudioDecodeWave");
+            methodInfos.Single(it => it.Name == "AudioDecodeMp3");
         }
 
         [Fact]
@@ -182,21 +195,21 @@ namespace antlr_parser.tests.C
      
                 }
             ".TrimIndent();
-            
-            IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
 
-            IEnumerable<MethodInfo> methodInfos = classInfos.First().Methods;
-            MethodInfo fMethod = methodInfos.SingleOrDefault(it => it.Name.ShortName == "f");
+            FileDto fileDto = AntlrParseC.Parse(source, "file/path");
+
+            List<MethodDto> methodInfos = fileDto.Classes[0].Methods;
+            MethodDto? fMethod = methodInfos.SingleOrDefault(it => it.Name == "f");
             fMethod.Should().NotBeNull();
-            fMethod.SourceCode.Text.Trim().Should().Be(@"
+            fMethod.SourceCode.Trim().Should().Be(@"
                 int f(int a, int b)
                 {
                     for(i = 0; i<0; i++){
                     };
                 }".TrimIndent().Trim());
-            methodInfos.SingleOrDefault(it => it.Name.ShortName == "g").Should().NotBeNull();
+            methodInfos.SingleOrDefault(it => it.Name == "g").Should().NotBeNull();
         }
-        
+
         [Fact]
         void ParseReferenceFieldNames()
         {
@@ -205,12 +218,12 @@ namespace antlr_parser.tests.C
                     const struct b *c;
                 };
             ".TrimIndent();
-            
-            IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
 
-            classInfos.First().Fields.First().Name.ShortName.Should().Be("c");
+            FileDto fileDto = AntlrParseC.Parse(source, "file/path");
+
+            fileDto.Classes.First().Fields.First().Name.Should().Be("c");
         }
-        
+
         [Fact]
         void ParseMultiFieldNames()
         {
@@ -219,12 +232,12 @@ namespace antlr_parser.tests.C
                    struct b c,d;
                 };
             ".TrimIndent();
-            
-            IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
 
-            classInfos.First().Fields.Single().Name.ShortName.Should().Be("c,d");
+            FileDto fileDto = AntlrParseC.Parse(source, "file/path");
+
+            fileDto.Classes.First().Fields.Single().Name.Should().Be("c,d");
         }
-        
+
         [Fact]
         void FirstClassHeader()
         {
@@ -235,16 +248,16 @@ namespace antlr_parser.tests.C
                    struct a b;
                 };
             ".TrimIndent();
-            
-            IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
 
-            classInfos.First().SourceCode.Text.Should().Be(@"
+            FileDto fileDto = AntlrParseC.Parse(source, "file/path");
+
+            fileDto.Classes.First().Header.Should().Be(@"
                 #include ""something""
                 /**comment*/
                 struct A {
             ".TrimIndent().Trim());
         }
-        
+
         [Fact]
         void SecondClassHeader()
         {
@@ -259,10 +272,10 @@ namespace antlr_parser.tests.C
                     struct c d;
                 };
             ".TrimIndent();
-            
-            IEnumerable<ClassInfo> classInfos = AntlrParseC.OuterClassInfosFromSource(source, "file/path").ToImmutableList();
 
-            classInfos.ToArray()[1].SourceCode.Text.Should().Be(@"
+            FileDto fileDto = AntlrParseC.Parse(source, "file/path");
+
+            fileDto.Classes[2].Header.Should().Be(@"
                 /**comment2*/
                 struct B {
             ".TrimIndent().Trim());
