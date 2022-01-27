@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
+using PrimitiveCodebaseElements.Primitive;
 using Xunit;
 
 namespace antlr_parser.Antlr4Impl.JavaScript

@@ -1,7 +1,7 @@
 using System.Linq;
-using antlr_parser.Antlr4Impl;
 using antlr_parser.Antlr4Impl.Kotlin;
 using FluentAssertions;
+using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
 using Xunit;
 

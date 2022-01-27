@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using antlr_parser.Antlr4Impl;
 using antlr_parser.Antlr4Impl.C;
 using FluentAssertions;
+using PrimitiveCodebaseElements.Primitive;
 using Xunit;
 
 namespace antlr_parser.tests.C

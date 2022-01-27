@@ -1,5 +1,6 @@
 using antlr_parser.Antlr4Impl;
 using FluentAssertions;
+using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
 using Xunit;
 
