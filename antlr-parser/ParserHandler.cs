@@ -12,6 +12,7 @@ using PrimitiveCodebaseElements.Primitive.dto;
 
 namespace antlr_parser
 {
+    [PublicAPI]
     public static class ParserHandler
     {
         // see: https://github.com/dyne/file-extension-list
@@ -20,26 +21,6 @@ namespace antlr_parser
             {
                 ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3", ".js", ".jsx", ".kt",
                 ".sol", ".ts"
-            };
-
-        static readonly HashSet<string> SupportedUnparsableFiles =
-            new HashSet<string>
-            {
-                // files to be parsed in the future
-                ".sc", ".rs", ".go", ".class", ".clj", ".cxx", ".el", ".lua", ".m4", ".php", ".pl", ".po", ".rb", ".sh",
-                ".swift", ".vb",
-                // other data formats
-                ".txt", ".md", ".html", ".json", ".xml", ".sql", ".yaml", ".hbs", ".sh", ".vcxproj", ".xcodeproj",
-                ".csproj", ".xml", ".diff", ".patch", ".log", ".rtf", ".tex", ".odt", ".org", ".pdf", ".rst", ".wpd",
-                ".wps"
-            };
-
-        public static readonly HashSet<string> SupportedLibraryFiles =
-            new HashSet<string>
-            {
-                ".jar", ".war", ".ear", // Java 
-                ".dll", ".exe", // CLR
-                ".so", ".lib", ".a" // Linux
             };
 
         [CanBeNull]

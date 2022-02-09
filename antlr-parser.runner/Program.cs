@@ -13,7 +13,7 @@ using PrimitiveCodebaseElements.Primitive.dto;
 using Argument = System.CommandLine.Argument;
 using FileInfo = System.IO.FileInfo;
 
-namespace antlr_parser
+namespace antlr_parser.runner
 {
     static class Program
     {
