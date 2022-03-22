@@ -35,7 +35,16 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             List<Tuple<int, int>> blocksToRemove = matches.Select(currentMatch =>
             {
                 int openedCurlyPosition = currentMatch.Groups[4].Index;
-                int closedCurlyPosition = StringUtil.ClosedCurlyPosition(source, openedCurlyPosition);
+                int closedCurlyPosition = -1;
+                try
+                {
+                    closedCurlyPosition = StringUtil.ClosedCurlyPosition(source, openedCurlyPosition);
+                }
+                catch (Exception e)
+                {
+                    PrimitiveLogger.Logger.Instance().Error("could not find closed curly position");
+                    return new Tuple<int, int>(0, 0);
+                }
 
                 int afterMethodDeclarationPosition = currentMatch.Groups[3].Index;
 

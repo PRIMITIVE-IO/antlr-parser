@@ -26,8 +26,23 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             List<AstNode.ClassNode> classes = new List<AstNode.ClassNode>();
             List<AstNode.MethodNode> methods = new List<AstNode.MethodNode>();
             List<AstNode.FieldNode> fields = new List<AstNode.FieldNode>();
-            foreach (JavaScriptParser.SourceElementContext sourceElementContext in context.sourceElements()
-                .sourceElement())
+
+            if (context.sourceElements() == null)
+            {
+                return new AstNode.FileNode(
+                    FilePath,
+                    null,
+                    classes,
+                    fields,
+                    methods,
+                    "",
+                    new List<AstNode.Namespace>(),
+                    SourceCodeLanguage.JavaScript,
+                    false,
+                    new CodeRange(new CodeLocation(0, 0), new CodeLocation(0, 0)));
+            }
+            
+            foreach (JavaScriptParser.SourceElementContext sourceElementContext in context.sourceElements().sourceElement())
             {
                 JavaScriptParser.StatementContext statement = sourceElementContext.statement();
 
@@ -64,15 +79,15 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
             return new AstNode.FileNode(
                 path: FilePath,
-                new AstNode.PackageNode(""),
-                classes,
-                fields,
-                methods,
-                header,
+                packageNode: new AstNode.PackageNode(""),
+                classes: classes,
+                fields: fields,
+                methods: methods,
+                header: header,
+                namespaces: new List<AstNode.Namespace>(),
                 language: SourceCodeLanguage.Java,
                 isTest: false,
-                codeRange: new CodeRange(new CodeLocation(1, 1), headerEndLocation),
-                namespaces: new List<AstNode.Namespace>()
+                codeRange: new CodeRange(new CodeLocation(1, 1), headerEndLocation)
             );
         }
 
