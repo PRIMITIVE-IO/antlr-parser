@@ -4,6 +4,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
+using static PrimitiveCodebaseElements.Primitive.IEnumerableUtils;
 
 namespace antlr_parser.Antlr4Impl.dto.converter
 {
@@ -28,7 +29,7 @@ namespace antlr_parser.Antlr4Impl.dto.converter
             bool fakePresent = false;
             if (fileNode.Fields.Count + fileNode.Methods.Count != 0)
             {
-                classes.Add( new ClassDto(
+                classes.Add(new ClassDto(
                     path: fileNode.Path,
                     packageName: fileNode.PackageNode?.Name,
                     name: Path.GetFileNameWithoutExtension(fileNode.Path),
@@ -66,7 +67,8 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                 {
                     List<ClassDto> fakeClass = ExtractFakeClass(nnmspace, fileNode);
 
-                    IEnumerable<ClassDto> classes = nnmspace.Classes.SelectMany(it => ToDto(it, fileNode, parentFqn: null));
+                    IEnumerable<ClassDto> classes =
+                        nnmspace.Classes.SelectMany(it => ToDto(it, fileNode, parentFqn: null));
                     IEnumerable<ClassDto> nested = ExtractNested(nnmspace.Namespaces, fileNode);
 
                     return fakeClass.Concat(classes).Concat(nested);
@@ -84,27 +86,36 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                     new ClassDto(
                         path: fileNode.Path,
                         packageName: fileNode.PackageNode?.Name, //ns.Name,
-                        name: fileNode.Path,//ns.Name,
-                        fullyQualifiedName: fileNode.Path,//parent + ns.Name,
+                        name: fileNode.Path, //ns.Name,
+                        fullyQualifiedName: fileNode.Path, //parent + ns.Name,
                         methods: ns.Methods.Select(it => ToDto(it, fileNode.Path)).ToList(),
                         fields: ns.Fields.Select(it => ToDto(it)).ToList(),
                         modifier: AccessFlags.None,
-                        startIdx: 0,//ns.StartIdx,
-                        endIdx: fileNode.Header.Length ,//ns.EndIdx,
-                        header: fileNode.Header,//ns.Header,
-                        codeRange: fileNode.CodeRange//ns.CodeRange
+                        startIdx: 0, //ns.StartIdx,
+                        endIdx: fileNode.Header.Length, //ns.EndIdx,
+                        header: fileNode.Header, //ns.Header,
+                        codeRange: fileNode.CodeRange //ns.CodeRange
                     )
                 };
             }
-        
+
             return new List<ClassDto>();
         }
 
         static IEnumerable<ClassDto> ToDto(AstNode.ClassNode classNode, AstNode.FileNode fileNode,
             [CanBeNull] string parentFqn)
         {
-            string fullyQualifiedName = string.Join(".",
-                new List<string> { parentFqn ?? fileNode.PackageNode?.Name, classNode.Name }.Where(it => it != null));
+            string fullyQualifiedName;
+            if (parentFqn != null)
+            {
+                fullyQualifiedName = EnumerableOfNotNull(parentFqn, classNode.Name)
+                    .JoinToString("$");
+            }
+            else
+            {
+                fullyQualifiedName = EnumerableOfNotNull(fileNode.PackageNode?.Name, classNode.Name)
+                    .JoinToString(".");
+            }
 
             return new List<ClassDto>
                 {

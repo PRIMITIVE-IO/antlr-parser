@@ -136,7 +136,7 @@ namespace antlr_parser.tests.Java
             ClassDto innerClass = fileDto.Classes[1];
             innerClass.ParentClassFqn.Should().Be("MyPackage.MyClass");
             innerClass.Name.Should().Be("InnerClass");
-            innerClass.FullyQualifiedName.Should().Be("MyPackage.MyClass.InnerClass");
+            innerClass.FullyQualifiedName.Should().Be("MyPackage.MyClass$InnerClass");
             innerClass.Header.Should().Be(@"//inner class comment
                     static class InnerClass {".TrimIndent());
             innerClass.CodeRange.Should().Be(TestUtils.CodeRange(7, 27, 9, 29));
