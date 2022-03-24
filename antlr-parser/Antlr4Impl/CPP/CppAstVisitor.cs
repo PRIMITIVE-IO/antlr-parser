@@ -130,7 +130,8 @@ namespace antlr_parser.Antlr4Impl.CPP
                     sourceCode,
                     startIdx,
                     endIdx,
-                    codeRange
+                    codeRange,
+                    arguments: new List<AstNode.ArgumentNode>()
                 );
             }
 
@@ -239,7 +240,8 @@ namespace antlr_parser.Antlr4Impl.CPP
                 sourceCode,
                 startIdx,
                 endIdx,
-                codeRange: codeRange
+                codeRange: codeRange,
+                arguments: new List<AstNode.ArgumentNode>()
             );
 
         }
@@ -362,7 +364,8 @@ namespace antlr_parser.Antlr4Impl.CPP
                     sourceCode,
                     startIdx,
                     endIdx,
-                    codeRange: codeRange
+                    codeRange: codeRange,
+                    arguments: new List<AstNode.ArgumentNode>()
                 );
             }
 

@@ -90,7 +90,8 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 sourceCode,
                 startIdx: startIdx,
                 endIdx: endIdx,
-                codeRange: codeRange
+                codeRange: codeRange,
+                arguments: new List<AstNode.ArgumentNode>()
             );
         }
 

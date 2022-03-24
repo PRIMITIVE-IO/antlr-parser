@@ -128,7 +128,8 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 context.GetFullText() + (removeSourceCode ?? ""),
                 startIdx: startIdx,
                 endIdx: endIdx,
-                codeRange: codeRange
+                codeRange: codeRange,
+                arguments: new List<AstNode.ArgumentNode>()
             );
         }
 
@@ -196,7 +197,8 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 context.GetFullText() + (removedSourceCode ?? ""),
                 startIdx: startIdx,
                 endIdx: endIdx,
-                codeRange: codeRange
+                codeRange: codeRange,
+                arguments: new List<AstNode.ArgumentNode>()
             );
         }
 

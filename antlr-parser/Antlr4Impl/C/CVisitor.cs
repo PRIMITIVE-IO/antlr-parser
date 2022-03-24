@@ -217,7 +217,8 @@ namespace antlr_parser.Antlr4Impl.C
                 text + removedSourceCode ?? "",
                 startIdx: startIdx,
                 endIdx: endIdx,
-                codeRange: codeRange
+                codeRange: codeRange,
+                arguments: new List<AstNode.ArgumentNode>()
             );
         }
 

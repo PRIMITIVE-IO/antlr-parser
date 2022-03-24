@@ -103,8 +103,9 @@ namespace antlr_parser.Antlr4Impl
             public readonly int StartIdx;
             public readonly int EndIdx;
             [CanBeNull] public readonly CodeRange CodeRange;
+            public readonly List<ArgumentNode> Arguments;
 
-            public MethodNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx, [CanBeNull] CodeRange codeRange)
+            public MethodNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx, [CanBeNull] CodeRange codeRange, List<ArgumentNode> arguments)
             {
                 Name = name;
                 AccFlag = accFlag;
@@ -112,6 +113,19 @@ namespace antlr_parser.Antlr4Impl
                 EndIdx = endIdx;
                 CodeRange = codeRange;
                 StartIdx = startIdx;
+                Arguments = arguments;
+            }
+        }
+        
+        public class ArgumentNode : AstNode
+        {
+            public readonly string Name;
+            public readonly string Type;
+
+            public ArgumentNode(string name, string type)
+            {
+                Name = name;
+                Type = type;
             }
         }
 

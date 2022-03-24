@@ -131,7 +131,8 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 accFlag: accessFlags,
                 startIdx: startIdx,
                 endIdx: endIdx,
-                codeRange: codeRange
+                codeRange: codeRange,
+                arguments: new List<AstNode.ArgumentNode>()
             );
         }
 
@@ -150,7 +151,8 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 accFlag: AccessFlags.None,
                 startIdx: startIdx,
                 endIdx: endIdx,
-                codeRange: codeRange
+                codeRange: codeRange,
+                arguments: new List<AstNode.ArgumentNode>()
             );
         }
 
@@ -219,7 +221,8 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 sourceCode: source,
                 startIdx: startIdx,
                 endIdx: endIdx,
-                codeRange: codeRange
+                codeRange: codeRange,
+                arguments: new List<AstNode.ArgumentNode>()
             );
         }
 

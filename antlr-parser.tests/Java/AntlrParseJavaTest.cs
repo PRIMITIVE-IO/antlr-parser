@@ -161,19 +161,44 @@ namespace antlr_parser.tests.Java
             myInterface.Name.Should().Be("MyInterface");
             myInterface.Modifier.Should().Be(AccessFlags.AccPublic);
             myInterface.Methods.Should().HaveCount(1);
-            
+
             MethodDto myMethod = myInterface.Methods[0];
             myMethod.Name.Should().Be("myMethod");
             myMethod.AccFlag.Should().Be(AccessFlags.AccPublic);
             myMethod.SourceCode.Should().Be(@"//method comment
                     public void myMethod();".TrimIndent());
             myMethod.CodeRange.Should().Be(TestUtils.CodeRange(5, 31, 7, 27));
-            
+
             myInterface.Header.Should().Be(@"package MyPackage;
 
                 //  comment
                 public interface MyInterface {".TrimIndent());
             myInterface.CodeRange.Should().Be(TestUtils.CodeRange(1, 1, 5, 30));
+        }
+
+        [Fact]
+        public void ParseMethodArguments()
+        {
+            string source = @"
+
+                public class MyClass {
+
+                    public String myMethod(String x, int y){
+                        return """";
+                    }               
+                }
+            ".TrimIndent();
+
+            FileDto fileDto = AntlrParseJava.Parse(source, "some/path");
+
+            ClassDto myClass = fileDto.Classes[0];
+           
+            MethodDto myMethod = myClass.Methods[0];
+            myMethod.Arguments.Should().HaveCount(2);
+            myMethod.Arguments[0].Name.Should().Be("x");
+            myMethod.Arguments[0].Type.Should().Be("String");
+            myMethod.Arguments[1].Name.Should().Be("y");
+            myMethod.Arguments[1].Type.Should().Be("int");
         }
     }
 }

@@ -142,11 +142,15 @@ namespace antlr_parser.Antlr4Impl.dto.converter
         {
             string signature = MethodDto.MethodSignature(classFqn, methodNode.Name, new List<ArgumentDto>());
 
+            List<ArgumentDto> arguments = methodNode.Arguments
+                .Select((arg, i) => new ArgumentDto(i, arg.Name, arg.Type))
+                .ToList();
+
             return new MethodDto(
                 signature: signature,
                 name: methodNode.Name,
                 accFlag: methodNode.AccFlag,
-                arguments: new List<ArgumentDto>(),
+                arguments: arguments,
                 returnType: "void",
                 sourceCode: methodNode.SourceCode,
                 startIdx: methodNode.StartIdx,

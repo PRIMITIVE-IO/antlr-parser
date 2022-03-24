@@ -189,14 +189,26 @@ namespace antlr_parser.Antlr4Impl.Java
 
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx);
 
+            List<AstNode.ArgumentNode> arguments = context.formalParameters()?.formalParameterList()?.formalParameter()
+                .Select(parameter => parameter.Accept(this) as AstNode.ArgumentNode)
+                .ToList() ?? new List<AstNode.ArgumentNode>();
+
             return new AstNode.MethodNode(
                 name: name,
                 accFlag: AccessFlag(modifier),
                 sourceCode: source,
                 startIdx: restoredStartIdx,
                 endIdx: restoredEndIdx,
-                codeRange: codeRange
+                codeRange: codeRange,
+                arguments: arguments
             );
+        }
+
+        public override AstNode VisitFormalParameter(JavaParser.FormalParameterContext context)
+        {
+            return new AstNode.ArgumentNode(
+                name: context.variableDeclaratorId().GetText(),
+                type: context.typeType().GetText());
         }
 
         public override AstNode VisitMethodDeclaration(JavaParser.MethodDeclarationContext context)
@@ -218,13 +230,18 @@ namespace antlr_parser.Antlr4Impl.Java
 
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx);
 
+            List<AstNode.ArgumentNode> arguments = context.formalParameters()?.formalParameterList()?.formalParameter()
+                .Select(param => param.Accept(this) as AstNode.ArgumentNode)
+                .ToList() ?? new List<AstNode.ArgumentNode>();
+
             return new AstNode.MethodNode(
                 name: name,
                 accFlag: AccessFlag(modifier),
                 sourceCode: source,
                 startIdx: restoredStartIdx,
                 endIdx: restoredEndIdx,
-                codeRange: codeRange
+                codeRange: codeRange,
+                arguments: arguments
             );
         }
 
@@ -347,13 +364,18 @@ namespace antlr_parser.Antlr4Impl.Java
 
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx);
 
+            List<AstNode.ArgumentNode> arguments = context.formalParameters()?.formalParameterList()?.formalParameter()
+                .Select(parameter => parameter.Accept(this) as AstNode.ArgumentNode)
+                .ToList() ?? new List<AstNode.ArgumentNode>();
+
             return new AstNode.MethodNode(
                 name: name,
                 accFlag: AccessFlag(modifier),
                 sourceCode: source,
                 startIdx: restoredStartIdx,
                 endIdx: restoredEndIdx,
-                codeRange: codeRange
+                codeRange: codeRange,
+                arguments: arguments
             );
         }
 
