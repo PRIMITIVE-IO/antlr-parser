@@ -17,7 +17,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 class C{
                     f(x){ return 10}
                 }
-            ".TrimIndent();
+            ".Unindent();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
             res.Classes.Should().HaveCount(1);
 
@@ -35,7 +35,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 class C{
                     f(x)
                 }
-            ".TrimIndent();
+            ".Unindent();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
             res.Classes.Count().Should().Be(1);
 
@@ -54,7 +54,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 class C{
                     g(x) { return 20; }
                 }
-            ".TrimIndent();
+            ".Unindent();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
             res.Classes.Should().HaveCount(2);
             ClassDto script = res.Classes[0];
@@ -76,7 +76,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         {
             string source = @"
                 var x = 10;
-            ".TrimIndent();
+            ".Unindent();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
             res.Classes.Count().Should().Be(1);
             ClassDto script = res.Classes.First();
@@ -92,7 +92,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         {
             string source = @"
                 const { y: { x } } = obj;
-            ".TrimIndent();
+            ".Unindent();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
             res.Classes.Count().Should().Be(1);
             ClassDto script = res.Classes.First();
@@ -108,7 +108,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         {
             string source = @"
                 const { a: { x, y } } = obj;
-            ".TrimIndent();
+            ".Unindent();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
             res.Classes.Count().Should().Be(1);
             ClassDto script = res.Classes.First();
@@ -124,7 +124,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         {
             string source = @"
                 const [x, ...y] = obj;
-            ".TrimIndent();
+            ".Unindent();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
             res.Classes.Count().Should().Be(1);
             ClassDto script = res.Classes.First();
@@ -140,7 +140,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         {
             string source = @"
                 const { a: [x, ...y]} = obj;
-            ".TrimIndent();
+            ".Unindent();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
             res.Classes.Count().Should().Be(1);
             ClassDto script = res.Classes.First();
@@ -156,7 +156,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         {
             string source = @"
                 const { a: [{x}, ...y], z} = obj;
-            ".TrimIndent();
+            ".Unindent();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
             res.Classes.Count().Should().Be(1);
             ClassDto script = res.Classes.First();
@@ -176,7 +176,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 class A {
                     f(x){return 10}
                 }
-            ".TrimIndent();
+            ".Unindent();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
             res.Classes.Count().Should().Be(1);
             ClassDto classInfo = res.Classes.First();
@@ -184,7 +184,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             classInfo.Header.Should().Be(@"
                 /**comment*/
                 class A {
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
         }
 
         [Fact]
@@ -197,7 +197,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
                 /**comment2*/
                 class B {}
-            ".TrimIndent();
+            ".Unindent();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
 
             ClassDto classB = res.Classes.ToArray()[1];
@@ -205,7 +205,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             classB.Header.Should().Be(@"
                 /**comment2*/
                 class B {}
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
         }
 
         [Fact]
@@ -215,7 +215,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 requires('')
                 /**comment1*/
                 function f(){}
-            ".TrimIndent();
+            ".Unindent();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
 
             ClassDto fakeClass = res.Classes.First();
@@ -223,7 +223,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             fakeClass.Header.Should().Be(@"
                 requires('')
                 /**comment1*/
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
         }
 
         [Fact]
@@ -235,7 +235,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 function f(){}
                 /**comment2*/
                 class A {}
-            ".TrimIndent();
+            ".Unindent();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
 
             ClassDto fakeClass = res.Classes[0];
@@ -243,12 +243,12 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             fakeClass.Header.Should().Be(@"
                 requires('')
                 /**comment1*/
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
 
             res.Classes[1].Header.Should().Be(@"
                 /**comment2*/
                 class A {}
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
         }
 
         [Fact]
@@ -258,7 +258,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 function f(){
                    return 10;
                 }
-            ".TrimIndent();
+            ".Unindent();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
 
             res.Classes[0].Methods[0].CodeRange.Should().Be(TestUtils.CodeRange(2, 1, 4, 2));

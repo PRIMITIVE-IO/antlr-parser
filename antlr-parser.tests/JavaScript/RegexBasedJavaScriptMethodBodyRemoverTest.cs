@@ -34,7 +34,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         public void FunctionDeclarationWithDoubleQuotes()
         {
             string source = @"function generateAssets(repo, outputName, commit = """", diffs = [], iGenerateDB = false, createDBcallback = null) {
-}".TrimIndent();
+}".Unindent();
             List<Tuple<int,int>> blocksToRemove = RegexBasedJavaScriptMethodBodyRemover.FindBlocksToRemove(source);
 
             blocksToRemove.Count.Should().Be(1);

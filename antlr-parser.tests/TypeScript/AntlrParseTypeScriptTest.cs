@@ -29,7 +29,7 @@ namespace antlr_parser.tests.TypeScript
                         }
                     }
                 } 
-                ".TrimIndent(),
+                ".Unindent(),
                 filePath: "repo/path"
             );
 
@@ -53,7 +53,7 @@ namespace antlr_parser.tests.TypeScript
             res.Classes[0].Methods[0].SourceCode.Should().Be(@"constructor(code: number, name: string) {
                                 this.empName = name;
                                 this.empCode = code;
-                        }".TrimIndent());
+                        }".Unindent());
 
             res.Classes[0].Methods[1].Name.Should().Be("getSalary");
             res.Classes[0].Methods[1].CodeRange.Should().Be(TestUtils.CodeRange(12, 9, 14, 9));

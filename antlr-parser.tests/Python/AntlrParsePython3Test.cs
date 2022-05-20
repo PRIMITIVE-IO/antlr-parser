@@ -19,7 +19,7 @@ namespace antlr_parser.tests.Python
                     def f(self):
                         """"""Method comment""""""
                         return 'hello world'
-            ".TrimIndent();
+            ".Unindent();
 
             FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 
@@ -58,7 +58,7 @@ namespace antlr_parser.tests.Python
                     def g(self):
                         """"""Method G comment""""""
                         return 'hello G'
-            ".TrimIndent();
+            ".Unindent();
 
             FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 
@@ -117,7 +117,7 @@ namespace antlr_parser.tests.Python
             def f():
                 """"""Function F comment""""""
                 return 'hello F'
-            ".TrimIndent();
+            ".Unindent();
 
             FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 

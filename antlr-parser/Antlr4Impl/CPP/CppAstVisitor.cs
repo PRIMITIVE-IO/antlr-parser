@@ -122,7 +122,7 @@ namespace antlr_parser.Antlr4Impl.CPP
                 string sourceCode = MethodBodyRemovalResult.ExtractOriginalSubstring(
                     startIdx,
                     endIdx)
-                    .TrimIndent().Trim();
+                    .Unindent().Trim();
 
                 return new AstNode.MethodNode(
                     methodName,
@@ -197,7 +197,7 @@ namespace antlr_parser.Antlr4Impl.CPP
             string header = MethodBodyRemovalResult.ExtractOriginalSubstring(
                     headerStart,
                     headerEnd)
-                .TrimIndent().Trim();
+                .Unindent().Trim();
 
             
             return new AstNode.ClassNode(
@@ -231,7 +231,7 @@ namespace antlr_parser.Antlr4Impl.CPP
 
             string sourceCode = MethodBodyRemovalResult
                 .ExtractOriginalSubstring(startIdx, endIdx)
-                .TrimIndent()
+                .Unindent()
                 .Trim();
 
             return new AstNode.MethodNode(
@@ -264,7 +264,7 @@ namespace antlr_parser.Antlr4Impl.CPP
 
             string header = MethodBodyRemovalResult
                 .ExtractOriginalSubstring(headerStart, headerEnd)
-                .TrimIndent()
+                .Unindent()
                 .Trim();
 
             return new AstNode.ClassNode(
@@ -288,7 +288,7 @@ namespace antlr_parser.Antlr4Impl.CPP
 
             string header = MethodBodyRemovalResult
                 .ExtractOriginalSubstring(headerStart, headerEnd)
-                .TrimIndent()
+                .Unindent()
                 .Trim();
 
             return new AstNode.ClassNode(
@@ -355,7 +355,7 @@ namespace antlr_parser.Antlr4Impl.CPP
             {
                 string sourceCode = MethodBodyRemovalResult
                     .ExtractOriginalSubstring(startIdx, endIdx)
-                    .TrimIndent()
+                    .Unindent()
                     .Trim();
 
                 return new AstNode.MethodNode(

@@ -40,7 +40,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             string header = MethodBodyRemovalResult
                 .ExtractOriginalSubstring(0, headerEndIdxRestored)
                 .Trim()
-                .TrimIndent();
+                .Unindent();
 
             CodeLocation headerEndLocationRestored = IndexToLocationConverter.IdxToLocation(headerEndIdxRestored);
 
@@ -95,7 +95,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
             string header = MethodBodyRemovalResult
                 .ExtractOriginalSubstring(startIdx, endIdx)
-                .TrimIndent()
+                .Unindent()
                 .Trim();
 
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
@@ -209,7 +209,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
             string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx)
-                .TrimIndent();
+                .Unindent();
 
             AccessFlags accessFlags = AccessFlagsFrom(context.accessibilityModifier()?.GetText());
             

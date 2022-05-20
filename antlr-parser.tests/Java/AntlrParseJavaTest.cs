@@ -29,7 +29,7 @@ namespace antlr_parser.tests.Java
                         return """";
                     }               
                 }
-            ".TrimIndent();
+            ".Unindent();
 
             FileDto fileDto = AntlrParseJava.Parse(source, "some/path");
 
@@ -41,14 +41,14 @@ namespace antlr_parser.tests.Java
             myClass.Header.Should().Be(@"package MyPackage;
 
                 // My class comment
-                public class MyClass {".TrimIndent());
+                public class MyClass {".Unindent());
             myClass.CodeRange.Should().Be(TestUtils.CodeRange(1, 1, 5, 22));
 
             FieldDto myField = myClass.Fields[0];
             myField.Name.Should().Be("myField");
             myField.AccFlag.Should().Be(AccessFlags.AccPublic);
             myField.SourceCode.Should().Be(@"//field comment
-                    public String myField;".TrimIndent());
+                    public String myField;".Unindent());
             myField.CodeRange.Should().Be(TestUtils.CodeRange(5, 23, 7, 26));
 
             myClass.Methods.Should().HaveCount(2);
@@ -57,7 +57,7 @@ namespace antlr_parser.tests.Java
             constructor.AccFlag.Should().Be(AccessFlags.AccPublic);
             constructor.SourceCode.Should().Be(@"//constructor comment
                     public MyClass(){
-                    }".TrimIndent());
+                    }".Unindent());
             constructor.CodeRange.Should().Be(TestUtils.CodeRange(7, 27, 10, 5));
 
             MethodDto myMethod = myClass.Methods[1];
@@ -66,7 +66,7 @@ namespace antlr_parser.tests.Java
             myMethod.SourceCode.Should().Be(@"//method comment
                     public String myMethod(){
                         return """";
-                    }".TrimIndent());
+                    }".Unindent());
             myMethod.CodeRange.Should().Be(TestUtils.CodeRange(10, 6, 14, 5));
         }
 
@@ -91,7 +91,7 @@ namespace antlr_parser.tests.Java
                         return """";
                     }               
                 }
-            ".TrimIndent();
+            ".Unindent();
 
             FileDto fileDto = AntlrParseJava.Parse(source, "some/path");
 
@@ -103,7 +103,7 @@ namespace antlr_parser.tests.Java
                 public enum MyEnum {
                     ONE,
                     TWO,
-                    THREE".TrimIndent());
+                    THREE".Unindent());
             myEnum.CodeRange.Should().Be(TestUtils.CodeRange(1, 1, 8, 9));
 
             myEnum.Fields.Should().HaveCount(1);
@@ -126,7 +126,7 @@ namespace antlr_parser.tests.Java
                     static class InnerClass {
                     }
                 }
-            ".TrimIndent();
+            ".Unindent();
 
             FileDto fileDto = AntlrParseJava.Parse(source, "some/path");
 
@@ -138,7 +138,7 @@ namespace antlr_parser.tests.Java
             innerClass.Name.Should().Be("InnerClass");
             innerClass.FullyQualifiedName.Should().Be("MyPackage.MyClass$InnerClass");
             innerClass.Header.Should().Be(@"//inner class comment
-                    static class InnerClass {".TrimIndent());
+                    static class InnerClass {".Unindent());
             innerClass.CodeRange.Should().Be(TestUtils.CodeRange(7, 27, 9, 29));
         }
 
@@ -153,7 +153,7 @@ namespace antlr_parser.tests.Java
                     //method comment
                     public void myMethod();
                 }
-            ".TrimIndent();
+            ".Unindent();
 
             FileDto fileDto = AntlrParseJava.Parse(source, "some/path");
             fileDto.Classes.Should().HaveCount(1);
@@ -166,13 +166,13 @@ namespace antlr_parser.tests.Java
             myMethod.Name.Should().Be("myMethod");
             myMethod.AccFlag.Should().Be(AccessFlags.AccPublic);
             myMethod.SourceCode.Should().Be(@"//method comment
-                    public void myMethod();".TrimIndent());
+                    public void myMethod();".Unindent());
             myMethod.CodeRange.Should().Be(TestUtils.CodeRange(5, 31, 7, 27));
 
             myInterface.Header.Should().Be(@"package MyPackage;
 
                 //  comment
-                public interface MyInterface {".TrimIndent());
+                public interface MyInterface {".Unindent());
             myInterface.CodeRange.Should().Be(TestUtils.CodeRange(1, 1, 5, 30));
         }
 
@@ -187,7 +187,7 @@ namespace antlr_parser.tests.Java
                         return """";
                     }               
                 }
-            ".TrimIndent();
+            ".Unindent();
 
             FileDto fileDto = AntlrParseJava.Parse(source, "some/path");
 

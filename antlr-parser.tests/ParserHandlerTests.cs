@@ -54,7 +54,7 @@ namespace antlr_parser.tests
                 
                 fun outerFunction() { }
 
-            ".TrimIndent(); 
+            ".Unindent(); 
             
             FileDto result = ParserHandler.FileDtoFromSourceText("kotlin.kt", ".kt", source);
 
@@ -63,7 +63,7 @@ namespace antlr_parser.tests
             fileInfo.Header.Should().Be(
                 @"package pkg
 
-                  /** comment */".TrimIndent());
+                  /** comment */".Unindent());
 
             ClassDto classInfo = result.Classes[1];
             classInfo.Name.Should().Be("C");
@@ -72,7 +72,7 @@ namespace antlr_parser.tests
                 
                 /** comment */
                 class C {
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
 
             classInfo.Methods.Single().SourceCode.Should().Be("fun method() {\n  println()\n}");
         }

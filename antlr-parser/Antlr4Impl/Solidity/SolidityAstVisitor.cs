@@ -103,7 +103,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
             string header = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx)
                 .Trim()
-                .TrimIndent();
+                .Unindent();
 
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 
@@ -134,7 +134,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
             string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx)
                 .Trim()
-                .TrimIndent();
+                .Unindent();
 
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 
@@ -161,7 +161,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
             string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx)
                 .Trim()
-                .TrimIndent();
+                .Unindent();
 
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 

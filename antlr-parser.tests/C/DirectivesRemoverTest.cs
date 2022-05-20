@@ -21,7 +21,7 @@ namespace antlr_parser.tests.C
                 #else
                     textToRemove
                 #endif
-            ".TrimIndent();
+            ".Unindent();
 
             List<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
@@ -43,7 +43,7 @@ namespace antlr_parser.tests.C
                 #else
                     textToRemove3
                 #endif
-            ".TrimIndent();
+            ".Unindent();
 
             List<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
@@ -70,7 +70,7 @@ namespace antlr_parser.tests.C
                 #endif
                     textToRemove4
                 #endif
-            ".TrimIndent();
+            ".Unindent();
 
             List<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
@@ -95,7 +95,7 @@ namespace antlr_parser.tests.C
                 #if 3
                     textToKeep2
                 #endif
-            ".TrimIndent();
+            ".Unindent();
 
             List<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 

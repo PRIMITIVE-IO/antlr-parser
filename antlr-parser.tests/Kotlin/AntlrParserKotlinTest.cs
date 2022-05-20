@@ -48,7 +48,7 @@ namespace antlr_parser.tests.Kotlin
                 class X {
                     fun f(){}
                 }
-            ".TrimIndent();
+            ".Unindent();
 
             FileDto res = AntlrParseKotlin.Parse(source, "path");
             res.Classes.Should().HaveCount(1);
@@ -58,7 +58,7 @@ namespace antlr_parser.tests.Kotlin
                 import y
                 /**comment*/
                 class X {
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
         }
 
         [Fact]
@@ -71,14 +71,14 @@ namespace antlr_parser.tests.Kotlin
                         fun g()
                     }
                 }
-            ".TrimIndent();
+            ".Unindent();
             FileDto res = AntlrParseKotlin.Parse(source, "path");
             res.Classes.Should().HaveCount(2);
             ClassDto innerClass = res.Classes[1];
             innerClass.Header.Should().Be(@"
                 /**comment*/
                 class Y {
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
         }
 
         [Fact]
@@ -95,7 +95,7 @@ namespace antlr_parser.tests.Kotlin
             secondClass.Header.Should().Be(@"
                 /**comment*/
                 class Y {}
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
         }
     }
 }

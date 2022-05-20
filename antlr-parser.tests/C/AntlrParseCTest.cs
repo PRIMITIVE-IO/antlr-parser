@@ -26,7 +26,7 @@ namespace antlr_parser.tests.C
                     result = a+b;
                     return result;
                 }"
-                .TrimIndent();
+                .Unindent();
 
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
@@ -42,7 +42,7 @@ namespace antlr_parser.tests.C
                 struct structureName 
                 {
                     dataType member1;
-                };".TrimIndent();
+                };".Unindent();
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
             fileDto.Classes.Should().HaveCount(1);
@@ -58,7 +58,7 @@ namespace antlr_parser.tests.C
                 struct structureName 
                 {
                     dataType member1[10];
-                };".TrimIndent();
+                };".Unindent();
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
             fileDto.Classes.Should().HaveCount(1);
@@ -77,7 +77,7 @@ namespace antlr_parser.tests.C
                     {  
                       int dd;  
                     }doj;  
-                };".TrimIndent();
+                };".Unindent();
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
             fileDto.Classes.Should().HaveCount(2);
@@ -95,7 +95,7 @@ namespace antlr_parser.tests.C
                 struct Employee  
                 {     
                     int x;
-                };".TrimIndent();
+                };".Unindent();
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
             fileDto.Classes[0].FullyQualifiedName.Should().Be("Employee");
         }
@@ -121,7 +121,7 @@ namespace antlr_parser.tests.C
                 #include ""CxxSymbolsX.h""
                 #include ""HeaderX.h""
                 #include ""SymbolsX.h""
-            ".TrimIndent();
+            ".Unindent();
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
             fileDto.Classes.Should().HaveCount(0);
         }
@@ -166,7 +166,7 @@ namespace antlr_parser.tests.C
                     Channels
                   );
                 }
-            ".TrimIndent();
+            ".Unindent();
 
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
@@ -194,7 +194,7 @@ namespace antlr_parser.tests.C
                 {
      
                 }
-            ".TrimIndent();
+            ".Unindent();
 
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
@@ -206,7 +206,7 @@ namespace antlr_parser.tests.C
                 {
                     for(i = 0; i<0; i++){
                     };
-                }".TrimIndent().Trim());
+                }".Unindent().Trim());
             methodInfos.SingleOrDefault(it => it.Name == "g").Should().NotBeNull();
         }
 
@@ -217,7 +217,7 @@ namespace antlr_parser.tests.C
                 struct A {
                     const struct b *c;
                 };
-            ".TrimIndent();
+            ".Unindent();
 
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
@@ -231,7 +231,7 @@ namespace antlr_parser.tests.C
                 struct A {
                    struct b c,d;
                 };
-            ".TrimIndent();
+            ".Unindent();
 
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
@@ -247,7 +247,7 @@ namespace antlr_parser.tests.C
                 struct A {
                    struct a b;
                 };
-            ".TrimIndent();
+            ".Unindent();
 
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
@@ -255,7 +255,7 @@ namespace antlr_parser.tests.C
                 #include ""something""
                 /**comment*/
                 struct A {
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
         }
 
         [Fact]
@@ -271,14 +271,14 @@ namespace antlr_parser.tests.C
                 struct B {
                     struct c d;
                 };
-            ".TrimIndent();
+            ".Unindent();
 
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
             fileDto.Classes[2].Header.Should().Be(@"
                 /**comment2*/
                 struct B {
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
         }
     }
 }

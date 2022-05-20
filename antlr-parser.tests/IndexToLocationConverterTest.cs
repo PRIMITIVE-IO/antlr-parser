@@ -18,7 +18,7 @@ namespace antlr_parser.tests
                 fun h() { 
                     REMOVE 
                 }
-            ".TrimIndent();
+            ".Unindent();
 
             IndexToLocationConverter converter = new IndexToLocationConverter(source);
             

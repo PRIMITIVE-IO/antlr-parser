@@ -23,7 +23,7 @@ namespace antlr_parser.tests.Solidity
                       return storedData;
                    }
                 }
-            ".TrimIndent();
+            ".Unindent();
             FileDto fileDto = AntlrParseSolidity.Parse(source, "some/path");
 
             fileDto.Classes.Should().HaveCount(1);
@@ -53,7 +53,7 @@ namespace antlr_parser.tests.Solidity
                       uint result = a + b;
                       return result;
                    }
-                }".TrimIndent();
+                }".Unindent();
             FileDto fileDto = AntlrParseSolidity.Parse(source, "some/path");
 
             fileDto.Classes[0].Methods.Should().HaveCount(2);
@@ -71,12 +71,12 @@ namespace antlr_parser.tests.Solidity
                 /*comment*/
                 contract SimpleStorage {
                 }
-            ".TrimIndent();
+            ".Unindent();
             FileDto fileDto = AntlrParseSolidity.Parse(source, "some/path");
             ClassDto classDto = fileDto.Classes[0];
             classDto.Header.Should().Be(@"pragma solidity >=0.4.0 <0.6.0;
                 /*comment*/
-                contract SimpleStorage {".TrimIndent());
+                contract SimpleStorage {".Unindent());
             classDto.CodeRange.Should().Be(TestUtils.CodeRange(1, 1, 4, 24));
         }
 
@@ -92,14 +92,14 @@ namespace antlr_parser.tests.Solidity
                 contract SimpleStorage2 {
 
                 }
-            ".TrimIndent();
+            ".Unindent();
             FileDto fileDto = AntlrParseSolidity.Parse(source, "some/path");
 
             ClassDto classDto = fileDto.Classes[1];
             classDto.Header.Should().Be(@"
                 /*comment2*/
                 contract SimpleStorage2 {
-            ".Trim().TrimIndent());
+            ".Trim().Unindent());
             classDto.CodeRange.Should().Be(TestUtils.CodeRange(5, 2, 7, 25));
         }
 
@@ -116,7 +116,7 @@ namespace antlr_parser.tests.Solidity
                       uint result = a + b;
                       return result;
                    }
-                }".TrimIndent();
+                }".Unindent();
             FileDto fileDto = AntlrParseSolidity.Parse(source, "some/path");
 
             MethodDto methodDto = fileDto.Classes[0].Methods[0];
@@ -126,7 +126,7 @@ namespace antlr_parser.tests.Solidity
                       uint b = 2;
                       uint result = a + b;
                       return result;
-                   }".TrimIndent());
+                   }".Unindent());
             methodDto.CodeRange.Should().Be(TestUtils.CodeRange(3, 24, 10, 4));
         }
     }

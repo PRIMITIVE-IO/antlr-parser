@@ -75,7 +75,7 @@ namespace antlr_parser.Antlr4Impl.Java
             int restoredEndIdx = MethodBodyRemovalResult.RestoreIdx(context.classBody().LBRACE().Symbol.StartIndex);
 
             string header = MethodBodyRemovalResult.ExtractOriginalSubstring(restoredStartIdx, restoredEndIdx).Trim()
-                .TrimIndent();
+                .Unindent();
 
             return new AstNode.ClassNode(
                 name: context.IDENTIFIER().GetText(),
@@ -153,7 +153,7 @@ namespace antlr_parser.Antlr4Impl.Java
 
             string header = MethodBodyRemovalResult.ExtractOriginalSubstring(restoredStartIdx, restoredEndIdx)
                 .Trim()
-                .TrimIndent();
+                .Unindent();
 
             return new AstNode.ClassNode(
                 name: context.IDENTIFIER().GetText(),
@@ -185,7 +185,7 @@ namespace antlr_parser.Antlr4Impl.Java
 
             string source = MethodBodyRemovalResult.ExtractOriginalSubstring(restoredStartIdx, restoredEndIdx)
                 .Trim()
-                .TrimIndent();
+                .Unindent();
 
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx);
 
@@ -226,7 +226,7 @@ namespace antlr_parser.Antlr4Impl.Java
 
             string source = MethodBodyRemovalResult.ExtractOriginalSubstring(restoredStartIdx, restoredEndIdx)
                 .Trim()
-                .TrimIndent();
+                .Unindent();
 
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx);
 
@@ -262,7 +262,7 @@ namespace antlr_parser.Antlr4Impl.Java
 
             string sourceCode = MethodBodyRemovalResult.ExtractOriginalSubstring(restoredStartIdx, restoredEndIdx)
                 .Trim()
-                .TrimIndent();
+                .Unindent();
 
             return new AstNode.FieldNode(
                 name: name,
@@ -309,7 +309,7 @@ namespace antlr_parser.Antlr4Impl.Java
 
             string header = MethodBodyRemovalResult.ExtractOriginalSubstring(restoredStartIdx, restoredStopIdx)
                 .Trim()
-                .TrimIndent();
+                .Unindent();
 
             return new AstNode.ClassNode(
                 name: context.IDENTIFIER().GetText(),
@@ -360,7 +360,7 @@ namespace antlr_parser.Antlr4Impl.Java
 
             string source = MethodBodyRemovalResult.ExtractOriginalSubstring(restoredStartIdx, restoredEndIdx)
                 .Trim()
-                .TrimIndent();
+                .Unindent();
 
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx);
 

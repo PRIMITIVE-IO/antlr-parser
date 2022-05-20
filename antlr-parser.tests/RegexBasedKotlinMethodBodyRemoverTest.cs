@@ -17,7 +17,7 @@ namespace antlr_parser.tests
             string source = @"
                 fun f(){ REMOVE }
                 fun g() { REMOVE }
-            ".TrimIndent();
+            ".Unindent();
 
             //Act
             List<Tuple<int,int>> blocksToRemove = RegexBasedKotlinMethodBodyRemover.FindBlocksToRemove(source);

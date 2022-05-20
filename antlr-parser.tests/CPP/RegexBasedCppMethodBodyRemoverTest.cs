@@ -15,11 +15,11 @@ namespace antlr_parser.tests.CPP
         {
             string source = @"
                 fun f(){REMOVE}
-            ".TrimIndent();
+            ".Unindent();
             List<Tuple<int, int>> blocksToRemove = RegexBasedCppMethodBodyRemover.FindBlocksToRemove(source);
             MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be(@"
                 fun f(){}
-            ".TrimIndent());
+            ".Unindent());
         }
         
         [Fact]
@@ -27,11 +27,11 @@ namespace antlr_parser.tests.CPP
         {
             string source = @"
                 bool DecodeBase64PSBT(PartiallySignedTransaction& psbt, const std::string& base64_tx, std::string& error) const {REMOVE}
-            ".TrimIndent();
+            ".Unindent();
             List<Tuple<int, int>> blocksToRemove = RegexBasedCppMethodBodyRemover.FindBlocksToRemove(source);
             MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be(@"
                 bool DecodeBase64PSBT(PartiallySignedTransaction& psbt, const std::string& base64_tx, std::string& error) const {}
-            ".TrimIndent());
+            ".Unindent());
         }
     }
 }

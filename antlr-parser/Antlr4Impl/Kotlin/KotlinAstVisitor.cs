@@ -38,7 +38,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex))
                 .Min();
 
-            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(0, headerEnd).Trim().TrimIndent();
+            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(0, headerEnd).Trim().Unindent();
 
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(0, headerEnd);
             return new AstNode.FileNode(
@@ -79,7 +79,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
             string sourceCode = context.GetFullText() + removedBody;
 
-            sourceCode = sourceCode.TrimIndent();
+            sourceCode = sourceCode.Unindent();
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
@@ -148,7 +148,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             }.Max();
 
             string header = MethodBodyRemovalResult.ExtractOriginalSubstring(headerStart, headerEndIdx)
-                .TrimIndent()
+                .Unindent()
                 .Trim();
 
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);

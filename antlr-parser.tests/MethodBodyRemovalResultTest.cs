@@ -15,7 +15,7 @@ namespace antlr_parser.tests
             string source = @"
                 fun f(){ REMOVE }
                 fun g() { REMOVE }
-            ".TrimIndent();
+            ".Unindent();
 
             List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>
             {
@@ -30,7 +30,7 @@ namespace antlr_parser.tests
             string expectedSource = @"
                 fun f()
                 fun g()
-            ".TrimIndent();
+            ".Unindent();
             result.ShortenedSource.Should().Be(expectedSource);
 
             result.IdxToRemovedMethodBody.Count.Should().Be(2);
@@ -43,7 +43,7 @@ namespace antlr_parser.tests
         {
             string source = @"
                 fun f(){ fun h() {} }
-            ".TrimIndent();
+            ".Unindent();
 
             List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>
             {
@@ -57,7 +57,7 @@ namespace antlr_parser.tests
             //Verify
             string expectedSource = @"
                 fun f()
-            ".TrimIndent();
+            ".Unindent();
             result.ShortenedSource.Should().Be(expectedSource);
 
             result.IdxToRemovedMethodBody.Count.Should().Be(1);
@@ -71,7 +71,7 @@ namespace antlr_parser.tests
                 fun f(){ REMOVE }
                 fun g() { REMOVE }
                 fun h() { REMOVE }
-            ".TrimIndent();
+            ".Unindent();
 
             List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>
             {

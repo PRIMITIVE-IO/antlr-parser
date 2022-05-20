@@ -21,7 +21,7 @@ namespace antlr_parser.tests.Kotlin
                         fun h() { REMOVE }
                     }
                 }
-            ".TrimIndent();
+            ".Unindent();
             //Act
             List<Tuple<int,int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
             
@@ -41,7 +41,7 @@ namespace antlr_parser.tests.Kotlin
                     classes { REMOVE }
                     myclass { REMOVE }
                 }
-            ".TrimIndent();
+            ".Unindent();
             
             //Act
             List<Tuple<int,int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);

@@ -19,7 +19,7 @@ namespace antlr_parser.tests.CPP
                 int f(int a, int b) {
                    return 10; 
                 }
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.First();
@@ -31,7 +31,7 @@ namespace antlr_parser.tests.CPP
                 int f(int a, int b) {
                    return 10; 
                 }
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace antlr_parser.tests.CPP
                 int f(int a, int b) {
                    return 10; 
                 };
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.First();
@@ -53,7 +53,7 @@ namespace antlr_parser.tests.CPP
                 int f(int a, int b) {
                    return 10; 
                 };
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace antlr_parser.tests.CPP
         {
             string source = @"
                 int f(int a, int b);
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.First();
@@ -71,7 +71,7 @@ namespace antlr_parser.tests.CPP
             method.Name.Should().Be("f");
             method.SourceCode.Should().Be(@"
                 int f(int a, int b);
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace antlr_parser.tests.CPP
                        return 10; 
                     }
                 };
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.First();
@@ -96,7 +96,7 @@ namespace antlr_parser.tests.CPP
                 int f(int a, int b) {
                    return 10; 
                 }
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
 
             FieldDto field = classInfo.Fields.Single();
             field.Name.Should().Be("x");
@@ -110,7 +110,7 @@ namespace antlr_parser.tests.CPP
                     class B{};
                     class C;
                 };
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.First();
@@ -127,7 +127,7 @@ namespace antlr_parser.tests.CPP
         {
             string source = @"
                 class A;
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.First();
@@ -141,7 +141,7 @@ namespace antlr_parser.tests.CPP
                 class A {
                     int x;
                 };
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.First();
@@ -160,7 +160,7 @@ namespace antlr_parser.tests.CPP
                     int f();
                     int h(){return 0;};
                 };
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.First();
@@ -178,7 +178,7 @@ namespace antlr_parser.tests.CPP
                 class A {
                     double f();
                 };
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.First();
@@ -194,7 +194,7 @@ namespace antlr_parser.tests.CPP
                     static int x;
                     void f(int i);
                 };
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.First();
@@ -210,7 +210,7 @@ namespace antlr_parser.tests.CPP
                     int x;
                     int y = 0;
                     static a b GUARDED_BY(c) = 0;
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.First();
@@ -227,7 +227,7 @@ namespace antlr_parser.tests.CPP
                     {
                        
                     }
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.First();
@@ -241,7 +241,7 @@ namespace antlr_parser.tests.CPP
                 bool T::operator()() const {
                  
                 }
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.First();
@@ -255,7 +255,7 @@ namespace antlr_parser.tests.CPP
                 namespace {
                     class A{};
                 }
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.Single();
@@ -270,7 +270,7 @@ namespace antlr_parser.tests.CPP
                 CSHA512& operator<<() {
                     
                 }
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.Single();
@@ -285,14 +285,14 @@ namespace antlr_parser.tests.CPP
                     A,
                     B,
                 };
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.Single();
             classInfo.Name.Should().Be("E");
             classInfo.Header.Should().Be(@"
                 enum class E {
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
         }
 
         [Fact]
@@ -300,7 +300,7 @@ namespace antlr_parser.tests.CPP
         {
             string source = @"
                 Session::~Session(){}
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.Single();
@@ -314,7 +314,7 @@ namespace antlr_parser.tests.CPP
                 CThreadInterrupt::operator bool() const
                 {
                 }
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.Single();
@@ -325,7 +325,7 @@ namespace antlr_parser.tests.CPP
         {
             string source = @"
                 static const size_t MAX_GETUTXOS_OUTPOINTS = 15;
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.Single();
@@ -339,7 +339,7 @@ namespace antlr_parser.tests.CPP
                 struct {
                     bool (*handler)(const std::any& context, HTTPRequest* req, const std::string& strReq);
                 };
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             throw new Exception();
@@ -363,7 +363,7 @@ namespace antlr_parser.tests.CPP
                     }
 
                 } // namespace leveldb
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes[0];
@@ -382,14 +382,14 @@ namespace antlr_parser.tests.CPP
                     int y=0;
                     int f(){};
                 };
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.Single();
             classInfo.Header.Should().Be(@"
                 /**comment*/
                 class A{
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
         }
         
         [Fact]
@@ -403,14 +403,14 @@ namespace antlr_parser.tests.CPP
                     int y=0;
                     int f(){};
                 };
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes[1];
             classInfo.Header.Should().Be(@"
                 /**comment*/
                 class A{
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
         }
         
         [Fact]
@@ -424,7 +424,7 @@ namespace antlr_parser.tests.CPP
                     int y=0;
                     int f(){};
                 };
-            ".TrimIndent();
+            ".Unindent();
             FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
             ClassDto classInfo = classInfos.Classes.ToArray()[1];
@@ -432,7 +432,7 @@ namespace antlr_parser.tests.CPP
             classInfo.Header.Should().Be(@"
                 /**comment*/
                 class B{
-            ".TrimIndent().Trim());
+            ".Unindent().Trim());
         }
         
     }
