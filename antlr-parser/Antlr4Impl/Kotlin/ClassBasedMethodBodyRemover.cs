@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PrimitiveCodebaseElements.Primitive;
 
-namespace antlr_parser.Antlr4Impl
+namespace antlr_parser.Antlr4Impl.Kotlin
 {
     /// <summary>
     /// Removes everything in curly braces except class bodies.
