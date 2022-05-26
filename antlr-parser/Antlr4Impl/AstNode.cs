@@ -17,17 +17,17 @@ namespace antlr_parser.Antlr4Impl
         {
             public readonly string Header;
             public readonly string Path;
-            [CanBeNull] public readonly PackageNode PackageNode;
+            public readonly PackageNode? PackageNode;
             public readonly List<ClassNode> Classes;
             public readonly List<FieldNode> Fields;
             public readonly List<MethodNode> Methods;
             public readonly List<Namespace> Namespaces;
             public readonly SourceCodeLanguage Language;
             public readonly bool IsTest;
-            [CanBeNull] public readonly CodeRange CodeRange;
+            public readonly CodeRange? CodeRange;
 
             public FileNode(string path,
-                [CanBeNull] PackageNode packageNode,
+                PackageNode? packageNode,
                 List<ClassNode> classes,
                 List<FieldNode> fields,
                 List<MethodNode> methods,
@@ -70,7 +70,7 @@ namespace antlr_parser.Antlr4Impl
             public readonly int StartIdx;
             public readonly int EndIdx;
             public readonly string Header;
-            [CanBeNull] public readonly CodeRange CodeRange;
+            public readonly CodeRange? CodeRange;
 
             public ClassNode(string name,
                 List<MethodNode> methods,
@@ -80,7 +80,7 @@ namespace antlr_parser.Antlr4Impl
                 int startIdx,
                 int endIdx,
                 string header,
-                [CanBeNull] CodeRange codeRange
+                CodeRange? codeRange
             )
             {
                 Name = name;
@@ -102,10 +102,10 @@ namespace antlr_parser.Antlr4Impl
             public readonly string SourceCode;
             public readonly int StartIdx;
             public readonly int EndIdx;
-            [CanBeNull] public readonly CodeRange CodeRange;
+            public readonly CodeRange? CodeRange;
             public readonly List<ArgumentNode> Arguments;
 
-            public MethodNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx, [CanBeNull] CodeRange codeRange, List<ArgumentNode> arguments)
+            public MethodNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx, CodeRange? codeRange, List<ArgumentNode> arguments)
             {
                 Name = name;
                 AccFlag = accFlag;
@@ -136,9 +136,9 @@ namespace antlr_parser.Antlr4Impl
             public readonly string SourceCode;
             public readonly int StartIdx;
             public readonly int EndIdx;
-            [CanBeNull] public readonly CodeRange CodeRange;
+            public readonly CodeRange? CodeRange;
 
-            public FieldNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx, [CanBeNull] CodeRange codeRange)
+            public FieldNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx, CodeRange? codeRange)
             {
                 Name = name;
                 AccFlag = accFlag;
@@ -166,6 +166,20 @@ namespace antlr_parser.Antlr4Impl
             }
         }
 
+        public class Comment : AstNode
+        {
+            public readonly string Text;
+            public readonly int StartIdx;
+            public readonly int EndIdx;
+
+            public Comment(string text, int startIdx, int endIdx)
+            {
+                Text = text;
+                StartIdx = startIdx;
+                EndIdx = endIdx;
+            }
+        }
+
         public class NodeList : AstNode
         {
             public readonly List<AstNode> Nodes;
@@ -180,7 +194,7 @@ namespace antlr_parser.Antlr4Impl
                 return Nodes;
             }
 
-            public static AstNode Combine(AstNode aggregate, AstNode element)
+            public static AstNode Combine(AstNode? aggregate, AstNode? element)
             {
                 if (aggregate == null)
                 {

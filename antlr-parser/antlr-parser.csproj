@@ -7,13 +7,14 @@
     <Company>Primitive.io</Company>
     <Product />
     <TargetFrameworks>net6.0;netstandard2.1</TargetFrameworks>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
 
 
   <ItemGroup>
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.3" />
-    <PackageReference Include="PrimitiveCodebaseElements" Version="0.14.0" />
+    <PackageReference Include="PrimitiveCodebaseElements" Version="0.17.0" />
     <PackageReference Include="PrimitiveLogger" Version="0.2.4" />
   </ItemGroup>
 

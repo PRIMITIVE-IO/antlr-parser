@@ -1,10 +1,7 @@
-using System.Collections.Generic;
 using System.Linq;
-using antlr_parser.Antlr4Impl;
 using FluentAssertions;
 using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
-using PrimitiveCodebaseElements.Primitive.dto.converter;
 using Xunit;
 
 namespace antlr_parser.tests

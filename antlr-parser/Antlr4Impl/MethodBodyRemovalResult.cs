@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace antlr_parser.Antlr4Impl
 {
@@ -28,16 +29,20 @@ namespace antlr_parser.Antlr4Impl
 
         static string RemoveBlocks(string source, List<Tuple<int, int>> removeFromTo)
         {
-            return removeFromTo.AsEnumerable()
-                // since the list contains char indices, in case if we traverse in original order - each removed block
-                // will affect the next one.
-                // (Assume you have to remove 1-st and 5-th elements. After removing the first one, you have to remove 4-th rather than 5-th, because it was shifted by removal.)
-                // Traversing them in reverse order allows us to avoid this problem.
-                // (Using previous example, after removing 5-th element you have to remove 1-st one. No shifts anymore.) 
-                .Reverse()
-                //for each block it removes a substring (tuple 'fromTo') from a source text
-                .Aggregate(source,
-                    (acc, fromTo) => acc.Remove(fromTo.Item1, fromTo.Item2 - fromTo.Item1 + 1));
+            if (!removeFromTo.Any()) return source;
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(source[..removeFromTo.First().Item1]);
+            
+            for (int i = 0; i < removeFromTo.Count - 1; i++)
+            {
+                sb.Append(source[(removeFromTo[i].Item2 + 1)..(removeFromTo[i + 1].Item1)]);
+            }
+
+            sb.Append(source[(removeFromTo.Last().Item2 + 1)..]);
+
+            return sb.ToString();
         }
 
         static Dictionary<int, string> ComputeIdxToRemovedMethodBody(List<Tuple<int, int>> blocksToRemove, string text)
@@ -73,9 +78,9 @@ namespace antlr_parser.Antlr4Impl
             foreach (Tuple<int, int> blockForRemoval in blocksForRemoval)
             {
                 (int fromIndex, int toIndex) = blockForRemoval;
-                
+
                 if (fromIndex <= lastIndexForRemoval) continue;
-                
+
                 res.Add(blockForRemoval);
                 lastIndexForRemoval = toIndex;
             }

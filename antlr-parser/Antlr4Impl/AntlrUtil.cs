@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
+using PrimitiveCodebaseElements.Primitive.dto;
 
 namespace antlr_parser.Antlr4Impl
 {
@@ -23,7 +26,7 @@ namespace antlr_parser.Antlr4Impl
         /// <param name="context">The context that contains the tokens</param>
         /// <returns>Original new-lined and indented text</returns>
         public static string GetFullText(this ParserRuleContext context)
-        { 
+        {
             if (context == null)
             {
                 return "";
@@ -41,6 +44,23 @@ namespace antlr_parser.Antlr4Impl
             return context.Start.InputStream.GetText(Interval.Of(
                 context.Start.StartIndex,
                 context.Stop.StopIndex));
+        }
+    }
+
+    public static class AntlrUtil
+    {
+        public static CodeLocation ToCodeLocation(IToken c)
+        {
+            return new CodeLocation(c.Line, c.Column);
+        }
+
+        public static IEnumerable<ParserRuleContext> FlattenChildren(ParserRuleContext c)
+        {
+            IEnumerable<ParserRuleContext> flattenedChildren = c.children
+                ?.OfType<ParserRuleContext>()
+                .SelectMany(FlattenChildren) ?? new List<ParserRuleContext>();
+
+            return new[] { c }.Concat(flattenedChildren);
         }
     }
 }

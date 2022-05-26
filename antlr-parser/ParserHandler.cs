@@ -5,6 +5,7 @@ using antlr_parser.Antlr4Impl.CPP;
 using antlr_parser.Antlr4Impl.Java;
 using antlr_parser.Antlr4Impl.JavaScript;
 using antlr_parser.Antlr4Impl.Kotlin;
+using antlr_parser.Antlr4Impl.Python;
 using antlr_parser.Antlr4Impl.Solidity;
 using antlr_parser.Antlr4Impl.TypeScript;
 using JetBrains.Annotations;
@@ -30,6 +31,8 @@ namespace antlr_parser
             string sourceText)
         {
             if (!SupportedParsableFiles.Contains(sourceExtension)) return null;
+
+            PrimitiveLogger.Logger.Instance().Info($"Parsing: {filePath}");
 
             switch (sourceExtension)
             {
@@ -61,9 +64,8 @@ namespace antlr_parser
                     //cpp
                     return AntlrParseCpp.Parse(sourceText, filePath);
                 case ".py":
-                case ".py3":
                     // python
-                    return null;
+                    return AntlrParsePython3.Parse(sourceText, filePath);
                 case ".kt":
                     return AntlrParseKotlin.Parse(
                         sourceText,
