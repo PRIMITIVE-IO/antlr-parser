@@ -8,7 +8,6 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 {
     public static class AntlrParseKotlin
     {
-
         public static FileDto Parse(string source, string filePath)
         {
             return AstNodeToClassDtoConverter.ToFileDto(ParseFileNode(source, filePath), source);
@@ -33,7 +32,8 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             // a KotlinFile is the highest level container -> start there
             // do not call parser.kotlinFile() more than once
             KotlinParser.KotlinFileContext kotlinFileContext = parser.kotlinFile();
-            return kotlinFileContext.Accept(new KotlinVisitor(filePath, removalMethodBodyRemovalResult)) as AstNode.FileNode;
+            return kotlinFileContext.Accept(new KotlinVisitor(filePath, removalMethodBodyRemovalResult)) as
+                AstNode.FileNode;
         }
     }
 }

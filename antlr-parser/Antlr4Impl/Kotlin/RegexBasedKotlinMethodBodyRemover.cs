@@ -42,7 +42,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         {
             IEnumerable<Match> matches = KotlinFunctionDeclarationRegex.Matches(source).Cast<Match>();
 
-            List<Tuple<int,int>> blocksToRemove = matches.Select(currentMatch =>
+            List<Tuple<int, int>> blocksToRemove = matches.Select(currentMatch =>
             {
                 int openedCurlyPosition = currentMatch.Groups[5].Index;
                 int closedCurlyPosition = StringUtil.ClosedCurlyPosition(source, openedCurlyPosition);

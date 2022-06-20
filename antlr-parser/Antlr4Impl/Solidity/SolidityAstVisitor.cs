@@ -101,10 +101,6 @@ namespace antlr_parser.Antlr4Impl.Solidity
                 .Symbol
                 .StartIndex;
 
-            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx)
-                .Trim()
-                .Unindent();
-
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 
             return new AstNode.ClassNode(
@@ -115,7 +111,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
                 modifier: AccessFlags.None,
                 startIdx: startIdx,
                 endIdx: endIdx,
-                header: header,
+                header: "",
                 codeRange: codeRange
             );
         }
@@ -132,16 +128,12 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
             int endIdx = context.Stop.StopIndex;
 
-            string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx)
-                .Trim()
-                .Unindent();
-
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 
             return new AstNode.FieldNode(
                 name: context.identifier().GetText(),
                 accFlag: accFlag,
-                sourceCode: source,
+                sourceCode: "",
                 startIdx: startIdx,
                 endIdx: endIdx,
                 codeRange: codeRange
@@ -159,16 +151,12 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
             int endIdx = context.Stop.StopIndex;
 
-            string source = MethodBodyRemovalResult.ExtractOriginalSubstring(startIdx, endIdx)
-                .Trim()
-                .Unindent();
-
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 
             return new AstNode.MethodNode(
                 name: name,
                 accFlag: ExtractAccFlags(context.modifierList()),
-                sourceCode: source,
+                sourceCode: "",
                 startIdx: startIdx,
                 endIdx: endIdx,
                 codeRange: codeRange,

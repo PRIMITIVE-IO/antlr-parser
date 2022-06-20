@@ -11,7 +11,6 @@ namespace antlr_parser.Antlr4Impl.Java
 {
     public static class AntlrParseJava
     {
-
         public static FileDto Parse(string source, string filePath)
         {
             try

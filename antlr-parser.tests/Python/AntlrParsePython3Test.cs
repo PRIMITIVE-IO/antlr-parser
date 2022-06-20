@@ -76,7 +76,7 @@ namespace antlr_parser.tests.Python
             gMethodDto.CodeRange.Of(source).Should()
                 .Be("def g(self):\n        \"\"\"Method G comment\"\"\"\n        return 'hello G'");
         }
-        
+
         [Fact]
         public void ParseMethodWithoutComments()
         {
@@ -91,7 +91,7 @@ namespace antlr_parser.tests.Python
                     
                     def g(self):
                         return 'hello G'
-            ".TrimIndent();
+            ".Unindent();
 
             FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 
@@ -184,8 +184,8 @@ namespace antlr_parser.tests.Python
 
             fileDto.Classes[0].CodeRange.Of(source).Should().Be("class MyClass:");
         }
-        
-        
+
+
         [Fact]
         public void WierdCase2()
         {
@@ -285,7 +285,7 @@ namespace antlr_parser.tests.Python
                     def __init__(self, dict):
                         self.__dict__ = dict
             ".TrimIndent2();
-            
+
             FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 
             fileDto.Classes.Should().HaveCount(2);
@@ -303,8 +303,6 @@ namespace antlr_parser.tests.Python
                 # Occasionally convenient in order to write dict.x instead of more laborious
                 # (and less in keeping with all other attr accesses) dict[""x""]
             ".TrimIndent2());
-            
-
         }
     }
 }

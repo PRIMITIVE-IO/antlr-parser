@@ -71,13 +71,14 @@ namespace antlr_parser.tests.Solidity
                 /*comment*/
                 contract SimpleStorage {
                 }
-            ".Unindent();
+            ".TrimIndent2();
             FileDto fileDto = AntlrParseSolidity.Parse(source, "some/path");
             ClassDto classDto = fileDto.Classes[0];
-            classDto.Header.Should().Be(@"pragma solidity >=0.4.0 <0.6.0;
+            classDto.CodeRange.Of(source).Should().Be(@"
+                pragma solidity >=0.4.0 <0.6.0;
                 /*comment*/
-                contract SimpleStorage {".Unindent());
-            classDto.CodeRange.Should().Be(TestUtils.CodeRange(1, 1, 4, 24));
+                contract SimpleStorage {
+            ".TrimIndent2());
         }
 
         [Fact]
@@ -92,15 +93,15 @@ namespace antlr_parser.tests.Solidity
                 contract SimpleStorage2 {
 
                 }
-            ".Unindent();
+            ".TrimIndent2();
             FileDto fileDto = AntlrParseSolidity.Parse(source, "some/path");
 
             ClassDto classDto = fileDto.Classes[1];
-            classDto.Header.Should().Be(@"
-                /*comment2*/
-                contract SimpleStorage2 {
-            ".Trim().Unindent());
-            classDto.CodeRange.Should().Be(TestUtils.CodeRange(5, 2, 7, 25));
+            classDto.CodeRange.Of(source).Should().Be(@"
+                |
+                |/*comment2*/
+                |contract SimpleStorage2 {
+            ".TrimMargin());
         }
 
         [Fact]
@@ -116,18 +117,21 @@ namespace antlr_parser.tests.Solidity
                       uint result = a + b;
                       return result;
                    }
-                }".Unindent();
+                }
+            ".TrimIndent2();
             FileDto fileDto = AntlrParseSolidity.Parse(source, "some/path");
 
             MethodDto methodDto = fileDto.Classes[0].Methods[0];
-            methodDto.SourceCode.Should().Be(@"/*comment*/
-                   function getResult() public view returns(uint){
-                      uint a = 1;
-                      uint b = 2;
-                      uint result = a + b;
-                      return result;
-                   }".Unindent());
-            methodDto.CodeRange.Should().Be(TestUtils.CodeRange(3, 24, 10, 4));
+            methodDto.CodeRange.Of(source).Should().Be(@"
+                   |
+                   |   /*comment*/
+                   |   function getResult() public view returns(uint){
+                   |      uint a = 1;
+                   |      uint b = 2;
+                   |      uint result = a + b;
+                   |      return result;
+                   |   }
+            ".TrimMargin());
         }
     }
 }

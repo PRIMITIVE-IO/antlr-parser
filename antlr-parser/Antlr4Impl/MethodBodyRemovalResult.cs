@@ -11,20 +11,31 @@ namespace antlr_parser.Antlr4Impl
         public readonly string OriginalSource;
         readonly List<Tuple<int, int>> BlocksToRemove;
 
-        /// <summary>
-        /// Index is a position of last symbol of a function declaration header
-        /// It is 'Y' for: fun f(x:X):Y  { 
-        /// and ')' for: fun f(x:X){ 
-        /// </summary>
-        public readonly Dictionary<int, string> IdxToRemovedMethodBody;
-
-        public static MethodBodyRemovalResult From(string source, List<Tuple<int, int>> blocksToRemove)
+        public static MethodBodyRemovalResult From(string originalSource, List<Tuple<int, int>> blocksToRemove)
         {
-            List<Tuple<int, int>> topLevelBlocksToRemove = RemoveNested(blocksToRemove);
-            Dictionary<int, string> idxToRemovedMethodBody =
-                ComputeIdxToRemovedMethodBody(topLevelBlocksToRemove, source);
-            string cleanedText = RemoveBlocks(source, topLevelBlocksToRemove);
-            return new MethodBodyRemovalResult(cleanedText, source, idxToRemovedMethodBody, topLevelBlocksToRemove);
+            List<Tuple<int, int>> topLevelBlocksToRemove = RemoveNested(blocksToRemove.ToSortedSet(x => x.Item1));
+            string shortenedSource = RemoveBlocks(originalSource, topLevelBlocksToRemove);
+            return new MethodBodyRemovalResult(shortenedSource, originalSource, topLevelBlocksToRemove);
+        }
+
+        /// Is used when have to remove blocks from shortened source.
+        /// Results 'connects' original source and shortened-shortened one :)
+        /// <param name="blocksToRemove"> indices from shortened text</param>
+        public MethodBodyRemovalResult RemoveFromShortened(List<Tuple<int, int>> blocksToRemove)
+        {
+            IEnumerable<Tuple<int, int>> restoredBlocksToRemove = blocksToRemove
+                .Select(r => new Tuple<int, int>(RestoreIdx(r.Item1), RestoreIdx(r.Item2)));
+
+            new SortedSet<Tuple<int, int>>();
+
+            List<Tuple<int, int>> newBlocksToRemove =
+                RemoveNested(BlocksToRemove.Concat(restoredBlocksToRemove).ToSortedSet(x => x.Item1));
+
+            return new MethodBodyRemovalResult(
+                RemoveBlocks(OriginalSource, newBlocksToRemove),
+                OriginalSource,
+                newBlocksToRemove
+            );
         }
 
         static string RemoveBlocks(string source, List<Tuple<int, int>> removeFromTo)
@@ -34,34 +45,18 @@ namespace antlr_parser.Antlr4Impl
             StringBuilder sb = new StringBuilder();
 
             sb.Append(source[..removeFromTo.First().Item1]);
-            
+
             for (int i = 0; i < removeFromTo.Count - 1; i++)
             {
                 sb.Append(source[(removeFromTo[i].Item2 + 1)..(removeFromTo[i + 1].Item1)]);
             }
 
-            sb.Append(source[(removeFromTo.Last().Item2 + 1)..]);
-
-            return sb.ToString();
-        }
-
-        static Dictionary<int, string> ComputeIdxToRemovedMethodBody(List<Tuple<int, int>> blocksToRemove, string text)
-        {
-            //This map is used to restore removed source code
-            Dictionary<int, string> idxToRemovedMethodBody = new Dictionary<int, string>();
-
-            int removedLength = 0;
-            foreach (Tuple<int, int> fromTo in blocksToRemove)
+            if (removeFromTo.Last().Item2 + 1 < source.Length)
             {
-                int lengthToRemove = fromTo.Item2 - fromTo.Item1 + 1;
-                // 'fromTo.Item1' is an index in original file, where removed source code used to be. Since this index
-                // is shifted (because of previous deletions in the same file) it should be corrected for
-                // 'removedLength`.
-                idxToRemovedMethodBody[fromTo.Item1 - removedLength - 1] = text.Substring(fromTo.Item1, lengthToRemove);
-                removedLength += lengthToRemove;
+                sb.Append(source[(removeFromTo.Last().Item2 + 1)..]);
             }
 
-            return idxToRemovedMethodBody;
+            return sb.ToString();
         }
 
         /// <summary>
@@ -71,7 +66,7 @@ namespace antlr_parser.Antlr4Impl
         /// </summary>
         /// <param name="blocksForRemoval"></param>
         /// <returns></returns>
-        static List<Tuple<int, int>> RemoveNested(List<Tuple<int, int>> blocksForRemoval)
+        static List<Tuple<int, int>> RemoveNested(SortedSet<Tuple<int, int>> blocksForRemoval)
         {
             List<Tuple<int, int>> res = new List<Tuple<int, int>>();
             int lastIndexForRemoval = -1;
@@ -91,19 +86,12 @@ namespace antlr_parser.Antlr4Impl
         private MethodBodyRemovalResult(
             string shortenedSource,
             string originalSource,
-            Dictionary<int, string> idxToRemovedMethodBody,
             List<Tuple<int, int>> blocksToRemove
         )
         {
             ShortenedSource = shortenedSource;
-            IdxToRemovedMethodBody = idxToRemovedMethodBody;
             BlocksToRemove = blocksToRemove;
             OriginalSource = originalSource;
-        }
-
-        public string ExtractOriginalSubstring(int from, int to)
-        {
-            return OriginalSource.Substring(from, to - from + 1);
         }
 
         /// <summary>
@@ -114,11 +102,10 @@ namespace antlr_parser.Antlr4Impl
         public int RestoreIdx(int idx)
         {
             int acc = idx;
-            foreach ((int item1, int item2) in BlocksToRemove)
+            foreach ((int fromIdx, int toIdx) in BlocksToRemove) //TODO rework to log(n) using binary search?
             {
-                if (acc < item1) break;
-
-                acc += item2 - item1 + 1;
+                if (acc < fromIdx) break;
+                acc += toIdx - fromIdx + 1;
             }
 
             return acc;

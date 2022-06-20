@@ -19,10 +19,10 @@ namespace antlr_parser.Antlr4Impl.Python
                     int closedParenthesisPosition =
                         source.ClosedParenthesisPosition(methodDef.Index + methodDef.Length - 1);
                     int endMethodDefIdx = MethodDeclarationEndIdx(source, closedParenthesisPosition);
-                    int from = (source.IndexAfterComment(endMethodDefIdx) ?? endMethodDefIdx) + 1;
-                    int to = source.LastMethodLineIdx(methodIndentation, from);
+                    int fromIdx = (source.IndexAfterComment(endMethodDefIdx) ?? endMethodDefIdx) + 1;
+                    int toIdx = source.LastMethodLineIdx(methodIndentation, fromIdx);
 
-                    return Tuple.Create(from, to);
+                    return Tuple.Create(fromIdx, toIdx);
                 })
                 .ToList();
         }

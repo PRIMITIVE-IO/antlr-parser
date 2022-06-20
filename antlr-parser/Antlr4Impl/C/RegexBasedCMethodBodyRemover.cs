@@ -34,7 +34,7 @@ namespace antlr_parser.Antlr4Impl.C
         {
             IEnumerable<Match> matches = CFunctionDeclarationRegex.Matches(source).Cast<Match>();
 
-            List<Tuple<int,int>> blocksToRemove = matches.Select(currentMatch =>
+            List<Tuple<int, int>> blocksToRemove = matches.Select(currentMatch =>
             {
                 int openedCurlyPosition = currentMatch.Groups[3].Index;
                 int closedCurlyPosition = StringUtil.ClosedCurlyPosition(source, openedCurlyPosition);

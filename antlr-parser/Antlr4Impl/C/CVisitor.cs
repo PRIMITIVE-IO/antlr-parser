@@ -45,9 +45,6 @@ namespace antlr_parser.Antlr4Impl.C
                 .DefaultIfEmpty(methodBodyRemovalResult.RestoreIdx(context.Stop?.StopIndex ?? 0))
                 .Min();
 
-            string header = methodBodyRemovalResult.ExtractOriginalSubstring(0, headerEnd)
-                .Trim();
-
             CodeLocation headerEndLocation = IndexToLocationConverter.IdxToLocation(headerEnd);
 
             return new AstNode.FileNode(
@@ -56,7 +53,7 @@ namespace antlr_parser.Antlr4Impl.C
                 classes: structs,
                 fields: new List<AstNode.FieldNode>(),
                 methods: methods,
-                header: header,
+                header: "",
                 namespaces: new List<AstNode.Namespace>(),
                 language: SourceCodeLanguage.C,
                 isTest: false,
@@ -98,9 +95,6 @@ namespace antlr_parser.Antlr4Impl.C
                 .DefaultIfEmpty(methodBodyRemovalResult.RestoreIdx(context.Stop?.StopIndex ?? 0))
                 .Min();
 
-            string header = methodBodyRemovalResult.ExtractOriginalSubstring(headerStart, headerEnd)
-                .Trim();
-
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(headerStart, headerEnd);
 
             return new AstNode.ClassNode(
@@ -111,7 +105,7 @@ namespace antlr_parser.Antlr4Impl.C
                 AccessFlags.AccPublic,
                 methodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
                 methodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex),
-                header,
+                "",
                 codeRange
             );
         }
@@ -162,11 +156,11 @@ namespace antlr_parser.Antlr4Impl.C
             List<string> names = context.structDeclaratorList()
                 ?.structDeclarator()
                 ?.Select(it => it.declarator().directDeclarator().Identifier().ToString())
-                ?.ToList();
+                .ToList();
             return (names?.Count ?? 0) != 0 ? string.Join(",", names) : null;
         }
 
-        private static string ExtractReferenceFieldName(CParser.StructDeclarationContext context)
+        private static string? ExtractReferenceFieldName(CParser.StructDeclarationContext context)
         {
             return context.specifierQualifierList()
                 ?.specifierQualifierList()
@@ -177,7 +171,7 @@ namespace antlr_parser.Antlr4Impl.C
                 ?.ToString();
         }
 
-        private static string ExtractPlainFieldName(CParser.StructDeclarationContext context)
+        private static string? ExtractPlainFieldName(CParser.StructDeclarationContext context)
         {
             return context.specifierQualifierList()
                 ?.specifierQualifierList()
@@ -187,7 +181,7 @@ namespace antlr_parser.Antlr4Impl.C
                 ?.ToString();
         }
 
-        private static string ExtractArrayFieldName(CParser.StructDeclarationContext context)
+        private static string? ExtractArrayFieldName(CParser.StructDeclarationContext context)
         {
             return context.structDeclaratorList()
                 ?.structDeclarator()
@@ -201,20 +195,17 @@ namespace antlr_parser.Antlr4Impl.C
 
         public override AstNode VisitFunctionDefinition(CParser.FunctionDefinitionContext context)
         {
-            string text = context.GetFullText();
             string fName = ExtractFunctionName(context.declarator().directDeclarator());
 
-            methodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex,
-                out string removedSourceCode);
-
             int startIdx = methodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
-            int endIdx = methodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+            //+1 forces to restore removed part
+            int endIdx = methodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex + 1);
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 
             return new AstNode.MethodNode(
                 fName,
                 AccessFlags.AccPublic,
-                text + removedSourceCode ?? "",
+                "",
                 startIdx: startIdx,
                 endIdx: endIdx,
                 codeRange: codeRange,

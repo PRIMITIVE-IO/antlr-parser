@@ -12,8 +12,7 @@ namespace antlr_parser.tests.TypeScript
         [Fact]
         public void SmokeTest()
         {
-            FileDto res = AntlrParseTypeScript.Parse(
-                source: @"
+            string source = @"
                 namespace testNamespace {
                     class Employee {
                         public empCode: number;
@@ -29,18 +28,26 @@ namespace antlr_parser.tests.TypeScript
                         }
                     }
                 } 
-                ".Unindent(),
+                ".TrimIndent2();
+
+            FileDto res = AntlrParseTypeScript.Parse(
+                source: source,
                 filePath: "repo/path"
             );
 
             res.Classes.Count.Should().Be(1);
             res.Classes[0].Name.Should().Be("Employee");
             res.Classes[0].Fields.Count.Should().Be(2);
-            res.Classes[0].Header.Should().Be("class Employee {");
+            res.Classes[0].CodeRange.Of(source).Should().Be(@"
+                |class Employee {
+                |        
+            ".TrimMargin());
 
             FieldDto empCodeField = res.Classes[0].Fields[0];
             empCodeField.Name.Should().Be("empCode");
-            empCodeField.SourceCode.Should().Be("public empCode: number;");
+            empCodeField.CodeRange.Of(source).Should().Be(@"
+                public empCode: number;
+            ".TrimIndent2());
             empCodeField.AccFlag.Should().Be(AccessFlags.AccPublic);
 
             FieldDto empNameField = res.Classes[0].Fields[1];
@@ -49,14 +56,20 @@ namespace antlr_parser.tests.TypeScript
 
             res.Classes[0].Methods.Count.Should().Be(2);
             res.Classes[0].Methods[0].Name.Should().Be("constructor");
-            res.Classes[0].Methods[0].CodeRange.Should().Be(TestUtils.CodeRange(7, 9, 10, 9));
-            res.Classes[0].Methods[0].SourceCode.Should().Be(@"constructor(code: number, name: string) {
-                                this.empName = name;
-                                this.empCode = code;
-                        }".Unindent());
+            res.Classes[0].Methods[0].CodeRange.Of(source).Should().Be(@"
+                |constructor(code: number, name: string) {
+                |                this.empName = name;
+                |                this.empCode = code;
+                |        }
+            ".TrimMargin());
 
             res.Classes[0].Methods[1].Name.Should().Be("getSalary");
-            res.Classes[0].Methods[1].CodeRange.Should().Be(TestUtils.CodeRange(12, 9, 14, 9));
+            res.Classes[0].Methods[1].CodeRange.Of(source).Should().Be(@"
+                |private getSalary() : number {
+                |            return 10000;
+                |        }
+            ".TrimMargin());
+
             res.Classes[0].Methods[1].AccFlag.Should().Be(AccessFlags.AccPrivate);
         }
 

@@ -14,7 +14,7 @@ namespace antlr_parser.tests.Kotlin
         {
             string source = @"
                 class X
-            ";
+            ".TrimIndent2();
             FileDto res = AntlrParseKotlin.Parse(source, "path");
             res.Classes.Should().HaveCount(1);
             ClassDto topClass = res.Classes.First();
@@ -27,7 +27,7 @@ namespace antlr_parser.tests.Kotlin
             string source = @"
                 class X{}
                 fun f(){}
-            ";
+            ".TrimIndent2();
             FileDto res = AntlrParseKotlin.Parse(source, "path");
             res.Classes.Should().HaveCount(2);
 
@@ -48,17 +48,18 @@ namespace antlr_parser.tests.Kotlin
                 class X {
                     fun f(){}
                 }
-            ".Unindent();
+            ".TrimIndent2();
 
             FileDto res = AntlrParseKotlin.Parse(source, "path");
             res.Classes.Should().HaveCount(1);
             ClassDto topClass = res.Classes.First();
-            topClass.Header.Should().Be(@"
-                package x
-                import y
-                /**comment*/
-                class X {
-            ".Unindent().Trim());
+            topClass.CodeRange.Of(source).Should().Be(@"
+                |package x
+                |import y
+                |/**comment*/
+                |class X {
+                |    
+            ".TrimMargin());
         }
 
         [Fact]
@@ -71,14 +72,16 @@ namespace antlr_parser.tests.Kotlin
                         fun g()
                     }
                 }
-            ".Unindent();
+            ".TrimIndent2();
             FileDto res = AntlrParseKotlin.Parse(source, "path");
             res.Classes.Should().HaveCount(2);
             ClassDto innerClass = res.Classes[1];
-            innerClass.Header.Should().Be(@"
-                /**comment*/
-                class Y {
-            ".Unindent().Trim());
+            innerClass.CodeRange.Of(source).Should().Be(@"
+                |
+                |    /**comment*/
+                |    class Y {
+                |        
+            ".TrimMargin());
         }
 
         [Fact]
@@ -88,14 +91,15 @@ namespace antlr_parser.tests.Kotlin
                 class X {}
                 /**comment*/
                 class Y {}
-            ";
+            ".TrimIndent2();
             FileDto res = AntlrParseKotlin.Parse(source, "path");
             res.Classes.Should().HaveCount(2);
             ClassDto secondClass = res.Classes[1];
-            secondClass.Header.Should().Be(@"
-                /**comment*/
-                class Y {}
-            ".Unindent().Trim());
+            secondClass.CodeRange.Of(source).Should().Be(@"
+                |
+                |/**comment*/
+                |class Y {}
+            ".TrimMargin());
         }
     }
 }

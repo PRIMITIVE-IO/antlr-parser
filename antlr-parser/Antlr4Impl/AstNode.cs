@@ -12,7 +12,7 @@ namespace antlr_parser.Antlr4Impl
         {
             return new List<AstNode> { this };
         }
-        
+
         public class FileNode : AstNode
         {
             public readonly string Header;
@@ -105,7 +105,8 @@ namespace antlr_parser.Antlr4Impl
             public readonly CodeRange? CodeRange;
             public readonly List<ArgumentNode> Arguments;
 
-            public MethodNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx, CodeRange? codeRange, List<ArgumentNode> arguments)
+            public MethodNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx,
+                CodeRange? codeRange, List<ArgumentNode> arguments)
             {
                 Name = name;
                 AccFlag = accFlag;
@@ -116,7 +117,7 @@ namespace antlr_parser.Antlr4Impl
                 Arguments = arguments;
             }
         }
-        
+
         public class ArgumentNode : AstNode
         {
             public readonly string Name;
@@ -138,7 +139,8 @@ namespace antlr_parser.Antlr4Impl
             public readonly int EndIdx;
             public readonly CodeRange? CodeRange;
 
-            public FieldNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx, CodeRange? codeRange)
+            public FieldNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx,
+                CodeRange? codeRange)
             {
                 Name = name;
                 AccFlag = accFlag;
@@ -151,18 +153,24 @@ namespace antlr_parser.Antlr4Impl
 
         public class Namespace : AstNode
         {
+            public readonly string Name;
             public readonly List<ClassNode> Classes;
             public readonly List<FieldNode> Fields;
             public readonly List<MethodNode> Methods;
             public readonly List<Namespace> Namespaces;
+            public readonly int StartIdx;
+            public readonly int EndIdx;
 
-            public Namespace(List<ClassNode> classes, List<FieldNode> fields, List<MethodNode> methods,
-                List<Namespace> namespaces)
+            public Namespace(string name, List<ClassNode> classes, List<FieldNode> fields, List<MethodNode> methods,
+                List<Namespace> namespaces, int startIdx, int endIdx)
             {
+                Name = name;
                 Classes = classes;
                 Fields = fields;
                 Methods = methods;
                 Namespaces = namespaces;
+                StartIdx = startIdx;
+                EndIdx = endIdx;
             }
         }
 

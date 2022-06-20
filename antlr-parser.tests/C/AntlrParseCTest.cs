@@ -25,14 +25,14 @@ namespace antlr_parser.tests.C
                     int result;
                     result = a+b;
                     return result;
-                }"
-                .Unindent();
+                }
+            ".TrimIndent2();
 
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
             MethodDto method = fileDto.Classes[0].Methods[0];
             method.Name.Should().Be("addNumbers");
-            method.SourceCode.Should().Be(source.TrimStart('\n'));
+            method.CodeRange.Of(source).Should().Be(source);
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace antlr_parser.tests.C
             ClassDto dateClass = fileDto.Classes[1];
             dateClass.Name.Should().Be("Date");
         }
-        
+
         //TODO [Fact]
         public void ClassNameWithoutNamespace()
         {
@@ -194,19 +194,27 @@ namespace antlr_parser.tests.C
                 {
      
                 }
-            ".Unindent();
+            ".TrimIndent2();
 
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
             List<MethodDto> methodInfos = fileDto.Classes[0].Methods;
-            MethodDto? fMethod = methodInfos.SingleOrDefault(it => it.Name == "f");
+            MethodDto fMethod = methodInfos.Single(it => it.Name == "f");
             fMethod.Should().NotBeNull();
-            fMethod.SourceCode.Trim().Should().Be(@"
-                int f(int a, int b)
-                {
-                    for(i = 0; i<0; i++){
-                    };
-                }".Unindent().Trim());
+
+            fMethod.CodeRange.Of(source).Should().Be(@"
+                |int f(int a, int b)
+                |{
+                |#if 1
+                |    for(i = 0; i<0; i++){
+                |#else
+                |    for(j = 0; j<0; j++){
+                |#endif
+                |    };
+                |}
+                |
+            ".TrimMargin());
+
             methodInfos.SingleOrDefault(it => it.Name == "g").Should().NotBeNull();
         }
 
@@ -245,17 +253,18 @@ namespace antlr_parser.tests.C
                 #include ""something""
                 /**comment*/
                 struct A {
-                   struct a b;
+                   int a;
                 };
-            ".Unindent();
+            ".TrimIndent2();
 
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
-            fileDto.Classes.First().Header.Should().Be(@"
-                #include ""something""
-                /**comment*/
-                struct A {
-            ".Unindent().Trim());
+            fileDto.Classes.Single().CodeRange.Of(source).Should().Be(@"
+                |#include ""something""
+                |/**comment*/
+                |struct A {
+                |   
+            ".TrimMargin());
         }
 
         [Fact]
@@ -264,21 +273,24 @@ namespace antlr_parser.tests.C
             string source = @"
                 #include ""something""
                 struct A {
-                   struct a b;
+                   int a ;
                 };
 
                 /**comment2*/
                 struct B {
-                    struct c d;
+                    int c;
                 };
-            ".Unindent();
+            ".TrimIndent2();
 
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
-            fileDto.Classes[2].Header.Should().Be(@"
-                /**comment2*/
-                struct B {
-            ".Unindent().Trim());
+            fileDto.Classes.Single(x => x.Name == "B").CodeRange.Of(source).Should().Be(@"
+                |
+                |
+                |/**comment2*/
+                |struct B {
+                |    
+            ".TrimMargin());
         }
     }
 }

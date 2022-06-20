@@ -9,7 +9,6 @@ namespace antlr_parser.Antlr4Impl.CPP
 {
     public static class AntlrParseCpp
     {
-
         public static FileDto Parse(string source, string filePath)
         {
             return AstNodeToClassDtoConverter.ToFileDto(ParseFileNode(source, filePath), source);
@@ -17,15 +16,12 @@ namespace antlr_parser.Antlr4Impl.CPP
 
         private static AstNode.FileNode ParseFileNode(string source, string filePath)
         {
-            string preprocessedSource = MethodBodyRemovalResult
-                .From(source, DirectivesRemover.FindBlocksToRemove(source))
-                .ShortenedSource;
+            MethodBodyRemovalResult directivesRemovalResult = MethodBodyRemovalResult
+                .From(source, DirectivesRemover.FindBlocksToRemove(source));
 
-            List<Tuple<int, int>> blocksToRemove =
-                RegexBasedCppMethodBodyRemover.FindBlocksToRemove(preprocessedSource);
-
-            MethodBodyRemovalResult methodBodyRemovalResult =
-                MethodBodyRemovalResult.From(preprocessedSource, blocksToRemove);
+            MethodBodyRemovalResult methodBodyRemovalResult = directivesRemovalResult.RemoveFromShortened(
+                RegexBasedCppMethodBodyRemover.FindBlocksToRemove(directivesRemovalResult.ShortenedSource)
+            );
 
             char[] codeArray = methodBodyRemovalResult.ShortenedSource.ToCharArray();
             AntlrInputStream inputStream = new AntlrInputStream(codeArray, codeArray.Length);

@@ -27,7 +27,7 @@ namespace antlr_parser.Antlr4Impl.Python
                         ']' => '[',
                         _ => throw new Exception()
                     };
-                    
+
                     if (line[i] != expected)
                         PrimitiveLogger.Logger.Instance()
                             .Warn($"line: {line} at {i} contains {line[i]}, expected: {expected}");

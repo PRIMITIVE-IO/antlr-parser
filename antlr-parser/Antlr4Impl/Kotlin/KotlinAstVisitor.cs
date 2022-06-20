@@ -38,8 +38,6 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex))
                 .Min();
 
-            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(0, headerEnd).Trim().Unindent();
-
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(0, headerEnd);
             return new AstNode.FileNode(
                 path: FilePath,
@@ -47,7 +45,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 classes: classes,
                 fields: fields,
                 methods: methods,
-                header: header,
+                header: "",
                 namespaces: new List<AstNode.Namespace>(),
                 language: SourceCodeLanguage.Kotlin,
                 isTest: false,
@@ -71,23 +69,14 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         public override AstNode VisitFunctionDeclaration(KotlinParser.FunctionDeclarationContext context)
         {
             AccessFlags modifier = ExtractVisibilityModifier(context.modifierList());
-            MethodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex, out string removedBody);
-            if (string.IsNullOrEmpty(removedBody))
-            {
-                removedBody = "";
-            }
-
-            string sourceCode = context.GetFullText() + removedBody;
-
-            sourceCode = sourceCode.Unindent();
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
-            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex + 1);
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 
             return new AstNode.MethodNode(
                 context.identifier().GetFullText(),
                 modifier,
-                sourceCode,
+                "",
                 startIdx: startIdx,
                 endIdx: endIdx,
                 codeRange: codeRange,
@@ -147,14 +136,11 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 0
             }.Max();
 
-            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(headerStart, headerEndIdx)
-                .Unindent()
-                .Trim();
-
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
 
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StartIndex);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(headerStart, headerEndIdx);
+
             return new AstNode.ClassNode(
                 context.simpleIdentifier().GetFullText(),
                 methodNodes,
@@ -163,7 +149,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 modifier,
                 startIdx: startIdx,
                 endIdx: endIdx,
-                header: header,
+                header: "",
                 codeRange: codeRange
             );
         }
@@ -205,7 +191,6 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         public override AstNode VisitPropertyDeclaration(KotlinParser.PropertyDeclarationContext context)
         {
             AccessFlags modifier = ExtractVisibilityModifier(context.modifierList());
-            string sourceCode = context.GetFullText();
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
@@ -213,7 +198,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             return new AstNode.FieldNode(
                 context.variableDeclaration().simpleIdentifier().GetFullText(),
                 modifier,
-                sourceCode,
+                "",
                 startIdx: startIdx,
                 endIdx: endIdx,
                 codeRange: codeRange

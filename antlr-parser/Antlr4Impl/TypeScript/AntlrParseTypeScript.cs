@@ -8,7 +8,6 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 {
     public static class AntlrParseTypeScript
     {
-
         public static FileDto Parse(string source, string filePath)
         {
             return AstNodeToClassDtoConverter.ToFileDto(ParseFileNode(source, filePath), source);

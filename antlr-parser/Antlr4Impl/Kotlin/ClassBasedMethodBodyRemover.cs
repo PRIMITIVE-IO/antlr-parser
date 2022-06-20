@@ -46,7 +46,10 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                     keepNextCurly = true;
                 }
 
-                if (!IsEmptyChar(s[i])) lastNonEmptyCharIdx = i;
+                if (!IsEmptyChar(s[i]))
+                {
+                    lastNonEmptyCharIdx = i;
+                }
             }
 
             return removeFromTo.ToList();
@@ -54,19 +57,13 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
         static bool IsCompletedClassWord(string s, int i)
         {
-            if ( 5 <= i && i + 1 < s.Length)
-            {
-                char nextChar = s[i + 1];
-                if (5 < i)
-                {
-                    char prevChar = s[i - 5];
-                    if (!IsEmptyChar(prevChar)) return false;
-                }
-                return (nextChar == ' ' || nextChar == '\t' || nextChar == '\n' || nextChar == '\r' || nextChar == '{')
-                       && s[i] == 's' && s.Substring(i - 4, 5) == "class";
-            }
+            if (i < 4 || i == s.Length - 1) return false; // start of file or end of file
+            if (5 <= i && !IsEmptyChar(s[i - 5])) return false; // 'class' is part of bigger name 
 
-            return false;
+            char nextChar = s[i + 1];
+
+            return (nextChar == ' ' || nextChar == '\t' || nextChar == '\n' || nextChar == '\r' || nextChar == '{')
+                   && s[i] == 's' && s.Substring(i - 4, 5) == "class";
         }
 
         static bool IsEmptyChar(char c)

@@ -41,8 +41,9 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                     false,
                     new CodeRange(new CodeLocation(0, 0), new CodeLocation(0, 0)));
             }
-            
-            foreach (JavaScriptParser.SourceElementContext sourceElementContext in context.sourceElements().sourceElement())
+
+            foreach (JavaScriptParser.SourceElementContext sourceElementContext in context.sourceElements()
+                         .sourceElement())
             {
                 JavaScriptParser.StatementContext statement = sourceElementContext.statement();
 
@@ -72,9 +73,6 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex))
                 .Min();
 
-            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(0, headerEnd)
-                .Trim();
-
             CodeLocation headerEndLocation = IndexToLocationConverter.IdxToLocation(headerEnd);
 
             return new AstNode.FileNode(
@@ -83,7 +81,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 classes: classes,
                 fields: fields,
                 methods: methods,
-                header: header,
+                header: "",
                 namespaces: new List<AstNode.Namespace>(),
                 language: SourceCodeLanguage.Java,
                 isTest: false,
@@ -102,11 +100,12 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                     return PreviousPeerEndPosition(parent.Parent, parent);
                 default:
                 {
-                    JavaScriptParser.SourceElementsContext sourceElementsContext = parent as JavaScriptParser.SourceElementsContext;
+                    JavaScriptParser.SourceElementsContext sourceElementsContext =
+                        parent as JavaScriptParser.SourceElementsContext;
 
                     return sourceElementsContext.sourceElement()
                         .TakeWhile(it => it != self)
-                        .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
+                        .Select(it => it.Stop.StopIndex + 1)
                         .DefaultIfEmpty(-1)
                         .Max();
                 }
@@ -115,9 +114,6 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         public override AstNode VisitFunctionDeclaration(JavaScriptParser.FunctionDeclarationContext context)
         {
-            MethodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex,
-                out string removeSourceCode);
-            
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex + 1);
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
@@ -125,7 +121,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             return new AstNode.MethodNode(
                 context.identifier().GetFullText(),
                 AccessFlags.None,
-                context.GetFullText() + (removeSourceCode ?? ""),
+                "",
                 startIdx: startIdx,
                 endIdx: endIdx,
                 codeRange: codeRange,
@@ -144,7 +140,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             List<AstNode.ClassNode> innerClasses = classElements.OfType<AstNode.ClassNode>().ToList();
 
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
-            
+
             int headerEnd = methodNodes.Select(it => it.StartIdx - 1)
                 .Concat(fieldNodes.Select(it => it.StartIdx - 1))
                 .Concat(innerClasses.Select(it => it.StartIdx - 1))
@@ -157,12 +153,8 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 0
             }.Max();
 
-
-            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(headerStart, headerEnd)
-                .Trim();
-
-            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(headerStart);
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, headerEnd);
 
             return new AstNode.ClassNode(
                 context.identifier().GetFullText(),
@@ -172,7 +164,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 AccessFlags.None,
                 startIdx,
                 endIdx,
-                header,
+                "",
                 codeRange: codeRange
             );
         }
@@ -184,17 +176,14 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         public override AstNode VisitMethodDefinition(JavaScriptParser.MethodDefinitionContext context)
         {
-            MethodBodyRemovalResult.IdxToRemovedMethodBody.TryGetValue(context.Stop.StopIndex,
-                out string removedSourceCode);
-            
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex + 1);
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
-            
+
             return new AstNode.MethodNode(
                 context.propertyName().GetFullText(),
                 AccessFlags.None,
-                context.GetFullText() + (removedSourceCode ?? ""),
+                "",
                 startIdx: startIdx,
                 endIdx: endIdx,
                 codeRange: codeRange,
@@ -251,7 +240,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         public override List<string> VisitPropertyShorthand(JavaScriptParser.PropertyShorthandContext context)
         {
-            return new List<string> {context.singleExpression().GetFullText()};
+            return new List<string> { context.singleExpression().GetFullText() };
         }
 
         public override List<string> VisitObjectLiteralExpression(
@@ -292,7 +281,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         public override List<string> VisitIdentifierExpression(JavaScriptParser.IdentifierExpressionContext context)
         {
-            return new List<string> {context.identifier().GetFullText()};
+            return new List<string> { context.identifier().GetFullText() };
         }
     }
 }

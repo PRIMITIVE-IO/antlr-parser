@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using antlr_parser.Antlr4Impl;
 using antlr_parser.Antlr4Impl.Kotlin;
 using FluentAssertions;
 using PrimitiveCodebaseElements.Primitive;
@@ -23,8 +24,8 @@ namespace antlr_parser.tests.Kotlin
                 }
             ".Unindent();
             //Act
-            List<Tuple<int,int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
-            
+            List<Tuple<int, int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
+
             //Verify
             blocksToRemove.Count.Should().Be(4);
             blocksToRemove[0].Should().Be(new Tuple<int, int>(1, 10));
@@ -32,7 +33,7 @@ namespace antlr_parser.tests.Kotlin
             blocksToRemove[2].Should().Be(new Tuple<int, int>(53, 63));
             blocksToRemove[3].Should().Be(new Tuple<int, int>(92, 102));
         }
-        
+
         [Fact]
         public void OnlyFullWord()
         {
@@ -41,15 +42,15 @@ namespace antlr_parser.tests.Kotlin
                     classes { REMOVE }
                     myclass { REMOVE }
                 }
-            ".Unindent();
-            
+            ".TrimIndent2();
+
             //Act
-            List<Tuple<int,int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
-            
+            List<Tuple<int, int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
+
             //Verify
             blocksToRemove.Count.Should().Be(2);
-            blocksToRemove[0].Should().Be(new Tuple<int, int>(20, 30));
-            blocksToRemove[1].Should().Be(new Tuple<int, int>(43, 53));
+            blocksToRemove[0].Should().Be(new Tuple<int, int>(19, 29));
+            blocksToRemove[1].Should().Be(new Tuple<int, int>(42, 52));
         }
     }
 }

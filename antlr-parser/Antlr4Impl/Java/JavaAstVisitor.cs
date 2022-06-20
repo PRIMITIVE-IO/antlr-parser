@@ -74,9 +74,6 @@ namespace antlr_parser.Antlr4Impl.Java
             int restoredStartIdx = MethodBodyRemovalResult.RestoreIdx(startIdx);
             int restoredEndIdx = MethodBodyRemovalResult.RestoreIdx(context.classBody().LBRACE().Symbol.StartIndex);
 
-            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(restoredStartIdx, restoredEndIdx).Trim()
-                .Unindent();
-
             return new AstNode.ClassNode(
                 name: context.IDENTIFIER().GetText(),
                 methods: methodNodes,
@@ -86,7 +83,7 @@ namespace antlr_parser.Antlr4Impl.Java
                 startIdx: restoredStartIdx,
                 endIdx: restoredEndIdx,
                 codeRange: IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx),
-                header: header
+                header: ""
             );
         }
 
@@ -151,10 +148,6 @@ namespace antlr_parser.Antlr4Impl.Java
 
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx);
 
-            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(restoredStartIdx, restoredEndIdx)
-                .Trim()
-                .Unindent();
-
             return new AstNode.ClassNode(
                 name: context.IDENTIFIER().GetText(),
                 methods: methodNodes,
@@ -164,7 +157,7 @@ namespace antlr_parser.Antlr4Impl.Java
                 startIdx: restoredStartIdx,
                 endIdx: restoredEndIdx,
                 codeRange: codeRange,
-                header: header
+                header: ""
             );
         }
 
@@ -183,10 +176,6 @@ namespace antlr_parser.Antlr4Impl.Java
             int restoredStartIdx = MethodBodyRemovalResult.RestoreIdx(startIdx);
             int restoredEndIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
-            string source = MethodBodyRemovalResult.ExtractOriginalSubstring(restoredStartIdx, restoredEndIdx)
-                .Trim()
-                .Unindent();
-
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx);
 
             List<AstNode.ArgumentNode> arguments = context.formalParameters()?.formalParameterList()?.formalParameter()
@@ -196,7 +185,7 @@ namespace antlr_parser.Antlr4Impl.Java
             return new AstNode.MethodNode(
                 name: name,
                 accFlag: AccessFlag(modifier),
-                sourceCode: source,
+                sourceCode: "",
                 startIdx: restoredStartIdx,
                 endIdx: restoredEndIdx,
                 codeRange: codeRange,
@@ -224,10 +213,6 @@ namespace antlr_parser.Antlr4Impl.Java
             int restoredStartIdx = MethodBodyRemovalResult.RestoreIdx(startIdx);
             int restoredEndIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
-            string source = MethodBodyRemovalResult.ExtractOriginalSubstring(restoredStartIdx, restoredEndIdx)
-                .Trim()
-                .Unindent();
-
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx);
 
             List<AstNode.ArgumentNode> arguments = context.formalParameters()?.formalParameterList()?.formalParameter()
@@ -237,7 +222,7 @@ namespace antlr_parser.Antlr4Impl.Java
             return new AstNode.MethodNode(
                 name: name,
                 accFlag: AccessFlag(modifier),
-                sourceCode: source,
+                sourceCode: "",
                 startIdx: restoredStartIdx,
                 endIdx: restoredEndIdx,
                 codeRange: codeRange,
@@ -260,22 +245,17 @@ namespace antlr_parser.Antlr4Impl.Java
 
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx);
 
-            string sourceCode = MethodBodyRemovalResult.ExtractOriginalSubstring(restoredStartIdx, restoredEndIdx)
-                .Trim()
-                .Unindent();
-
             return new AstNode.FieldNode(
                 name: name,
                 accFlag: AccessFlag(modifier),
-                sourceCode: sourceCode,
+                sourceCode: "",
                 startIdx: restoredStartIdx,
                 endIdx: restoredEndIdx,
                 codeRange: codeRange
             );
         }
 
-        [CanBeNull]
-        private static string ClassBodyDeclarationModifier([CanBeNull] JavaParser.ClassBodyDeclarationContext context)
+        private static string? ClassBodyDeclarationModifier(JavaParser.ClassBodyDeclarationContext? context)
         {
             return context
                 ?.modifier()
@@ -307,10 +287,6 @@ namespace antlr_parser.Antlr4Impl.Java
                               ClassBodyDeclarationModifier(
                                   context.Parent.Parent as JavaParser.ClassBodyDeclarationContext);
 
-            string header = MethodBodyRemovalResult.ExtractOriginalSubstring(restoredStartIdx, restoredStopIdx)
-                .Trim()
-                .Unindent();
-
             return new AstNode.ClassNode(
                 name: context.IDENTIFIER().GetText(),
                 methods: methodNodes,
@@ -320,12 +296,11 @@ namespace antlr_parser.Antlr4Impl.Java
                 startIdx: restoredStartIdx,
                 endIdx: restoredStopIdx,
                 codeRange: codeRange,
-                header: header
+                header: ""
             );
         }
 
-        [CanBeNull]
-        private static string TypeDeclarationModifier([CanBeNull] JavaParser.TypeDeclarationContext context)
+        private static string? TypeDeclarationModifier(JavaParser.TypeDeclarationContext? context)
         {
             return context
                 ?.classOrInterfaceModifier()
@@ -333,7 +308,7 @@ namespace antlr_parser.Antlr4Impl.Java
                 .SingleOrDefault(it => it == "private" || it == "protected" || it == "public");
         }
 
-        static string ParentName(ParserRuleContext context)
+        static string? ParentName(ParserRuleContext context)
         {
             return (context.Parent?.Parent?.Parent?.Parent as JavaParser.EnumDeclarationContext)?.IDENTIFIER()
                    .GetText() ??
@@ -350,17 +325,13 @@ namespace antlr_parser.Antlr4Impl.Java
                 .Select(it => it.GetText())
                 .SingleOrDefault(it => it == "private" || it == "protected" || it == "public");
 
-            string name = ParentName(context);
+            string? name = ParentName(context);
 
             int startIdx = (NearestPeerEndIdx(context, context.Start.StartIndex) ?? EnclosingClassHeaderEnd(context))
                 .GetValueOrDefault(-1) + 1;
 
             int restoredStartIdx = MethodBodyRemovalResult.RestoreIdx(startIdx);
             int restoredEndIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
-
-            string source = MethodBodyRemovalResult.ExtractOriginalSubstring(restoredStartIdx, restoredEndIdx)
-                .Trim()
-                .Unindent();
 
             CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx);
 
@@ -371,7 +342,7 @@ namespace antlr_parser.Antlr4Impl.Java
             return new AstNode.MethodNode(
                 name: name,
                 accFlag: AccessFlag(modifier),
-                sourceCode: source,
+                sourceCode: "",
                 startIdx: restoredStartIdx,
                 endIdx: restoredEndIdx,
                 codeRange: codeRange,

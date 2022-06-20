@@ -54,27 +54,35 @@ namespace antlr_parser.tests
                 
                 fun outerFunction() { }
 
-            ".Unindent(); 
-            
+            ".TrimIndent2();
+
             FileDto result = ParserHandler.FileDtoFromSourceText("kotlin.kt", ".kt", source);
 
             //Verify
             ClassDto fileInfo = result.Classes.First();
-            fileInfo.Header.Should().Be(
-                @"package pkg
-
-                  /** comment */".Unindent());
+            fileInfo.CodeRange.Of(source).Should().Be(@"
+                  |package pkg
+                  |
+                  |/** comment */
+                  |
+            ".TrimMargin());
 
             ClassDto classInfo = result.Classes[1];
             classInfo.Name.Should().Be("C");
-            classInfo.Header.Should().Be(@"
-                package pkg
-                
-                /** comment */
-                class C {
-            ".Unindent().Trim());
+            classInfo.CodeRange.Of(source).Should().Be(@"
+                |package pkg
+                |
+                |/** comment */
+                |class C {
+                |  
+            ".TrimMargin());
 
-            classInfo.Methods.Single().SourceCode.Should().Be("fun method() {\n  println()\n}");
+            classInfo.Methods.Single().CodeRange.Of(source).Should().Be(@"
+                |fun method() {
+                |    println()
+                |  }
+                |
+            ".TrimMargin());
         }
     }
 }

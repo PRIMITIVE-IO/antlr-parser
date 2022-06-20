@@ -40,19 +40,19 @@ namespace antlr_parser.Antlr4Impl.C
             IEnumerable<Match> matches = CFunctionDeclarationRegex.Matches(source).Cast<Match>();
 
             List<Tuple<int, int>> blocksToRemove = matches.Select(currentMatch =>
-            {
-                int openedCurlyPosition = currentMatch.Groups[5].Index;
-                try
                 {
-                    int closedCurlyPosition = StringUtil.ClosedCurlyPosition(source, openedCurlyPosition);
-                    return new Tuple<int, int>(openedCurlyPosition + 1, closedCurlyPosition - 1);
-                }
-                catch (Exception e)
-                {
-                    PrimitiveLogger.Logger.Instance().Error("Failed to remove blocks", e);
-                    return null;
-                }
-            })
+                    int openedCurlyPosition = currentMatch.Groups[5].Index;
+                    try
+                    {
+                        int closedCurlyPosition = StringUtil.ClosedCurlyPosition(source, openedCurlyPosition);
+                        return new Tuple<int, int>(openedCurlyPosition + 1, closedCurlyPosition - 1);
+                    }
+                    catch (Exception e)
+                    {
+                        PrimitiveLogger.Logger.Instance().Error("Failed to remove blocks", e);
+                        return null;
+                    }
+                })
                 .Where(it => it != null)
                 .ToList();
 

@@ -8,19 +8,16 @@ namespace antlr_parser.tests.Python
 {
     public class LastNonWhitespaceIndexerTest
     {
-        
-        
         [Fact]
         public void SingleLineWithSpaces()
         {
             string source = @"
                 1234 1234
             ".TrimIndent2();
-            
-            Dictionary<int,int> actual = LastNonWhitespaceIndexer.IdxToLastNonWhiteSpace(source);
+
+            Dictionary<int, int> actual = LastNonWhitespaceIndexer.IdxToLastNonWhiteSpace(source);
 
             actual.Should().Contain(4, 3);
-            
         }
 
         [Fact]
@@ -30,11 +27,10 @@ namespace antlr_parser.tests.Python
                 1234
                 1234
             ".TrimIndent2();
-            
-            Dictionary<int,int> actual = LastNonWhitespaceIndexer.IdxToLastNonWhiteSpace(source);
+
+            Dictionary<int, int> actual = LastNonWhitespaceIndexer.IdxToLastNonWhiteSpace(source);
 
             actual.Should().Contain(4, 3);
-            
         }
     }
 }

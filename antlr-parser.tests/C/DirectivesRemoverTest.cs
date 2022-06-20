@@ -23,11 +23,11 @@ namespace antlr_parser.tests.C
                 #endif
             ".Unindent();
 
-            List<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
+            List<Tuple<int, int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
             MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be("\n    textToKeep\n");
         }
-        
+
         [Fact]
         void RemoveNestedDirectives()
         {
@@ -45,10 +45,11 @@ namespace antlr_parser.tests.C
                 #endif
             ".Unindent();
 
-            List<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
+            List<Tuple<int, int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
             MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be("\n    textToKeep\n");
         }
+
         [Fact]
         void RemoveNestedDirectivesLevel2()
         {
@@ -72,11 +73,12 @@ namespace antlr_parser.tests.C
                 #endif
             ".Unindent();
 
-            List<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
+            List<Tuple<int, int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
-            MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be("\n    textToKeep\n    textToKeep2\n");
+            MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should()
+                .Be("\n    textToKeep\n    textToKeep2\n");
         }
-        
+
         [Fact]
         void KeepSameLevelDirectives()
         {
@@ -97,10 +99,10 @@ namespace antlr_parser.tests.C
                 #endif
             ".Unindent();
 
-            List<Tuple<int,int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
+            List<Tuple<int, int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
-            MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be("\n    textToKeep\n    textToKeep2\n");
+            MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should()
+                .Be("\n    textToKeep\n    textToKeep2\n");
         }
-        
     }
 }

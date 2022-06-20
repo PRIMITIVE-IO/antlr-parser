@@ -21,7 +21,7 @@ namespace antlr_parser.tests.CPP
                 fun f(){}
             ".Unindent());
         }
-        
+
         [Fact]
         void ShouldRemoveBody()
         {

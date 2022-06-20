@@ -34,19 +34,19 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             IEnumerable<Match> matches = TypescriptFunctionDeclarationRegex.Matches(source).Cast<Match>();
 
             List<Tuple<int, int>> blocksToRemove = matches.Select(currentMatch =>
-            {
-                int openedCurlyPosition = currentMatch.Groups[4].Index;
-                int closedCurlyPosition = StringUtil.ClosedCurlyPosition(source, openedCurlyPosition);
+                {
+                    int openedCurlyPosition = currentMatch.Groups[4].Index;
+                    int closedCurlyPosition = StringUtil.ClosedCurlyPosition(source, openedCurlyPosition);
 
-                int openCurlyPosition = currentMatch.Groups[4].Index;
+                    int openCurlyPosition = currentMatch.Groups[4].Index;
 
-                int start = openCurlyPosition + 1;
-                int end = closedCurlyPosition - 1;
+                    int start = openCurlyPosition + 1;
+                    int end = closedCurlyPosition - 1;
 
-                if (end < start) return null;
-                
-                return new Tuple<int, int>(start, end);
-            })
+                    if (end < start) return null;
+
+                    return new Tuple<int, int>(start, end);
+                })
                 .Where(it => it != null)
                 .ToList();
 

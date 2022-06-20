@@ -1,12 +1,11 @@
-using System.Collections.Generic;
 using System.Linq;
-using antlr_parser.tests;
+using antlr_parser.Antlr4Impl.JavaScript;
 using FluentAssertions;
 using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
 using Xunit;
 
-namespace antlr_parser.Antlr4Impl.JavaScript
+namespace antlr_parser.tests.JavaScript
 {
     public class AntlrParseJavaScriptTest
     {
@@ -54,7 +53,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 class C{
                     g(x) { return 20; }
                 }
-            ".Unindent();
+            ".TrimIndent2();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
             res.Classes.Should().HaveCount(2);
             ClassDto script = res.Classes[0];
@@ -62,13 +61,13 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
             script.Methods.Count().Should().Be(1);
             script.Methods.First().Name.Should().Be("f");
-            script.Methods.First().SourceCode.Should().Be("function f(x){ return 10; }");
+            script.Methods.First().CodeRange.Of(source).Should().Be("function f(x){ return 10; }\n");
             ClassDto klass = res.Classes[1];
             klass.Name.Should().Be("C");
             klass.Methods.Count().Should().Be(1);
             MethodDto method = klass.Methods.First();
             method.Name.Should().Be("g");
-            method.SourceCode.Should().Be("g(x) { return 20; }");
+            method.CodeRange.Of(source).Should().Be("g(x) { return 20; }\n");
         }
 
         [Fact]
@@ -176,15 +175,17 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 class A {
                     f(x){return 10}
                 }
-            ".Unindent();
+            ".TrimIndent2();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
             res.Classes.Count().Should().Be(1);
             ClassDto classInfo = res.Classes.First();
 
-            classInfo.Header.Should().Be(@"
-                /**comment*/
-                class A {
-            ".Unindent().Trim());
+            classInfo.CodeRange.Of(source).Should().Be(@"
+                |
+                |/**comment*/
+                |class A {
+                |    
+            ".TrimMargin());
         }
 
         [Fact]
@@ -197,15 +198,17 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
                 /**comment2*/
                 class B {}
-            ".Unindent();
+            ".TrimIndent2();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
 
             ClassDto classB = res.Classes.ToArray()[1];
 
-            classB.Header.Should().Be(@"
-                /**comment2*/
-                class B {}
-            ".Unindent().Trim());
+            classB.CodeRange.Of(source).Should().Be(@"
+                |
+                |
+                |/**comment2*/
+                |class B {}
+            ".TrimMargin());
         }
 
         [Fact]
@@ -215,15 +218,16 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 requires('')
                 /**comment1*/
                 function f(){}
-            ".Unindent();
+            ".TrimIndent2();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
 
             ClassDto fakeClass = res.Classes.First();
 
-            fakeClass.Header.Should().Be(@"
-                requires('')
-                /**comment1*/
-            ".Unindent().Trim());
+            fakeClass.CodeRange.Of(source).Should().Be(@"
+                |requires('')
+                |/**comment1*/
+                |
+            ".TrimMargin());
         }
 
         [Fact]
@@ -235,20 +239,22 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 function f(){}
                 /**comment2*/
                 class A {}
-            ".Unindent();
+            ".TrimIndent2();
             FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
 
             ClassDto fakeClass = res.Classes[0];
 
-            fakeClass.Header.Should().Be(@"
-                requires('')
-                /**comment1*/
-            ".Unindent().Trim());
+            fakeClass.CodeRange.Of(source).Should().Be(@"
+                |requires('')
+                |/**comment1*/
+                |
+            ".TrimMargin());
 
-            res.Classes[1].Header.Should().Be(@"
-                /**comment2*/
-                class A {}
-            ".Unindent().Trim());
+            res.Classes[1].CodeRange.Of(source).Should().Be(@"
+                |
+                |/**comment2*/
+                |class A {}
+            ".TrimMargin());
         }
 
         [Fact]

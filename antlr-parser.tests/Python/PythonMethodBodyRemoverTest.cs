@@ -225,7 +225,7 @@ namespace antlr_parser.tests.Python
                         for i in range(len(points))
                     ]
             ".TrimIndent2();
-            
+
             List<Tuple<int, int>> blocksToRemove = PythonMethodBodyRemover.FindBlocksToRemove(source);
 
             var methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
