@@ -57,7 +57,7 @@ namespace antlr_parser.runner
                 return Directory.GetFiles(inputPath, "*.*", SearchOption.AllDirectories);
             }
 
-            return new[] {inputPath};
+            return new[] { inputPath };
         }
 
         [CanBeNull]
@@ -71,10 +71,9 @@ namespace antlr_parser.runner
 
         static void PrintFileDto(FileDto fileDto)
         {
-
             foreach (ClassDto classDto in fileDto.Classes)
             {
-                Console.WriteLine("class: "+classDto.FullyQualifiedName);
+                Console.WriteLine("class: " + classDto.FullyQualifiedName);
 
                 foreach (FieldDto field in classDto.Fields)
                 {

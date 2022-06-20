@@ -38,16 +38,14 @@ public abstract class JavaScriptLexerBase : Lexer
     {
     }
 
-    public bool IsStartOfFile(){
+    public bool IsStartOfFile()
+    {
         return _lastToken == null;
     }
 
     public bool UseStrictDefault
     {
-        get
-        {
-            return _useStrictDefault;
-        }
+        get { return _useStrictDefault; }
         set
         {
             _useStrictDefault = value;
