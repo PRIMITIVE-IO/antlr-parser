@@ -140,7 +140,9 @@ namespace antlr_parser.Antlr4Impl.CPP
 
             try
             {
-                PrimitiveLogger.Logger.Instance().Warn($"Cannot parse DeclarationContext: {context.GetFullText()}");
+                //TODO figure out why without replacing curlies it fails on parsing primitive
+                string text = context.GetFullText().Replace("{", "[").Replace("}", "]");
+                PrimitiveLogger.Logger.Instance().Warn($"Cannot parse DeclarationContext: {text}");
             }
             catch (Exception e)
             {

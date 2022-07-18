@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using antlr_parser.Antlr4Impl.CSharp;
 using antlr_parser.Antlr4Impl.C;
 using antlr_parser.Antlr4Impl.CPP;
 using antlr_parser.Antlr4Impl.Java;
@@ -24,8 +25,7 @@ namespace antlr_parser
                 ".sol", ".ts"
             };
 
-        [CanBeNull]
-        public static FileDto FileDtoFromSourceText(
+        public static FileDto? FileDtoFromSourceText(
             string filePath,
             string sourceExtension,
             string sourceText)
@@ -50,8 +50,10 @@ namespace antlr_parser
                         sourceText,
                         filePath);
                 case ".cs":
-                    return null;
-                // cs
+                    // cs
+                    return AntlrParseCSharp.Parse(
+                        sourceText,
+                        filePath);
                 case ".h":
                 case ".c":
                     // C

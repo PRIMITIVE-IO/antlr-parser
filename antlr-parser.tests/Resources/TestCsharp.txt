@@ -1,0 +1,105 @@
+
+#if UNITY_4_7 || UNITY_5 || UNITY_5_3_OR_NEWER
+#define SUPPORTED_UNITY
+#endif
+
+
+namespace Photon.Realtime
+{
+    using System;
+    using SupportClass = ExitGames.Client.Photon.SupportClass;
+
+    #if SUPPORTED_UNITY
+    using UnityEngine;
+    #endif
+
+
+    #if SUPPORTED_UNITY
+    public class ConnectionHandler : MonoBehaviour
+    #else
+    public class ConnectionHandler
+    #endif
+    {
+        /// <summary>
+        /// Photon client to log information and statistics from.
+        /// </summary>
+        public LoadBalancingClient Client { get; set; }
+
+        /// <summary>Counts how often the Fallback Thread called SendAcksOnly, which is purely of interest to monitor if the game logic called SendOutgoingCommands as intended.</summary>
+        public int CountSendAcksOnly { get; private set; }
+
+        public bool FallbackThreadRunning
+        {
+            get { return this.fallbackThreadId < 255; }
+        }
+
+
+        #if SUPPORTED_UNITY
+
+        #if UNITY_2019_4_OR_NEWER
+
+        /// <summary>
+        /// Resets statics for Domain Reload
+        /// </summary>
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void StaticReset()
+        {
+            AppQuits = false;
+        }
+
+        #endif
+
+        /// <summary>Keeps the ConnectionHandler, even if a new scene gets loaded.</summary>
+        public bool ApplyDontDestroyOnLoad = true;
+
+        /// <summary>Indicates that the app is closing. Set in OnApplicationQuit().</summary>
+        [NonSerialized]
+        public static bool AppQuits;
+
+        /// <summary>Called by Unity when the application gets closed. The UnityEngine will also call OnDisable, which disconnects.</summary>
+        protected void OnApplicationQuit()
+        {
+        }
+
+
+        /// <summary></summary>
+        protected virtual void Awake()
+        {
+        }
+
+        /// <summary>Called by Unity when the application gets closed. Disconnects if OnApplicationQuit() was called before.</summary>
+        protected virtual void OnDisable()
+        {
+            this.StopFallbackSendAckThread();
+        }
+
+        #endif
+
+
+        public void StartFallbackSendAckThread()
+        {
+            #if !UNITY_WEBGL
+                return;
+            #if UNITY_SWITCH
+            this.fallbackThreadId = SupportClass.StartBackgroundCalls(this.RealtimeFallbackThread, 50);  // as workaround, we don't name the Thread.
+            #else
+            this.fallbackThreadId = SupportClass.StartBackgroundCalls(this.RealtimeFallbackThread, 50, "RealtimeFallbackThread");
+            #endif
+            #endif
+        }
+
+        public void StopFallbackSendAckThread()
+        {
+            #if !UNITY_WEBGL
+                return;
+            #endif
+        }
+
+
+        /// <summary>A thread which runs independent from the Update() calls. Keeps connections online while loading or in background. See <see cref="KeepAliveInBackground"/>.</summary>
+        public bool RealtimeFallbackThread()
+        {
+            return true;
+        }
+    }
+}

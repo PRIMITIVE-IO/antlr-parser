@@ -13841,8 +13841,7 @@ public partial class CPP14Parser : Parser {
 			Match(Assign);
 			State = 1783;
 			_localctx.val = Match(OctalLiteral);
-			if((_localctx.val != null ? _localctx.val.Text : null) != "0") throw new InputMismatchException(this);
-					
+			if(_localctx.val?.Text != "0") throw new InputMismatchException(this);
 			}
 		}
 		catch (RecognitionException re) {

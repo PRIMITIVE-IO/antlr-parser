@@ -35,7 +35,8 @@ namespace antlr_parser.Antlr4Impl
             if (context.Start == null ||
                 context.Stop == null ||
                 context.Start.StartIndex < 0 ||
-                context.Stop.StopIndex < 0)
+                context.Stop.StopIndex < 0 || 
+                context.Start.StartIndex > context.Stop.StopIndex)
             {
                 // Fallback
                 return context.GetText();
