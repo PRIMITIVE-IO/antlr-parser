@@ -1,9 +1,9 @@
 using System;
-using System.Collections.Generic;
 using antlr_parser.Antlr4Impl.C;
 using antlr_parser.Antlr4Impl.dto.converter;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive.dto;
+using PrimitiveLogger;
 
 namespace antlr_parser.Antlr4Impl.CSharp
 {
@@ -39,7 +39,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Logger.Instance().Warn($"Cannot parse {filePath}", e);
             }
 
             return null;

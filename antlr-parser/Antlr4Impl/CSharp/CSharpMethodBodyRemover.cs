@@ -9,16 +9,23 @@ namespace antlr_parser.Antlr4Impl.CSharp
     public static class CSharpMethodBodyRemover
     {
         //matches functions having open curly braces, like: "public void f(string x, int y) {"
-        //group 8 matches the last curly
+        //group 1 matches the last curly
         /*
-         test cases:
+         positive test cases:
             public static List<Tuple<int, int>> FindBlocksToRemove(string source) {
             static void Swap<T>(ref T lhs, ref T rhs) {
-            public static void TestSwap(){            
+            public static void TestSwap(){
+            f(x){
+            
+         negative test cases:
+            if(x = y){
+            for(int x = 0; x < 3; x++){
+            foreach(int x in y){
+            while(x){
         */
 
         static readonly Regex MethodDeclarationRegex = new Regex(
-            @"(public |private |protected |static |readonly )?(public |private |protected |static |readonly )?(public |private |protected |static |readonly )?([A-Za-z0-9_\[\]<>, ]*) ([A-Za-z0-9_]*)([A-Za-z0-9_\[\]<>, ]*)?(\s)*\(([A-Za-z\[\]<>,\s]*)\)\s*(\{)"
+            @"(?<!if)(?<!for)(?<!foreach)(?<!while)\s*?\(.*?\)\s*?({)"
         );
 
         public static List<Tuple<int, int>> FindBlocksToRemove(string source)
@@ -26,7 +33,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
             return MethodDeclarationRegex.Matches(source)
                 .SelectNotNull(currentMatch =>
                 {
-                    int openedCurlyPosition = currentMatch.Groups[9].Index;
+                    int openedCurlyPosition = currentMatch.Groups[1].Index;
                     int closedCurlyPosition = StringUtil.ClosedCurlyPosition(source, openedCurlyPosition);
 
 
