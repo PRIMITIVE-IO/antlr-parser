@@ -36,7 +36,7 @@ namespace antlr_parser.Antlr4Impl.Python
         {
             int tripleQuoteEnd = 0;
             int linesBeforeComment = 0;
-            for (var i = startFrom; i < source.Length; i++)
+            for (int i = startFrom; i < source.Length; i++)
             {
                 if (OnTripleQuoteEnd(source, i))
                 {
@@ -56,7 +56,7 @@ namespace antlr_parser.Antlr4Impl.Python
             }
 
             int commentEnd = 0;
-            for (var i = tripleQuoteEnd + 1; i < source.Length; i++)
+            for (int i = tripleQuoteEnd + 1; i < source.Length; i++)
             {
                 if (OnTripleQuoteEnd(source, i))
                 {
@@ -67,7 +67,7 @@ namespace antlr_parser.Antlr4Impl.Python
             return null;
         }
 
-        private static bool OnTripleQuoteEnd(string source, int i)
+        static bool OnTripleQuoteEnd(string source, int i)
         {
             return source[i - 2] == '"' && source[i - 1] == '"' && source[i] == '"';
         }

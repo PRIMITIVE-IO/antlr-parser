@@ -6,7 +6,7 @@ namespace antlr_parser.Antlr4Impl
 {
     public class IndexToLocationConverter
     {
-        private readonly int[] LineLengths;
+        readonly int[] LineLengths;
 
         public IndexToLocationConverter(string text)
         {

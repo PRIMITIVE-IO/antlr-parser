@@ -18,7 +18,7 @@ namespace antlr_parser.Antlr4Impl
 
     class ExtractionCompaprer<T, Y> : Comparer<T> where Y : IComparable<Y>
     {
-        private readonly Func<T, Y> extractor;
+        readonly Func<T, Y> extractor;
 
         public ExtractionCompaprer(Func<T, Y> extractor)
         {

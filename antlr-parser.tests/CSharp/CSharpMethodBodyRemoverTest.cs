@@ -6,14 +6,14 @@ using FluentAssertions;
 using PrimitiveCodebaseElements.Primitive;
 using Xunit;
 
-namespace antlr_parser.tests.CSharp
+namespace antlr_parser.tests.CSharp;
+
+public class CSharpMethodBodyRemoverTest
 {
-    public class CSharpMethodBodyRemoverTest
+    [Fact]
+    public void SmokeTest()
     {
-        [Fact]
-        public void SmokeTest()
-        {
-            string source = @"
+        string source = @"
                 using PrimitiveCodebaseElements.Primitive;
                 using Xunit;
 
@@ -36,10 +36,10 @@ namespace antlr_parser.tests.CSharp
                     } 
                 }
             ".TrimIndent2();
-            List<Tuple<int, int>> blocksToRemove = CSharpMethodBodyRemover.FindBlocksToRemove(source);
-            MethodBodyRemovalResult methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+        List<Tuple<int, int>> blocksToRemove = CSharpMethodBodyRemover.FindBlocksToRemove(source);
+        MethodBodyRemovalResult methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
 
-            methodBodyRemovalResult.ShortenedSource.Should().Be(@"
+        methodBodyRemovalResult.ShortenedSource.Should().Be(@"
                 using PrimitiveCodebaseElements.Primitive;
                 using Xunit;
 
@@ -56,6 +56,5 @@ namespace antlr_parser.tests.CSharp
                     } 
                 }
             ".TrimIndent2());
-        }
     }
 }

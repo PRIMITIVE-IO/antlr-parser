@@ -12,8 +12,8 @@ namespace antlr_parser.Antlr4Impl.C
     public class CVisitor : CBaseVisitor<AstNode>
     {
         readonly string filePath;
-        private readonly MethodBodyRemovalResult methodBodyRemovalResult;
-        private readonly IndexToLocationConverter IndexToLocationConverter;
+        readonly MethodBodyRemovalResult methodBodyRemovalResult;
+        readonly IndexToLocationConverter IndexToLocationConverter;
 
         public CVisitor(string filePath, MethodBodyRemovalResult methodBodyRemovalResult)
         {
@@ -151,7 +151,7 @@ namespace antlr_parser.Antlr4Impl.C
             );
         }
 
-        private static string ExtractMultiName(CParser.StructDeclarationContext context)
+        static string ExtractMultiName(CParser.StructDeclarationContext context)
         {
             List<string> names = context.structDeclaratorList()
                 ?.structDeclarator()
@@ -160,7 +160,7 @@ namespace antlr_parser.Antlr4Impl.C
             return (names?.Count ?? 0) != 0 ? string.Join(",", names) : null;
         }
 
-        private static string? ExtractReferenceFieldName(CParser.StructDeclarationContext context)
+        static string? ExtractReferenceFieldName(CParser.StructDeclarationContext context)
         {
             return context.specifierQualifierList()
                 ?.specifierQualifierList()
@@ -171,7 +171,7 @@ namespace antlr_parser.Antlr4Impl.C
                 ?.ToString();
         }
 
-        private static string? ExtractPlainFieldName(CParser.StructDeclarationContext context)
+        static string? ExtractPlainFieldName(CParser.StructDeclarationContext context)
         {
             return context.specifierQualifierList()
                 ?.specifierQualifierList()
@@ -181,7 +181,7 @@ namespace antlr_parser.Antlr4Impl.C
                 ?.ToString();
         }
 
-        private static string? ExtractArrayFieldName(CParser.StructDeclarationContext context)
+        static string? ExtractArrayFieldName(CParser.StructDeclarationContext context)
         {
             return context.structDeclaratorList()
                 ?.structDeclarator()
@@ -213,7 +213,7 @@ namespace antlr_parser.Antlr4Impl.C
             );
         }
 
-        private string ExtractFunctionName(CParser.DirectDeclaratorContext context)
+        string ExtractFunctionName(CParser.DirectDeclaratorContext context)
         {
             if (context.directDeclarator() == null)
             {

@@ -11,7 +11,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
     {
         readonly string Path;
         readonly IndexToLocationConverter IndexToLocationConverter;
-        private readonly MethodBodyRemovalResult MethodBodyRemovalResult;
+        readonly MethodBodyRemovalResult MethodBodyRemovalResult;
 
         public CSharpAstVisitor(string path, MethodBodyRemovalResult methodBodyRemovalResult)
         {
@@ -370,7 +370,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
                 .FirstOrDefault(it => it != null) ?? AccessFlags.None;
         }
 
-        private T? FindParent<T>(ParserRuleContext context) where T : ParserRuleContext
+        T? FindParent<T>(ParserRuleContext context) where T : ParserRuleContext
         {
             RuleContext? cur = context;
             do
@@ -381,7 +381,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
             return cur as T;
         }
 
-        private AccessFlags? Flags(string flag)
+        AccessFlags? Flags(string flag)
         {
             switch (flag)
             {
@@ -416,7 +416,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
             );
         }
 
-        private int MethodStartIdx(CSharpParser.Method_declarationContext context)
+        int MethodStartIdx(CSharpParser.Method_declarationContext context)
         {
             CSharpParser.Class_bodyContext? parentClassBodyContext =
                 FindParent<CSharpParser.Class_bodyContext>(context);
@@ -432,7 +432,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
                     parentStructBodyContext.OPEN_BRACE().Symbol.StartIndex) + 1;
         }
 
-        private AccessFlags MethodAccessFlag(CSharpParser.Method_declarationContext context)
+        AccessFlags MethodAccessFlag(CSharpParser.Method_declarationContext context)
         {
             CSharpParser.Class_member_declarationContext? classMemberDeclarationContext =
                 FindParent<CSharpParser.Class_member_declarationContext>(context);

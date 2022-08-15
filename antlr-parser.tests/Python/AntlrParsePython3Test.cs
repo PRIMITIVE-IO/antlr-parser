@@ -4,14 +4,14 @@ using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
 using Xunit;
 
-namespace antlr_parser.tests.Python
+namespace antlr_parser.tests.Python;
+
+public class AntlrParsePython3Test
 {
-    public class AntlrParsePython3Test
+    [Fact]
+    public void SmokeTest()
     {
-        [Fact]
-        public void SmokeTest()
-        {
-            string source = @"
+        string source = @"
                 class MyClass:
                     """"""A simple example class""""""
                     i = 12345
@@ -21,31 +21,31 @@ namespace antlr_parser.tests.Python
                         return 'hello world'
             ".Unindent();
 
-            FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
+        FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 
-            fileDto.Path.Should().Be("some/path");
-            fileDto.Classes.Should().HaveCount(1);
-            ClassDto classDto = fileDto.Classes[0];
-            classDto.Name.Should().Be("MyClass");
-            string expectedClassHeader = "class MyClass:\n    \"\"\"A simple example class\"\"\"";
-            classDto.CodeRange.Of(source).Should().Be(expectedClassHeader);
+        fileDto.Path.Should().Be("some/path");
+        fileDto.Classes.Should().HaveCount(1);
+        ClassDto classDto = fileDto.Classes[0];
+        classDto.Name.Should().Be("MyClass");
+        string expectedClassHeader = "class MyClass:\n    \"\"\"A simple example class\"\"\"";
+        classDto.CodeRange.Of(source).Should().Be(expectedClassHeader);
 
-            classDto.Fields.Should().HaveCount(1);
-            FieldDto fieldDto = classDto.Fields[0];
-            fieldDto.Name.Should().Be("i");
-            fieldDto.CodeRange.Of(source).Should().Be("i = 12345");
+        classDto.Fields.Should().HaveCount(1);
+        FieldDto fieldDto = classDto.Fields[0];
+        fieldDto.Name.Should().Be("i");
+        fieldDto.CodeRange.Of(source).Should().Be("i = 12345");
 
-            classDto.Methods.Should().HaveCount(1);
-            MethodDto methodDto = classDto.Methods[0];
-            methodDto.Name.Should().Be("f");
-            methodDto.CodeRange.Of(source).Should()
-                .Be("def f(self):\n        \"\"\"Method comment\"\"\"\n        return 'hello world'");
-        }
+        classDto.Methods.Should().HaveCount(1);
+        MethodDto methodDto = classDto.Methods[0];
+        methodDto.Name.Should().Be("f");
+        methodDto.CodeRange.Of(source).Should()
+            .Be("def f(self):\n        \"\"\"Method comment\"\"\"\n        return 'hello world'");
+    }
 
-        [Fact]
-        public void ParseMethod()
-        {
-            string source = @"
+    [Fact]
+    public void ParseMethod()
+    {
+        string source = @"
                 class MyClass:
                     """"""A simple example class""""""
                     
@@ -60,27 +60,27 @@ namespace antlr_parser.tests.Python
                         return 'hello G'
             ".Unindent();
 
-            FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
+        FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 
-            ClassDto classDto = fileDto.Classes[0];
+        ClassDto classDto = fileDto.Classes[0];
 
 
-            classDto.Methods.Should().HaveCount(2);
-            MethodDto fMethodDto = classDto.Methods[0];
-            fMethodDto.Name.Should().Be("f");
-            fMethodDto.CodeRange.Of(source).Should()
-                .Be("def f(self):\n        \"\"\"Method F comment\"\"\"\n        return 'hello F'");
+        classDto.Methods.Should().HaveCount(2);
+        MethodDto fMethodDto = classDto.Methods[0];
+        fMethodDto.Name.Should().Be("f");
+        fMethodDto.CodeRange.Of(source).Should()
+            .Be("def f(self):\n        \"\"\"Method F comment\"\"\"\n        return 'hello F'");
 
-            MethodDto gMethodDto = classDto.Methods[1];
-            gMethodDto.Name.Should().Be("g");
-            gMethodDto.CodeRange.Of(source).Should()
-                .Be("def g(self):\n        \"\"\"Method G comment\"\"\"\n        return 'hello G'");
-        }
+        MethodDto gMethodDto = classDto.Methods[1];
+        gMethodDto.Name.Should().Be("g");
+        gMethodDto.CodeRange.Of(source).Should()
+            .Be("def g(self):\n        \"\"\"Method G comment\"\"\"\n        return 'hello G'");
+    }
 
-        [Fact]
-        public void ParseMethodWithoutComments()
-        {
-            string source = @"
+    [Fact]
+    public void ParseMethodWithoutComments()
+    {
+        string source = @"
                 class MyClass:
                     """"""A simple example class""""""
                     
@@ -93,103 +93,103 @@ namespace antlr_parser.tests.Python
                         return 'hello G'
             ".Unindent();
 
-            FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
+        FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 
-            ClassDto classDto = fileDto.Classes[0];
+        ClassDto classDto = fileDto.Classes[0];
 
 
-            classDto.Methods.Should().HaveCount(2);
-            MethodDto fMethodDto = classDto.Methods[0];
-            fMethodDto.Name.Should().Be("f");
-            fMethodDto.CodeRange.Of(source).Should()
-                .Be("def f(self):\n        return 'hello F'");
+        classDto.Methods.Should().HaveCount(2);
+        MethodDto fMethodDto = classDto.Methods[0];
+        fMethodDto.Name.Should().Be("f");
+        fMethodDto.CodeRange.Of(source).Should()
+            .Be("def f(self):\n        return 'hello F'");
 
-            MethodDto gMethodDto = classDto.Methods[1];
-            gMethodDto.Name.Should().Be("g");
-            gMethodDto.CodeRange.Of(source).Should()
-                .Be("def g(self):\n        return 'hello G'");
-        }
+        MethodDto gMethodDto = classDto.Methods[1];
+        gMethodDto.Name.Should().Be("g");
+        gMethodDto.CodeRange.Of(source).Should()
+            .Be("def g(self):\n        return 'hello G'");
+    }
 
-        [Fact]
-        public void CreateFakeClass()
-        {
-            string source = @"
+    [Fact]
+    public void CreateFakeClass()
+    {
+        string source = @"
             def f():
                 """"""Function F comment""""""
                 return 'hello F'
             ".Unindent();
 
-            FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
+        FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 
-            ClassDto classDto = fileDto.Classes[0];
+        ClassDto classDto = fileDto.Classes[0];
 
 
-            classDto.Methods.Should().HaveCount(1);
-            MethodDto fMethodDto = classDto.Methods[0];
-            fMethodDto.Name.Should().Be("f");
-            fMethodDto.CodeRange.Of(source).Should()
-                .Be("def f():\n    \"\"\"Function F comment\"\"\"\n    return 'hello F'");
-        }
+        classDto.Methods.Should().HaveCount(1);
+        MethodDto fMethodDto = classDto.Methods[0];
+        fMethodDto.Name.Should().Be("f");
+        fMethodDto.CodeRange.Of(source).Should()
+            .Be("def f():\n    \"\"\"Function F comment\"\"\"\n    return 'hello F'");
+    }
 
-        [Fact]
-        public void TrivialCarrierReturn()
-        {
-            string source = "def f():\r\n    \"\"\"Function F comment\"\"\"\r\n    return 'hello F'";
+    [Fact]
+    public void TrivialCarrierReturn()
+    {
+        string source = "def f():\r\n    \"\"\"Function F comment\"\"\"\r\n    return 'hello F'";
 
-            FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
+        FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 
-            MethodDto fMethodDto = fileDto.Classes[0].Methods[0];
-            fMethodDto.CodeRange.Of(source).Should()
-                .Be("def f():\r\n    \"\"\"Function F comment\"\"\"\r\n    return 'hello F'");
-        }
+        MethodDto fMethodDto = fileDto.Classes[0].Methods[0];
+        fMethodDto.CodeRange.Of(source).Should()
+            .Be("def f():\r\n    \"\"\"Function F comment\"\"\"\r\n    return 'hello F'");
+    }
 
-        [Fact]
-        public void ComplexCarrierReturn()
-        {
-            string source =
-                "class MyClass:\r\n    \"\"\"A simple example class\"\"\"\r\n    i = 12345\r\n\r\n    def f(self):\r\n        \"\"\"Method comment\"\"\"\r\n        return 'hello world'\r\n";
+    [Fact]
+    public void ComplexCarrierReturn()
+    {
+        string source =
+            "class MyClass:\r\n    \"\"\"A simple example class\"\"\"\r\n    i = 12345\r\n\r\n    def f(self):\r\n        \"\"\"Method comment\"\"\"\r\n        return 'hello world'\r\n";
 
-            FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
+        FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 
-            fileDto.Path.Should().Be("some/path");
-            fileDto.Classes.Should().HaveCount(1);
-            ClassDto classDto = fileDto.Classes[0];
-            classDto.Name.Should().Be("MyClass");
-            string expectedClassHeader = "class MyClass:\r\n    \"\"\"A simple example class\"\"\"";
-            classDto.CodeRange.Of(source).Should().Be(expectedClassHeader);
+        fileDto.Path.Should().Be("some/path");
+        fileDto.Classes.Should().HaveCount(1);
+        ClassDto classDto = fileDto.Classes[0];
+        classDto.Name.Should().Be("MyClass");
+        string expectedClassHeader = "class MyClass:\r\n    \"\"\"A simple example class\"\"\"";
+        classDto.CodeRange.Of(source).Should().Be(expectedClassHeader);
 
-            classDto.Fields.Should().HaveCount(1);
-            FieldDto fieldDto = classDto.Fields[0];
-            fieldDto.Name.Should().Be("i");
-            fieldDto.CodeRange.Of(source).Should().Be("i = 12345");
+        classDto.Fields.Should().HaveCount(1);
+        FieldDto fieldDto = classDto.Fields[0];
+        fieldDto.Name.Should().Be("i");
+        fieldDto.CodeRange.Of(source).Should().Be("i = 12345");
 
-            classDto.Methods.Should().HaveCount(1);
-            MethodDto methodDto = classDto.Methods[0];
-            methodDto.Name.Should().Be("f");
-            methodDto.CodeRange.Of(source).Should()
-                .Be("def f(self):\r\n        \"\"\"Method comment\"\"\"\r\n        return 'hello world'");
-        }
+        classDto.Methods.Should().HaveCount(1);
+        MethodDto methodDto = classDto.Methods[0];
+        methodDto.Name.Should().Be("f");
+        methodDto.CodeRange.Of(source).Should()
+            .Be("def f(self):\r\n        \"\"\"Method comment\"\"\"\r\n        return 'hello world'");
+    }
 
-        [Fact]
-        public void ClassHeader()
-        {
-            string source = @"
+    [Fact]
+    public void ClassHeader()
+    {
+        string source = @"
                 class MyClass:
                     def f(self):
                         """"""Method comment""""""
                         return 'hello world'
             ".TrimIndent2();
 
-            FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
+        FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 
-            fileDto.Classes[0].CodeRange.Of(source).Should().Be("class MyClass:");
-        }
+        fileDto.Classes[0].CodeRange.Of(source).Should().Be("class MyClass:");
+    }
 
 
-        [Fact]
-        public void WierdCase2()
-        {
-            string source = @"
+    [Fact]
+    public void WierdCase2()
+    {
+        string source = @"
                 import inspect
                 import itertools as it
 
@@ -286,11 +286,11 @@ namespace antlr_parser.tests.Python
                         self.__dict__ = dict
             ".TrimIndent2();
 
-            FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
+        FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 
-            fileDto.Classes.Should().HaveCount(2);
-            fileDto.Classes[0].Methods.Should().HaveCount(6);
-            fileDto.Classes[0].Methods[5].SourceCode.Should().Be(@"
+        fileDto.Classes.Should().HaveCount(2);
+        fileDto.Classes[0].Methods.Should().HaveCount(6);
+        fileDto.Classes[0].Methods[5].SourceCode.Should().Be(@"
                 def digest_locals(obj, keys=None):
                     caller_locals = filtered_locals(
                         inspect.currentframe().f_back.f_locals
@@ -303,6 +303,5 @@ namespace antlr_parser.tests.Python
                 # Occasionally convenient in order to write dict.x instead of more laborious
                 # (and less in keeping with all other attr accesses) dict[""x""]
             ".TrimIndent2());
-        }
     }
 }

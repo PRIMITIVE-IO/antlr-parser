@@ -11,7 +11,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
     {
         readonly string FilePath;
         readonly MethodBodyRemovalResult MethodBodyRemovalResult;
-        private readonly IndexToLocationConverter IndexToLocationConverter;
+        readonly IndexToLocationConverter IndexToLocationConverter;
 
         public KotlinVisitor(string filePath, MethodBodyRemovalResult methodBodyRemovalResult)
         {

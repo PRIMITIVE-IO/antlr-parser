@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace antlr_parser.Antlr4Impl.Python
 {
     public class OpenBraceFinder
     {
-        private readonly Stack<char> Stack = new Stack<char>();
+        readonly Stack<char> Stack = new Stack<char>();
 
         public bool CompletedExpression(string line)
         {

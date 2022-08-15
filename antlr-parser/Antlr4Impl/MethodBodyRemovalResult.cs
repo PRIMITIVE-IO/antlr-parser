@@ -83,7 +83,7 @@ namespace antlr_parser.Antlr4Impl
             return res.ToList();
         }
 
-        private MethodBodyRemovalResult(
+        MethodBodyRemovalResult(
             string shortenedSource,
             string originalSource,
             List<Tuple<int, int>> blocksToRemove

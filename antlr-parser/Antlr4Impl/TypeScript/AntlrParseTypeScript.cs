@@ -13,7 +13,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             return AstNodeToClassDtoConverter.ToFileDto(ParseFileNode(source, filePath), source);
         }
 
-        private static AstNode.FileNode ParseFileNode(string source, string filePath)
+        static AstNode.FileNode ParseFileNode(string source, string filePath)
         {
             try
             {

@@ -1,6 +1,4 @@
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using antlr_parser.Antlr4Impl.CSharp;
 using FluentAssertions;
 using PrimitiveCodebaseElements.Primitive;
@@ -8,14 +6,14 @@ using PrimitiveCodebaseElements.Primitive.dto;
 using Xunit;
 using static antlr_parser.tests.TestUtils;
 
-namespace antlr_parser.tests.CSharp
+namespace antlr_parser.tests.CSharp;
+
+public class AntlrParseCSharpTest
 {
-    public class AntlrParseCSharpTest
+    [Fact]
+    public void SmokeTest()
     {
-        [Fact]
-        public void SmokeTest()
-        {
-            var source = @"
+        string source = @"
                 namespace X 
                 {
                     public class MyClass
@@ -28,23 +26,23 @@ namespace antlr_parser.tests.CSharp
                     }
                 }
             ";
-            var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
-            fileDto.Classes.Should().HaveCount(1);
-            var classDto = fileDto.Classes[0];
-            classDto.PackageName.Should().Be("X");
-            classDto.FullyQualifiedName.Should().Be("X.MyClass");
-            classDto.Name.Should().Be("MyClass");
-            classDto.Fields.Should().HaveCount(1);
-            classDto.Fields[0].Name.Should().Be("MyField");
-            classDto.Methods.Should().HaveCount(1);
-            classDto.Methods[0].Name.Should().Be("MyMethod");
-        }
+        fileDto.Classes.Should().HaveCount(1);
+        var classDto = fileDto.Classes[0];
+        classDto.PackageName.Should().Be("X");
+        classDto.FullyQualifiedName.Should().Be("X.MyClass");
+        classDto.Name.Should().Be("MyClass");
+        classDto.Fields.Should().HaveCount(1);
+        classDto.Fields[0].Name.Should().Be("MyField");
+        classDto.Methods.Should().HaveCount(1);
+        classDto.Methods[0].Name.Should().Be("MyMethod");
+    }
 
-        [Fact]
-        public void FirstClassHeaderStartFromFileBegin()
-        {
-            string source = @"
+    [Fact]
+    public void FirstClassHeaderStartFromFileBegin()
+    {
+        string source = @"
                 using Y;
                 namespace X 
                 {
@@ -55,11 +53,11 @@ namespace antlr_parser.tests.CSharp
                     }
                 }
             ".TrimIndent2();
-            FileDto fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        FileDto fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
-            ClassDto classDto = fileDto.Classes.Single();
+        ClassDto classDto = fileDto.Classes.Single();
 
-            classDto.CodeRange.Of(source).Should().Be(@"
+        classDto.CodeRange.Of(source).Should().Be(@"
                 |using Y;
                 |namespace X 
                 |{
@@ -67,14 +65,14 @@ namespace antlr_parser.tests.CSharp
                 |    public class MyClass
                 |    
             ".TrimMargin());
-            classDto.CodeRange.Should().Be(CodeRange(1, 1, 6, 4));
-        }
+        classDto.CodeRange.Should().Be(CodeRange(1, 1, 6, 4));
+    }
 
 
-        [Fact]
-        public void SecondClassHeaderStartFromFileBegin()
-        {
-            var source = @"
+    [Fact]
+    public void SecondClassHeaderStartFromFileBegin()
+    {
+        string source = @"
                 using Y;
                 namespace X 
                 {
@@ -89,23 +87,23 @@ namespace antlr_parser.tests.CSharp
                     }
                 }
             ".TrimIndent2();
-            var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
-            ClassDto classDto = fileDto.Classes[1];
+        ClassDto classDto = fileDto.Classes[1];
 
-            classDto.CodeRange.Of(source).Should().Be(@"
+        classDto.CodeRange.Of(source).Should().Be(@"
                     |
                     |    ///comment
                     |    public class SecondClass
                     |    
             ".TrimMargin());
-            classDto.CodeRange.Should().Be(CodeRange(8, 6, 11, 4));
-        }
+        classDto.CodeRange.Should().Be(CodeRange(8, 6, 11, 4));
+    }
 
-        [Fact]
-        public void InnerClasses()
-        {
-            var source = @"
+    [Fact]
+    public void InnerClasses()
+    {
+        string source = @"
                 using Y;
                 namespace X 
                 {
@@ -119,30 +117,30 @@ namespace antlr_parser.tests.CSharp
                     }
                 }
             ".TrimIndent2();
-            var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
-            ClassDto topLevelClass = fileDto.Classes[0];
-            topLevelClass.FullyQualifiedName.Should().Be("X.MyClass");
+        ClassDto topLevelClass = fileDto.Classes[0];
+        topLevelClass.FullyQualifiedName.Should().Be("X.MyClass");
 
-            ClassDto nestedClass = fileDto.Classes[1];
+        ClassDto nestedClass = fileDto.Classes[1];
 
-            nestedClass.ParentClassFqn.Should().Be("X.MyClass");
-            nestedClass.FullyQualifiedName.Should().Be("X.MyClass$SecondClass");
+        nestedClass.ParentClassFqn.Should().Be("X.MyClass");
+        nestedClass.FullyQualifiedName.Should().Be("X.MyClass$SecondClass");
 
-            nestedClass.CodeRange.Of(source).Should().Be(@"
+        nestedClass.CodeRange.Of(source).Should().Be(@"
                     |
                     |        ///comment
                     |        public class SecondClass
                     |        
             ".TrimMargin());
 
-            nestedClass.CodeRange.Should().Be(CodeRange(6, 6, 9, 8));
-        }
+        nestedClass.CodeRange.Should().Be(CodeRange(6, 6, 9, 8));
+    }
 
-        [Fact]
-        public void MethodHeaderIncludesComment()
-        {
-            string source = @"
+    [Fact]
+    public void MethodHeaderIncludesComment()
+    {
+        string source = @"
                 namespace X 
                 {
                     ///comment
@@ -160,11 +158,11 @@ namespace antlr_parser.tests.CSharp
                     }
                 }
             ".TrimIndent2();
-            FileDto fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        FileDto fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
-            ClassDto classDto = fileDto.Classes[0];
-            MethodDto method1 = classDto.Methods[0];
-            method1.CodeRange.Of(source).Should().Be(@"
+        ClassDto classDto = fileDto.Classes[0];
+        MethodDto method1 = classDto.Methods[0];
+        method1.CodeRange.Of(source).Should().Be(@"
                 |
                 |        ///comment
                 |        public int MyMethod1()  
@@ -172,8 +170,8 @@ namespace antlr_parser.tests.CSharp
                 |        }
             ".TrimMargin());
 
-            MethodDto method2 = classDto.Methods[1];
-            method2.CodeRange.Of(source).Should().Be(@"
+        MethodDto method2 = classDto.Methods[1];
+        method2.CodeRange.Of(source).Should().Be(@"
                 |
                 |
                 |        ///comment
@@ -181,12 +179,12 @@ namespace antlr_parser.tests.CSharp
                 |        {
                 |        }
             ".TrimMargin());
-        }
+    }
 
-        [Fact]
-        public void FieldHeaderIncludesComment()
-        {
-            string source = @"
+    [Fact]
+    public void FieldHeaderIncludesComment()
+    {
+        string source = @"
                 namespace X 
                 {
                     ///comment
@@ -200,28 +198,28 @@ namespace antlr_parser.tests.CSharp
                     }
                 }
             ".TrimIndent2();
-            FileDto fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        FileDto fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
-            ClassDto classDto = fileDto.Classes[0];
-            FieldDto field1 = classDto.Fields[0];
-            field1.CodeRange.Of(source).Should().Be(@"
+        ClassDto classDto = fileDto.Classes[0];
+        FieldDto field1 = classDto.Fields[0];
+        field1.CodeRange.Of(source).Should().Be(@"
                 |
                 |        ///comment
                 |        public int MyField1;
             ".TrimMargin());
-            FieldDto field2 = classDto.Fields[1];
-            field2.CodeRange.Of(source).Should().Be(@"
+        FieldDto field2 = classDto.Fields[1];
+        field2.CodeRange.Of(source).Should().Be(@"
                 |
                 |
                 |        ///comment
                 |        public int MyField2;
             ".TrimMargin());
-        }
+    }
 
-        [Fact]
-        public void ParseInterface()
-        {
-            var source = @"
+    [Fact]
+    public void ParseInterface()
+    {
+        string source = @"
                 namespace X 
                 {
                     ///comment
@@ -235,33 +233,33 @@ namespace antlr_parser.tests.CSharp
                     }
                 }
             ".TrimIndent2();
-            var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
-            var classDto = fileDto.Classes[0];
-            classDto.Name.Should().Be("IMyClass");
+        var classDto = fileDto.Classes[0];
+        classDto.Name.Should().Be("IMyClass");
 
-            var method1 = classDto.Methods[0];
-            method1.Name.Should().Be("MyMethod1");
-            method1.CodeRange.Of(source).Should().Be(@"
+        var method1 = classDto.Methods[0];
+        method1.Name.Should().Be("MyMethod1");
+        method1.CodeRange.Of(source).Should().Be(@"
                 |
                 |        ///comment
                 |        public int MyMethod1();
             ".TrimMargin());
 
-            var method2 = classDto.Methods[1];
-            method2.Name.Should().Be("MyMethod2");
-            method2.CodeRange.Of(source).Should().Be(@"
+        var method2 = classDto.Methods[1];
+        method2.Name.Should().Be("MyMethod2");
+        method2.CodeRange.Of(source).Should().Be(@"
                 |
                 |
                 |        ///comment
                 |        public int MyMethod2();
             ".TrimMargin());
-        }
+    }
 
-        [Fact]
-        public void ParseEnum()
-        {
-            var source = @"
+    [Fact]
+    public void ParseEnum()
+    {
+        string source = @"
                 namespace X 
                 {
                     ///comment
@@ -273,10 +271,10 @@ namespace antlr_parser.tests.CSharp
                     }
                 }
             ".TrimIndent2();
-            var fileDto = AntlrParseCSharp.Parse(source, "some/path");
-            var classDto = fileDto.Classes[0];
-            classDto.Name.Should().Be("MyEnum");
-            classDto.CodeRange.Of(source).Should().Be(@"
+        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        var classDto = fileDto.Classes[0];
+        classDto.Name.Should().Be("MyEnum");
+        classDto.CodeRange.Of(source).Should().Be(@"
                 namespace X 
                 {
                     ///comment
@@ -288,14 +286,14 @@ namespace antlr_parser.tests.CSharp
                     }
             ".TrimIndent2());
 
-            classDto.CodeRange.Should().Be(CodeRange(1, 1, 9, 5));
-        }
+        classDto.CodeRange.Should().Be(CodeRange(1, 1, 9, 5));
+    }
 
 
-        [Fact]
-        public void ParseStruct()
-        {
-            var source = @"
+    [Fact]
+    public void ParseStruct()
+    {
+        string source = @"
                 /// <summary>
                 /// comment
                 /// </summary>
@@ -325,15 +323,15 @@ namespace antlr_parser.tests.CSharp
                     }
                 }
             ".TrimIndent2();
-            var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
-            fileDto.Classes.Should().HaveCount(1);
-            fileDto.Classes[0].Fields.Should().HaveCount(2);
+        fileDto.Classes.Should().HaveCount(1);
+        fileDto.Classes[0].Fields.Should().HaveCount(2);
 
-            FieldDto field1 = fileDto.Classes[0].Fields[0];
-            field1.Name.Should().Be("MyField1");
-            field1.AccFlag.Should().Be(AccessFlags.AccPublic);
-            field1.CodeRange.Of(source).Should().Be(@"
+        FieldDto field1 = fileDto.Classes[0].Fields[0];
+        field1.Name.Should().Be("MyField1");
+        field1.AccFlag.Should().Be(AccessFlags.AccPublic);
+        field1.CodeRange.Of(source).Should().Be(@"
                 |
                 |
                 |    /// <summary>
@@ -342,10 +340,10 @@ namespace antlr_parser.tests.CSharp
                 |    public string MyField1;
             ".TrimMargin());
 
-            FieldDto field2 = fileDto.Classes[0].Fields[1];
-            field2.Name.Should().Be("MyField2");
-            field2.AccFlag.Should().Be(AccessFlags.AccPublic);
-            field2.CodeRange.Of(source).Should().Be(@"
+        FieldDto field2 = fileDto.Classes[0].Fields[1];
+        field2.Name.Should().Be("MyField2");
+        field2.AccFlag.Should().Be(AccessFlags.AccPublic);
+        field2.CodeRange.Of(source).Should().Be(@"
                 |
                 |    /// <summary>
                 |    /// comment
@@ -353,22 +351,22 @@ namespace antlr_parser.tests.CSharp
                 |    public string MyField2;
             ".TrimMargin());
 
-            MethodDto method = fileDto.Classes[0].Methods[0];
+        MethodDto method = fileDto.Classes[0].Methods[0];
 
-            method.Name.Should().Be("f");
-            method.CodeRange.Of(source).Should().Be(@"
+        method.Name.Should().Be("f");
+        method.CodeRange.Of(source).Should().Be(@"
                 |
                 |
                 |    ///Comment
                 |    public void f(){
                 |    }
             ".TrimMargin());
-        }
+    }
 
-        [Fact]
-        public void PropertiesWithArrow()
-        {
-            string source = @"
+    [Fact]
+    public void PropertiesWithArrow()
+    {
+        string source = @"
                 class C {
                     internal string Path
                     {
@@ -378,12 +376,12 @@ namespace antlr_parser.tests.CSharp
                 }
             ".TrimIndent2();
 
-            var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
-            var field = fileDto.Classes[0].Fields[0];
+        var field = fileDto.Classes[0].Fields[0];
 
-            field.Name.Should().Be("Path");
-            field.CodeRange.Of(source).Should().Be(@"
+        field.Name.Should().Be("Path");
+        field.CodeRange.Of(source).Should().Be(@"
                |
                |    internal string Path
                |    {
@@ -391,16 +389,16 @@ namespace antlr_parser.tests.CSharp
                |        set => HttpRequest.Path = value;
                |    }
             ".TrimMargin());
-        }
+    }
 
-        [Fact]
-        public void Directives()
-        {
-            string source = Resource("TestCsharp.txt");
-            var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+    [Fact]
+    public void Directives()
+    {
+        string source = Resource("TestCsharp.txt");
+        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
-            fileDto.Classes.Single().Methods.Single(x => x.Name == "StaticReset")
-                .CodeRange.Of(source).Should().Be(@"
+        fileDto.Classes.Single().Methods.Single(x => x.Name == "StaticReset")
+            .CodeRange.Of(source).Should().Be(@"
                     |
                     |
                     |
@@ -417,12 +415,12 @@ namespace antlr_parser.tests.CSharp
                     |            AppQuits = false;
                     |        }
                 ".TrimMargin());
-        }
+    }
 
-        [Fact]
-        public void Properties()
-        {
-            string source = @"
+    [Fact]
+    public void Properties()
+    {
+        string source = @"
                 using System;
                 using UnityEngine.InputSystem.Composites;
                 using UnityEngine.InputSystem.LowLevel;
@@ -443,21 +441,21 @@ namespace antlr_parser.tests.CSharp
                 }
             ".TrimIndent2();
 
-            var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
-            var field = fileDto.Classes.Single().Fields.Single();
-            field.Name.Should().Be("alias");
-            field.CodeRange.Of(source).Should().Be(@"
+        var field = fileDto.Classes.Single().Fields.Single();
+        field.Name.Should().Be("alias");
+        field.CodeRange.Of(source).Should().Be(@"
                 |
                 |        /// <summary>
                 |        public string alias { get; set; }
             ".TrimMargin());
-        }
+    }
 
-        [Fact]
-        public void EventAsField()
-        {
-            string source = @"
+    [Fact]
+    public void EventAsField()
+    {
+        string source = @"
                 public sealed unsafe class InputEventTrace 
                 {
 
@@ -478,12 +476,12 @@ namespace antlr_parser.tests.CSharp
                     }
                 }
             ".TrimIndent2();
-            var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
-            FieldDto fieldDto = fileDto.Classes.Single().Fields.Single();
-            fieldDto.Name.Should().Be("onEvent");
+        FieldDto fieldDto = fileDto.Classes.Single().Fields.Single();
+        fieldDto.Name.Should().Be("onEvent");
             
-            fieldDto.CodeRange.Of(source).Should().Be(@"
+        fieldDto.CodeRange.Of(source).Should().Be(@"
                 |
                 |
                 |    /// comment
@@ -498,7 +496,6 @@ namespace antlr_parser.tests.CSharp
                 |    }
             ".TrimMargin());
             
-            fieldDto.AccFlag.Should().Be(AccessFlags.AccPublic);
-        }
+        fieldDto.AccFlag.Should().Be(AccessFlags.AccPublic);
     }
 }

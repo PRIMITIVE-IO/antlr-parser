@@ -6,14 +6,14 @@ using FluentAssertions;
 using PrimitiveCodebaseElements.Primitive;
 using Xunit;
 
-namespace antlr_parser.tests.C
+namespace antlr_parser.tests.C;
+
+public class DirectivesRemoverTest
 {
-    public class DirectivesRemoverTest
+    [Fact]
+    void RemoveElseDirectives()
     {
-        [Fact]
-        void RemoveElseDirectives()
-        {
-            string source = @"
+        string source = @"
                 #if 1
                     textToKeep
                 #elif 1
@@ -23,15 +23,15 @@ namespace antlr_parser.tests.C
                 #endif
             ".Unindent();
 
-            List<Tuple<int, int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
+        List<Tuple<int, int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
-            MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be("\n    textToKeep\n");
-        }
+        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be("\n    textToKeep\n");
+    }
 
-        [Fact]
-        void RemoveNestedDirectives()
-        {
-            string source = @"
+    [Fact]
+    void RemoveNestedDirectives()
+    {
+        string source = @"
                 #if 1
                 #if 2
                     textToKeep
@@ -45,15 +45,15 @@ namespace antlr_parser.tests.C
                 #endif
             ".Unindent();
 
-            List<Tuple<int, int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
+        List<Tuple<int, int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
-            MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be("\n    textToKeep\n");
-        }
+        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be("\n    textToKeep\n");
+    }
 
-        [Fact]
-        void RemoveNestedDirectivesLevel2()
-        {
-            string source = @"
+    [Fact]
+    void RemoveNestedDirectivesLevel2()
+    {
+        string source = @"
                 #if 1
                 #if 2
                 #if 3
@@ -73,16 +73,16 @@ namespace antlr_parser.tests.C
                 #endif
             ".Unindent();
 
-            List<Tuple<int, int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
+        List<Tuple<int, int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
-            MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should()
-                .Be("\n    textToKeep\n    textToKeep2\n");
-        }
+        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should()
+            .Be("\n    textToKeep\n    textToKeep2\n");
+    }
 
-        [Fact]
-        void KeepSameLevelDirectives()
-        {
-            string source = @"
+    [Fact]
+    void KeepSameLevelDirectives()
+    {
+        string source = @"
                 #if 1
                 #if 2
                     textToKeep
@@ -99,10 +99,9 @@ namespace antlr_parser.tests.C
                 #endif
             ".Unindent();
 
-            List<Tuple<int, int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
+        List<Tuple<int, int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
-            MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should()
-                .Be("\n    textToKeep\n    textToKeep2\n");
-        }
+        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should()
+            .Be("\n    textToKeep\n    textToKeep2\n");
     }
 }

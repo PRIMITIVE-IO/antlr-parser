@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using antlr_parser.Antlr4Impl.dto.converter;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
@@ -16,7 +15,7 @@ namespace antlr_parser.Antlr4Impl.Python
             return AstNodeToClassDtoConverter.ToFileDto(ParseFileNode(source, filePath), source);
         }
 
-        private static AstNode.FileNode ParseFileNode(string source, string filePath)
+        static AstNode.FileNode ParseFileNode(string source, string filePath)
         {
             try
             {

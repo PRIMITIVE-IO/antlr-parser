@@ -10,9 +10,9 @@ namespace antlr_parser.Antlr4Impl.CPP
 {
     public class CppAstVisitor : CPP14ParserBaseVisitor<AstNode>
     {
-        private readonly string Path;
-        private readonly MethodBodyRemovalResult MethodBodyRemovalResult;
-        private readonly IndexToLocationConverter IndexToLocationConverter;
+        readonly string Path;
+        readonly MethodBodyRemovalResult MethodBodyRemovalResult;
+        readonly IndexToLocationConverter IndexToLocationConverter;
 
         public CppAstVisitor(string path, MethodBodyRemovalResult methodBodyRemovalResult)
         {

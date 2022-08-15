@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
-using JetBrains.Annotations;
 using PrimitiveCodebaseElements.Primitive;
 using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
 
@@ -9,9 +8,9 @@ namespace antlr_parser.Antlr4Impl.Java
 {
     public class JavaAstVisitor : JavaParserBaseVisitor<AstNode>
     {
-        private readonly string Path;
-        private readonly MethodBodyRemovalResult MethodBodyRemovalResult;
-        private readonly IndexToLocationConverter IndexToLocationConverter;
+        readonly string Path;
+        readonly MethodBodyRemovalResult MethodBodyRemovalResult;
+        readonly IndexToLocationConverter IndexToLocationConverter;
 
         public JavaAstVisitor(MethodBodyRemovalResult methodBodyRemovalResult, string path)
         {
@@ -255,7 +254,7 @@ namespace antlr_parser.Antlr4Impl.Java
             );
         }
 
-        private static string? ClassBodyDeclarationModifier(JavaParser.ClassBodyDeclarationContext? context)
+        static string? ClassBodyDeclarationModifier(JavaParser.ClassBodyDeclarationContext? context)
         {
             return context
                 ?.modifier()
@@ -300,7 +299,7 @@ namespace antlr_parser.Antlr4Impl.Java
             );
         }
 
-        private static string? TypeDeclarationModifier(JavaParser.TypeDeclarationContext? context)
+        static string? TypeDeclarationModifier(JavaParser.TypeDeclarationContext? context)
         {
             return context
                 ?.classOrInterfaceModifier()

@@ -8,9 +8,9 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 {
     public class TypeScriptVisitor : TypeScriptParserBaseVisitor<AstNode>
     {
-        private readonly string Path;
-        private readonly MethodBodyRemovalResult MethodBodyRemovalResult;
-        private readonly IndexToLocationConverter IndexToLocationConverter;
+        readonly string Path;
+        readonly MethodBodyRemovalResult MethodBodyRemovalResult;
+        readonly IndexToLocationConverter IndexToLocationConverter;
 
         public TypeScriptVisitor(string path, MethodBodyRemovalResult methodBodyRemovalResult)
         {
@@ -208,7 +208,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             );
         }
 
-        private AccessFlags AccessFlagsFrom(string text)
+        AccessFlags AccessFlagsFrom(string text)
         {
             return text switch
             {

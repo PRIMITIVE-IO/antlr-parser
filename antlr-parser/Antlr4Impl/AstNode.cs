@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using PrimitiveCodebaseElements.Primitive;
 using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
 

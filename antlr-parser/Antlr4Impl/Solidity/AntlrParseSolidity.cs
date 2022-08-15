@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using antlr_parser.Antlr4Impl.dto.converter;
 using Antlr4.Runtime;
-using JetBrains.Annotations;
 using PrimitiveCodebaseElements.Primitive.dto;
 
 namespace antlr_parser.Antlr4Impl.Solidity

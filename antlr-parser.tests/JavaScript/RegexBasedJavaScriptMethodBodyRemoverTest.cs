@@ -5,41 +5,40 @@ using FluentAssertions;
 using PrimitiveCodebaseElements.Primitive;
 using Xunit;
 
-namespace antlr_parser.tests.JavaScript
+namespace antlr_parser.tests.JavaScript;
+
+public class RegexBasedJavaScriptMethodBodyRemoverTest
 {
-    public class RegexBasedJavaScriptMethodBodyRemoverTest
+    [Fact]
+    public void RemoveCurly()
     {
-        [Fact]
-        public void RemoveCurly()
-        {
-            string source = "function f(x){}";
-            List<Tuple<int, int>> findBlocksToRemove = RegexBasedJavaScriptMethodBodyRemover.FindBlocksToRemove(source);
+        string source = "function f(x){}";
+        List<Tuple<int, int>> findBlocksToRemove = RegexBasedJavaScriptMethodBodyRemover.FindBlocksToRemove(source);
 
-            findBlocksToRemove.Count.Should().Be(1);
-            findBlocksToRemove[0].Item1.Should().Be(13);
-            findBlocksToRemove[0].Item2.Should().Be(14);
-        }
+        findBlocksToRemove.Count.Should().Be(1);
+        findBlocksToRemove[0].Item1.Should().Be(13);
+        findBlocksToRemove[0].Item2.Should().Be(14);
+    }
 
-        [Fact]
-        public void RemoveSpacesBeforeCurly()
-        {
-            string source = "function f(x) {}";
-            List<Tuple<int, int>> blocksToRemove = RegexBasedJavaScriptMethodBodyRemover.FindBlocksToRemove(source);
+    [Fact]
+    public void RemoveSpacesBeforeCurly()
+    {
+        string source = "function f(x) {}";
+        List<Tuple<int, int>> blocksToRemove = RegexBasedJavaScriptMethodBodyRemover.FindBlocksToRemove(source);
 
-            blocksToRemove.Count.Should().Be(1);
-            blocksToRemove[0].Item1.Should().Be(13);
-            blocksToRemove[0].Item2.Should().Be(15);
-        }
+        blocksToRemove.Count.Should().Be(1);
+        blocksToRemove[0].Item1.Should().Be(13);
+        blocksToRemove[0].Item2.Should().Be(15);
+    }
 
-        [Fact]
-        public void FunctionDeclarationWithDoubleQuotes()
-        {
-            string source =
-                @"function generateAssets(repo, outputName, commit = """", diffs = [], iGenerateDB = false, createDBcallback = null) {
+    [Fact]
+    public void FunctionDeclarationWithDoubleQuotes()
+    {
+        string source =
+            @"function generateAssets(repo, outputName, commit = """", diffs = [], iGenerateDB = false, createDBcallback = null) {
 }".Unindent();
-            List<Tuple<int, int>> blocksToRemove = RegexBasedJavaScriptMethodBodyRemover.FindBlocksToRemove(source);
+        List<Tuple<int, int>> blocksToRemove = RegexBasedJavaScriptMethodBodyRemover.FindBlocksToRemove(source);
 
-            blocksToRemove.Count.Should().Be(1);
-        }
+        blocksToRemove.Count.Should().Be(1);
     }
 }

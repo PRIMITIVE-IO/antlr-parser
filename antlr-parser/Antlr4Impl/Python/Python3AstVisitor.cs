@@ -11,10 +11,10 @@ namespace antlr_parser.Antlr4Impl.Python
 {
     public class Python3AstVisitor : Python3ParserBaseVisitor<AstNode>
     {
-        private readonly string FilePath;
-        private readonly Dictionary<int, int> IdxToLastNonWhiteSpace;
-        private readonly MethodBodyRemovalResult MethodBodyRemovalResult;
-        private readonly IndexToLocationConverter IndexToLocationConverter;
+        readonly string FilePath;
+        readonly Dictionary<int, int> IdxToLastNonWhiteSpace;
+        readonly MethodBodyRemovalResult MethodBodyRemovalResult;
+        readonly IndexToLocationConverter IndexToLocationConverter;
 
         public Python3AstVisitor(
             string filePath,

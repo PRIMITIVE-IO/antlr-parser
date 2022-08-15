@@ -12,84 +12,80 @@ using log4net.Repository;
 using PrimitiveCodebaseElements.Primitive.dto;
 using FileInfo = System.IO.FileInfo;
 
-namespace antlr_parser.runner
+namespace antlr_parser.runner;
+
+static class Program
 {
-    static class Program
+    class Args
     {
-        class Args
-        {
-            public string InputPath { get; set; }
-        }
+        public string InputPath { get; set; }
+    }
 
-        static void Main(string[] args)
-        {
-            SetupLogger();
+    static void Main(string[] args)
+    {
+        SetupLogger();
 
-            // Create a root command with some options 
-            RootCommand rootCommand = new RootCommand
+        // Create a root command with some options 
+        RootCommand rootCommand = new RootCommand
+        {
+            new Argument<string>("InputPath")
+        };
+
+        rootCommand.Description = "Parse Files";
+
+        // Note that the parameters of the handler method are matched according to the names of the options 
+        rootCommand.Handler = CommandHandler.Create<Args>(Parse);
+
+        rootCommand.Invoke(args);
+    }
+
+    static void Parse(Args args)
+    {
+        FilePathsFrom(args.InputPath)
+            .Where(filePath => ParserHandler.SupportedParsableFiles.Contains(Path.GetExtension(filePath)))
+            .Select(ParseFile)
+            .Where(it => it != null)
+            .ToList()
+            .ForEach(PrintFileDto);
+    }
+
+    static IEnumerable<string> FilePathsFrom(string inputPath)
+    {
+        return File.GetAttributes(inputPath).HasFlag(FileAttributes.Directory) 
+            ? Directory.GetFiles(inputPath, "*.*", SearchOption.AllDirectories) 
+            : new[] { inputPath };
+    }
+
+    [CanBeNull]
+    static FileDto ParseFile(string filePath)
+    {
+        return ParserHandler.FileDtoFromSourceText(
+            filePath,
+            Path.GetExtension(filePath),
+            ParserHandler.GetTextFromFilePath(filePath));
+    }
+
+    static void PrintFileDto(FileDto fileDto)
+    {
+        foreach (ClassDto classDto in fileDto.Classes)
+        {
+            Console.WriteLine("class: " + classDto.FullyQualifiedName);
+
+            foreach (FieldDto field in classDto.Fields)
             {
-                new Argument<string>("InputPath")
-            };
-
-            rootCommand.Description = "Parse Files";
-
-            // Note that the parameters of the handler method are matched according to the names of the options 
-            rootCommand.Handler = CommandHandler.Create<Args>(Parse);
-
-            rootCommand.Invoke(args);
-        }
-
-        static void Parse(Args args)
-        {
-            FilePathsFrom(args.InputPath)
-                .Where(filePath => ParserHandler.SupportedParsableFiles.Contains(Path.GetExtension(filePath)))
-                .Select(ParseFile)
-                .Where(it => it != null)
-                .ToList()
-                .ForEach(PrintFileDto);
-        }
-
-        static IEnumerable<string> FilePathsFrom(string inputPath)
-        {
-            if (File.GetAttributes(inputPath).HasFlag(FileAttributes.Directory))
-            {
-                return Directory.GetFiles(inputPath, "*.*", SearchOption.AllDirectories);
+                Console.WriteLine($"    field: {field.Name}: {field.SourceCode}");
             }
 
-            return new[] { inputPath };
-        }
-
-        [CanBeNull]
-        static FileDto ParseFile(string filePath)
-        {
-            return ParserHandler.FileDtoFromSourceText(
-                filePath,
-                Path.GetExtension(filePath),
-                ParserHandler.GetTextFromFilePath(filePath));
-        }
-
-        static void PrintFileDto(FileDto fileDto)
-        {
-            foreach (ClassDto classDto in fileDto.Classes)
+            foreach (MethodDto method in classDto.Methods)
             {
-                Console.WriteLine("class: " + classDto.FullyQualifiedName);
-
-                foreach (FieldDto field in classDto.Fields)
-                {
-                    Console.WriteLine($"    field: {field.Name}: {field.SourceCode}");
-                }
-
-                foreach (MethodDto method in classDto.Methods)
-                {
-                    Console.WriteLine($"    method: {method.Name}: {method.SourceCode}");
-                }
+                Console.WriteLine($"    method: {method.Name}: {method.SourceCode}");
             }
         }
+    }
 
-        static void SetupLogger()
-        {
-            ILoggerRepository logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
-            XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
-        }
+    static void SetupLogger()
+    {
+        ILoggerRepository logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+        XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
     }
 }

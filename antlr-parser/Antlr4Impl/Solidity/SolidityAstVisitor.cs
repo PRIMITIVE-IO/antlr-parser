@@ -3,16 +3,15 @@ using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using PrimitiveCodebaseElements.Primitive;
-using PrimitiveCodebaseElements.Primitive.dto;
 using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
 
 namespace antlr_parser.Antlr4Impl.Solidity
 {
     public class SolidityAstVisitor : SolidityBaseVisitor<AstNode>
     {
-        private readonly string Path;
-        private readonly MethodBodyRemovalResult MethodBodyRemovalResult;
-        private readonly IndexToLocationConverter IndexToLocationConverter;
+        readonly string Path;
+        readonly MethodBodyRemovalResult MethodBodyRemovalResult;
+        readonly IndexToLocationConverter IndexToLocationConverter;
 
 
         public SolidityAstVisitor(string path, MethodBodyRemovalResult methodBodyRemovalResult)

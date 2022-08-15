@@ -6,33 +6,33 @@ using FluentAssertions;
 using PrimitiveCodebaseElements.Primitive;
 using Xunit;
 
-namespace antlr_parser.tests.Python
+namespace antlr_parser.tests.Python;
+
+public class PythonMethodBodyRemoverTest
 {
-    public class PythonMethodBodyRemoverTest
+    [Fact]
+    public void KeepLastLine()
     {
-        [Fact]
-        public void KeepLastLine()
-        {
-            string source = @"
+        string source = @"
                 def f():
                     should_be_removed()
                     return 10
             ".TrimIndent2();
 
-            List<Tuple<int, int>> blocksToRemove = PythonMethodBodyRemover.FindBlocksToRemove(source);
+        List<Tuple<int, int>> blocksToRemove = PythonMethodBodyRemover.FindBlocksToRemove(source);
 
-            var methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+        var methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
 
-            methodBodyRemovalResult.ShortenedSource.Should().Be(@"
+        methodBodyRemovalResult.ShortenedSource.Should().Be(@"
                 def f():
                     return 10
             ".TrimIndent2());
-        }
+    }
 
-        [Fact]
-        public void KeepLastLine2()
-        {
-            string source = @"
+    [Fact]
+    public void KeepLastLine2()
+    {
+        string source = @"
                 def f():
                     should_be_removed()
                     return 10
@@ -43,11 +43,11 @@ namespace antlr_parser.tests.Python
                     return 10
             ".TrimIndent2();
 
-            List<Tuple<int, int>> blocksToRemove = PythonMethodBodyRemover.FindBlocksToRemove(source);
+        List<Tuple<int, int>> blocksToRemove = PythonMethodBodyRemover.FindBlocksToRemove(source);
 
-            var methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+        var methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
 
-            methodBodyRemovalResult.ShortenedSource.Should().Be(@"
+        methodBodyRemovalResult.ShortenedSource.Should().Be(@"
                 def f():
                     return 10
 
@@ -55,12 +55,12 @@ namespace antlr_parser.tests.Python
                 def g():
                     return 10
             ".TrimIndent2());
-        }
+    }
 
-        [Fact]
-        public void SmokeTest()
-        {
-            string source = @"
+    [Fact]
+    public void SmokeTest()
+    {
+        string source = @"
                 def get_test_tfdataset(self, test_dataset: tf.data.Dataset) -> tf.data.Data_set:
                     """"""comment should be kept""""""
                     should_be_kept()
@@ -83,11 +83,11 @@ namespace antlr_parser.tests.Python
                     should_be_kept()
             ".TrimIndent2();
 
-            List<Tuple<int, int>> blocksToRemove = PythonMethodBodyRemover.FindBlocksToRemove(source);
+        List<Tuple<int, int>> blocksToRemove = PythonMethodBodyRemover.FindBlocksToRemove(source);
 
-            var methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+        var methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
 
-            methodBodyRemovalResult.ShortenedSource.Should().Be(@"
+        methodBodyRemovalResult.ShortenedSource.Should().Be(@"
                 def get_test_tfdataset(self, test_dataset: tf.data.Dataset) -> tf.data.Data_set:
                     """"""comment should be kept""""""
                     should_be_kept()
@@ -107,12 +107,12 @@ namespace antlr_parser.tests.Python
                 ):
                     should_be_kept()
             ".TrimIndent2());
-        }
+    }
 
-        [Fact]
-        public void SmokeTest2()
-        {
-            string source = @"
+    [Fact]
+    public void SmokeTest2()
+    {
+        string source = @"
                 import inspect
                 import itertools as it
 
@@ -164,11 +164,11 @@ namespace antlr_parser.tests.Python
 
             ".TrimIndent2();
 
-            List<Tuple<int, int>> blocksToRemove = PythonMethodBodyRemover.FindBlocksToRemove(source);
+        List<Tuple<int, int>> blocksToRemove = PythonMethodBodyRemover.FindBlocksToRemove(source);
 
-            var methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+        var methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
 
-            methodBodyRemovalResult.ShortenedSource.Should().Be(@"
+        methodBodyRemovalResult.ShortenedSource.Should().Be(@"
                 import inspect
                 import itertools as it
 
@@ -198,12 +198,12 @@ namespace antlr_parser.tests.Python
                     return result
 
             ".TrimIndent2());
-        }
+    }
 
-        [Fact]
-        public void ConsistentParenthesis()
-        {
-            string source = @"
+    [Fact]
+    public void ConsistentParenthesis()
+    {
+        string source = @"
                 def partial_bezier_points(
                     points: Sequence[np.ndarray],
                     a: float,
@@ -226,11 +226,11 @@ namespace antlr_parser.tests.Python
                     ]
             ".TrimIndent2();
 
-            List<Tuple<int, int>> blocksToRemove = PythonMethodBodyRemover.FindBlocksToRemove(source);
+        List<Tuple<int, int>> blocksToRemove = PythonMethodBodyRemover.FindBlocksToRemove(source);
 
-            var methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+        var methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
 
-            methodBodyRemovalResult.ShortenedSource.Should().Be(@"
+        methodBodyRemovalResult.ShortenedSource.Should().Be(@"
                 def partial_bezier_points(
                     points: Sequence[np.ndarray],
                     a: float,
@@ -244,6 +244,5 @@ namespace antlr_parser.tests.Python
                         for i in range(len(points))
                     ]
             ".TrimIndent2());
-        }
     }
 }

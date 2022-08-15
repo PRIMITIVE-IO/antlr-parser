@@ -12,7 +12,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
     {
         readonly string FilePath;
         readonly MethodBodyRemovalResult MethodBodyRemovalResult;
-        private readonly IndexToLocationConverter IndexToLocationConverter;
+        readonly IndexToLocationConverter IndexToLocationConverter;
 
         public JavaScriptAstVisitor(string filePath, MethodBodyRemovalResult methodBodyRemovalResult)
         {

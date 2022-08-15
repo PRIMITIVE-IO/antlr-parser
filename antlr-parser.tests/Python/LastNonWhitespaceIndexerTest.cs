@@ -4,33 +4,32 @@ using FluentAssertions;
 using PrimitiveCodebaseElements.Primitive;
 using Xunit;
 
-namespace antlr_parser.tests.Python
+namespace antlr_parser.tests.Python;
+
+public class LastNonWhitespaceIndexerTest
 {
-    public class LastNonWhitespaceIndexerTest
+    [Fact]
+    public void SingleLineWithSpaces()
     {
-        [Fact]
-        public void SingleLineWithSpaces()
-        {
-            string source = @"
+        string source = @"
                 1234 1234
             ".TrimIndent2();
 
-            Dictionary<int, int> actual = LastNonWhitespaceIndexer.IdxToLastNonWhiteSpace(source);
+        Dictionary<int, int> actual = LastNonWhitespaceIndexer.IdxToLastNonWhiteSpace(source);
 
-            actual.Should().Contain(4, 3);
-        }
+        actual.Should().Contain(4, 3);
+    }
 
-        [Fact]
-        public void Multiline()
-        {
-            string source = @"
+    [Fact]
+    public void Multiline()
+    {
+        string source = @"
                 1234
                 1234
             ".TrimIndent2();
 
-            Dictionary<int, int> actual = LastNonWhitespaceIndexer.IdxToLastNonWhiteSpace(source);
+        Dictionary<int, int> actual = LastNonWhitespaceIndexer.IdxToLastNonWhiteSpace(source);
 
-            actual.Should().Contain(4, 3);
-        }
+        actual.Should().Contain(4, 3);
     }
 }

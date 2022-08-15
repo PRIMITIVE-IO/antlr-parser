@@ -4,45 +4,45 @@ using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
 using Xunit;
 
-namespace antlr_parser.tests
+namespace antlr_parser.tests;
+
+public class ParserHandlerTests
 {
-    public class ParserHandlerTests
+    readonly string testJavaClassSourceCode;
+
+    public ParserHandlerTests()
     {
-        private readonly string testJavaClassSourceCode;
-
-        public ParserHandlerTests()
-        {
-            testJavaClassSourceCode = System.IO.File.ReadAllText(@"Resources/TestJavaClass.java");
-        }
+        testJavaClassSourceCode = System.IO.File.ReadAllText(@"Resources/TestJavaClass.java");
+    }
 
 
-        [Fact]
-        public void ParserHandlerShouldReturnCollectionWithOneElement()
-        {
-            //Act
-            FileDto result = ParserHandler.FileDtoFromSourceText("test.java", ".java", testJavaClassSourceCode);
+    [Fact]
+    public void ParserHandlerShouldReturnCollectionWithOneElement()
+    {
+        //Act
+        FileDto result = ParserHandler.FileDtoFromSourceText("test.java", ".java", testJavaClassSourceCode);
 
-            //Verify
-            result.Should().NotBeNull();
-            result.Classes.Count().Should().Be(2);
-        }
+        //Verify
+        result.Should().NotBeNull();
+        result.Classes.Count().Should().Be(2);
+    }
 
-        [Fact]
-        public void ParserHandlerShouldReturnCollectionWithAnyClassInfoWithClassName()
-        {
-            //Act
-            FileDto result = ParserHandler.FileDtoFromSourceText("test.java", ".java", testJavaClassSourceCode);
+    [Fact]
+    public void ParserHandlerShouldReturnCollectionWithAnyClassInfoWithClassName()
+    {
+        //Act
+        FileDto result = ParserHandler.FileDtoFromSourceText("test.java", ".java", testJavaClassSourceCode);
 
-            //Verify
-            result.Classes[0].Methods.Any(x => x.Name == "doWork").Should().BeTrue();
-        }
+        //Verify
+        result.Classes[0].Methods.Any(x => x.Name == "doWork").Should().BeTrue();
+    }
 
-        [Fact]
-        public void KotlinClassHasHeader()
-        {
-            //string source = System.IO.File.ReadAllText(@"Resources/KotlinExample.kt");
-            //Act
-            string source = @"
+    [Fact]
+    public void KotlinClassHasHeader()
+    {
+        //string source = System.IO.File.ReadAllText(@"Resources/KotlinExample.kt");
+        //Act
+        string source = @"
                 package pkg
                 
                 /** comment */
@@ -56,20 +56,20 @@ namespace antlr_parser.tests
 
             ".TrimIndent2();
 
-            FileDto result = ParserHandler.FileDtoFromSourceText("kotlin.kt", ".kt", source);
+        FileDto result = ParserHandler.FileDtoFromSourceText("kotlin.kt", ".kt", source);
 
-            //Verify
-            ClassDto fileInfo = result.Classes.First();
-            fileInfo.CodeRange.Of(source).Should().Be(@"
+        //Verify
+        ClassDto fileInfo = result.Classes.First();
+        fileInfo.CodeRange.Of(source).Should().Be(@"
                   |package pkg
                   |
                   |/** comment */
                   |
             ".TrimMargin());
 
-            ClassDto classInfo = result.Classes[1];
-            classInfo.Name.Should().Be("C");
-            classInfo.CodeRange.Of(source).Should().Be(@"
+        ClassDto classInfo = result.Classes[1];
+        classInfo.Name.Should().Be("C");
+        classInfo.CodeRange.Of(source).Should().Be(@"
                 |package pkg
                 |
                 |/** comment */
@@ -77,12 +77,11 @@ namespace antlr_parser.tests
                 |  
             ".TrimMargin());
 
-            classInfo.Methods.Single().CodeRange.Of(source).Should().Be(@"
+        classInfo.Methods.Single().CodeRange.Of(source).Should().Be(@"
                 |fun method() {
                 |    println()
                 |  }
                 |
             ".TrimMargin());
-        }
     }
 }
