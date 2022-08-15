@@ -10,7 +10,6 @@ using log4net;
 using log4net.Config;
 using log4net.Repository;
 using PrimitiveCodebaseElements.Primitive.dto;
-using Argument = System.CommandLine.Argument;
 using FileInfo = System.IO.FileInfo;
 
 namespace antlr_parser.runner
@@ -29,7 +28,7 @@ namespace antlr_parser.runner
             // Create a root command with some options 
             RootCommand rootCommand = new RootCommand
             {
-                new Argument("InputPath")
+                new Argument<string>("InputPath")
             };
 
             rootCommand.Description = "Parse Files";
