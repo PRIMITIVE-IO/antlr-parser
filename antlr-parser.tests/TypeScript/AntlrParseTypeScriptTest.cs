@@ -98,4 +98,18 @@ public class AntlrParseTypeScriptTest
         res.Classes[1].Name.Should().Be("MyClass");
         res.Classes[1].ParentClassFqn.Should().Be("repo/path");
     }
+
+    [Fact]
+    public void EmptyFile()
+    {
+        var source = @"
+            /// some comment
+        ".TrimIndent2();
+        
+        FileDto res = AntlrParseTypeScript.Parse(
+            source: source,
+            filePath: "repo/path"
+        );
+        res.Should().NotBeNull();
+    }
 }

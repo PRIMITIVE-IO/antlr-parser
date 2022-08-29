@@ -171,7 +171,30 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         public override AstNode VisitClassElement(JavaScriptParser.ClassElementContext context)
         {
-            return context.methodDefinition().Accept(this);
+            if (context.methodDefinition() != null)
+            {
+                return context.methodDefinition().Accept(this);
+            }
+
+            if (context.propertyName() != null)
+            {
+                // field containing lambda, like `field = x => { return 10 }` 
+                int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+                int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+                CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+
+                return new AstNode.MethodNode(
+                    name: context.propertyName().GetText(),
+                    accFlag: AccessFlags.None,
+                    sourceCode: "",
+                    startIdx: -1,
+                    endIdx: -1,
+                    codeRange: codeRange,
+                    arguments: new List<AstNode.ArgumentNode>()
+                );
+            }
+
+            return null;
         }
 
         public override AstNode VisitMethodDefinition(JavaScriptParser.MethodDefinitionContext context)
