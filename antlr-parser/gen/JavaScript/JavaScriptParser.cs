@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from /Users/maxfarsikov/IdeaProjects/antlr-parser/antlr-parser/grammars/JavaScriptParser.g4 by ANTLR 4.10.1
+// Generated from /Users/max/RiderProjects/antlr-parser/antlr-parser/grammars/JavaScriptParser.g4 by ANTLR 4.10.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -38,35 +38,36 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 	public const int
 		HashBangLine=1, MultiLineComment=2, SingleLineComment=3, RegularExpressionLiteral=4, 
 		OpenBracket=5, CloseBracket=6, OpenParen=7, CloseParen=8, OpenBrace=9, 
-		CloseBrace=10, SemiColon=11, Comma=12, Assign=13, QuestionMark=14, Colon=15, 
-		Ellipsis=16, Dot=17, PlusPlus=18, MinusMinus=19, Plus=20, Minus=21, BitNot=22, 
-		Not=23, Multiply=24, Divide=25, Modulus=26, Power=27, NullCoalesce=28, 
-		Hashtag=29, RightShiftArithmetic=30, LeftShiftArithmetic=31, RightShiftLogical=32, 
-		LessThan=33, MoreThan=34, LessThanEquals=35, GreaterThanEquals=36, Equals_=37, 
-		NotEquals=38, IdentityEquals=39, IdentityNotEquals=40, BitAnd=41, BitXOr=42, 
-		BitOr=43, And=44, Or=45, MultiplyAssign=46, DivideAssign=47, ModulusAssign=48, 
-		PlusAssign=49, MinusAssign=50, LeftShiftArithmeticAssign=51, RightShiftArithmeticAssign=52, 
-		RightShiftLogicalAssign=53, BitAndAssign=54, BitXorAssign=55, BitOrAssign=56, 
-		PowerAssign=57, ARROW=58, NullLiteral=59, BooleanLiteral=60, DecimalLiteral=61, 
-		HexIntegerLiteral=62, OctalIntegerLiteral=63, OctalIntegerLiteral2=64, 
-		BinaryIntegerLiteral=65, BigHexIntegerLiteral=66, BigOctalIntegerLiteral=67, 
-		BigBinaryIntegerLiteral=68, BigDecimalIntegerLiteral=69, Break=70, Do=71, 
-		Instanceof=72, Typeof=73, Case=74, Else=75, New=76, Var=77, Catch=78, 
-		Finally=79, Return=80, Void=81, Continue=82, For=83, Switch=84, While=85, 
-		Debugger=86, Function_=87, This=88, With=89, Default=90, If=91, Throw=92, 
-		Delete=93, In=94, Try=95, As=96, From=97, Class=98, Enum=99, Extends=100, 
-		Super=101, Const=102, Export=103, Import=104, Async=105, Await=106, Implements=107, 
-		StrictLet=108, NonStrictLet=109, Private=110, Public=111, Interface=112, 
-		Package=113, Protected=114, Static=115, Yield=116, Identifier=117, StringLiteral=118, 
-		TemplateStringLiteral=119, WhiteSpaces=120, LineTerminator=121, HtmlComment=122, 
-		CDataComment=123, UnexpectedCharacter=124;
+		TemplateCloseBrace=10, CloseBrace=11, SemiColon=12, Comma=13, Assign=14, 
+		QuestionMark=15, Colon=16, Ellipsis=17, Dot=18, PlusPlus=19, MinusMinus=20, 
+		Plus=21, Minus=22, BitNot=23, Not=24, Multiply=25, Divide=26, Modulus=27, 
+		Power=28, NullCoalesce=29, Hashtag=30, RightShiftArithmetic=31, LeftShiftArithmetic=32, 
+		RightShiftLogical=33, LessThan=34, MoreThan=35, LessThanEquals=36, GreaterThanEquals=37, 
+		Equals_=38, NotEquals=39, IdentityEquals=40, IdentityNotEquals=41, BitAnd=42, 
+		BitXOr=43, BitOr=44, And=45, Or=46, MultiplyAssign=47, DivideAssign=48, 
+		ModulusAssign=49, PlusAssign=50, MinusAssign=51, LeftShiftArithmeticAssign=52, 
+		RightShiftArithmeticAssign=53, RightShiftLogicalAssign=54, BitAndAssign=55, 
+		BitXorAssign=56, BitOrAssign=57, PowerAssign=58, ARROW=59, NullLiteral=60, 
+		BooleanLiteral=61, DecimalLiteral=62, HexIntegerLiteral=63, OctalIntegerLiteral=64, 
+		OctalIntegerLiteral2=65, BinaryIntegerLiteral=66, BigHexIntegerLiteral=67, 
+		BigOctalIntegerLiteral=68, BigBinaryIntegerLiteral=69, BigDecimalIntegerLiteral=70, 
+		Break=71, Do=72, Instanceof=73, Typeof=74, Case=75, Else=76, New=77, Var=78, 
+		Catch=79, Finally=80, Return=81, Void=82, Continue=83, For=84, Switch=85, 
+		While=86, Debugger=87, Function_=88, This=89, With=90, Default=91, If=92, 
+		Throw=93, Delete=94, In=95, Try=96, As=97, From=98, Class=99, Enum=100, 
+		Extends=101, Super=102, Const=103, Export=104, Import=105, Async=106, 
+		Await=107, Yield=108, Implements=109, StrictLet=110, NonStrictLet=111, 
+		Private=112, Public=113, Interface=114, Package=115, Protected=116, Static=117, 
+		Identifier=118, StringLiteral=119, BackTick=120, WhiteSpaces=121, LineTerminator=122, 
+		HtmlComment=123, CDataComment=124, UnexpectedCharacter=125, TemplateStringStartExpression=126, 
+		TemplateStringAtom=127;
 	public const int
 		RULE_program = 0, RULE_sourceElement = 1, RULE_statement = 2, RULE_block = 3, 
 		RULE_statementList = 4, RULE_importStatement = 5, RULE_importFromBlock = 6, 
 		RULE_moduleItems = 7, RULE_importDefault = 8, RULE_importNamespace = 9, 
 		RULE_importFrom = 10, RULE_aliasName = 11, RULE_exportStatement = 12, 
 		RULE_exportFromBlock = 13, RULE_declaration = 14, RULE_variableStatement = 15, 
-		RULE_variableDeclarationList = 16, RULE_variableDeclaration = 17, RULE_emptyStatement = 18, 
+		RULE_variableDeclarationList = 16, RULE_variableDeclaration = 17, RULE_emptyStatement_ = 18, 
 		RULE_expressionStatement = 19, RULE_ifStatement = 20, RULE_iterationStatement = 21, 
 		RULE_varModifier = 22, RULE_continueStatement = 23, RULE_breakStatement = 24, 
 		RULE_returnStatement = 25, RULE_yieldStatement = 26, RULE_withStatement = 27, 
@@ -82,15 +83,16 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		RULE_argument = 55, RULE_expressionSequence = 56, RULE_singleExpression = 57, 
 		RULE_assignable = 58, RULE_objectLiteral = 59, RULE_anonymousFunction = 60, 
 		RULE_arrowFunctionParameters = 61, RULE_arrowFunctionBody = 62, RULE_assignmentOperator = 63, 
-		RULE_literal = 64, RULE_numericLiteral = 65, RULE_bigintLiteral = 66, 
-		RULE_getter = 67, RULE_setter = 68, RULE_identifierName = 69, RULE_identifier = 70, 
-		RULE_reservedWord = 71, RULE_keyword = 72, RULE_let_ = 73, RULE_eos = 74;
+		RULE_literal = 64, RULE_templateStringLiteral = 65, RULE_templateStringAtom = 66, 
+		RULE_numericLiteral = 67, RULE_bigintLiteral = 68, RULE_getter = 69, RULE_setter = 70, 
+		RULE_identifierName = 71, RULE_identifier = 72, RULE_reservedWord = 73, 
+		RULE_keyword = 74, RULE_let_ = 75, RULE_eos = 76;
 	public static readonly string[] ruleNames = {
 		"program", "sourceElement", "statement", "block", "statementList", "importStatement", 
 		"importFromBlock", "moduleItems", "importDefault", "importNamespace", 
 		"importFrom", "aliasName", "exportStatement", "exportFromBlock", "declaration", 
 		"variableStatement", "variableDeclarationList", "variableDeclaration", 
-		"emptyStatement", "expressionStatement", "ifStatement", "iterationStatement", 
+		"emptyStatement_", "expressionStatement", "ifStatement", "iterationStatement", 
 		"varModifier", "continueStatement", "breakStatement", "returnStatement", 
 		"yieldStatement", "withStatement", "switchStatement", "caseBlock", "caseClauses", 
 		"caseClause", "defaultClause", "labelledStatement", "throwStatement", 
@@ -101,38 +103,39 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		"propertyAssignment", "propertyName", "arguments", "argument", "expressionSequence", 
 		"singleExpression", "assignable", "objectLiteral", "anonymousFunction", 
 		"arrowFunctionParameters", "arrowFunctionBody", "assignmentOperator", 
-		"literal", "numericLiteral", "bigintLiteral", "getter", "setter", "identifierName", 
-		"identifier", "reservedWord", "keyword", "let_", "eos"
+		"literal", "templateStringLiteral", "templateStringAtom", "numericLiteral", 
+		"bigintLiteral", "getter", "setter", "identifierName", "identifier", "reservedWord", 
+		"keyword", "let_", "eos"
 	};
 
 	private static readonly string[] _LiteralNames = {
-		null, null, null, null, null, "'['", "']'", "'('", "')'", "'{'", "'}'", 
-		"';'", "','", "'='", "'?'", "':'", "'...'", "'.'", "'++'", "'--'", "'+'", 
-		"'-'", "'~'", "'!'", "'*'", "'/'", "'%'", "'**'", "'??'", "'#'", "'>>'", 
-		"'<<'", "'>>>'", "'<'", "'>'", "'<='", "'>='", "'=='", "'!='", "'==='", 
-		"'!=='", "'&'", "'^'", "'|'", "'&&'", "'||'", "'*='", "'/='", "'%='", 
-		"'+='", "'-='", "'<<='", "'>>='", "'>>>='", "'&='", "'^='", "'|='", "'**='", 
-		"'=>'", "'null'", null, null, null, null, null, null, null, null, null, 
-		null, "'break'", "'do'", "'instanceof'", "'typeof'", "'case'", "'else'", 
+		null, null, null, null, null, "'['", "']'", "'('", "')'", "'{'", null, 
+		"'}'", "';'", "','", "'='", "'?'", "':'", "'...'", "'.'", "'++'", "'--'", 
+		"'+'", "'-'", "'~'", "'!'", "'*'", "'/'", "'%'", "'**'", "'??'", "'#'", 
+		"'>>'", "'<<'", "'>>>'", "'<'", "'>'", "'<='", "'>='", "'=='", "'!='", 
+		"'==='", "'!=='", "'&'", "'^'", "'|'", "'&&'", "'||'", "'*='", "'/='", 
+		"'%='", "'+='", "'-='", "'<<='", "'>>='", "'>>>='", "'&='", "'^='", "'|='", 
+		"'**='", "'=>'", "'null'", null, null, null, null, null, null, null, null, 
+		null, null, "'break'", "'do'", "'instanceof'", "'typeof'", "'case'", "'else'", 
 		"'new'", "'var'", "'catch'", "'finally'", "'return'", "'void'", "'continue'", 
 		"'for'", "'switch'", "'while'", "'debugger'", "'function'", "'this'", 
 		"'with'", "'default'", "'if'", "'throw'", "'delete'", "'in'", "'try'", 
 		"'as'", "'from'", "'class'", "'enum'", "'extends'", "'super'", "'const'", 
-		"'export'", "'import'", "'async'", "'await'", "'implements'", null, null, 
-		"'private'", "'public'", "'interface'", "'package'", "'protected'", "'static'", 
-		"'yield'"
+		"'export'", "'import'", "'async'", "'await'", "'yield'", "'implements'", 
+		null, null, "'private'", "'public'", "'interface'", "'package'", "'protected'", 
+		"'static'", null, null, null, null, null, null, null, null, "'${'"
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, "HashBangLine", "MultiLineComment", "SingleLineComment", "RegularExpressionLiteral", 
 		"OpenBracket", "CloseBracket", "OpenParen", "CloseParen", "OpenBrace", 
-		"CloseBrace", "SemiColon", "Comma", "Assign", "QuestionMark", "Colon", 
-		"Ellipsis", "Dot", "PlusPlus", "MinusMinus", "Plus", "Minus", "BitNot", 
-		"Not", "Multiply", "Divide", "Modulus", "Power", "NullCoalesce", "Hashtag", 
-		"RightShiftArithmetic", "LeftShiftArithmetic", "RightShiftLogical", "LessThan", 
-		"MoreThan", "LessThanEquals", "GreaterThanEquals", "Equals_", "NotEquals", 
-		"IdentityEquals", "IdentityNotEquals", "BitAnd", "BitXOr", "BitOr", "And", 
-		"Or", "MultiplyAssign", "DivideAssign", "ModulusAssign", "PlusAssign", 
-		"MinusAssign", "LeftShiftArithmeticAssign", "RightShiftArithmeticAssign", 
+		"TemplateCloseBrace", "CloseBrace", "SemiColon", "Comma", "Assign", "QuestionMark", 
+		"Colon", "Ellipsis", "Dot", "PlusPlus", "MinusMinus", "Plus", "Minus", 
+		"BitNot", "Not", "Multiply", "Divide", "Modulus", "Power", "NullCoalesce", 
+		"Hashtag", "RightShiftArithmetic", "LeftShiftArithmetic", "RightShiftLogical", 
+		"LessThan", "MoreThan", "LessThanEquals", "GreaterThanEquals", "Equals_", 
+		"NotEquals", "IdentityEquals", "IdentityNotEquals", "BitAnd", "BitXOr", 
+		"BitOr", "And", "Or", "MultiplyAssign", "DivideAssign", "ModulusAssign", 
+		"PlusAssign", "MinusAssign", "LeftShiftArithmeticAssign", "RightShiftArithmeticAssign", 
 		"RightShiftLogicalAssign", "BitAndAssign", "BitXorAssign", "BitOrAssign", 
 		"PowerAssign", "ARROW", "NullLiteral", "BooleanLiteral", "DecimalLiteral", 
 		"HexIntegerLiteral", "OctalIntegerLiteral", "OctalIntegerLiteral2", "BinaryIntegerLiteral", 
@@ -141,10 +144,11 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		"Else", "New", "Var", "Catch", "Finally", "Return", "Void", "Continue", 
 		"For", "Switch", "While", "Debugger", "Function_", "This", "With", "Default", 
 		"If", "Throw", "Delete", "In", "Try", "As", "From", "Class", "Enum", "Extends", 
-		"Super", "Const", "Export", "Import", "Async", "Await", "Implements", 
+		"Super", "Const", "Export", "Import", "Async", "Await", "Yield", "Implements", 
 		"StrictLet", "NonStrictLet", "Private", "Public", "Interface", "Package", 
-		"Protected", "Static", "Yield", "Identifier", "StringLiteral", "TemplateStringLiteral", 
-		"WhiteSpaces", "LineTerminator", "HtmlComment", "CDataComment", "UnexpectedCharacter"
+		"Protected", "Static", "Identifier", "StringLiteral", "BackTick", "WhiteSpaces", 
+		"LineTerminator", "HtmlComment", "CDataComment", "UnexpectedCharacter", 
+		"TemplateStringStartExpression", "TemplateStringAtom"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -190,16 +194,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_program; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterProgram(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitProgram(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitProgram(this);
@@ -214,27 +208,27 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 151;
+			State = 155;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,0,Context) ) {
 			case 1:
 				{
-				State = 150;
+				State = 154;
 				Match(HashBangLine);
 				}
 				break;
 			}
-			State = 154;
+			State = 158;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,1,Context) ) {
 			case 1:
 				{
-				State = 153;
+				State = 157;
 				sourceElements();
 				}
 				break;
 			}
-			State = 156;
+			State = 160;
 			Match(Eof);
 			}
 		}
@@ -259,16 +253,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_sourceElement; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterSourceElement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitSourceElement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitSourceElement(this);
@@ -283,7 +267,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 158;
+			State = 162;
 			statement();
 			}
 		}
@@ -311,8 +295,8 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ExportStatementContext exportStatement() {
 			return GetRuleContext<ExportStatementContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public EmptyStatementContext emptyStatement() {
-			return GetRuleContext<EmptyStatementContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public EmptyStatement_Context emptyStatement_() {
+			return GetRuleContext<EmptyStatement_Context>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ClassDeclarationContext classDeclaration() {
 			return GetRuleContext<ClassDeclarationContext>(0);
@@ -365,16 +349,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_statement; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitStatement(this);
@@ -387,146 +361,146 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		StatementContext _localctx = new StatementContext(Context, State);
 		EnterRule(_localctx, 4, RULE_statement);
 		try {
-			State = 180;
+			State = 184;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,2,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 160;
+				State = 164;
 				block();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 161;
+				State = 165;
 				variableStatement();
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 162;
+				State = 166;
 				importStatement();
 				}
 				break;
 			case 4:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 163;
+				State = 167;
 				exportStatement();
 				}
 				break;
 			case 5:
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 164;
-				emptyStatement();
+				State = 168;
+				emptyStatement_();
 				}
 				break;
 			case 6:
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 165;
+				State = 169;
 				classDeclaration();
 				}
 				break;
 			case 7:
 				EnterOuterAlt(_localctx, 7);
 				{
-				State = 166;
+				State = 170;
 				expressionStatement();
 				}
 				break;
 			case 8:
 				EnterOuterAlt(_localctx, 8);
 				{
-				State = 167;
+				State = 171;
 				ifStatement();
 				}
 				break;
 			case 9:
 				EnterOuterAlt(_localctx, 9);
 				{
-				State = 168;
+				State = 172;
 				iterationStatement();
 				}
 				break;
 			case 10:
 				EnterOuterAlt(_localctx, 10);
 				{
-				State = 169;
+				State = 173;
 				continueStatement();
 				}
 				break;
 			case 11:
 				EnterOuterAlt(_localctx, 11);
 				{
-				State = 170;
+				State = 174;
 				breakStatement();
 				}
 				break;
 			case 12:
 				EnterOuterAlt(_localctx, 12);
 				{
-				State = 171;
+				State = 175;
 				returnStatement();
 				}
 				break;
 			case 13:
 				EnterOuterAlt(_localctx, 13);
 				{
-				State = 172;
+				State = 176;
 				yieldStatement();
 				}
 				break;
 			case 14:
 				EnterOuterAlt(_localctx, 14);
 				{
-				State = 173;
+				State = 177;
 				withStatement();
 				}
 				break;
 			case 15:
 				EnterOuterAlt(_localctx, 15);
 				{
-				State = 174;
+				State = 178;
 				labelledStatement();
 				}
 				break;
 			case 16:
 				EnterOuterAlt(_localctx, 16);
 				{
-				State = 175;
+				State = 179;
 				switchStatement();
 				}
 				break;
 			case 17:
 				EnterOuterAlt(_localctx, 17);
 				{
-				State = 176;
+				State = 180;
 				throwStatement();
 				}
 				break;
 			case 18:
 				EnterOuterAlt(_localctx, 18);
 				{
-				State = 177;
+				State = 181;
 				tryStatement();
 				}
 				break;
 			case 19:
 				EnterOuterAlt(_localctx, 19);
 				{
-				State = 178;
+				State = 182;
 				debuggerStatement();
 				}
 				break;
 			case 20:
 				EnterOuterAlt(_localctx, 20);
 				{
-				State = 179;
+				State = 183;
 				functionDeclaration();
 				}
 				break;
@@ -555,16 +529,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_block; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterBlock(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitBlock(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitBlock(this);
@@ -579,19 +543,19 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 182;
+			State = 186;
 			Match(OpenBrace);
-			State = 184;
+			State = 188;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,3,Context) ) {
 			case 1:
 				{
-				State = 183;
+				State = 187;
 				statementList();
 				}
 				break;
 			}
-			State = 186;
+			State = 190;
 			Match(CloseBrace);
 			}
 		}
@@ -619,16 +583,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_statementList; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterStatementList(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitStatementList(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitStatementList(this);
@@ -644,7 +598,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 189;
+			State = 193;
 			ErrorHandler.Sync(this);
 			_alt = 1;
 			do {
@@ -652,7 +606,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				case 1:
 					{
 					{
-					State = 188;
+					State = 192;
 					statement();
 					}
 					}
@@ -660,7 +614,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				default:
 					throw new NoViableAltException(this);
 				}
-				State = 191;
+				State = 195;
 				ErrorHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(TokenStream,4,Context);
 			} while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER );
@@ -688,16 +642,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_importStatement; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterImportStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitImportStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitImportStatement(this);
@@ -712,9 +656,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 193;
+			State = 197;
 			Match(Import);
-			State = 194;
+			State = 198;
 			importFromBlock();
 			}
 		}
@@ -752,16 +696,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_importFromBlock; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterImportFromBlock(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitImportFromBlock(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitImportFromBlock(this);
@@ -774,7 +708,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		ImportFromBlockContext _localctx = new ImportFromBlockContext(Context, State);
 		EnterRule(_localctx, 12, RULE_importFromBlock);
 		try {
-			State = 208;
+			State = 212;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case OpenBrace:
@@ -818,6 +752,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case Import:
 			case Async:
 			case Await:
+			case Yield:
 			case Implements:
 			case StrictLet:
 			case NonStrictLet:
@@ -827,21 +762,20 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case Package:
 			case Protected:
 			case Static:
-			case Yield:
 			case Identifier:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 197;
+				State = 201;
 				ErrorHandler.Sync(this);
 				switch ( Interpreter.AdaptivePredict(TokenStream,5,Context) ) {
 				case 1:
 					{
-					State = 196;
+					State = 200;
 					importDefault();
 					}
 					break;
 				}
-				State = 201;
+				State = 205;
 				ErrorHandler.Sync(this);
 				switch (TokenStream.LA(1)) {
 				case Multiply:
@@ -884,6 +818,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				case Import:
 				case Async:
 				case Await:
+				case Yield:
 				case Implements:
 				case StrictLet:
 				case NonStrictLet:
@@ -893,34 +828,33 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				case Package:
 				case Protected:
 				case Static:
-				case Yield:
 				case Identifier:
 					{
-					State = 199;
+					State = 203;
 					importNamespace();
 					}
 					break;
 				case OpenBrace:
 					{
-					State = 200;
+					State = 204;
 					moduleItems();
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				State = 203;
+				State = 207;
 				importFrom();
-				State = 204;
+				State = 208;
 				eos();
 				}
 				break;
 			case StringLiteral:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 206;
+				State = 210;
 				Match(StringLiteral);
-				State = 207;
+				State = 211;
 				eos();
 				}
 				break;
@@ -958,16 +892,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_moduleItems; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterModuleItems(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitModuleItems(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitModuleItems(this);
@@ -984,39 +908,39 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 210;
+			State = 214;
 			Match(OpenBrace);
-			State = 216;
+			State = 220;
 			ErrorHandler.Sync(this);
 			_alt = Interpreter.AdaptivePredict(TokenStream,8,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 211;
+					State = 215;
 					aliasName();
-					State = 212;
+					State = 216;
 					Match(Comma);
 					}
 					} 
 				}
-				State = 218;
+				State = 222;
 				ErrorHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(TokenStream,8,Context);
 			}
-			State = 223;
+			State = 227;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			if (((((_la - 59)) & ~0x3f) == 0 && ((1L << (_la - 59)) & ((1L << (NullLiteral - 59)) | (1L << (BooleanLiteral - 59)) | (1L << (Break - 59)) | (1L << (Do - 59)) | (1L << (Instanceof - 59)) | (1L << (Typeof - 59)) | (1L << (Case - 59)) | (1L << (Else - 59)) | (1L << (New - 59)) | (1L << (Var - 59)) | (1L << (Catch - 59)) | (1L << (Finally - 59)) | (1L << (Return - 59)) | (1L << (Void - 59)) | (1L << (Continue - 59)) | (1L << (For - 59)) | (1L << (Switch - 59)) | (1L << (While - 59)) | (1L << (Debugger - 59)) | (1L << (Function_ - 59)) | (1L << (This - 59)) | (1L << (With - 59)) | (1L << (Default - 59)) | (1L << (If - 59)) | (1L << (Throw - 59)) | (1L << (Delete - 59)) | (1L << (In - 59)) | (1L << (Try - 59)) | (1L << (As - 59)) | (1L << (From - 59)) | (1L << (Class - 59)) | (1L << (Enum - 59)) | (1L << (Extends - 59)) | (1L << (Super - 59)) | (1L << (Const - 59)) | (1L << (Export - 59)) | (1L << (Import - 59)) | (1L << (Async - 59)) | (1L << (Await - 59)) | (1L << (Implements - 59)) | (1L << (StrictLet - 59)) | (1L << (NonStrictLet - 59)) | (1L << (Private - 59)) | (1L << (Public - 59)) | (1L << (Interface - 59)) | (1L << (Package - 59)) | (1L << (Protected - 59)) | (1L << (Static - 59)) | (1L << (Yield - 59)) | (1L << (Identifier - 59)))) != 0)) {
+			if (((((_la - 60)) & ~0x3f) == 0 && ((1L << (_la - 60)) & ((1L << (NullLiteral - 60)) | (1L << (BooleanLiteral - 60)) | (1L << (Break - 60)) | (1L << (Do - 60)) | (1L << (Instanceof - 60)) | (1L << (Typeof - 60)) | (1L << (Case - 60)) | (1L << (Else - 60)) | (1L << (New - 60)) | (1L << (Var - 60)) | (1L << (Catch - 60)) | (1L << (Finally - 60)) | (1L << (Return - 60)) | (1L << (Void - 60)) | (1L << (Continue - 60)) | (1L << (For - 60)) | (1L << (Switch - 60)) | (1L << (While - 60)) | (1L << (Debugger - 60)) | (1L << (Function_ - 60)) | (1L << (This - 60)) | (1L << (With - 60)) | (1L << (Default - 60)) | (1L << (If - 60)) | (1L << (Throw - 60)) | (1L << (Delete - 60)) | (1L << (In - 60)) | (1L << (Try - 60)) | (1L << (As - 60)) | (1L << (From - 60)) | (1L << (Class - 60)) | (1L << (Enum - 60)) | (1L << (Extends - 60)) | (1L << (Super - 60)) | (1L << (Const - 60)) | (1L << (Export - 60)) | (1L << (Import - 60)) | (1L << (Async - 60)) | (1L << (Await - 60)) | (1L << (Yield - 60)) | (1L << (Implements - 60)) | (1L << (StrictLet - 60)) | (1L << (NonStrictLet - 60)) | (1L << (Private - 60)) | (1L << (Public - 60)) | (1L << (Interface - 60)) | (1L << (Package - 60)) | (1L << (Protected - 60)) | (1L << (Static - 60)) | (1L << (Identifier - 60)))) != 0)) {
 				{
-				State = 219;
+				State = 223;
 				aliasName();
-				State = 221;
+				State = 225;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Comma) {
 					{
-					State = 220;
+					State = 224;
 					Match(Comma);
 					}
 				}
@@ -1024,7 +948,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				}
 			}
 
-			State = 225;
+			State = 229;
 			Match(CloseBrace);
 			}
 		}
@@ -1050,16 +974,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_importDefault; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterImportDefault(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitImportDefault(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitImportDefault(this);
@@ -1074,9 +988,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 227;
+			State = 231;
 			aliasName();
-			State = 228;
+			State = 232;
 			Match(Comma);
 			}
 		}
@@ -1106,16 +1020,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_importNamespace; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterImportNamespace(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitImportNamespace(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitImportNamespace(this);
@@ -1131,12 +1035,12 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 232;
+			State = 236;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Multiply:
 				{
-				State = 230;
+				State = 234;
 				Match(Multiply);
 				}
 				break;
@@ -1179,6 +1083,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case Import:
 			case Async:
 			case Await:
+			case Yield:
 			case Implements:
 			case StrictLet:
 			case NonStrictLet:
@@ -1188,24 +1093,23 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case Package:
 			case Protected:
 			case Static:
-			case Yield:
 			case Identifier:
 				{
-				State = 231;
+				State = 235;
 				identifierName();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			State = 236;
+			State = 240;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==As) {
 				{
-				State = 234;
+				State = 238;
 				Match(As);
-				State = 235;
+				State = 239;
 				identifierName();
 				}
 			}
@@ -1232,16 +1136,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_importFrom; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterImportFrom(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitImportFrom(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitImportFrom(this);
@@ -1256,9 +1150,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 238;
+			State = 242;
 			Match(From);
-			State = 239;
+			State = 243;
 			Match(StringLiteral);
 			}
 		}
@@ -1287,16 +1181,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_aliasName; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterAliasName(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitAliasName(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAliasName(this);
@@ -1312,16 +1196,16 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 241;
+			State = 245;
 			identifierName();
-			State = 244;
+			State = 248;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==As) {
 				{
-				State = 242;
+				State = 246;
 				Match(As);
-				State = 243;
+				State = 247;
 				identifierName();
 				}
 			}
@@ -1362,16 +1246,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public ExportDefaultDeclarationContext(ExportStatementContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterExportDefaultDeclaration(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitExportDefaultDeclaration(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitExportDefaultDeclaration(this);
@@ -1391,16 +1265,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public ExportDeclarationContext(ExportStatementContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterExportDeclaration(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitExportDeclaration(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitExportDeclaration(this);
@@ -1413,32 +1277,32 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		ExportStatementContext _localctx = new ExportStatementContext(Context, State);
 		EnterRule(_localctx, 24, RULE_exportStatement);
 		try {
-			State = 258;
+			State = 262;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,15,Context) ) {
 			case 1:
 				_localctx = new ExportDeclarationContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 246;
+				State = 250;
 				Match(Export);
-				State = 249;
+				State = 253;
 				ErrorHandler.Sync(this);
 				switch ( Interpreter.AdaptivePredict(TokenStream,14,Context) ) {
 				case 1:
 					{
-					State = 247;
+					State = 251;
 					exportFromBlock();
 					}
 					break;
 				case 2:
 					{
-					State = 248;
+					State = 252;
 					declaration();
 					}
 					break;
 				}
-				State = 251;
+				State = 255;
 				eos();
 				}
 				break;
@@ -1446,13 +1310,13 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				_localctx = new ExportDefaultDeclarationContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 253;
+				State = 257;
 				Match(Export);
-				State = 254;
+				State = 258;
 				Match(Default);
-				State = 255;
+				State = 259;
 				singleExpression(0);
-				State = 256;
+				State = 260;
 				eos();
 				}
 				break;
@@ -1488,16 +1352,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_exportFromBlock; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterExportFromBlock(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitExportFromBlock(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitExportFromBlock(this);
@@ -1510,7 +1364,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		ExportFromBlockContext _localctx = new ExportFromBlockContext(Context, State);
 		EnterRule(_localctx, 26, RULE_exportFromBlock);
 		try {
-			State = 270;
+			State = 274;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Multiply:
@@ -1553,6 +1407,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case Import:
 			case Async:
 			case Await:
+			case Yield:
 			case Implements:
 			case StrictLet:
 			case NonStrictLet:
@@ -1562,34 +1417,33 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case Package:
 			case Protected:
 			case Static:
-			case Yield:
 			case Identifier:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 260;
+				State = 264;
 				importNamespace();
-				State = 261;
+				State = 265;
 				importFrom();
-				State = 262;
+				State = 266;
 				eos();
 				}
 				break;
 			case OpenBrace:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 264;
+				State = 268;
 				moduleItems();
-				State = 266;
+				State = 270;
 				ErrorHandler.Sync(this);
 				switch ( Interpreter.AdaptivePredict(TokenStream,16,Context) ) {
 				case 1:
 					{
-					State = 265;
+					State = 269;
 					importFrom();
 					}
 					break;
 				}
-				State = 268;
+				State = 272;
 				eos();
 				}
 				break;
@@ -1624,16 +1478,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_declaration; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterDeclaration(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitDeclaration(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitDeclaration(this);
@@ -1646,7 +1490,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		DeclarationContext _localctx = new DeclarationContext(Context, State);
 		EnterRule(_localctx, 28, RULE_declaration);
 		try {
-			State = 275;
+			State = 279;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Var:
@@ -1655,14 +1499,14 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case NonStrictLet:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 272;
+				State = 276;
 				variableStatement();
 				}
 				break;
 			case Class:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 273;
+				State = 277;
 				classDeclaration();
 				}
 				break;
@@ -1670,7 +1514,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case Async:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 274;
+				State = 278;
 				functionDeclaration();
 				}
 				break;
@@ -1702,16 +1546,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_variableStatement; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterVariableStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitVariableStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVariableStatement(this);
@@ -1726,9 +1560,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 277;
+			State = 281;
 			variableDeclarationList();
-			State = 278;
+			State = 282;
 			eos();
 			}
 		}
@@ -1763,16 +1597,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_variableDeclarationList; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterVariableDeclarationList(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitVariableDeclarationList(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVariableDeclarationList(this);
@@ -1788,25 +1612,25 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 280;
+			State = 284;
 			varModifier();
-			State = 281;
+			State = 285;
 			variableDeclaration();
-			State = 286;
+			State = 290;
 			ErrorHandler.Sync(this);
 			_alt = Interpreter.AdaptivePredict(TokenStream,19,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 282;
+					State = 286;
 					Match(Comma);
-					State = 283;
+					State = 287;
 					variableDeclaration();
 					}
 					} 
 				}
-				State = 288;
+				State = 292;
 				ErrorHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(TokenStream,19,Context);
 			}
@@ -1837,16 +1661,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_variableDeclaration; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterVariableDeclaration(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitVariableDeclaration(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVariableDeclaration(this);
@@ -1861,16 +1675,16 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 289;
+			State = 293;
 			assignable();
-			State = 292;
+			State = 296;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,20,Context) ) {
 			case 1:
 				{
-				State = 290;
+				State = 294;
 				Match(Assign);
-				State = 291;
+				State = 295;
 				singleExpression(0);
 				}
 				break;
@@ -1888,39 +1702,29 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		return _localctx;
 	}
 
-	public partial class EmptyStatementContext : ParserRuleContext {
+	public partial class EmptyStatement_Context : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SemiColon() { return GetToken(JavaScriptParser.SemiColon, 0); }
-		public EmptyStatementContext(ParserRuleContext parent, int invokingState)
+		public EmptyStatement_Context(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_emptyStatement; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterEmptyStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitEmptyStatement(this);
-		}
+		public override int RuleIndex { get { return RULE_emptyStatement_; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitEmptyStatement(this);
+			if (typedVisitor != null) return typedVisitor.VisitEmptyStatement_(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public EmptyStatementContext emptyStatement() {
-		EmptyStatementContext _localctx = new EmptyStatementContext(Context, State);
-		EnterRule(_localctx, 36, RULE_emptyStatement);
+	public EmptyStatement_Context emptyStatement_() {
+		EmptyStatement_Context _localctx = new EmptyStatement_Context(Context, State);
+		EnterRule(_localctx, 36, RULE_emptyStatement_);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 294;
+			State = 298;
 			Match(SemiColon);
 			}
 		}
@@ -1948,16 +1752,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_expressionStatement; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterExpressionStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitExpressionStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitExpressionStatement(this);
@@ -1972,11 +1766,11 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 296;
+			State = 300;
 			if (!(this.notOpenBraceAndNotFunction())) throw new FailedPredicateException(this, "this.notOpenBraceAndNotFunction()");
-			State = 297;
+			State = 301;
 			expressionSequence();
-			State = 298;
+			State = 302;
 			eos();
 			}
 		}
@@ -2011,16 +1805,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_ifStatement; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterIfStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitIfStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitIfStatement(this);
@@ -2035,24 +1819,24 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 300;
-			Match(If);
-			State = 301;
-			Match(OpenParen);
-			State = 302;
-			expressionSequence();
-			State = 303;
-			Match(CloseParen);
 			State = 304;
-			statement();
+			Match(If);
+			State = 305;
+			Match(OpenParen);
+			State = 306;
+			expressionSequence();
 			State = 307;
+			Match(CloseParen);
+			State = 308;
+			statement();
+			State = 311;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,21,Context) ) {
 			case 1:
 				{
-				State = 305;
+				State = 309;
 				Match(Else);
-				State = 306;
+				State = 310;
 				statement();
 				}
 				break;
@@ -2098,16 +1882,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public DoStatementContext(IterationStatementContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterDoStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitDoStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitDoStatement(this);
@@ -2125,16 +1899,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			return GetRuleContext<StatementContext>(0);
 		}
 		public WhileStatementContext(IterationStatementContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterWhileStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitWhileStatement(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -2164,16 +1928,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public ForStatementContext(IterationStatementContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterForStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitForStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitForStatement(this);
@@ -2198,16 +1952,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			return GetRuleContext<VariableDeclarationListContext>(0);
 		}
 		public ForInStatementContext(IterationStatementContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterForInStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitForInStatement(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -2237,16 +1981,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Await() { return GetToken(JavaScriptParser.Await, 0); }
 		public ForOfStatementContext(IterationStatementContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterForOfStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitForOfStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitForOfStatement(this);
@@ -2260,26 +1994,26 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		EnterRule(_localctx, 42, RULE_iterationStatement);
 		int _la;
 		try {
-			State = 365;
+			State = 369;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,28,Context) ) {
 			case 1:
 				_localctx = new DoStatementContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 309;
-				Match(Do);
-				State = 310;
-				statement();
-				State = 311;
-				Match(While);
-				State = 312;
-				Match(OpenParen);
 				State = 313;
-				expressionSequence();
+				Match(Do);
 				State = 314;
-				Match(CloseParen);
+				statement();
 				State = 315;
+				Match(While);
+				State = 316;
+				Match(OpenParen);
+				State = 317;
+				expressionSequence();
+				State = 318;
+				Match(CloseParen);
+				State = 319;
 				eos();
 				}
 				break;
@@ -2287,15 +2021,15 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				_localctx = new WhileStatementContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 317;
-				Match(While);
-				State = 318;
-				Match(OpenParen);
-				State = 319;
-				expressionSequence();
-				State = 320;
-				Match(CloseParen);
 				State = 321;
+				Match(While);
+				State = 322;
+				Match(OpenParen);
+				State = 323;
+				expressionSequence();
+				State = 324;
+				Match(CloseParen);
+				State = 325;
 				statement();
 				}
 				break;
@@ -2303,44 +2037,32 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				_localctx = new ForStatementContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 323;
-				Match(For);
-				State = 324;
-				Match(OpenParen);
 				State = 327;
+				Match(For);
+				State = 328;
+				Match(OpenParen);
+				State = 331;
 				ErrorHandler.Sync(this);
 				switch ( Interpreter.AdaptivePredict(TokenStream,22,Context) ) {
 				case 1:
 					{
-					State = 325;
+					State = 329;
 					expressionSequence();
 					}
 					break;
 				case 2:
 					{
-					State = 326;
+					State = 330;
 					variableDeclarationList();
 					}
 					break;
 				}
-				State = 329;
-				Match(SemiColon);
-				State = 331;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << RegularExpressionLiteral) | (1L << OpenBracket) | (1L << OpenParen) | (1L << OpenBrace) | (1L << PlusPlus) | (1L << MinusMinus) | (1L << Plus) | (1L << Minus) | (1L << BitNot) | (1L << Not) | (1L << NullLiteral) | (1L << BooleanLiteral) | (1L << DecimalLiteral) | (1L << HexIntegerLiteral) | (1L << OctalIntegerLiteral))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (OctalIntegerLiteral2 - 64)) | (1L << (BinaryIntegerLiteral - 64)) | (1L << (BigHexIntegerLiteral - 64)) | (1L << (BigOctalIntegerLiteral - 64)) | (1L << (BigBinaryIntegerLiteral - 64)) | (1L << (BigDecimalIntegerLiteral - 64)) | (1L << (Typeof - 64)) | (1L << (New - 64)) | (1L << (Void - 64)) | (1L << (Function_ - 64)) | (1L << (This - 64)) | (1L << (Delete - 64)) | (1L << (Class - 64)) | (1L << (Super - 64)) | (1L << (Import - 64)) | (1L << (Async - 64)) | (1L << (Await - 64)) | (1L << (NonStrictLet - 64)) | (1L << (Yield - 64)) | (1L << (Identifier - 64)) | (1L << (StringLiteral - 64)) | (1L << (TemplateStringLiteral - 64)))) != 0)) {
-					{
-					State = 330;
-					expressionSequence();
-					}
-				}
-
 				State = 333;
 				Match(SemiColon);
 				State = 335;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << RegularExpressionLiteral) | (1L << OpenBracket) | (1L << OpenParen) | (1L << OpenBrace) | (1L << PlusPlus) | (1L << MinusMinus) | (1L << Plus) | (1L << Minus) | (1L << BitNot) | (1L << Not) | (1L << NullLiteral) | (1L << BooleanLiteral) | (1L << DecimalLiteral) | (1L << HexIntegerLiteral) | (1L << OctalIntegerLiteral))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (OctalIntegerLiteral2 - 64)) | (1L << (BinaryIntegerLiteral - 64)) | (1L << (BigHexIntegerLiteral - 64)) | (1L << (BigOctalIntegerLiteral - 64)) | (1L << (BigBinaryIntegerLiteral - 64)) | (1L << (BigDecimalIntegerLiteral - 64)) | (1L << (Typeof - 64)) | (1L << (New - 64)) | (1L << (Void - 64)) | (1L << (Function_ - 64)) | (1L << (This - 64)) | (1L << (Delete - 64)) | (1L << (Class - 64)) | (1L << (Super - 64)) | (1L << (Import - 64)) | (1L << (Async - 64)) | (1L << (Await - 64)) | (1L << (NonStrictLet - 64)) | (1L << (Yield - 64)) | (1L << (Identifier - 64)) | (1L << (StringLiteral - 64)) | (1L << (TemplateStringLiteral - 64)))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << RegularExpressionLiteral) | (1L << OpenBracket) | (1L << OpenParen) | (1L << OpenBrace) | (1L << PlusPlus) | (1L << MinusMinus) | (1L << Plus) | (1L << Minus) | (1L << BitNot) | (1L << Not) | (1L << NullLiteral) | (1L << BooleanLiteral) | (1L << DecimalLiteral) | (1L << HexIntegerLiteral))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (OctalIntegerLiteral - 64)) | (1L << (OctalIntegerLiteral2 - 64)) | (1L << (BinaryIntegerLiteral - 64)) | (1L << (BigHexIntegerLiteral - 64)) | (1L << (BigOctalIntegerLiteral - 64)) | (1L << (BigBinaryIntegerLiteral - 64)) | (1L << (BigDecimalIntegerLiteral - 64)) | (1L << (Typeof - 64)) | (1L << (New - 64)) | (1L << (Void - 64)) | (1L << (Function_ - 64)) | (1L << (This - 64)) | (1L << (Delete - 64)) | (1L << (Class - 64)) | (1L << (Super - 64)) | (1L << (Import - 64)) | (1L << (Async - 64)) | (1L << (Await - 64)) | (1L << (Yield - 64)) | (1L << (NonStrictLet - 64)) | (1L << (Identifier - 64)) | (1L << (StringLiteral - 64)) | (1L << (BackTick - 64)))) != 0)) {
 					{
 					State = 334;
 					expressionSequence();
@@ -2348,8 +2070,20 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				}
 
 				State = 337;
+				Match(SemiColon);
+				State = 339;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << RegularExpressionLiteral) | (1L << OpenBracket) | (1L << OpenParen) | (1L << OpenBrace) | (1L << PlusPlus) | (1L << MinusMinus) | (1L << Plus) | (1L << Minus) | (1L << BitNot) | (1L << Not) | (1L << NullLiteral) | (1L << BooleanLiteral) | (1L << DecimalLiteral) | (1L << HexIntegerLiteral))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (OctalIntegerLiteral - 64)) | (1L << (OctalIntegerLiteral2 - 64)) | (1L << (BinaryIntegerLiteral - 64)) | (1L << (BigHexIntegerLiteral - 64)) | (1L << (BigOctalIntegerLiteral - 64)) | (1L << (BigBinaryIntegerLiteral - 64)) | (1L << (BigDecimalIntegerLiteral - 64)) | (1L << (Typeof - 64)) | (1L << (New - 64)) | (1L << (Void - 64)) | (1L << (Function_ - 64)) | (1L << (This - 64)) | (1L << (Delete - 64)) | (1L << (Class - 64)) | (1L << (Super - 64)) | (1L << (Import - 64)) | (1L << (Async - 64)) | (1L << (Await - 64)) | (1L << (Yield - 64)) | (1L << (NonStrictLet - 64)) | (1L << (Identifier - 64)) | (1L << (StringLiteral - 64)) | (1L << (BackTick - 64)))) != 0)) {
+					{
+					State = 338;
+					expressionSequence();
+					}
+				}
+
+				State = 341;
 				Match(CloseParen);
-				State = 338;
+				State = 342;
 				statement();
 				}
 				break;
@@ -2357,33 +2091,33 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				_localctx = new ForInStatementContext(_localctx);
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 339;
-				Match(For);
-				State = 340;
-				Match(OpenParen);
 				State = 343;
+				Match(For);
+				State = 344;
+				Match(OpenParen);
+				State = 347;
 				ErrorHandler.Sync(this);
 				switch ( Interpreter.AdaptivePredict(TokenStream,25,Context) ) {
 				case 1:
 					{
-					State = 341;
+					State = 345;
 					singleExpression(0);
 					}
 					break;
 				case 2:
 					{
-					State = 342;
+					State = 346;
 					variableDeclarationList();
 					}
 					break;
 				}
-				State = 345;
+				State = 349;
 				Match(In);
-				State = 346;
+				State = 350;
 				expressionSequence();
-				State = 347;
+				State = 351;
 				Match(CloseParen);
-				State = 348;
+				State = 352;
 				statement();
 				}
 				break;
@@ -2391,45 +2125,45 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				_localctx = new ForOfStatementContext(_localctx);
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 350;
+				State = 354;
 				Match(For);
-				State = 352;
+				State = 356;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Await) {
 					{
-					State = 351;
+					State = 355;
 					Match(Await);
 					}
 				}
 
-				State = 354;
+				State = 358;
 				Match(OpenParen);
-				State = 357;
+				State = 361;
 				ErrorHandler.Sync(this);
 				switch ( Interpreter.AdaptivePredict(TokenStream,27,Context) ) {
 				case 1:
 					{
-					State = 355;
+					State = 359;
 					singleExpression(0);
 					}
 					break;
 				case 2:
 					{
-					State = 356;
+					State = 360;
 					variableDeclarationList();
 					}
 					break;
 				}
-				State = 359;
-				identifier();
-				State = 360;
-				if (!(this.p("of"))) throw new FailedPredicateException(this, "this.p(\"of\")");
-				State = 361;
-				expressionSequence();
-				State = 362;
-				Match(CloseParen);
 				State = 363;
+				identifier();
+				State = 364;
+				if (!(this.p("of"))) throw new FailedPredicateException(this, "this.p(\"of\")");
+				State = 365;
+				expressionSequence();
+				State = 366;
+				Match(CloseParen);
+				State = 367;
 				statement();
 				}
 				break;
@@ -2458,16 +2192,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_varModifier; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterVarModifier(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitVarModifier(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVarModifier(this);
@@ -2480,13 +2204,13 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		VarModifierContext _localctx = new VarModifierContext(Context, State);
 		EnterRule(_localctx, 44, RULE_varModifier);
 		try {
-			State = 370;
+			State = 374;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Var:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 367;
+				State = 371;
 				Match(Var);
 				}
 				break;
@@ -2494,14 +2218,14 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case NonStrictLet:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 368;
+				State = 372;
 				let_();
 				}
 				break;
 			case Const:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 369;
+				State = 373;
 				Match(Const);
 				}
 				break;
@@ -2534,16 +2258,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_continueStatement; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterContinueStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitContinueStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitContinueStatement(this);
@@ -2558,21 +2272,21 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 372;
+			State = 376;
 			Match(Continue);
-			State = 375;
+			State = 379;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,30,Context) ) {
 			case 1:
 				{
-				State = 373;
+				State = 377;
 				if (!(this.notLineTerminator())) throw new FailedPredicateException(this, "this.notLineTerminator()");
-				State = 374;
+				State = 378;
 				identifier();
 				}
 				break;
 			}
-			State = 377;
+			State = 381;
 			eos();
 			}
 		}
@@ -2601,16 +2315,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_breakStatement; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterBreakStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitBreakStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitBreakStatement(this);
@@ -2625,21 +2329,21 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 379;
+			State = 383;
 			Match(Break);
-			State = 382;
+			State = 386;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,31,Context) ) {
 			case 1:
 				{
-				State = 380;
+				State = 384;
 				if (!(this.notLineTerminator())) throw new FailedPredicateException(this, "this.notLineTerminator()");
-				State = 381;
+				State = 385;
 				identifier();
 				}
 				break;
 			}
-			State = 384;
+			State = 388;
 			eos();
 			}
 		}
@@ -2668,16 +2372,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_returnStatement; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterReturnStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitReturnStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitReturnStatement(this);
@@ -2692,21 +2386,21 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 386;
+			State = 390;
 			Match(Return);
-			State = 389;
+			State = 393;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,32,Context) ) {
 			case 1:
 				{
-				State = 387;
+				State = 391;
 				if (!(this.notLineTerminator())) throw new FailedPredicateException(this, "this.notLineTerminator()");
-				State = 388;
+				State = 392;
 				expressionSequence();
 				}
 				break;
 			}
-			State = 391;
+			State = 395;
 			eos();
 			}
 		}
@@ -2735,16 +2429,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_yieldStatement; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterYieldStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitYieldStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitYieldStatement(this);
@@ -2759,21 +2443,21 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 393;
+			State = 397;
 			Match(Yield);
-			State = 396;
+			State = 400;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,33,Context) ) {
 			case 1:
 				{
-				State = 394;
+				State = 398;
 				if (!(this.notLineTerminator())) throw new FailedPredicateException(this, "this.notLineTerminator()");
-				State = 395;
+				State = 399;
 				expressionSequence();
 				}
 				break;
 			}
-			State = 398;
+			State = 402;
 			eos();
 			}
 		}
@@ -2804,16 +2488,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_withStatement; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterWithStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitWithStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitWithStatement(this);
@@ -2828,15 +2502,15 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 400;
-			Match(With);
-			State = 401;
-			Match(OpenParen);
-			State = 402;
-			expressionSequence();
-			State = 403;
-			Match(CloseParen);
 			State = 404;
+			Match(With);
+			State = 405;
+			Match(OpenParen);
+			State = 406;
+			expressionSequence();
+			State = 407;
+			Match(CloseParen);
+			State = 408;
 			statement();
 			}
 		}
@@ -2867,16 +2541,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_switchStatement; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterSwitchStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitSwitchStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitSwitchStatement(this);
@@ -2891,15 +2555,15 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 406;
-			Match(Switch);
-			State = 407;
-			Match(OpenParen);
-			State = 408;
-			expressionSequence();
-			State = 409;
-			Match(CloseParen);
 			State = 410;
+			Match(Switch);
+			State = 411;
+			Match(OpenParen);
+			State = 412;
+			expressionSequence();
+			State = 413;
+			Match(CloseParen);
+			State = 414;
 			caseBlock();
 			}
 		}
@@ -2932,16 +2596,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_caseBlock; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterCaseBlock(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitCaseBlock(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitCaseBlock(this);
@@ -2957,31 +2611,31 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 412;
+			State = 416;
 			Match(OpenBrace);
-			State = 414;
+			State = 418;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Case) {
 				{
-				State = 413;
+				State = 417;
 				caseClauses();
 				}
 			}
 
-			State = 420;
+			State = 424;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Default) {
 				{
-				State = 416;
+				State = 420;
 				defaultClause();
-				State = 418;
+				State = 422;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Case) {
 					{
-					State = 417;
+					State = 421;
 					caseClauses();
 					}
 				}
@@ -2989,7 +2643,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				}
 			}
 
-			State = 422;
+			State = 426;
 			Match(CloseBrace);
 			}
 		}
@@ -3017,16 +2671,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_caseClauses; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterCaseClauses(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitCaseClauses(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitCaseClauses(this);
@@ -3042,17 +2686,17 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 425;
+			State = 429;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 424;
+				State = 428;
 				caseClause();
 				}
 				}
-				State = 427;
+				State = 431;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( _la==Case );
@@ -3084,16 +2728,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_caseClause; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterCaseClause(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitCaseClause(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitCaseClause(this);
@@ -3108,18 +2742,18 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 429;
-			Match(Case);
-			State = 430;
-			expressionSequence();
-			State = 431;
-			Match(Colon);
 			State = 433;
+			Match(Case);
+			State = 434;
+			expressionSequence();
+			State = 435;
+			Match(Colon);
+			State = 437;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,38,Context) ) {
 			case 1:
 				{
-				State = 432;
+				State = 436;
 				statementList();
 				}
 				break;
@@ -3149,16 +2783,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_defaultClause; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterDefaultClause(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitDefaultClause(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitDefaultClause(this);
@@ -3173,16 +2797,16 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 435;
+			State = 439;
 			Match(Default);
-			State = 436;
+			State = 440;
 			Match(Colon);
-			State = 438;
+			State = 442;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,39,Context) ) {
 			case 1:
 				{
-				State = 437;
+				State = 441;
 				statementList();
 				}
 				break;
@@ -3214,16 +2838,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_labelledStatement; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterLabelledStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitLabelledStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitLabelledStatement(this);
@@ -3238,11 +2852,11 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 440;
+			State = 444;
 			identifier();
-			State = 441;
+			State = 445;
 			Match(Colon);
-			State = 442;
+			State = 446;
 			statement();
 			}
 		}
@@ -3271,16 +2885,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_throwStatement; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterThrowStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitThrowStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitThrowStatement(this);
@@ -3295,13 +2899,13 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 444;
+			State = 448;
 			Match(Throw);
-			State = 445;
+			State = 449;
 			if (!(this.notLineTerminator())) throw new FailedPredicateException(this, "this.notLineTerminator()");
-			State = 446;
+			State = 450;
 			expressionSequence();
-			State = 447;
+			State = 451;
 			eos();
 			}
 		}
@@ -3333,16 +2937,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_tryStatement; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterTryStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitTryStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitTryStatement(this);
@@ -3357,23 +2951,23 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 449;
+			State = 453;
 			Match(Try);
-			State = 450;
+			State = 454;
 			block();
-			State = 456;
+			State = 460;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Catch:
 				{
-				State = 451;
+				State = 455;
 				catchProduction();
-				State = 453;
+				State = 457;
 				ErrorHandler.Sync(this);
 				switch ( Interpreter.AdaptivePredict(TokenStream,40,Context) ) {
 				case 1:
 					{
-					State = 452;
+					State = 456;
 					finallyProduction();
 					}
 					break;
@@ -3382,7 +2976,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				break;
 			case Finally:
 				{
-				State = 455;
+				State = 459;
 				finallyProduction();
 				}
 				break;
@@ -3418,16 +3012,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_catchProduction; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterCatchProduction(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitCatchProduction(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitCatchProduction(this);
@@ -3443,31 +3027,31 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 458;
+			State = 462;
 			Match(Catch);
-			State = 464;
+			State = 468;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==OpenParen) {
 				{
-				State = 459;
+				State = 463;
 				Match(OpenParen);
-				State = 461;
+				State = 465;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if (_la==OpenBracket || _la==OpenBrace || ((((_la - 105)) & ~0x3f) == 0 && ((1L << (_la - 105)) & ((1L << (Async - 105)) | (1L << (NonStrictLet - 105)) | (1L << (Identifier - 105)))) != 0)) {
+				if (_la==OpenBracket || _la==OpenBrace || ((((_la - 106)) & ~0x3f) == 0 && ((1L << (_la - 106)) & ((1L << (Async - 106)) | (1L << (NonStrictLet - 106)) | (1L << (Identifier - 106)))) != 0)) {
 					{
-					State = 460;
+					State = 464;
 					assignable();
 					}
 				}
 
-				State = 463;
+				State = 467;
 				Match(CloseParen);
 				}
 			}
 
-			State = 466;
+			State = 470;
 			block();
 			}
 		}
@@ -3493,16 +3077,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_finallyProduction; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterFinallyProduction(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitFinallyProduction(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFinallyProduction(this);
@@ -3517,9 +3091,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 468;
+			State = 472;
 			Match(Finally);
-			State = 469;
+			State = 473;
 			block();
 			}
 		}
@@ -3545,16 +3119,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_debuggerStatement; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterDebuggerStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitDebuggerStatement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitDebuggerStatement(this);
@@ -3569,9 +3133,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 471;
+			State = 475;
 			Match(Debugger);
-			State = 472;
+			State = 476;
 			eos();
 			}
 		}
@@ -3593,29 +3157,19 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode OpenParen() { return GetToken(JavaScriptParser.OpenParen, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseParen() { return GetToken(JavaScriptParser.CloseParen, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public FunctionBodyContext functionBody() {
+			return GetRuleContext<FunctionBodyContext>(0);
+		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Async() { return GetToken(JavaScriptParser.Async, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Multiply() { return GetToken(JavaScriptParser.Multiply, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public FormalParameterListContext formalParameterList() {
 			return GetRuleContext<FormalParameterListContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public FunctionBodyContext functionBody() {
-			return GetRuleContext<FunctionBodyContext>(0);
 		}
 		public FunctionDeclarationContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
 		public override int RuleIndex { get { return RULE_functionDeclaration; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterFunctionDeclaration(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitFunctionDeclaration(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -3632,54 +3186,46 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 475;
+			State = 479;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Async) {
 				{
-				State = 474;
+				State = 478;
 				Match(Async);
 				}
 			}
 
-			State = 477;
+			State = 481;
 			Match(Function_);
-			State = 479;
+			State = 483;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Multiply) {
 				{
-				State = 478;
+				State = 482;
 				Match(Multiply);
 				}
 			}
 
-			State = 481;
+			State = 485;
 			identifier();
-			State = 482;
+			State = 486;
 			Match(OpenParen);
-			State = 484;
+			State = 488;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OpenBracket) | (1L << OpenBrace) | (1L << Ellipsis))) != 0) || ((((_la - 105)) & ~0x3f) == 0 && ((1L << (_la - 105)) & ((1L << (Async - 105)) | (1L << (NonStrictLet - 105)) | (1L << (Identifier - 105)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OpenBracket) | (1L << OpenBrace) | (1L << Ellipsis))) != 0) || ((((_la - 106)) & ~0x3f) == 0 && ((1L << (_la - 106)) & ((1L << (Async - 106)) | (1L << (NonStrictLet - 106)) | (1L << (Identifier - 106)))) != 0)) {
 				{
-				State = 483;
+				State = 487;
 				formalParameterList();
 				}
 			}
 
-			State = 486;
+			State = 490;
 			Match(CloseParen);
-			State = 488;
-			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,47,Context) ) {
-			case 1:
-				{
-				State = 487;
-				functionBody();
-				}
-				break;
-			}
+			State = 491;
+			functionBody();
 			}
 		}
 		catch (RecognitionException re) {
@@ -3707,16 +3253,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_classDeclaration; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterClassDeclaration(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitClassDeclaration(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitClassDeclaration(this);
@@ -3731,11 +3267,11 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 490;
+			State = 493;
 			Match(Class);
-			State = 491;
+			State = 494;
 			identifier();
-			State = 492;
+			State = 495;
 			classTail();
 			}
 		}
@@ -3769,16 +3305,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_classTail; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterClassTail(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitClassTail(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitClassTail(this);
@@ -3795,37 +3321,37 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 496;
+			State = 499;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Extends) {
 				{
-				State = 494;
+				State = 497;
 				Match(Extends);
-				State = 495;
+				State = 498;
 				singleExpression(0);
 				}
 			}
 
-			State = 498;
+			State = 501;
 			Match(OpenBrace);
-			State = 502;
+			State = 505;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,49,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,48,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 499;
+					State = 502;
 					classElement();
 					}
 					} 
 				}
-				State = 504;
+				State = 507;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,49,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,48,Context);
 			}
-			State = 505;
+			State = 508;
 			Match(CloseBrace);
 			}
 		}
@@ -3866,8 +3392,8 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Async(int i) {
 			return GetToken(JavaScriptParser.Async, i);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public EmptyStatementContext emptyStatement() {
-			return GetRuleContext<EmptyStatementContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public EmptyStatement_Context emptyStatement_() {
+			return GetRuleContext<EmptyStatement_Context>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public PropertyNameContext propertyName() {
 			return GetRuleContext<PropertyNameContext>(0);
@@ -3881,16 +3407,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		{
 		}
 		public override int RuleIndex { get { return RULE_classElement; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterClassElement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitClassElement(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -3906,66 +3422,66 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		int _la;
 		try {
 			int _alt;
-			State = 532;
+			State = 535;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,54,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,53,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 513;
+				State = 516;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,51,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,50,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
-						State = 511;
+						State = 514;
 						ErrorHandler.Sync(this);
-						switch ( Interpreter.AdaptivePredict(TokenStream,50,Context) ) {
+						switch ( Interpreter.AdaptivePredict(TokenStream,49,Context) ) {
 						case 1:
 							{
-							State = 507;
+							State = 510;
 							Match(Static);
 							}
 							break;
 						case 2:
 							{
-							State = 508;
+							State = 511;
 							if (!(this.n("static"))) throw new FailedPredicateException(this, "this.n(\"static\")");
-							State = 509;
+							State = 512;
 							identifier();
 							}
 							break;
 						case 3:
 							{
-							State = 510;
+							State = 513;
 							Match(Async);
 							}
 							break;
 						}
 						} 
 					}
-					State = 515;
+					State = 518;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,51,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,50,Context);
 				}
-				State = 522;
+				State = 525;
 				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,52,Context) ) {
+				switch ( Interpreter.AdaptivePredict(TokenStream,51,Context) ) {
 				case 1:
 					{
-					State = 516;
+					State = 519;
 					methodDefinition();
 					}
 					break;
 				case 2:
 					{
-					State = 517;
-					assignable();
-					State = 518;
-					Match(Assign);
-					State = 519;
-					objectLiteral();
 					State = 520;
+					assignable();
+					State = 521;
+					Match(Assign);
+					State = 522;
+					objectLiteral();
+					State = 523;
 					Match(SemiColon);
 					}
 					break;
@@ -3975,28 +3491,28 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 524;
-				emptyStatement();
+				State = 527;
+				emptyStatement_();
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 526;
+				State = 529;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Hashtag) {
 					{
-					State = 525;
+					State = 528;
 					Match(Hashtag);
 					}
 				}
 
-				State = 528;
+				State = 531;
 				propertyName();
-				State = 529;
+				State = 532;
 				Match(Assign);
-				State = 530;
+				State = 533;
 				singleExpression(0);
 				}
 				break;
@@ -4019,13 +3535,13 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode OpenParen() { return GetToken(JavaScriptParser.OpenParen, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseParen() { return GetToken(JavaScriptParser.CloseParen, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public FunctionBodyContext functionBody() {
+			return GetRuleContext<FunctionBodyContext>(0);
+		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Multiply() { return GetToken(JavaScriptParser.Multiply, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Hashtag() { return GetToken(JavaScriptParser.Hashtag, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public FormalParameterListContext formalParameterList() {
 			return GetRuleContext<FormalParameterListContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public FunctionBodyContext functionBody() {
-			return GetRuleContext<FunctionBodyContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public GetterContext getter() {
 			return GetRuleContext<GetterContext>(0);
@@ -4038,16 +3554,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		{
 		}
 		public override int RuleIndex { get { return RULE_methodDefinition; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterMethodDefinition(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitMethodDefinition(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -4064,148 +3570,124 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			State = 576;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,66,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,62,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 535;
+				State = 538;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Multiply) {
 					{
-					State = 534;
+					State = 537;
 					Match(Multiply);
 					}
 				}
 
-				State = 538;
+				State = 541;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Hashtag) {
 					{
-					State = 537;
+					State = 540;
 					Match(Hashtag);
 					}
 				}
 
-				State = 540;
-				propertyName();
-				State = 541;
-				Match(OpenParen);
 				State = 543;
+				propertyName();
+				State = 544;
+				Match(OpenParen);
+				State = 546;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OpenBracket) | (1L << OpenBrace) | (1L << Ellipsis))) != 0) || ((((_la - 105)) & ~0x3f) == 0 && ((1L << (_la - 105)) & ((1L << (Async - 105)) | (1L << (NonStrictLet - 105)) | (1L << (Identifier - 105)))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OpenBracket) | (1L << OpenBrace) | (1L << Ellipsis))) != 0) || ((((_la - 106)) & ~0x3f) == 0 && ((1L << (_la - 106)) & ((1L << (Async - 106)) | (1L << (NonStrictLet - 106)) | (1L << (Identifier - 106)))) != 0)) {
 					{
-					State = 542;
+					State = 545;
 					formalParameterList();
 					}
 				}
 
-				State = 545;
+				State = 548;
 				Match(CloseParen);
-				State = 547;
-				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,58,Context) ) {
-				case 1:
-					{
-					State = 546;
-					functionBody();
-					}
-					break;
-				}
+				State = 549;
+				functionBody();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 550;
+				State = 552;
 				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,59,Context) ) {
+				switch ( Interpreter.AdaptivePredict(TokenStream,57,Context) ) {
 				case 1:
 					{
-					State = 549;
+					State = 551;
 					Match(Multiply);
 					}
 					break;
 				}
-				State = 553;
+				State = 555;
 				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,60,Context) ) {
+				switch ( Interpreter.AdaptivePredict(TokenStream,58,Context) ) {
 				case 1:
 					{
-					State = 552;
+					State = 554;
 					Match(Hashtag);
 					}
 					break;
 				}
-				State = 555;
-				getter();
-				State = 556;
-				Match(OpenParen);
 				State = 557;
-				Match(CloseParen);
+				getter();
+				State = 558;
+				Match(OpenParen);
 				State = 559;
-				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,61,Context) ) {
-				case 1:
-					{
-					State = 558;
-					functionBody();
-					}
-					break;
-				}
+				Match(CloseParen);
+				State = 560;
+				functionBody();
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 562;
+				State = 563;
 				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,62,Context) ) {
+				switch ( Interpreter.AdaptivePredict(TokenStream,59,Context) ) {
 				case 1:
 					{
-					State = 561;
+					State = 562;
 					Match(Multiply);
 					}
 					break;
 				}
-				State = 565;
+				State = 566;
 				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,63,Context) ) {
+				switch ( Interpreter.AdaptivePredict(TokenStream,60,Context) ) {
 				case 1:
 					{
-					State = 564;
+					State = 565;
 					Match(Hashtag);
 					}
 					break;
 				}
-				State = 567;
-				setter();
 				State = 568;
+				setter();
+				State = 569;
 				Match(OpenParen);
-				State = 570;
+				State = 571;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OpenBracket) | (1L << OpenBrace) | (1L << Ellipsis))) != 0) || ((((_la - 105)) & ~0x3f) == 0 && ((1L << (_la - 105)) & ((1L << (Async - 105)) | (1L << (NonStrictLet - 105)) | (1L << (Identifier - 105)))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OpenBracket) | (1L << OpenBrace) | (1L << Ellipsis))) != 0) || ((((_la - 106)) & ~0x3f) == 0 && ((1L << (_la - 106)) & ((1L << (Async - 106)) | (1L << (NonStrictLet - 106)) | (1L << (Identifier - 106)))) != 0)) {
 					{
-					State = 569;
+					State = 570;
 					formalParameterList();
 					}
 				}
 
-				State = 572;
+				State = 573;
 				Match(CloseParen);
 				State = 574;
-				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,65,Context) ) {
-				case 1:
-					{
-					State = 573;
-					functionBody();
-					}
-					break;
-				}
+				functionBody();
 				}
 				break;
 			}
@@ -4241,16 +3723,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_formalParameterList; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterFormalParameterList(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitFormalParameterList(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFormalParameterList(this);
@@ -4279,7 +3751,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				formalParameterArg();
 				State = 583;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,67,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,63,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
@@ -4293,7 +3765,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 					}
 					State = 585;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,67,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,63,Context);
 				}
 				State = 588;
 				ErrorHandler.Sync(this);
@@ -4344,16 +3816,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		{
 		}
 		public override int RuleIndex { get { return RULE_formalParameterArg; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterFormalParameterArg(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitFormalParameterArg(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -4408,16 +3870,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_lastFormalParameterArg; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterLastFormalParameterArg(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitLastFormalParameterArg(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitLastFormalParameterArg(this);
@@ -4461,16 +3913,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_functionBody; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterFunctionBody(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitFunctionBody(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFunctionBody(this);
@@ -4489,7 +3931,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			Match(OpenBrace);
 			State = 603;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,71,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,67,Context) ) {
 			case 1:
 				{
 				State = 602;
@@ -4525,16 +3967,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_sourceElements; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterSourceElements(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitSourceElements(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitSourceElements(this);
@@ -4568,7 +4000,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				}
 				State = 610;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,72,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,68,Context);
 			} while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER );
 			}
 		}
@@ -4594,16 +4026,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		{
 		}
 		public override int RuleIndex { get { return RULE_arrayLiteral; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterArrayLiteral(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitArrayLiteral(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -4657,16 +4079,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_elementList; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterElementList(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitElementList(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitElementList(this);
@@ -4685,7 +4097,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			{
 			State = 619;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,73,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,69,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
@@ -4697,12 +4109,12 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				}
 				State = 621;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,73,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,69,Context);
 			}
 			State = 623;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << RegularExpressionLiteral) | (1L << OpenBracket) | (1L << OpenParen) | (1L << OpenBrace) | (1L << Ellipsis) | (1L << PlusPlus) | (1L << MinusMinus) | (1L << Plus) | (1L << Minus) | (1L << BitNot) | (1L << Not) | (1L << NullLiteral) | (1L << BooleanLiteral) | (1L << DecimalLiteral) | (1L << HexIntegerLiteral) | (1L << OctalIntegerLiteral))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (OctalIntegerLiteral2 - 64)) | (1L << (BinaryIntegerLiteral - 64)) | (1L << (BigHexIntegerLiteral - 64)) | (1L << (BigOctalIntegerLiteral - 64)) | (1L << (BigBinaryIntegerLiteral - 64)) | (1L << (BigDecimalIntegerLiteral - 64)) | (1L << (Typeof - 64)) | (1L << (New - 64)) | (1L << (Void - 64)) | (1L << (Function_ - 64)) | (1L << (This - 64)) | (1L << (Delete - 64)) | (1L << (Class - 64)) | (1L << (Super - 64)) | (1L << (Import - 64)) | (1L << (Async - 64)) | (1L << (Await - 64)) | (1L << (NonStrictLet - 64)) | (1L << (Yield - 64)) | (1L << (Identifier - 64)) | (1L << (StringLiteral - 64)) | (1L << (TemplateStringLiteral - 64)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << RegularExpressionLiteral) | (1L << OpenBracket) | (1L << OpenParen) | (1L << OpenBrace) | (1L << Ellipsis) | (1L << PlusPlus) | (1L << MinusMinus) | (1L << Plus) | (1L << Minus) | (1L << BitNot) | (1L << Not) | (1L << NullLiteral) | (1L << BooleanLiteral) | (1L << DecimalLiteral) | (1L << HexIntegerLiteral))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (OctalIntegerLiteral - 64)) | (1L << (OctalIntegerLiteral2 - 64)) | (1L << (BinaryIntegerLiteral - 64)) | (1L << (BigHexIntegerLiteral - 64)) | (1L << (BigOctalIntegerLiteral - 64)) | (1L << (BigBinaryIntegerLiteral - 64)) | (1L << (BigDecimalIntegerLiteral - 64)) | (1L << (Typeof - 64)) | (1L << (New - 64)) | (1L << (Void - 64)) | (1L << (Function_ - 64)) | (1L << (This - 64)) | (1L << (Delete - 64)) | (1L << (Class - 64)) | (1L << (Super - 64)) | (1L << (Import - 64)) | (1L << (Async - 64)) | (1L << (Await - 64)) | (1L << (Yield - 64)) | (1L << (NonStrictLet - 64)) | (1L << (Identifier - 64)) | (1L << (StringLiteral - 64)) | (1L << (BackTick - 64)))) != 0)) {
 				{
 				State = 622;
 				arrayElement();
@@ -4711,7 +4123,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 
 			State = 633;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,76,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,72,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
@@ -4737,7 +4149,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				}
 				State = 635;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,76,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,72,Context);
 			}
 			State = 639;
 			ErrorHandler.Sync(this);
@@ -4776,16 +4188,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		{
 		}
 		public override int RuleIndex { get { return RULE_arrayElement; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterArrayElement(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitArrayElement(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -4849,16 +4251,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public PropertyExpressionAssignmentContext(PropertyAssignmentContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterPropertyExpressionAssignment(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitPropertyExpressionAssignment(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPropertyExpressionAssignment(this);
@@ -4877,16 +4269,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Colon() { return GetToken(JavaScriptParser.Colon, 0); }
 		public ComputedPropertyExpressionAssignmentContext(PropertyAssignmentContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterComputedPropertyExpressionAssignment(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitComputedPropertyExpressionAssignment(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitComputedPropertyExpressionAssignment(this);
@@ -4899,16 +4281,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Ellipsis() { return GetToken(JavaScriptParser.Ellipsis, 0); }
 		public PropertyShorthandContext(PropertyAssignmentContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterPropertyShorthand(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitPropertyShorthand(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -4930,16 +4302,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public PropertySetterContext(PropertyAssignmentContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterPropertySetter(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitPropertySetter(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPropertySetter(this);
@@ -4957,16 +4319,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public PropertyGetterContext(PropertyAssignmentContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterPropertyGetter(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitPropertyGetter(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPropertyGetter(this);
@@ -4979,25 +4331,15 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode OpenParen() { return GetToken(JavaScriptParser.OpenParen, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseParen() { return GetToken(JavaScriptParser.CloseParen, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public FunctionBodyContext functionBody() {
+			return GetRuleContext<FunctionBodyContext>(0);
+		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Async() { return GetToken(JavaScriptParser.Async, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Multiply() { return GetToken(JavaScriptParser.Multiply, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public FormalParameterListContext formalParameterList() {
 			return GetRuleContext<FormalParameterListContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public FunctionBodyContext functionBody() {
-			return GetRuleContext<FunctionBodyContext>(0);
-		}
 		public FunctionPropertyContext(PropertyAssignmentContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterFunctionProperty(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitFunctionProperty(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -5012,9 +4354,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		EnterRule(_localctx, 104, RULE_propertyAssignment);
 		int _la;
 		try {
-			State = 689;
+			State = 686;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,86,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,79,Context) ) {
 			case 1:
 				_localctx = new PropertyExpressionAssignmentContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
@@ -5049,7 +4391,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				{
 				State = 658;
 				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,79,Context) ) {
+				switch ( Interpreter.AdaptivePredict(TokenStream,75,Context) ) {
 				case 1:
 					{
 					State = 657;
@@ -5074,7 +4416,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				State = 666;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OpenBracket) | (1L << OpenBrace) | (1L << Ellipsis))) != 0) || ((((_la - 105)) & ~0x3f) == 0 && ((1L << (_la - 105)) & ((1L << (Async - 105)) | (1L << (NonStrictLet - 105)) | (1L << (Identifier - 105)))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OpenBracket) | (1L << OpenBrace) | (1L << Ellipsis))) != 0) || ((((_la - 106)) & ~0x3f) == 0 && ((1L << (_la - 106)) & ((1L << (Async - 106)) | (1L << (NonStrictLet - 106)) | (1L << (Identifier - 106)))) != 0)) {
 					{
 					State = 665;
 					formalParameterList();
@@ -5083,79 +4425,55 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 
 				State = 668;
 				Match(CloseParen);
-				State = 670;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
-				if (_la==OpenBrace) {
-					{
-					State = 669;
-					functionBody();
-					}
-				}
-
+				State = 669;
+				functionBody();
 				}
 				break;
 			case 4:
 				_localctx = new PropertyGetterContext(_localctx);
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 672;
+				State = 671;
 				getter();
-				State = 673;
+				State = 672;
 				Match(OpenParen);
-				State = 674;
+				State = 673;
 				Match(CloseParen);
-				State = 676;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
-				if (_la==OpenBrace) {
-					{
-					State = 675;
-					functionBody();
-					}
-				}
-
+				State = 674;
+				functionBody();
 				}
 				break;
 			case 5:
 				_localctx = new PropertySetterContext(_localctx);
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 678;
+				State = 676;
 				setter();
-				State = 679;
+				State = 677;
 				Match(OpenParen);
-				State = 680;
+				State = 678;
 				formalParameterArg();
-				State = 681;
+				State = 679;
 				Match(CloseParen);
-				State = 683;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
-				if (_la==OpenBrace) {
-					{
-					State = 682;
-					functionBody();
-					}
-				}
-
+				State = 680;
+				functionBody();
 				}
 				break;
 			case 6:
 				_localctx = new PropertyShorthandContext(_localctx);
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 686;
+				State = 683;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Ellipsis) {
 					{
-					State = 685;
+					State = 682;
 					Match(Ellipsis);
 					}
 				}
 
-				State = 688;
+				State = 685;
 				singleExpression(0);
 				}
 				break;
@@ -5191,16 +4509,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_propertyName; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterPropertyName(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitPropertyName(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPropertyName(this);
@@ -5213,7 +4521,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		PropertyNameContext _localctx = new PropertyNameContext(Context, State);
 		EnterRule(_localctx, 106, RULE_propertyName);
 		try {
-			State = 698;
+			State = 695;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case NullLiteral:
@@ -5255,6 +4563,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case Import:
 			case Async:
 			case Await:
+			case Yield:
 			case Implements:
 			case StrictLet:
 			case NonStrictLet:
@@ -5264,18 +4573,17 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case Package:
 			case Protected:
 			case Static:
-			case Yield:
 			case Identifier:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 691;
+				State = 688;
 				identifierName();
 				}
 				break;
 			case StringLiteral:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 692;
+				State = 689;
 				Match(StringLiteral);
 				}
 				break;
@@ -5286,18 +4594,18 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case BinaryIntegerLiteral:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 693;
+				State = 690;
 				numericLiteral();
 				}
 				break;
 			case OpenBracket:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 694;
+				State = 691;
 				Match(OpenBracket);
-				State = 695;
+				State = 692;
 				singleExpression(0);
-				State = 696;
+				State = 693;
 				Match(CloseBracket);
 				}
 				break;
@@ -5335,16 +4643,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_arguments; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterArguments(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitArguments(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitArguments(this);
@@ -5361,39 +4659,39 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 700;
+			State = 697;
 			Match(OpenParen);
-			State = 712;
+			State = 709;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << RegularExpressionLiteral) | (1L << OpenBracket) | (1L << OpenParen) | (1L << OpenBrace) | (1L << Ellipsis) | (1L << PlusPlus) | (1L << MinusMinus) | (1L << Plus) | (1L << Minus) | (1L << BitNot) | (1L << Not) | (1L << NullLiteral) | (1L << BooleanLiteral) | (1L << DecimalLiteral) | (1L << HexIntegerLiteral) | (1L << OctalIntegerLiteral))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (OctalIntegerLiteral2 - 64)) | (1L << (BinaryIntegerLiteral - 64)) | (1L << (BigHexIntegerLiteral - 64)) | (1L << (BigOctalIntegerLiteral - 64)) | (1L << (BigBinaryIntegerLiteral - 64)) | (1L << (BigDecimalIntegerLiteral - 64)) | (1L << (Typeof - 64)) | (1L << (New - 64)) | (1L << (Void - 64)) | (1L << (Function_ - 64)) | (1L << (This - 64)) | (1L << (Delete - 64)) | (1L << (Class - 64)) | (1L << (Super - 64)) | (1L << (Import - 64)) | (1L << (Async - 64)) | (1L << (Await - 64)) | (1L << (NonStrictLet - 64)) | (1L << (Yield - 64)) | (1L << (Identifier - 64)) | (1L << (StringLiteral - 64)) | (1L << (TemplateStringLiteral - 64)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << RegularExpressionLiteral) | (1L << OpenBracket) | (1L << OpenParen) | (1L << OpenBrace) | (1L << Ellipsis) | (1L << PlusPlus) | (1L << MinusMinus) | (1L << Plus) | (1L << Minus) | (1L << BitNot) | (1L << Not) | (1L << NullLiteral) | (1L << BooleanLiteral) | (1L << DecimalLiteral) | (1L << HexIntegerLiteral))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (OctalIntegerLiteral - 64)) | (1L << (OctalIntegerLiteral2 - 64)) | (1L << (BinaryIntegerLiteral - 64)) | (1L << (BigHexIntegerLiteral - 64)) | (1L << (BigOctalIntegerLiteral - 64)) | (1L << (BigBinaryIntegerLiteral - 64)) | (1L << (BigDecimalIntegerLiteral - 64)) | (1L << (Typeof - 64)) | (1L << (New - 64)) | (1L << (Void - 64)) | (1L << (Function_ - 64)) | (1L << (This - 64)) | (1L << (Delete - 64)) | (1L << (Class - 64)) | (1L << (Super - 64)) | (1L << (Import - 64)) | (1L << (Async - 64)) | (1L << (Await - 64)) | (1L << (Yield - 64)) | (1L << (NonStrictLet - 64)) | (1L << (Identifier - 64)) | (1L << (StringLiteral - 64)) | (1L << (BackTick - 64)))) != 0)) {
 				{
-				State = 701;
+				State = 698;
 				argument();
-				State = 706;
+				State = 703;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,88,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,81,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
-						State = 702;
+						State = 699;
 						Match(Comma);
-						State = 703;
+						State = 700;
 						argument();
 						}
 						} 
 					}
-					State = 708;
+					State = 705;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,88,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,81,Context);
 				}
-				State = 710;
+				State = 707;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Comma) {
 					{
-					State = 709;
+					State = 706;
 					Match(Comma);
 					}
 				}
@@ -5401,7 +4699,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				}
 			}
 
-			State = 714;
+			State = 711;
 			Match(CloseParen);
 			}
 		}
@@ -5430,16 +4728,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_argument; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterArgument(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitArgument(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitArgument(this);
@@ -5455,28 +4743,28 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 717;
+			State = 714;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Ellipsis) {
 				{
-				State = 716;
+				State = 713;
 				Match(Ellipsis);
 				}
 			}
 
-			State = 721;
+			State = 718;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,92,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,85,Context) ) {
 			case 1:
 				{
-				State = 719;
+				State = 716;
 				singleExpression(0);
 				}
 				break;
 			case 2:
 				{
-				State = 720;
+				State = 717;
 				identifier();
 				}
 				break;
@@ -5511,16 +4799,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_expressionSequence; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterExpressionSequence(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitExpressionSequence(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitExpressionSequence(this);
@@ -5536,25 +4814,25 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 723;
+			State = 720;
 			singleExpression(0);
-			State = 728;
+			State = 725;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,93,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,86,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 724;
+					State = 721;
 					Match(Comma);
-					State = 725;
+					State = 722;
 					singleExpression(0);
 					}
 					} 
 				}
-				State = 730;
+				State = 727;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,93,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,86,Context);
 			}
 			}
 		}
@@ -5585,18 +4863,10 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public SingleExpressionContext singleExpression() {
 			return GetRuleContext<SingleExpressionContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TemplateStringLiteral() { return GetToken(JavaScriptParser.TemplateStringLiteral, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public TemplateStringLiteralContext templateStringLiteral() {
+			return GetRuleContext<TemplateStringLiteralContext>(0);
+		}
 		public TemplateStringExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterTemplateStringExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitTemplateStringExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -5615,16 +4885,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Colon() { return GetToken(JavaScriptParser.Colon, 0); }
 		public TernaryExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterTernaryExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitTernaryExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitTernaryExpression(this);
@@ -5640,16 +4900,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode And() { return GetToken(JavaScriptParser.And, 0); }
 		public LogicalAndExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterLogicalAndExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitLogicalAndExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -5667,16 +4917,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Power() { return GetToken(JavaScriptParser.Power, 0); }
 		public PowerExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterPowerExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitPowerExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPowerExpression(this);
@@ -5690,16 +4930,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public PreIncrementExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterPreIncrementExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitPreIncrementExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPreIncrementExpression(this);
@@ -5711,16 +4941,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			return GetRuleContext<ObjectLiteralContext>(0);
 		}
 		public ObjectLiteralExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterObjectLiteralExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitObjectLiteralExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -5735,16 +4955,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			return GetRuleContext<IdentifierContext>(0);
 		}
 		public MetaExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterMetaExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitMetaExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -5762,16 +4972,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode In() { return GetToken(JavaScriptParser.In, 0); }
 		public InExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterInExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitInExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitInExpression(this);
@@ -5788,16 +4988,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Or() { return GetToken(JavaScriptParser.Or, 0); }
 		public LogicalOrExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterLogicalOrExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitLogicalOrExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitLogicalOrExpression(this);
@@ -5811,16 +5001,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public NotExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterNotExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitNotExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitNotExpression(this);
@@ -5833,16 +5013,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			return GetRuleContext<SingleExpressionContext>(0);
 		}
 		public PreDecreaseExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterPreDecreaseExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitPreDecreaseExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -5859,16 +5029,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public ArgumentsExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterArgumentsExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitArgumentsExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitArgumentsExpression(this);
@@ -5882,16 +5042,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public AwaitExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterAwaitExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitAwaitExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAwaitExpression(this);
@@ -5901,16 +5051,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 	public partial class ThisExpressionContext : SingleExpressionContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode This() { return GetToken(JavaScriptParser.This, 0); }
 		public ThisExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterThisExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitThisExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -5924,16 +5064,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public FunctionExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterFunctionExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitFunctionExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFunctionExpression(this);
@@ -5946,16 +5076,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			return GetRuleContext<SingleExpressionContext>(0);
 		}
 		public UnaryMinusExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterUnaryMinusExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitUnaryMinusExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -5973,16 +5093,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Assign() { return GetToken(JavaScriptParser.Assign, 0); }
 		public AssignmentExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterAssignmentExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitAssignmentExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAssignmentExpression(this);
@@ -5996,16 +5106,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MinusMinus() { return GetToken(JavaScriptParser.MinusMinus, 0); }
 		public PostDecreaseExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterPostDecreaseExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitPostDecreaseExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPostDecreaseExpression(this);
@@ -6018,16 +5118,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			return GetRuleContext<SingleExpressionContext>(0);
 		}
 		public TypeofExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterTypeofExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitTypeofExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -6045,16 +5135,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Instanceof() { return GetToken(JavaScriptParser.Instanceof, 0); }
 		public InstanceofExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterInstanceofExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitInstanceofExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitInstanceofExpression(this);
@@ -6068,16 +5148,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public UnaryPlusExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterUnaryPlusExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitUnaryPlusExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitUnaryPlusExpression(this);
@@ -6090,16 +5160,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			return GetRuleContext<SingleExpressionContext>(0);
 		}
 		public DeleteExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterDeleteExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitDeleteExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -6115,16 +5175,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseParen() { return GetToken(JavaScriptParser.CloseParen, 0); }
 		public ImportExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterImportExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitImportExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -6145,16 +5195,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode IdentityNotEquals() { return GetToken(JavaScriptParser.IdentityNotEquals, 0); }
 		public EqualityExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterEqualityExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitEqualityExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitEqualityExpression(this);
@@ -6171,16 +5211,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BitXOr() { return GetToken(JavaScriptParser.BitXOr, 0); }
 		public BitXOrExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterBitXOrExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitBitXOrExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitBitXOrExpression(this);
@@ -6190,16 +5220,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 	public partial class SuperExpressionContext : SingleExpressionContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Super() { return GetToken(JavaScriptParser.Super, 0); }
 		public SuperExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterSuperExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitSuperExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -6219,16 +5239,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Modulus() { return GetToken(JavaScriptParser.Modulus, 0); }
 		public MultiplicativeExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterMultiplicativeExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitMultiplicativeExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitMultiplicativeExpression(this);
@@ -6247,16 +5257,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RightShiftLogical() { return GetToken(JavaScriptParser.RightShiftLogical, 0); }
 		public BitShiftExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterBitShiftExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitBitShiftExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitBitShiftExpression(this);
@@ -6270,16 +5270,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseParen() { return GetToken(JavaScriptParser.CloseParen, 0); }
 		public ParenthesizedExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterParenthesizedExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitParenthesizedExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -6297,16 +5287,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Plus() { return GetToken(JavaScriptParser.Plus, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Minus() { return GetToken(JavaScriptParser.Minus, 0); }
 		public AdditiveExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterAdditiveExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitAdditiveExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -6327,16 +5307,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode GreaterThanEquals() { return GetToken(JavaScriptParser.GreaterThanEquals, 0); }
 		public RelationalExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterRelationalExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitRelationalExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitRelationalExpression(this);
@@ -6350,16 +5320,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode PlusPlus() { return GetToken(JavaScriptParser.PlusPlus, 0); }
 		public PostIncrementExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterPostIncrementExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitPostIncrementExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPostIncrementExpression(this);
@@ -6371,16 +5331,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			return GetRuleContext<YieldStatementContext>(0);
 		}
 		public YieldExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterYieldExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitYieldExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -6394,16 +5344,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			return GetRuleContext<SingleExpressionContext>(0);
 		}
 		public BitNotExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterBitNotExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitBitNotExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -6421,16 +5361,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public NewExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterNewExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitNewExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitNewExpression(this);
@@ -6443,16 +5373,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public LiteralExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterLiteralExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitLiteralExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitLiteralExpression(this);
@@ -6464,16 +5384,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			return GetRuleContext<ArrayLiteralContext>(0);
 		}
 		public ArrayLiteralExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterArrayLiteralExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitArrayLiteralExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -6493,16 +5403,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Hashtag() { return GetToken(JavaScriptParser.Hashtag, 0); }
 		public MemberDotExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterMemberDotExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitMemberDotExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitMemberDotExpression(this);
@@ -6518,16 +5418,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			return GetRuleContext<IdentifierContext>(0);
 		}
 		public ClassExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterClassExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitClassExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -6546,16 +5436,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseBracket() { return GetToken(JavaScriptParser.CloseBracket, 0); }
 		public MemberIndexExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterMemberIndexExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitMemberIndexExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitMemberIndexExpression(this);
@@ -6567,16 +5447,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			return GetRuleContext<IdentifierContext>(0);
 		}
 		public IdentifierExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterIdentifierExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitIdentifierExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -6594,16 +5464,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BitAnd() { return GetToken(JavaScriptParser.BitAnd, 0); }
 		public BitAndExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterBitAndExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitBitAndExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitBitAndExpression(this);
@@ -6619,16 +5479,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BitOr() { return GetToken(JavaScriptParser.BitOr, 0); }
 		public BitOrExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterBitOrExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitBitOrExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -6648,16 +5498,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public AssignmentOperatorExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterAssignmentOperatorExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitAssignmentOperatorExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAssignmentOperatorExpression(this);
@@ -6670,16 +5510,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			return GetRuleContext<SingleExpressionContext>(0);
 		}
 		public VoidExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterVoidExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitVoidExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -6696,16 +5526,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NullCoalesce() { return GetToken(JavaScriptParser.NullCoalesce, 0); }
 		public CoalesceExpressionContext(SingleExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterCoalesceExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitCoalesceExpression(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -6731,16 +5551,16 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 782;
+			State = 780;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,96,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,88,Context) ) {
 			case 1:
 				{
 				_localctx = new FunctionExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
 
-				State = 732;
+				State = 729;
 				anonymousFunction();
 				}
 				break;
@@ -6749,19 +5569,19 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				_localctx = new ClassExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 733;
+				State = 730;
 				Match(Class);
-				State = 735;
+				State = 732;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if (((((_la - 105)) & ~0x3f) == 0 && ((1L << (_la - 105)) & ((1L << (Async - 105)) | (1L << (NonStrictLet - 105)) | (1L << (Identifier - 105)))) != 0)) {
+				if (((((_la - 106)) & ~0x3f) == 0 && ((1L << (_la - 106)) & ((1L << (Async - 106)) | (1L << (NonStrictLet - 106)) | (1L << (Identifier - 106)))) != 0)) {
 					{
-					State = 734;
+					State = 731;
 					identifier();
 					}
 				}
 
-				State = 737;
+				State = 734;
 				classTail();
 				}
 				break;
@@ -6770,259 +5590,262 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				_localctx = new NewExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 738;
+				State = 735;
 				Match(New);
-				State = 739;
+				State = 736;
 				singleExpression(0);
-				State = 741;
-				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,95,Context) ) {
-				case 1:
-					{
-					State = 740;
-					arguments();
-					}
-					break;
-				}
+				State = 737;
+				arguments();
 				}
 				break;
 			case 4:
 				{
-				_localctx = new MetaExpressionContext(_localctx);
+				_localctx = new NewExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 743;
+				State = 739;
 				Match(New);
-				State = 744;
-				Match(Dot);
-				State = 745;
-				identifier();
+				State = 740;
+				singleExpression(42);
 				}
 				break;
 			case 5:
 				{
-				_localctx = new DeleteExpressionContext(_localctx);
+				_localctx = new MetaExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 746;
-				Match(Delete);
-				State = 747;
-				singleExpression(37);
+				State = 741;
+				Match(New);
+				State = 742;
+				Match(Dot);
+				State = 743;
+				identifier();
 				}
 				break;
 			case 6:
 				{
-				_localctx = new VoidExpressionContext(_localctx);
+				_localctx = new DeleteExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 748;
-				Match(Void);
-				State = 749;
-				singleExpression(36);
+				State = 744;
+				Match(Delete);
+				State = 745;
+				singleExpression(37);
 				}
 				break;
 			case 7:
 				{
-				_localctx = new TypeofExpressionContext(_localctx);
+				_localctx = new VoidExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 750;
-				Match(Typeof);
-				State = 751;
-				singleExpression(35);
+				State = 746;
+				Match(Void);
+				State = 747;
+				singleExpression(36);
 				}
 				break;
 			case 8:
 				{
-				_localctx = new PreIncrementExpressionContext(_localctx);
+				_localctx = new TypeofExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 752;
-				Match(PlusPlus);
-				State = 753;
-				singleExpression(34);
+				State = 748;
+				Match(Typeof);
+				State = 749;
+				singleExpression(35);
 				}
 				break;
 			case 9:
 				{
-				_localctx = new PreDecreaseExpressionContext(_localctx);
+				_localctx = new PreIncrementExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 754;
-				Match(MinusMinus);
-				State = 755;
-				singleExpression(33);
+				State = 750;
+				Match(PlusPlus);
+				State = 751;
+				singleExpression(34);
 				}
 				break;
 			case 10:
 				{
-				_localctx = new UnaryPlusExpressionContext(_localctx);
+				_localctx = new PreDecreaseExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 756;
-				Match(Plus);
-				State = 757;
-				singleExpression(32);
+				State = 752;
+				Match(MinusMinus);
+				State = 753;
+				singleExpression(33);
 				}
 				break;
 			case 11:
 				{
-				_localctx = new UnaryMinusExpressionContext(_localctx);
+				_localctx = new UnaryPlusExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 758;
-				Match(Minus);
-				State = 759;
-				singleExpression(31);
+				State = 754;
+				Match(Plus);
+				State = 755;
+				singleExpression(32);
 				}
 				break;
 			case 12:
 				{
-				_localctx = new BitNotExpressionContext(_localctx);
+				_localctx = new UnaryMinusExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 760;
-				Match(BitNot);
-				State = 761;
-				singleExpression(30);
+				State = 756;
+				Match(Minus);
+				State = 757;
+				singleExpression(31);
 				}
 				break;
 			case 13:
 				{
-				_localctx = new NotExpressionContext(_localctx);
+				_localctx = new BitNotExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 762;
-				Match(Not);
-				State = 763;
-				singleExpression(29);
+				State = 758;
+				Match(BitNot);
+				State = 759;
+				singleExpression(30);
 				}
 				break;
 			case 14:
 				{
-				_localctx = new AwaitExpressionContext(_localctx);
+				_localctx = new NotExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 764;
-				Match(Await);
-				State = 765;
-				singleExpression(28);
+				State = 760;
+				Match(Not);
+				State = 761;
+				singleExpression(29);
 				}
 				break;
 			case 15:
 				{
-				_localctx = new ImportExpressionContext(_localctx);
+				_localctx = new AwaitExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 766;
-				Match(Import);
-				State = 767;
-				Match(OpenParen);
-				State = 768;
-				singleExpression(0);
-				State = 769;
-				Match(CloseParen);
+				State = 762;
+				Match(Await);
+				State = 763;
+				singleExpression(28);
 				}
 				break;
 			case 16:
 				{
-				_localctx = new YieldExpressionContext(_localctx);
+				_localctx = new ImportExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 771;
-				yieldStatement();
+				State = 764;
+				Match(Import);
+				State = 765;
+				Match(OpenParen);
+				State = 766;
+				singleExpression(0);
+				State = 767;
+				Match(CloseParen);
 				}
 				break;
 			case 17:
 				{
-				_localctx = new ThisExpressionContext(_localctx);
+				_localctx = new YieldExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 772;
-				Match(This);
+				State = 769;
+				yieldStatement();
 				}
 				break;
 			case 18:
 				{
-				_localctx = new IdentifierExpressionContext(_localctx);
+				_localctx = new ThisExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 773;
-				identifier();
+				State = 770;
+				Match(This);
 				}
 				break;
 			case 19:
 				{
-				_localctx = new SuperExpressionContext(_localctx);
+				_localctx = new IdentifierExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 774;
-				Match(Super);
+				State = 771;
+				identifier();
 				}
 				break;
 			case 20:
 				{
-				_localctx = new LiteralExpressionContext(_localctx);
+				_localctx = new SuperExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 775;
-				literal();
+				State = 772;
+				Match(Super);
 				}
 				break;
 			case 21:
 				{
-				_localctx = new ArrayLiteralExpressionContext(_localctx);
+				_localctx = new LiteralExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 776;
-				arrayLiteral();
+				State = 773;
+				literal();
 				}
 				break;
 			case 22:
 				{
-				_localctx = new ObjectLiteralExpressionContext(_localctx);
+				_localctx = new ArrayLiteralExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 777;
-				objectLiteral();
+				State = 774;
+				arrayLiteral();
 				}
 				break;
 			case 23:
 				{
+				_localctx = new ObjectLiteralExpressionContext(_localctx);
+				Context = _localctx;
+				_prevctx = _localctx;
+				State = 775;
+				objectLiteral();
+				}
+				break;
+			case 24:
+				{
 				_localctx = new ParenthesizedExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 778;
+				State = 776;
 				Match(OpenParen);
-				State = 779;
+				State = 777;
 				expressionSequence();
-				State = 780;
+				State = 778;
 				Match(CloseParen);
 				}
 				break;
 			}
 			Context.Stop = TokenStream.LT(-1);
-			State = 865;
+			State = 863;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,100,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,92,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( ParseListeners!=null )
 						TriggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					State = 863;
+					State = 861;
 					ErrorHandler.Sync(this);
-					switch ( Interpreter.AdaptivePredict(TokenStream,99,Context) ) {
+					switch ( Interpreter.AdaptivePredict(TokenStream,91,Context) ) {
 					case 1:
 						{
 						_localctx = new PowerExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 784;
+						State = 782;
 						if (!(Precpred(Context, 27))) throw new FailedPredicateException(this, "Precpred(Context, 27)");
-						State = 785;
+						State = 783;
 						Match(Power);
-						State = 786;
+						State = 784;
 						singleExpression(27);
 						}
 						break;
@@ -7030,9 +5853,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new MultiplicativeExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 787;
+						State = 785;
 						if (!(Precpred(Context, 26))) throw new FailedPredicateException(this, "Precpred(Context, 26)");
-						State = 788;
+						State = 786;
 						_la = TokenStream.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << Multiply) | (1L << Divide) | (1L << Modulus))) != 0)) ) {
 						ErrorHandler.RecoverInline(this);
@@ -7041,7 +5864,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 							ErrorHandler.ReportMatch(this);
 						    Consume();
 						}
-						State = 789;
+						State = 787;
 						singleExpression(27);
 						}
 						break;
@@ -7049,9 +5872,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new AdditiveExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 790;
+						State = 788;
 						if (!(Precpred(Context, 25))) throw new FailedPredicateException(this, "Precpred(Context, 25)");
-						State = 791;
+						State = 789;
 						_la = TokenStream.LA(1);
 						if ( !(_la==Plus || _la==Minus) ) {
 						ErrorHandler.RecoverInline(this);
@@ -7060,7 +5883,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 							ErrorHandler.ReportMatch(this);
 						    Consume();
 						}
-						State = 792;
+						State = 790;
 						singleExpression(26);
 						}
 						break;
@@ -7068,11 +5891,11 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new CoalesceExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 793;
+						State = 791;
 						if (!(Precpred(Context, 24))) throw new FailedPredicateException(this, "Precpred(Context, 24)");
-						State = 794;
+						State = 792;
 						Match(NullCoalesce);
-						State = 795;
+						State = 793;
 						singleExpression(25);
 						}
 						break;
@@ -7080,9 +5903,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new BitShiftExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 796;
+						State = 794;
 						if (!(Precpred(Context, 23))) throw new FailedPredicateException(this, "Precpred(Context, 23)");
-						State = 797;
+						State = 795;
 						_la = TokenStream.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << RightShiftArithmetic) | (1L << LeftShiftArithmetic) | (1L << RightShiftLogical))) != 0)) ) {
 						ErrorHandler.RecoverInline(this);
@@ -7091,7 +5914,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 							ErrorHandler.ReportMatch(this);
 						    Consume();
 						}
-						State = 798;
+						State = 796;
 						singleExpression(24);
 						}
 						break;
@@ -7099,9 +5922,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new RelationalExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 799;
+						State = 797;
 						if (!(Precpred(Context, 22))) throw new FailedPredicateException(this, "Precpred(Context, 22)");
-						State = 800;
+						State = 798;
 						_la = TokenStream.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LessThan) | (1L << MoreThan) | (1L << LessThanEquals) | (1L << GreaterThanEquals))) != 0)) ) {
 						ErrorHandler.RecoverInline(this);
@@ -7110,7 +5933,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 							ErrorHandler.ReportMatch(this);
 						    Consume();
 						}
-						State = 801;
+						State = 799;
 						singleExpression(23);
 						}
 						break;
@@ -7118,11 +5941,11 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new InstanceofExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 802;
+						State = 800;
 						if (!(Precpred(Context, 21))) throw new FailedPredicateException(this, "Precpred(Context, 21)");
-						State = 803;
+						State = 801;
 						Match(Instanceof);
-						State = 804;
+						State = 802;
 						singleExpression(22);
 						}
 						break;
@@ -7130,11 +5953,11 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new InExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 805;
+						State = 803;
 						if (!(Precpred(Context, 20))) throw new FailedPredicateException(this, "Precpred(Context, 20)");
-						State = 806;
+						State = 804;
 						Match(In);
-						State = 807;
+						State = 805;
 						singleExpression(21);
 						}
 						break;
@@ -7142,9 +5965,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new EqualityExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 808;
+						State = 806;
 						if (!(Precpred(Context, 19))) throw new FailedPredicateException(this, "Precpred(Context, 19)");
-						State = 809;
+						State = 807;
 						_la = TokenStream.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << Equals_) | (1L << NotEquals) | (1L << IdentityEquals) | (1L << IdentityNotEquals))) != 0)) ) {
 						ErrorHandler.RecoverInline(this);
@@ -7153,7 +5976,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 							ErrorHandler.ReportMatch(this);
 						    Consume();
 						}
-						State = 810;
+						State = 808;
 						singleExpression(20);
 						}
 						break;
@@ -7161,11 +5984,11 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new BitAndExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 811;
+						State = 809;
 						if (!(Precpred(Context, 18))) throw new FailedPredicateException(this, "Precpred(Context, 18)");
-						State = 812;
+						State = 810;
 						Match(BitAnd);
-						State = 813;
+						State = 811;
 						singleExpression(19);
 						}
 						break;
@@ -7173,11 +5996,11 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new BitXOrExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 814;
+						State = 812;
 						if (!(Precpred(Context, 17))) throw new FailedPredicateException(this, "Precpred(Context, 17)");
-						State = 815;
+						State = 813;
 						Match(BitXOr);
-						State = 816;
+						State = 814;
 						singleExpression(18);
 						}
 						break;
@@ -7185,11 +6008,11 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new BitOrExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 817;
+						State = 815;
 						if (!(Precpred(Context, 16))) throw new FailedPredicateException(this, "Precpred(Context, 16)");
-						State = 818;
+						State = 816;
 						Match(BitOr);
-						State = 819;
+						State = 817;
 						singleExpression(17);
 						}
 						break;
@@ -7197,11 +6020,11 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new LogicalAndExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 820;
+						State = 818;
 						if (!(Precpred(Context, 15))) throw new FailedPredicateException(this, "Precpred(Context, 15)");
-						State = 821;
+						State = 819;
 						Match(And);
-						State = 822;
+						State = 820;
 						singleExpression(16);
 						}
 						break;
@@ -7209,11 +6032,11 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new LogicalOrExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 823;
+						State = 821;
 						if (!(Precpred(Context, 14))) throw new FailedPredicateException(this, "Precpred(Context, 14)");
-						State = 824;
+						State = 822;
 						Match(Or);
-						State = 825;
+						State = 823;
 						singleExpression(15);
 						}
 						break;
@@ -7221,15 +6044,15 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new TernaryExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 826;
+						State = 824;
 						if (!(Precpred(Context, 13))) throw new FailedPredicateException(this, "Precpred(Context, 13)");
-						State = 827;
+						State = 825;
 						Match(QuestionMark);
-						State = 828;
+						State = 826;
 						singleExpression(0);
-						State = 829;
+						State = 827;
 						Match(Colon);
-						State = 830;
+						State = 828;
 						singleExpression(14);
 						}
 						break;
@@ -7237,11 +6060,11 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new AssignmentExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 832;
+						State = 830;
 						if (!(Precpred(Context, 12))) throw new FailedPredicateException(this, "Precpred(Context, 12)");
-						State = 833;
+						State = 831;
 						Match(Assign);
-						State = 834;
+						State = 832;
 						singleExpression(12);
 						}
 						break;
@@ -7249,11 +6072,11 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new AssignmentOperatorExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 835;
+						State = 833;
 						if (!(Precpred(Context, 11))) throw new FailedPredicateException(this, "Precpred(Context, 11)");
-						State = 836;
+						State = 834;
 						assignmentOperator();
-						State = 837;
+						State = 835;
 						singleExpression(11);
 						}
 						break;
@@ -7261,13 +6084,13 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new MemberIndexExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 839;
-						if (!(Precpred(Context, 44))) throw new FailedPredicateException(this, "Precpred(Context, 44)");
-						State = 840;
+						State = 837;
+						if (!(Precpred(Context, 45))) throw new FailedPredicateException(this, "Precpred(Context, 45)");
+						State = 838;
 						Match(OpenBracket);
-						State = 841;
+						State = 839;
 						expressionSequence();
-						State = 842;
+						State = 840;
 						Match(CloseBracket);
 						}
 						break;
@@ -7275,31 +6098,31 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new MemberDotExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
+						State = 842;
+						if (!(Precpred(Context, 44))) throw new FailedPredicateException(this, "Precpred(Context, 44)");
 						State = 844;
-						if (!(Precpred(Context, 43))) throw new FailedPredicateException(this, "Precpred(Context, 43)");
-						State = 846;
 						ErrorHandler.Sync(this);
 						_la = TokenStream.LA(1);
 						if (_la==QuestionMark) {
 							{
-							State = 845;
+							State = 843;
 							Match(QuestionMark);
 							}
 						}
 
-						State = 848;
+						State = 846;
 						Match(Dot);
-						State = 850;
+						State = 848;
 						ErrorHandler.Sync(this);
 						_la = TokenStream.LA(1);
 						if (_la==Hashtag) {
 							{
-							State = 849;
+							State = 847;
 							Match(Hashtag);
 							}
 						}
 
-						State = 852;
+						State = 850;
 						identifierName();
 						}
 						break;
@@ -7307,9 +6130,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new ArgumentsExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 853;
-						if (!(Precpred(Context, 42))) throw new FailedPredicateException(this, "Precpred(Context, 42)");
-						State = 854;
+						State = 851;
+						if (!(Precpred(Context, 41))) throw new FailedPredicateException(this, "Precpred(Context, 41)");
+						State = 852;
 						arguments();
 						}
 						break;
@@ -7317,11 +6140,11 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new PostIncrementExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 855;
+						State = 853;
 						if (!(Precpred(Context, 39))) throw new FailedPredicateException(this, "Precpred(Context, 39)");
-						State = 856;
+						State = 854;
 						if (!(this.notLineTerminator())) throw new FailedPredicateException(this, "this.notLineTerminator()");
-						State = 857;
+						State = 855;
 						Match(PlusPlus);
 						}
 						break;
@@ -7329,11 +6152,11 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new PostDecreaseExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 858;
+						State = 856;
 						if (!(Precpred(Context, 38))) throw new FailedPredicateException(this, "Precpred(Context, 38)");
-						State = 859;
+						State = 857;
 						if (!(this.notLineTerminator())) throw new FailedPredicateException(this, "this.notLineTerminator()");
-						State = 860;
+						State = 858;
 						Match(MinusMinus);
 						}
 						break;
@@ -7341,18 +6164,18 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 						{
 						_localctx = new TemplateStringExpressionContext(new SingleExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_singleExpression);
-						State = 861;
+						State = 859;
 						if (!(Precpred(Context, 9))) throw new FailedPredicateException(this, "Precpred(Context, 9)");
-						State = 862;
-						Match(TemplateStringLiteral);
+						State = 860;
+						templateStringLiteral();
 						}
 						break;
 					}
 					} 
 				}
-				State = 867;
+				State = 865;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,100,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,92,Context);
 			}
 			}
 		}
@@ -7383,16 +6206,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_assignable; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterAssignable(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitAssignable(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAssignable(this);
@@ -7405,7 +6218,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		AssignableContext _localctx = new AssignableContext(Context, State);
 		EnterRule(_localctx, 116, RULE_assignable);
 		try {
-			State = 871;
+			State = 869;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Async:
@@ -7413,21 +6226,21 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case Identifier:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 868;
+				State = 866;
 				identifier();
 				}
 				break;
 			case OpenBracket:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 869;
+				State = 867;
 				arrayLiteral();
 				}
 				break;
 			case OpenBrace:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 870;
+				State = 868;
 				objectLiteral();
 				}
 				break;
@@ -7465,16 +6278,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_objectLiteral; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterObjectLiteral(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitObjectLiteral(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitObjectLiteral(this);
@@ -7491,47 +6294,47 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 873;
+			State = 871;
 			Match(OpenBrace);
-			State = 882;
+			State = 883;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,103,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,96,Context) ) {
 			case 1:
 				{
-				State = 874;
+				State = 872;
 				propertyAssignment();
-				State = 879;
+				State = 877;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,102,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,94,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
-						State = 875;
+						State = 873;
 						Match(Comma);
-						State = 876;
+						State = 874;
 						propertyAssignment();
 						}
 						} 
 					}
-					State = 881;
+					State = 879;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,102,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,94,Context);
 				}
+				State = 881;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				if (_la==Comma) {
+					{
+					State = 880;
+					Match(Comma);
+					}
+				}
+
 				}
 				break;
 			}
 			State = 885;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			if (_la==Comma) {
-				{
-				State = 884;
-				Match(Comma);
-				}
-			}
-
-			State = 887;
 			Match(CloseBrace);
 			}
 		}
@@ -7562,25 +6365,15 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Function_() { return GetToken(JavaScriptParser.Function_, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode OpenParen() { return GetToken(JavaScriptParser.OpenParen, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseParen() { return GetToken(JavaScriptParser.CloseParen, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public FunctionBodyContext functionBody() {
+			return GetRuleContext<FunctionBodyContext>(0);
+		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Async() { return GetToken(JavaScriptParser.Async, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Multiply() { return GetToken(JavaScriptParser.Multiply, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public FormalParameterListContext formalParameterList() {
 			return GetRuleContext<FormalParameterListContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public FunctionBodyContext functionBody() {
-			return GetRuleContext<FunctionBodyContext>(0);
-		}
 		public AnonymousFunctionDeclContext(AnonymousFunctionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterAnonymousFunctionDecl(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitAnonymousFunctionDecl(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -7599,16 +6392,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Async() { return GetToken(JavaScriptParser.Async, 0); }
 		public ArrowFunctionContext(AnonymousFunctionContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterArrowFunction(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitArrowFunction(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitArrowFunction(this);
@@ -7620,16 +6403,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			return GetRuleContext<FunctionDeclarationContext>(0);
 		}
 		public FunctionDeclContext(AnonymousFunctionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterFunctionDecl(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitFunctionDecl(this);
-		}
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
@@ -7644,14 +6417,14 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		EnterRule(_localctx, 120, RULE_anonymousFunction);
 		int _la;
 		try {
-			State = 912;
+			State = 908;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,110,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,101,Context) ) {
 			case 1:
 				_localctx = new FunctionDeclContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 889;
+				State = 887;
 				functionDeclaration();
 				}
 				break;
@@ -7659,73 +6432,65 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 				_localctx = new AnonymousFunctionDeclContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 891;
+				State = 889;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Async) {
 					{
-					State = 890;
+					State = 888;
 					Match(Async);
 					}
 				}
 
-				State = 893;
+				State = 891;
 				Match(Function_);
-				State = 895;
+				State = 893;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Multiply) {
 					{
-					State = 894;
+					State = 892;
 					Match(Multiply);
 					}
 				}
 
-				State = 897;
+				State = 895;
 				Match(OpenParen);
-				State = 899;
+				State = 897;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OpenBracket) | (1L << OpenBrace) | (1L << Ellipsis))) != 0) || ((((_la - 105)) & ~0x3f) == 0 && ((1L << (_la - 105)) & ((1L << (Async - 105)) | (1L << (NonStrictLet - 105)) | (1L << (Identifier - 105)))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OpenBracket) | (1L << OpenBrace) | (1L << Ellipsis))) != 0) || ((((_la - 106)) & ~0x3f) == 0 && ((1L << (_la - 106)) & ((1L << (Async - 106)) | (1L << (NonStrictLet - 106)) | (1L << (Identifier - 106)))) != 0)) {
 					{
-					State = 898;
+					State = 896;
 					formalParameterList();
 					}
 				}
 
-				State = 901;
+				State = 899;
 				Match(CloseParen);
-				State = 903;
-				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,108,Context) ) {
-				case 1:
-					{
-					State = 902;
-					functionBody();
-					}
-					break;
-				}
+				State = 900;
+				functionBody();
 				}
 				break;
 			case 3:
 				_localctx = new ArrowFunctionContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 906;
+				State = 902;
 				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,109,Context) ) {
+				switch ( Interpreter.AdaptivePredict(TokenStream,100,Context) ) {
 				case 1:
 					{
-					State = 905;
+					State = 901;
 					Match(Async);
 					}
 					break;
 				}
-				State = 908;
+				State = 904;
 				arrowFunctionParameters();
-				State = 909;
+				State = 905;
 				Match(ARROW);
-				State = 910;
+				State = 906;
 				arrowFunctionBody();
 				}
 				break;
@@ -7757,16 +6522,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_arrowFunctionParameters; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterArrowFunctionParameters(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitArrowFunctionParameters(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitArrowFunctionParameters(this);
@@ -7780,7 +6535,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		EnterRule(_localctx, 122, RULE_arrowFunctionParameters);
 		int _la;
 		try {
-			State = 920;
+			State = 916;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Async:
@@ -7788,26 +6543,26 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case Identifier:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 914;
+				State = 910;
 				identifier();
 				}
 				break;
 			case OpenParen:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 915;
+				State = 911;
 				Match(OpenParen);
-				State = 917;
+				State = 913;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OpenBracket) | (1L << OpenBrace) | (1L << Ellipsis))) != 0) || ((((_la - 105)) & ~0x3f) == 0 && ((1L << (_la - 105)) & ((1L << (Async - 105)) | (1L << (NonStrictLet - 105)) | (1L << (Identifier - 105)))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OpenBracket) | (1L << OpenBrace) | (1L << Ellipsis))) != 0) || ((((_la - 106)) & ~0x3f) == 0 && ((1L << (_la - 106)) & ((1L << (Async - 106)) | (1L << (NonStrictLet - 106)) | (1L << (Identifier - 106)))) != 0)) {
 					{
-					State = 916;
+					State = 912;
 					formalParameterList();
 					}
 				}
 
-				State = 919;
+				State = 915;
 				Match(CloseParen);
 				}
 				break;
@@ -7839,16 +6594,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_arrowFunctionBody; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterArrowFunctionBody(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitArrowFunctionBody(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitArrowFunctionBody(this);
@@ -7861,20 +6606,20 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		ArrowFunctionBodyContext _localctx = new ArrowFunctionBodyContext(Context, State);
 		EnterRule(_localctx, 124, RULE_arrowFunctionBody);
 		try {
-			State = 924;
+			State = 920;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,113,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,104,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 922;
+				State = 918;
 				singleExpression(0);
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 923;
+				State = 919;
 				functionBody();
 				}
 				break;
@@ -7910,16 +6655,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_assignmentOperator; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterAssignmentOperator(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitAssignmentOperator(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAssignmentOperator(this);
@@ -7935,7 +6670,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 926;
+			State = 922;
 			_la = TokenStream.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << MultiplyAssign) | (1L << DivideAssign) | (1L << ModulusAssign) | (1L << PlusAssign) | (1L << MinusAssign) | (1L << LeftShiftArithmeticAssign) | (1L << RightShiftArithmeticAssign) | (1L << RightShiftLogicalAssign) | (1L << BitAndAssign) | (1L << BitXorAssign) | (1L << BitOrAssign) | (1L << PowerAssign))) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
@@ -7961,7 +6696,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NullLiteral() { return GetToken(JavaScriptParser.NullLiteral, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BooleanLiteral() { return GetToken(JavaScriptParser.BooleanLiteral, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode StringLiteral() { return GetToken(JavaScriptParser.StringLiteral, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TemplateStringLiteral() { return GetToken(JavaScriptParser.TemplateStringLiteral, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public TemplateStringLiteralContext templateStringLiteral() {
+			return GetRuleContext<TemplateStringLiteralContext>(0);
+		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RegularExpressionLiteral() { return GetToken(JavaScriptParser.RegularExpressionLiteral, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public NumericLiteralContext numericLiteral() {
 			return GetRuleContext<NumericLiteralContext>(0);
@@ -7975,16 +6712,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_literal; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterLiteral(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitLiteral(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitLiteral(this);
@@ -7997,41 +6724,41 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		LiteralContext _localctx = new LiteralContext(Context, State);
 		EnterRule(_localctx, 128, RULE_literal);
 		try {
-			State = 935;
+			State = 931;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case NullLiteral:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 928;
+				State = 924;
 				Match(NullLiteral);
 				}
 				break;
 			case BooleanLiteral:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 929;
+				State = 925;
 				Match(BooleanLiteral);
 				}
 				break;
 			case StringLiteral:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 930;
+				State = 926;
 				Match(StringLiteral);
 				}
 				break;
-			case TemplateStringLiteral:
+			case BackTick:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 931;
-				Match(TemplateStringLiteral);
+				State = 927;
+				templateStringLiteral();
 				}
 				break;
 			case RegularExpressionLiteral:
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 932;
+				State = 928;
 				Match(RegularExpressionLiteral);
 				}
 				break;
@@ -8042,7 +6769,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case BinaryIntegerLiteral:
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 933;
+				State = 929;
 				numericLiteral();
 				}
 				break;
@@ -8052,8 +6779,132 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case BigDecimalIntegerLiteral:
 				EnterOuterAlt(_localctx, 7);
 				{
-				State = 934;
+				State = 930;
 				bigintLiteral();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class TemplateStringLiteralContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] BackTick() { return GetTokens(JavaScriptParser.BackTick); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BackTick(int i) {
+			return GetToken(JavaScriptParser.BackTick, i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public TemplateStringAtomContext[] templateStringAtom() {
+			return GetRuleContexts<TemplateStringAtomContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public TemplateStringAtomContext templateStringAtom(int i) {
+			return GetRuleContext<TemplateStringAtomContext>(i);
+		}
+		public TemplateStringLiteralContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_templateStringLiteral; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitTemplateStringLiteral(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public TemplateStringLiteralContext templateStringLiteral() {
+		TemplateStringLiteralContext _localctx = new TemplateStringLiteralContext(Context, State);
+		EnterRule(_localctx, 130, RULE_templateStringLiteral);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 933;
+			Match(BackTick);
+			State = 937;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while (_la==TemplateStringStartExpression || _la==TemplateStringAtom) {
+				{
+				{
+				State = 934;
+				templateStringAtom();
+				}
+				}
+				State = 939;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			State = 940;
+			Match(BackTick);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class TemplateStringAtomContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TemplateStringAtom() { return GetToken(JavaScriptParser.TemplateStringAtom, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TemplateStringStartExpression() { return GetToken(JavaScriptParser.TemplateStringStartExpression, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public SingleExpressionContext singleExpression() {
+			return GetRuleContext<SingleExpressionContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TemplateCloseBrace() { return GetToken(JavaScriptParser.TemplateCloseBrace, 0); }
+		public TemplateStringAtomContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_templateStringAtom; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitTemplateStringAtom(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public TemplateStringAtomContext templateStringAtom() {
+		TemplateStringAtomContext _localctx = new TemplateStringAtomContext(Context, State);
+		EnterRule(_localctx, 132, RULE_templateStringAtom);
+		try {
+			State = 947;
+			ErrorHandler.Sync(this);
+			switch (TokenStream.LA(1)) {
+			case TemplateStringAtom:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 942;
+				Match(TemplateStringAtom);
+				}
+				break;
+			case TemplateStringStartExpression:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 943;
+				Match(TemplateStringStartExpression);
+				State = 944;
+				singleExpression(0);
+				State = 945;
+				Match(TemplateCloseBrace);
 				}
 				break;
 			default:
@@ -8083,16 +6934,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_numericLiteral; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterNumericLiteral(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitNumericLiteral(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitNumericLiteral(this);
@@ -8103,14 +6944,14 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 	[RuleVersion(0)]
 	public NumericLiteralContext numericLiteral() {
 		NumericLiteralContext _localctx = new NumericLiteralContext(Context, State);
-		EnterRule(_localctx, 130, RULE_numericLiteral);
+		EnterRule(_localctx, 134, RULE_numericLiteral);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 937;
+			State = 949;
 			_la = TokenStream.LA(1);
-			if ( !(((((_la - 61)) & ~0x3f) == 0 && ((1L << (_la - 61)) & ((1L << (DecimalLiteral - 61)) | (1L << (HexIntegerLiteral - 61)) | (1L << (OctalIntegerLiteral - 61)) | (1L << (OctalIntegerLiteral2 - 61)) | (1L << (BinaryIntegerLiteral - 61)))) != 0)) ) {
+			if ( !(((((_la - 62)) & ~0x3f) == 0 && ((1L << (_la - 62)) & ((1L << (DecimalLiteral - 62)) | (1L << (HexIntegerLiteral - 62)) | (1L << (OctalIntegerLiteral - 62)) | (1L << (OctalIntegerLiteral2 - 62)) | (1L << (BinaryIntegerLiteral - 62)))) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
 			}
 			else {
@@ -8141,16 +6982,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_bigintLiteral; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterBigintLiteral(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitBigintLiteral(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitBigintLiteral(this);
@@ -8161,14 +6992,14 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 	[RuleVersion(0)]
 	public BigintLiteralContext bigintLiteral() {
 		BigintLiteralContext _localctx = new BigintLiteralContext(Context, State);
-		EnterRule(_localctx, 132, RULE_bigintLiteral);
+		EnterRule(_localctx, 136, RULE_bigintLiteral);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 939;
+			State = 951;
 			_la = TokenStream.LA(1);
-			if ( !(((((_la - 66)) & ~0x3f) == 0 && ((1L << (_la - 66)) & ((1L << (BigHexIntegerLiteral - 66)) | (1L << (BigOctalIntegerLiteral - 66)) | (1L << (BigBinaryIntegerLiteral - 66)) | (1L << (BigDecimalIntegerLiteral - 66)))) != 0)) ) {
+			if ( !(((((_la - 67)) & ~0x3f) == 0 && ((1L << (_la - 67)) & ((1L << (BigHexIntegerLiteral - 67)) | (1L << (BigOctalIntegerLiteral - 67)) | (1L << (BigBinaryIntegerLiteral - 67)) | (1L << (BigDecimalIntegerLiteral - 67)))) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
 			}
 			else {
@@ -8201,16 +7032,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_getter; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterGetter(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitGetter(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitGetter(this);
@@ -8221,15 +7042,15 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 	[RuleVersion(0)]
 	public GetterContext getter() {
 		GetterContext _localctx = new GetterContext(Context, State);
-		EnterRule(_localctx, 134, RULE_getter);
+		EnterRule(_localctx, 138, RULE_getter);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 941;
+			State = 953;
 			if (!(this.n("get"))) throw new FailedPredicateException(this, "this.n(\"get\")");
-			State = 942;
+			State = 954;
 			identifier();
-			State = 943;
+			State = 955;
 			propertyName();
 			}
 		}
@@ -8257,16 +7078,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_setter; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterSetter(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitSetter(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitSetter(this);
@@ -8277,15 +7088,15 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 	[RuleVersion(0)]
 	public SetterContext setter() {
 		SetterContext _localctx = new SetterContext(Context, State);
-		EnterRule(_localctx, 136, RULE_setter);
+		EnterRule(_localctx, 140, RULE_setter);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 945;
+			State = 957;
 			if (!(this.n("set"))) throw new FailedPredicateException(this, "this.n(\"set\")");
-			State = 946;
+			State = 958;
 			identifier();
-			State = 947;
+			State = 959;
 			propertyName();
 			}
 		}
@@ -8313,16 +7124,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_identifierName; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterIdentifierName(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitIdentifierName(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitIdentifierName(this);
@@ -8333,22 +7134,22 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 	[RuleVersion(0)]
 	public IdentifierNameContext identifierName() {
 		IdentifierNameContext _localctx = new IdentifierNameContext(Context, State);
-		EnterRule(_localctx, 138, RULE_identifierName);
+		EnterRule(_localctx, 142, RULE_identifierName);
 		try {
-			State = 951;
+			State = 963;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,115,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,108,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 949;
+				State = 961;
 				identifier();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 950;
+				State = 962;
 				reservedWord();
 				}
 				break;
@@ -8375,16 +7176,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_identifier; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterIdentifier(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitIdentifier(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitIdentifier(this);
@@ -8395,14 +7186,14 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 	[RuleVersion(0)]
 	public IdentifierContext identifier() {
 		IdentifierContext _localctx = new IdentifierContext(Context, State);
-		EnterRule(_localctx, 140, RULE_identifier);
+		EnterRule(_localctx, 144, RULE_identifier);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 953;
+			State = 965;
 			_la = TokenStream.LA(1);
-			if ( !(((((_la - 105)) & ~0x3f) == 0 && ((1L << (_la - 105)) & ((1L << (Async - 105)) | (1L << (NonStrictLet - 105)) | (1L << (Identifier - 105)))) != 0)) ) {
+			if ( !(((((_la - 106)) & ~0x3f) == 0 && ((1L << (_la - 106)) & ((1L << (Async - 106)) | (1L << (NonStrictLet - 106)) | (1L << (Identifier - 106)))) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
 			}
 			else {
@@ -8434,16 +7225,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_reservedWord; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterReservedWord(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitReservedWord(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitReservedWord(this);
@@ -8454,9 +7235,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 	[RuleVersion(0)]
 	public ReservedWordContext reservedWord() {
 		ReservedWordContext _localctx = new ReservedWordContext(Context, State);
-		EnterRule(_localctx, 142, RULE_reservedWord);
+		EnterRule(_localctx, 146, RULE_reservedWord);
 		try {
-			State = 958;
+			State = 970;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Break:
@@ -8496,6 +7277,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case Import:
 			case Async:
 			case Await:
+			case Yield:
 			case Implements:
 			case StrictLet:
 			case NonStrictLet:
@@ -8505,24 +7287,23 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case Package:
 			case Protected:
 			case Static:
-			case Yield:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 955;
+				State = 967;
 				keyword();
 				}
 				break;
 			case NullLiteral:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 956;
+				State = 968;
 				Match(NullLiteral);
 				}
 				break;
 			case BooleanLiteral:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 957;
+				State = 969;
 				Match(BooleanLiteral);
 				}
 				break;
@@ -8596,16 +7377,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_keyword; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterKeyword(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitKeyword(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitKeyword(this);
@@ -8616,246 +7387,246 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 	[RuleVersion(0)]
 	public KeywordContext keyword() {
 		KeywordContext _localctx = new KeywordContext(Context, State);
-		EnterRule(_localctx, 144, RULE_keyword);
+		EnterRule(_localctx, 148, RULE_keyword);
 		try {
-			State = 1006;
+			State = 1018;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Break:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 960;
+				State = 972;
 				Match(Break);
 				}
 				break;
 			case Do:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 961;
+				State = 973;
 				Match(Do);
 				}
 				break;
 			case Instanceof:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 962;
+				State = 974;
 				Match(Instanceof);
 				}
 				break;
 			case Typeof:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 963;
+				State = 975;
 				Match(Typeof);
 				}
 				break;
 			case Case:
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 964;
+				State = 976;
 				Match(Case);
 				}
 				break;
 			case Else:
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 965;
+				State = 977;
 				Match(Else);
 				}
 				break;
 			case New:
 				EnterOuterAlt(_localctx, 7);
 				{
-				State = 966;
+				State = 978;
 				Match(New);
 				}
 				break;
 			case Var:
 				EnterOuterAlt(_localctx, 8);
 				{
-				State = 967;
+				State = 979;
 				Match(Var);
 				}
 				break;
 			case Catch:
 				EnterOuterAlt(_localctx, 9);
 				{
-				State = 968;
+				State = 980;
 				Match(Catch);
 				}
 				break;
 			case Finally:
 				EnterOuterAlt(_localctx, 10);
 				{
-				State = 969;
+				State = 981;
 				Match(Finally);
 				}
 				break;
 			case Return:
 				EnterOuterAlt(_localctx, 11);
 				{
-				State = 970;
+				State = 982;
 				Match(Return);
 				}
 				break;
 			case Void:
 				EnterOuterAlt(_localctx, 12);
 				{
-				State = 971;
+				State = 983;
 				Match(Void);
 				}
 				break;
 			case Continue:
 				EnterOuterAlt(_localctx, 13);
 				{
-				State = 972;
+				State = 984;
 				Match(Continue);
 				}
 				break;
 			case For:
 				EnterOuterAlt(_localctx, 14);
 				{
-				State = 973;
+				State = 985;
 				Match(For);
 				}
 				break;
 			case Switch:
 				EnterOuterAlt(_localctx, 15);
 				{
-				State = 974;
+				State = 986;
 				Match(Switch);
 				}
 				break;
 			case While:
 				EnterOuterAlt(_localctx, 16);
 				{
-				State = 975;
+				State = 987;
 				Match(While);
 				}
 				break;
 			case Debugger:
 				EnterOuterAlt(_localctx, 17);
 				{
-				State = 976;
+				State = 988;
 				Match(Debugger);
 				}
 				break;
 			case Function_:
 				EnterOuterAlt(_localctx, 18);
 				{
-				State = 977;
+				State = 989;
 				Match(Function_);
 				}
 				break;
 			case This:
 				EnterOuterAlt(_localctx, 19);
 				{
-				State = 978;
+				State = 990;
 				Match(This);
 				}
 				break;
 			case With:
 				EnterOuterAlt(_localctx, 20);
 				{
-				State = 979;
+				State = 991;
 				Match(With);
 				}
 				break;
 			case Default:
 				EnterOuterAlt(_localctx, 21);
 				{
-				State = 980;
+				State = 992;
 				Match(Default);
 				}
 				break;
 			case If:
 				EnterOuterAlt(_localctx, 22);
 				{
-				State = 981;
+				State = 993;
 				Match(If);
 				}
 				break;
 			case Throw:
 				EnterOuterAlt(_localctx, 23);
 				{
-				State = 982;
+				State = 994;
 				Match(Throw);
 				}
 				break;
 			case Delete:
 				EnterOuterAlt(_localctx, 24);
 				{
-				State = 983;
+				State = 995;
 				Match(Delete);
 				}
 				break;
 			case In:
 				EnterOuterAlt(_localctx, 25);
 				{
-				State = 984;
+				State = 996;
 				Match(In);
 				}
 				break;
 			case Try:
 				EnterOuterAlt(_localctx, 26);
 				{
-				State = 985;
+				State = 997;
 				Match(Try);
 				}
 				break;
 			case Class:
 				EnterOuterAlt(_localctx, 27);
 				{
-				State = 986;
+				State = 998;
 				Match(Class);
 				}
 				break;
 			case Enum:
 				EnterOuterAlt(_localctx, 28);
 				{
-				State = 987;
+				State = 999;
 				Match(Enum);
 				}
 				break;
 			case Extends:
 				EnterOuterAlt(_localctx, 29);
 				{
-				State = 988;
+				State = 1000;
 				Match(Extends);
 				}
 				break;
 			case Super:
 				EnterOuterAlt(_localctx, 30);
 				{
-				State = 989;
+				State = 1001;
 				Match(Super);
 				}
 				break;
 			case Const:
 				EnterOuterAlt(_localctx, 31);
 				{
-				State = 990;
+				State = 1002;
 				Match(Const);
 				}
 				break;
 			case Export:
 				EnterOuterAlt(_localctx, 32);
 				{
-				State = 991;
+				State = 1003;
 				Match(Export);
 				}
 				break;
 			case Import:
 				EnterOuterAlt(_localctx, 33);
 				{
-				State = 992;
+				State = 1004;
 				Match(Import);
 				}
 				break;
 			case Implements:
 				EnterOuterAlt(_localctx, 34);
 				{
-				State = 993;
+				State = 1005;
 				Match(Implements);
 				}
 				break;
@@ -8863,84 +7634,84 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 			case NonStrictLet:
 				EnterOuterAlt(_localctx, 35);
 				{
-				State = 994;
+				State = 1006;
 				let_();
 				}
 				break;
 			case Private:
 				EnterOuterAlt(_localctx, 36);
 				{
-				State = 995;
+				State = 1007;
 				Match(Private);
 				}
 				break;
 			case Public:
 				EnterOuterAlt(_localctx, 37);
 				{
-				State = 996;
+				State = 1008;
 				Match(Public);
 				}
 				break;
 			case Interface:
 				EnterOuterAlt(_localctx, 38);
 				{
-				State = 997;
+				State = 1009;
 				Match(Interface);
 				}
 				break;
 			case Package:
 				EnterOuterAlt(_localctx, 39);
 				{
-				State = 998;
+				State = 1010;
 				Match(Package);
 				}
 				break;
 			case Protected:
 				EnterOuterAlt(_localctx, 40);
 				{
-				State = 999;
+				State = 1011;
 				Match(Protected);
 				}
 				break;
 			case Static:
 				EnterOuterAlt(_localctx, 41);
 				{
-				State = 1000;
+				State = 1012;
 				Match(Static);
 				}
 				break;
 			case Yield:
 				EnterOuterAlt(_localctx, 42);
 				{
-				State = 1001;
+				State = 1013;
 				Match(Yield);
 				}
 				break;
 			case Async:
 				EnterOuterAlt(_localctx, 43);
 				{
-				State = 1002;
+				State = 1014;
 				Match(Async);
 				}
 				break;
 			case Await:
 				EnterOuterAlt(_localctx, 44);
 				{
-				State = 1003;
+				State = 1015;
 				Match(Await);
 				}
 				break;
 			case From:
 				EnterOuterAlt(_localctx, 45);
 				{
-				State = 1004;
+				State = 1016;
 				Match(From);
 				}
 				break;
 			case As:
 				EnterOuterAlt(_localctx, 46);
 				{
-				State = 1005;
+				State = 1017;
 				Match(As);
 				}
 				break;
@@ -8968,16 +7739,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_let_; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterLet_(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitLet_(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitLet_(this);
@@ -8988,12 +7749,12 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 	[RuleVersion(0)]
 	public Let_Context let_() {
 		Let_Context _localctx = new Let_Context(Context, State);
-		EnterRule(_localctx, 146, RULE_let_);
+		EnterRule(_localctx, 150, RULE_let_);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 1008;
+			State = 1020;
 			_la = TokenStream.LA(1);
 			if ( !(_la==StrictLet || _la==NonStrictLet) ) {
 			ErrorHandler.RecoverInline(this);
@@ -9024,16 +7785,6 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		}
 		public override int RuleIndex { get { return RULE_eos; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.EnterEos(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IJavaScriptParserListener typedListener = listener as IJavaScriptParserListener;
-			if (typedListener != null) typedListener.ExitEos(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IJavaScriptParserVisitor<TResult> typedVisitor = visitor as IJavaScriptParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitEos(this);
@@ -9044,36 +7795,36 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 	[RuleVersion(0)]
 	public EosContext eos() {
 		EosContext _localctx = new EosContext(Context, State);
-		EnterRule(_localctx, 148, RULE_eos);
+		EnterRule(_localctx, 152, RULE_eos);
 		try {
-			State = 1014;
+			State = 1026;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,118,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,111,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 1010;
+				State = 1022;
 				Match(SemiColon);
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 1011;
+				State = 1023;
 				Match(Eof);
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 1012;
+				State = 1024;
 				if (!(this.lineTerminatorAhead())) throw new FailedPredicateException(this, "this.lineTerminatorAhead()");
 				}
 				break;
 			case 4:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 1013;
+				State = 1025;
 				if (!(this.closeBrace())) throw new FailedPredicateException(this, "this.closeBrace()");
 				}
 				break;
@@ -9101,9 +7852,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		case 34: return throwStatement_sempred((ThrowStatementContext)_localctx, predIndex);
 		case 42: return classElement_sempred((ClassElementContext)_localctx, predIndex);
 		case 57: return singleExpression_sempred((SingleExpressionContext)_localctx, predIndex);
-		case 67: return getter_sempred((GetterContext)_localctx, predIndex);
-		case 68: return setter_sempred((SetterContext)_localctx, predIndex);
-		case 74: return eos_sempred((EosContext)_localctx, predIndex);
+		case 69: return getter_sempred((GetterContext)_localctx, predIndex);
+		case 70: return setter_sempred((SetterContext)_localctx, predIndex);
+		case 76: return eos_sempred((EosContext)_localctx, predIndex);
 		}
 		return true;
 	}
@@ -9174,9 +7925,9 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		case 22: return Precpred(Context, 13);
 		case 23: return Precpred(Context, 12);
 		case 24: return Precpred(Context, 11);
-		case 25: return Precpred(Context, 44);
-		case 26: return Precpred(Context, 43);
-		case 27: return Precpred(Context, 42);
+		case 25: return Precpred(Context, 45);
+		case 26: return Precpred(Context, 44);
+		case 27: return Precpred(Context, 41);
 		case 28: return Precpred(Context, 39);
 		case 29: return this.notLineTerminator();
 		case 30: return Precpred(Context, 38);
@@ -9206,7 +7957,7 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 	}
 
 	private static int[] _serializedATN = {
-		4,1,124,1017,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
+		4,1,127,1029,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
 		7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,
 		2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,7,20,2,21,7,21,
 		2,22,7,22,2,23,7,23,2,24,7,24,2,25,7,25,2,26,7,26,2,27,7,27,2,28,7,28,
@@ -9216,368 +7967,369 @@ public partial class JavaScriptParser : JavaScriptParserBase {
 		2,50,7,50,2,51,7,51,2,52,7,52,2,53,7,53,2,54,7,54,2,55,7,55,2,56,7,56,
 		2,57,7,57,2,58,7,58,2,59,7,59,2,60,7,60,2,61,7,61,2,62,7,62,2,63,7,63,
 		2,64,7,64,2,65,7,65,2,66,7,66,2,67,7,67,2,68,7,68,2,69,7,69,2,70,7,70,
-		2,71,7,71,2,72,7,72,2,73,7,73,2,74,7,74,1,0,3,0,152,8,0,1,0,3,0,155,8,
-		0,1,0,1,0,1,1,1,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,
-		1,2,1,2,1,2,1,2,1,2,1,2,1,2,3,2,181,8,2,1,3,1,3,3,3,185,8,3,1,3,1,3,1,
-		4,4,4,190,8,4,11,4,12,4,191,1,5,1,5,1,5,1,6,3,6,198,8,6,1,6,1,6,3,6,202,
-		8,6,1,6,1,6,1,6,1,6,1,6,3,6,209,8,6,1,7,1,7,1,7,1,7,5,7,215,8,7,10,7,12,
-		7,218,9,7,1,7,1,7,3,7,222,8,7,3,7,224,8,7,1,7,1,7,1,8,1,8,1,8,1,9,1,9,
-		3,9,233,8,9,1,9,1,9,3,9,237,8,9,1,10,1,10,1,10,1,11,1,11,1,11,3,11,245,
-		8,11,1,12,1,12,1,12,3,12,250,8,12,1,12,1,12,1,12,1,12,1,12,1,12,1,12,3,
-		12,259,8,12,1,13,1,13,1,13,1,13,1,13,1,13,3,13,267,8,13,1,13,1,13,3,13,
-		271,8,13,1,14,1,14,1,14,3,14,276,8,14,1,15,1,15,1,15,1,16,1,16,1,16,1,
-		16,5,16,285,8,16,10,16,12,16,288,9,16,1,17,1,17,1,17,3,17,293,8,17,1,18,
-		1,18,1,19,1,19,1,19,1,19,1,20,1,20,1,20,1,20,1,20,1,20,1,20,3,20,308,8,
-		20,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,
-		21,1,21,1,21,1,21,1,21,3,21,328,8,21,1,21,1,21,3,21,332,8,21,1,21,1,21,
-		3,21,336,8,21,1,21,1,21,1,21,1,21,1,21,1,21,3,21,344,8,21,1,21,1,21,1,
-		21,1,21,1,21,1,21,1,21,3,21,353,8,21,1,21,1,21,1,21,3,21,358,8,21,1,21,
-		1,21,1,21,1,21,1,21,1,21,3,21,366,8,21,1,22,1,22,1,22,3,22,371,8,22,1,
-		23,1,23,1,23,3,23,376,8,23,1,23,1,23,1,24,1,24,1,24,3,24,383,8,24,1,24,
-		1,24,1,25,1,25,1,25,3,25,390,8,25,1,25,1,25,1,26,1,26,1,26,3,26,397,8,
-		26,1,26,1,26,1,27,1,27,1,27,1,27,1,27,1,27,1,28,1,28,1,28,1,28,1,28,1,
-		28,1,29,1,29,3,29,415,8,29,1,29,1,29,3,29,419,8,29,3,29,421,8,29,1,29,
-		1,29,1,30,4,30,426,8,30,11,30,12,30,427,1,31,1,31,1,31,1,31,3,31,434,8,
-		31,1,32,1,32,1,32,3,32,439,8,32,1,33,1,33,1,33,1,33,1,34,1,34,1,34,1,34,
-		1,34,1,35,1,35,1,35,1,35,3,35,454,8,35,1,35,3,35,457,8,35,1,36,1,36,1,
-		36,3,36,462,8,36,1,36,3,36,465,8,36,1,36,1,36,1,37,1,37,1,37,1,38,1,38,
-		1,38,1,39,3,39,476,8,39,1,39,1,39,3,39,480,8,39,1,39,1,39,1,39,3,39,485,
-		8,39,1,39,1,39,3,39,489,8,39,1,40,1,40,1,40,1,40,1,41,1,41,3,41,497,8,
-		41,1,41,1,41,5,41,501,8,41,10,41,12,41,504,9,41,1,41,1,41,1,42,1,42,1,
-		42,1,42,5,42,512,8,42,10,42,12,42,515,9,42,1,42,1,42,1,42,1,42,1,42,1,
-		42,3,42,523,8,42,1,42,1,42,3,42,527,8,42,1,42,1,42,1,42,1,42,3,42,533,
-		8,42,1,43,3,43,536,8,43,1,43,3,43,539,8,43,1,43,1,43,1,43,3,43,544,8,43,
-		1,43,1,43,3,43,548,8,43,1,43,3,43,551,8,43,1,43,3,43,554,8,43,1,43,1,43,
-		1,43,1,43,3,43,560,8,43,1,43,3,43,563,8,43,1,43,3,43,566,8,43,1,43,1,43,
-		1,43,3,43,571,8,43,1,43,1,43,3,43,575,8,43,3,43,577,8,43,1,44,1,44,1,44,
-		5,44,582,8,44,10,44,12,44,585,9,44,1,44,1,44,3,44,589,8,44,1,44,3,44,592,
-		8,44,1,45,1,45,1,45,3,45,597,8,45,1,46,1,46,1,46,1,47,1,47,3,47,604,8,
-		47,1,47,1,47,1,48,4,48,609,8,48,11,48,12,48,610,1,49,1,49,1,49,1,49,1,
-		50,5,50,618,8,50,10,50,12,50,621,9,50,1,50,3,50,624,8,50,1,50,4,50,627,
-		8,50,11,50,12,50,628,1,50,5,50,632,8,50,10,50,12,50,635,9,50,1,50,5,50,
-		638,8,50,10,50,12,50,641,9,50,1,51,3,51,644,8,51,1,51,1,51,1,52,1,52,1,
-		52,1,52,1,52,1,52,1,52,1,52,1,52,1,52,1,52,3,52,659,8,52,1,52,3,52,662,
-		8,52,1,52,1,52,1,52,3,52,667,8,52,1,52,1,52,3,52,671,8,52,1,52,1,52,1,
-		52,1,52,3,52,677,8,52,1,52,1,52,1,52,1,52,1,52,3,52,684,8,52,1,52,3,52,
-		687,8,52,1,52,3,52,690,8,52,1,53,1,53,1,53,1,53,1,53,1,53,1,53,3,53,699,
-		8,53,1,54,1,54,1,54,1,54,5,54,705,8,54,10,54,12,54,708,9,54,1,54,3,54,
-		711,8,54,3,54,713,8,54,1,54,1,54,1,55,3,55,718,8,55,1,55,1,55,3,55,722,
-		8,55,1,56,1,56,1,56,5,56,727,8,56,10,56,12,56,730,9,56,1,57,1,57,1,57,
-		1,57,3,57,736,8,57,1,57,1,57,1,57,1,57,3,57,742,8,57,1,57,1,57,1,57,1,
+		2,71,7,71,2,72,7,72,2,73,7,73,2,74,7,74,2,75,7,75,2,76,7,76,1,0,3,0,156,
+		8,0,1,0,3,0,159,8,0,1,0,1,0,1,1,1,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,
+		2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,3,2,185,8,2,1,3,1,3,3,3,
+		189,8,3,1,3,1,3,1,4,4,4,194,8,4,11,4,12,4,195,1,5,1,5,1,5,1,6,3,6,202,
+		8,6,1,6,1,6,3,6,206,8,6,1,6,1,6,1,6,1,6,1,6,3,6,213,8,6,1,7,1,7,1,7,1,
+		7,5,7,219,8,7,10,7,12,7,222,9,7,1,7,1,7,3,7,226,8,7,3,7,228,8,7,1,7,1,
+		7,1,8,1,8,1,8,1,9,1,9,3,9,237,8,9,1,9,1,9,3,9,241,8,9,1,10,1,10,1,10,1,
+		11,1,11,1,11,3,11,249,8,11,1,12,1,12,1,12,3,12,254,8,12,1,12,1,12,1,12,
+		1,12,1,12,1,12,1,12,3,12,263,8,12,1,13,1,13,1,13,1,13,1,13,1,13,3,13,271,
+		8,13,1,13,1,13,3,13,275,8,13,1,14,1,14,1,14,3,14,280,8,14,1,15,1,15,1,
+		15,1,16,1,16,1,16,1,16,5,16,289,8,16,10,16,12,16,292,9,16,1,17,1,17,1,
+		17,3,17,297,8,17,1,18,1,18,1,19,1,19,1,19,1,19,1,20,1,20,1,20,1,20,1,20,
+		1,20,1,20,3,20,312,8,20,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,
+		21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,3,21,332,8,21,1,21,1,21,3,21,
+		336,8,21,1,21,1,21,3,21,340,8,21,1,21,1,21,1,21,1,21,1,21,1,21,3,21,348,
+		8,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,3,21,357,8,21,1,21,1,21,1,21,3,
+		21,362,8,21,1,21,1,21,1,21,1,21,1,21,1,21,3,21,370,8,21,1,22,1,22,1,22,
+		3,22,375,8,22,1,23,1,23,1,23,3,23,380,8,23,1,23,1,23,1,24,1,24,1,24,3,
+		24,387,8,24,1,24,1,24,1,25,1,25,1,25,3,25,394,8,25,1,25,1,25,1,26,1,26,
+		1,26,3,26,401,8,26,1,26,1,26,1,27,1,27,1,27,1,27,1,27,1,27,1,28,1,28,1,
+		28,1,28,1,28,1,28,1,29,1,29,3,29,419,8,29,1,29,1,29,3,29,423,8,29,3,29,
+		425,8,29,1,29,1,29,1,30,4,30,430,8,30,11,30,12,30,431,1,31,1,31,1,31,1,
+		31,3,31,438,8,31,1,32,1,32,1,32,3,32,443,8,32,1,33,1,33,1,33,1,33,1,34,
+		1,34,1,34,1,34,1,34,1,35,1,35,1,35,1,35,3,35,458,8,35,1,35,3,35,461,8,
+		35,1,36,1,36,1,36,3,36,466,8,36,1,36,3,36,469,8,36,1,36,1,36,1,37,1,37,
+		1,37,1,38,1,38,1,38,1,39,3,39,480,8,39,1,39,1,39,3,39,484,8,39,1,39,1,
+		39,1,39,3,39,489,8,39,1,39,1,39,1,39,1,40,1,40,1,40,1,40,1,41,1,41,3,41,
+		500,8,41,1,41,1,41,5,41,504,8,41,10,41,12,41,507,9,41,1,41,1,41,1,42,1,
+		42,1,42,1,42,5,42,515,8,42,10,42,12,42,518,9,42,1,42,1,42,1,42,1,42,1,
+		42,1,42,3,42,526,8,42,1,42,1,42,3,42,530,8,42,1,42,1,42,1,42,1,42,3,42,
+		536,8,42,1,43,3,43,539,8,43,1,43,3,43,542,8,43,1,43,1,43,1,43,3,43,547,
+		8,43,1,43,1,43,1,43,1,43,3,43,553,8,43,1,43,3,43,556,8,43,1,43,1,43,1,
+		43,1,43,1,43,1,43,3,43,564,8,43,1,43,3,43,567,8,43,1,43,1,43,1,43,3,43,
+		572,8,43,1,43,1,43,1,43,3,43,577,8,43,1,44,1,44,1,44,5,44,582,8,44,10,
+		44,12,44,585,9,44,1,44,1,44,3,44,589,8,44,1,44,3,44,592,8,44,1,45,1,45,
+		1,45,3,45,597,8,45,1,46,1,46,1,46,1,47,1,47,3,47,604,8,47,1,47,1,47,1,
+		48,4,48,609,8,48,11,48,12,48,610,1,49,1,49,1,49,1,49,1,50,5,50,618,8,50,
+		10,50,12,50,621,9,50,1,50,3,50,624,8,50,1,50,4,50,627,8,50,11,50,12,50,
+		628,1,50,5,50,632,8,50,10,50,12,50,635,9,50,1,50,5,50,638,8,50,10,50,12,
+		50,641,9,50,1,51,3,51,644,8,51,1,51,1,51,1,52,1,52,1,52,1,52,1,52,1,52,
+		1,52,1,52,1,52,1,52,1,52,3,52,659,8,52,1,52,3,52,662,8,52,1,52,1,52,1,
+		52,3,52,667,8,52,1,52,1,52,1,52,1,52,1,52,1,52,1,52,1,52,1,52,1,52,1,52,
+		1,52,1,52,1,52,1,52,3,52,684,8,52,1,52,3,52,687,8,52,1,53,1,53,1,53,1,
+		53,1,53,1,53,1,53,3,53,696,8,53,1,54,1,54,1,54,1,54,5,54,702,8,54,10,54,
+		12,54,705,9,54,1,54,3,54,708,8,54,3,54,710,8,54,1,54,1,54,1,55,3,55,715,
+		8,55,1,55,1,55,3,55,719,8,55,1,56,1,56,1,56,5,56,724,8,56,10,56,12,56,
+		727,9,56,1,57,1,57,1,57,1,57,3,57,733,8,57,1,57,1,57,1,57,1,57,1,57,1,
 		57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,
 		57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,
-		57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,3,57,783,8,57,1,57,1,57,1,57,1,57,
+		57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,3,57,781,
+		8,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,
 		1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,
 		1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,
 		1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,
-		1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,
-		1,57,1,57,3,57,847,8,57,1,57,1,57,3,57,851,8,57,1,57,1,57,1,57,1,57,1,
-		57,1,57,1,57,1,57,1,57,1,57,1,57,5,57,864,8,57,10,57,12,57,867,9,57,1,
-		58,1,58,1,58,3,58,872,8,58,1,59,1,59,1,59,1,59,5,59,878,8,59,10,59,12,
-		59,881,9,59,3,59,883,8,59,1,59,3,59,886,8,59,1,59,1,59,1,60,1,60,3,60,
-		892,8,60,1,60,1,60,3,60,896,8,60,1,60,1,60,3,60,900,8,60,1,60,1,60,3,60,
-		904,8,60,1,60,3,60,907,8,60,1,60,1,60,1,60,1,60,3,60,913,8,60,1,61,1,61,
-		1,61,3,61,918,8,61,1,61,3,61,921,8,61,1,62,1,62,3,62,925,8,62,1,63,1,63,
-		1,64,1,64,1,64,1,64,1,64,1,64,1,64,3,64,936,8,64,1,65,1,65,1,66,1,66,1,
-		67,1,67,1,67,1,67,1,68,1,68,1,68,1,68,1,69,1,69,3,69,952,8,69,1,70,1,70,
-		1,71,1,71,1,71,3,71,959,8,71,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,
-		72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,
-		72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,
-		72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,1,72,3,72,1007,8,72,1,73,1,
-		73,1,74,1,74,1,74,1,74,3,74,1015,8,74,1,74,0,1,114,75,0,2,4,6,8,10,12,
-		14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,
-		62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92,94,96,98,100,102,104,106,
-		108,110,112,114,116,118,120,122,124,126,128,130,132,134,136,138,140,142,
-		144,146,148,0,10,1,0,24,26,1,0,20,21,1,0,30,32,1,0,33,36,1,0,37,40,1,0,
-		46,57,1,0,61,65,1,0,66,69,3,0,105,105,109,109,117,117,1,0,108,109,1189,
-		0,151,1,0,0,0,2,158,1,0,0,0,4,180,1,0,0,0,6,182,1,0,0,0,8,189,1,0,0,0,
-		10,193,1,0,0,0,12,208,1,0,0,0,14,210,1,0,0,0,16,227,1,0,0,0,18,232,1,0,
-		0,0,20,238,1,0,0,0,22,241,1,0,0,0,24,258,1,0,0,0,26,270,1,0,0,0,28,275,
-		1,0,0,0,30,277,1,0,0,0,32,280,1,0,0,0,34,289,1,0,0,0,36,294,1,0,0,0,38,
-		296,1,0,0,0,40,300,1,0,0,0,42,365,1,0,0,0,44,370,1,0,0,0,46,372,1,0,0,
-		0,48,379,1,0,0,0,50,386,1,0,0,0,52,393,1,0,0,0,54,400,1,0,0,0,56,406,1,
-		0,0,0,58,412,1,0,0,0,60,425,1,0,0,0,62,429,1,0,0,0,64,435,1,0,0,0,66,440,
-		1,0,0,0,68,444,1,0,0,0,70,449,1,0,0,0,72,458,1,0,0,0,74,468,1,0,0,0,76,
-		471,1,0,0,0,78,475,1,0,0,0,80,490,1,0,0,0,82,496,1,0,0,0,84,532,1,0,0,
-		0,86,576,1,0,0,0,88,591,1,0,0,0,90,593,1,0,0,0,92,598,1,0,0,0,94,601,1,
-		0,0,0,96,608,1,0,0,0,98,612,1,0,0,0,100,619,1,0,0,0,102,643,1,0,0,0,104,
-		689,1,0,0,0,106,698,1,0,0,0,108,700,1,0,0,0,110,717,1,0,0,0,112,723,1,
-		0,0,0,114,782,1,0,0,0,116,871,1,0,0,0,118,873,1,0,0,0,120,912,1,0,0,0,
-		122,920,1,0,0,0,124,924,1,0,0,0,126,926,1,0,0,0,128,935,1,0,0,0,130,937,
-		1,0,0,0,132,939,1,0,0,0,134,941,1,0,0,0,136,945,1,0,0,0,138,951,1,0,0,
-		0,140,953,1,0,0,0,142,958,1,0,0,0,144,1006,1,0,0,0,146,1008,1,0,0,0,148,
-		1014,1,0,0,0,150,152,5,1,0,0,151,150,1,0,0,0,151,152,1,0,0,0,152,154,1,
-		0,0,0,153,155,3,96,48,0,154,153,1,0,0,0,154,155,1,0,0,0,155,156,1,0,0,
-		0,156,157,5,0,0,1,157,1,1,0,0,0,158,159,3,4,2,0,159,3,1,0,0,0,160,181,
-		3,6,3,0,161,181,3,30,15,0,162,181,3,10,5,0,163,181,3,24,12,0,164,181,3,
-		36,18,0,165,181,3,80,40,0,166,181,3,38,19,0,167,181,3,40,20,0,168,181,
-		3,42,21,0,169,181,3,46,23,0,170,181,3,48,24,0,171,181,3,50,25,0,172,181,
-		3,52,26,0,173,181,3,54,27,0,174,181,3,66,33,0,175,181,3,56,28,0,176,181,
-		3,68,34,0,177,181,3,70,35,0,178,181,3,76,38,0,179,181,3,78,39,0,180,160,
-		1,0,0,0,180,161,1,0,0,0,180,162,1,0,0,0,180,163,1,0,0,0,180,164,1,0,0,
-		0,180,165,1,0,0,0,180,166,1,0,0,0,180,167,1,0,0,0,180,168,1,0,0,0,180,
-		169,1,0,0,0,180,170,1,0,0,0,180,171,1,0,0,0,180,172,1,0,0,0,180,173,1,
-		0,0,0,180,174,1,0,0,0,180,175,1,0,0,0,180,176,1,0,0,0,180,177,1,0,0,0,
-		180,178,1,0,0,0,180,179,1,0,0,0,181,5,1,0,0,0,182,184,5,9,0,0,183,185,
-		3,8,4,0,184,183,1,0,0,0,184,185,1,0,0,0,185,186,1,0,0,0,186,187,5,10,0,
-		0,187,7,1,0,0,0,188,190,3,4,2,0,189,188,1,0,0,0,190,191,1,0,0,0,191,189,
-		1,0,0,0,191,192,1,0,0,0,192,9,1,0,0,0,193,194,5,104,0,0,194,195,3,12,6,
-		0,195,11,1,0,0,0,196,198,3,16,8,0,197,196,1,0,0,0,197,198,1,0,0,0,198,
-		201,1,0,0,0,199,202,3,18,9,0,200,202,3,14,7,0,201,199,1,0,0,0,201,200,
-		1,0,0,0,202,203,1,0,0,0,203,204,3,20,10,0,204,205,3,148,74,0,205,209,1,
-		0,0,0,206,207,5,118,0,0,207,209,3,148,74,0,208,197,1,0,0,0,208,206,1,0,
-		0,0,209,13,1,0,0,0,210,216,5,9,0,0,211,212,3,22,11,0,212,213,5,12,0,0,
-		213,215,1,0,0,0,214,211,1,0,0,0,215,218,1,0,0,0,216,214,1,0,0,0,216,217,
-		1,0,0,0,217,223,1,0,0,0,218,216,1,0,0,0,219,221,3,22,11,0,220,222,5,12,
-		0,0,221,220,1,0,0,0,221,222,1,0,0,0,222,224,1,0,0,0,223,219,1,0,0,0,223,
-		224,1,0,0,0,224,225,1,0,0,0,225,226,5,10,0,0,226,15,1,0,0,0,227,228,3,
-		22,11,0,228,229,5,12,0,0,229,17,1,0,0,0,230,233,5,24,0,0,231,233,3,138,
-		69,0,232,230,1,0,0,0,232,231,1,0,0,0,233,236,1,0,0,0,234,235,5,96,0,0,
-		235,237,3,138,69,0,236,234,1,0,0,0,236,237,1,0,0,0,237,19,1,0,0,0,238,
-		239,5,97,0,0,239,240,5,118,0,0,240,21,1,0,0,0,241,244,3,138,69,0,242,243,
-		5,96,0,0,243,245,3,138,69,0,244,242,1,0,0,0,244,245,1,0,0,0,245,23,1,0,
-		0,0,246,249,5,103,0,0,247,250,3,26,13,0,248,250,3,28,14,0,249,247,1,0,
-		0,0,249,248,1,0,0,0,250,251,1,0,0,0,251,252,3,148,74,0,252,259,1,0,0,0,
-		253,254,5,103,0,0,254,255,5,90,0,0,255,256,3,114,57,0,256,257,3,148,74,
-		0,257,259,1,0,0,0,258,246,1,0,0,0,258,253,1,0,0,0,259,25,1,0,0,0,260,261,
-		3,18,9,0,261,262,3,20,10,0,262,263,3,148,74,0,263,271,1,0,0,0,264,266,
-		3,14,7,0,265,267,3,20,10,0,266,265,1,0,0,0,266,267,1,0,0,0,267,268,1,0,
-		0,0,268,269,3,148,74,0,269,271,1,0,0,0,270,260,1,0,0,0,270,264,1,0,0,0,
-		271,27,1,0,0,0,272,276,3,30,15,0,273,276,3,80,40,0,274,276,3,78,39,0,275,
-		272,1,0,0,0,275,273,1,0,0,0,275,274,1,0,0,0,276,29,1,0,0,0,277,278,3,32,
-		16,0,278,279,3,148,74,0,279,31,1,0,0,0,280,281,3,44,22,0,281,286,3,34,
-		17,0,282,283,5,12,0,0,283,285,3,34,17,0,284,282,1,0,0,0,285,288,1,0,0,
-		0,286,284,1,0,0,0,286,287,1,0,0,0,287,33,1,0,0,0,288,286,1,0,0,0,289,292,
-		3,116,58,0,290,291,5,13,0,0,291,293,3,114,57,0,292,290,1,0,0,0,292,293,
-		1,0,0,0,293,35,1,0,0,0,294,295,5,11,0,0,295,37,1,0,0,0,296,297,4,19,0,
-		0,297,298,3,112,56,0,298,299,3,148,74,0,299,39,1,0,0,0,300,301,5,91,0,
-		0,301,302,5,7,0,0,302,303,3,112,56,0,303,304,5,8,0,0,304,307,3,4,2,0,305,
-		306,5,75,0,0,306,308,3,4,2,0,307,305,1,0,0,0,307,308,1,0,0,0,308,41,1,
-		0,0,0,309,310,5,71,0,0,310,311,3,4,2,0,311,312,5,85,0,0,312,313,5,7,0,
-		0,313,314,3,112,56,0,314,315,5,8,0,0,315,316,3,148,74,0,316,366,1,0,0,
-		0,317,318,5,85,0,0,318,319,5,7,0,0,319,320,3,112,56,0,320,321,5,8,0,0,
-		321,322,3,4,2,0,322,366,1,0,0,0,323,324,5,83,0,0,324,327,5,7,0,0,325,328,
-		3,112,56,0,326,328,3,32,16,0,327,325,1,0,0,0,327,326,1,0,0,0,327,328,1,
-		0,0,0,328,329,1,0,0,0,329,331,5,11,0,0,330,332,3,112,56,0,331,330,1,0,
-		0,0,331,332,1,0,0,0,332,333,1,0,0,0,333,335,5,11,0,0,334,336,3,112,56,
-		0,335,334,1,0,0,0,335,336,1,0,0,0,336,337,1,0,0,0,337,338,5,8,0,0,338,
-		366,3,4,2,0,339,340,5,83,0,0,340,343,5,7,0,0,341,344,3,114,57,0,342,344,
-		3,32,16,0,343,341,1,0,0,0,343,342,1,0,0,0,344,345,1,0,0,0,345,346,5,94,
-		0,0,346,347,3,112,56,0,347,348,5,8,0,0,348,349,3,4,2,0,349,366,1,0,0,0,
-		350,352,5,83,0,0,351,353,5,106,0,0,352,351,1,0,0,0,352,353,1,0,0,0,353,
-		354,1,0,0,0,354,357,5,7,0,0,355,358,3,114,57,0,356,358,3,32,16,0,357,355,
-		1,0,0,0,357,356,1,0,0,0,358,359,1,0,0,0,359,360,3,140,70,0,360,361,4,21,
-		1,0,361,362,3,112,56,0,362,363,5,8,0,0,363,364,3,4,2,0,364,366,1,0,0,0,
-		365,309,1,0,0,0,365,317,1,0,0,0,365,323,1,0,0,0,365,339,1,0,0,0,365,350,
-		1,0,0,0,366,43,1,0,0,0,367,371,5,77,0,0,368,371,3,146,73,0,369,371,5,102,
-		0,0,370,367,1,0,0,0,370,368,1,0,0,0,370,369,1,0,0,0,371,45,1,0,0,0,372,
-		375,5,82,0,0,373,374,4,23,2,0,374,376,3,140,70,0,375,373,1,0,0,0,375,376,
-		1,0,0,0,376,377,1,0,0,0,377,378,3,148,74,0,378,47,1,0,0,0,379,382,5,70,
-		0,0,380,381,4,24,3,0,381,383,3,140,70,0,382,380,1,0,0,0,382,383,1,0,0,
-		0,383,384,1,0,0,0,384,385,3,148,74,0,385,49,1,0,0,0,386,389,5,80,0,0,387,
-		388,4,25,4,0,388,390,3,112,56,0,389,387,1,0,0,0,389,390,1,0,0,0,390,391,
-		1,0,0,0,391,392,3,148,74,0,392,51,1,0,0,0,393,396,5,116,0,0,394,395,4,
-		26,5,0,395,397,3,112,56,0,396,394,1,0,0,0,396,397,1,0,0,0,397,398,1,0,
-		0,0,398,399,3,148,74,0,399,53,1,0,0,0,400,401,5,89,0,0,401,402,5,7,0,0,
-		402,403,3,112,56,0,403,404,5,8,0,0,404,405,3,4,2,0,405,55,1,0,0,0,406,
-		407,5,84,0,0,407,408,5,7,0,0,408,409,3,112,56,0,409,410,5,8,0,0,410,411,
-		3,58,29,0,411,57,1,0,0,0,412,414,5,9,0,0,413,415,3,60,30,0,414,413,1,0,
-		0,0,414,415,1,0,0,0,415,420,1,0,0,0,416,418,3,64,32,0,417,419,3,60,30,
-		0,418,417,1,0,0,0,418,419,1,0,0,0,419,421,1,0,0,0,420,416,1,0,0,0,420,
-		421,1,0,0,0,421,422,1,0,0,0,422,423,5,10,0,0,423,59,1,0,0,0,424,426,3,
-		62,31,0,425,424,1,0,0,0,426,427,1,0,0,0,427,425,1,0,0,0,427,428,1,0,0,
-		0,428,61,1,0,0,0,429,430,5,74,0,0,430,431,3,112,56,0,431,433,5,15,0,0,
-		432,434,3,8,4,0,433,432,1,0,0,0,433,434,1,0,0,0,434,63,1,0,0,0,435,436,
-		5,90,0,0,436,438,5,15,0,0,437,439,3,8,4,0,438,437,1,0,0,0,438,439,1,0,
-		0,0,439,65,1,0,0,0,440,441,3,140,70,0,441,442,5,15,0,0,442,443,3,4,2,0,
-		443,67,1,0,0,0,444,445,5,92,0,0,445,446,4,34,6,0,446,447,3,112,56,0,447,
-		448,3,148,74,0,448,69,1,0,0,0,449,450,5,95,0,0,450,456,3,6,3,0,451,453,
-		3,72,36,0,452,454,3,74,37,0,453,452,1,0,0,0,453,454,1,0,0,0,454,457,1,
-		0,0,0,455,457,3,74,37,0,456,451,1,0,0,0,456,455,1,0,0,0,457,71,1,0,0,0,
-		458,464,5,78,0,0,459,461,5,7,0,0,460,462,3,116,58,0,461,460,1,0,0,0,461,
-		462,1,0,0,0,462,463,1,0,0,0,463,465,5,8,0,0,464,459,1,0,0,0,464,465,1,
-		0,0,0,465,466,1,0,0,0,466,467,3,6,3,0,467,73,1,0,0,0,468,469,5,79,0,0,
-		469,470,3,6,3,0,470,75,1,0,0,0,471,472,5,86,0,0,472,473,3,148,74,0,473,
-		77,1,0,0,0,474,476,5,105,0,0,475,474,1,0,0,0,475,476,1,0,0,0,476,477,1,
-		0,0,0,477,479,5,87,0,0,478,480,5,24,0,0,479,478,1,0,0,0,479,480,1,0,0,
-		0,480,481,1,0,0,0,481,482,3,140,70,0,482,484,5,7,0,0,483,485,3,88,44,0,
-		484,483,1,0,0,0,484,485,1,0,0,0,485,486,1,0,0,0,486,488,5,8,0,0,487,489,
-		3,94,47,0,488,487,1,0,0,0,488,489,1,0,0,0,489,79,1,0,0,0,490,491,5,98,
-		0,0,491,492,3,140,70,0,492,493,3,82,41,0,493,81,1,0,0,0,494,495,5,100,
-		0,0,495,497,3,114,57,0,496,494,1,0,0,0,496,497,1,0,0,0,497,498,1,0,0,0,
-		498,502,5,9,0,0,499,501,3,84,42,0,500,499,1,0,0,0,501,504,1,0,0,0,502,
-		500,1,0,0,0,502,503,1,0,0,0,503,505,1,0,0,0,504,502,1,0,0,0,505,506,5,
-		10,0,0,506,83,1,0,0,0,507,512,5,115,0,0,508,509,4,42,7,0,509,512,3,140,
-		70,0,510,512,5,105,0,0,511,507,1,0,0,0,511,508,1,0,0,0,511,510,1,0,0,0,
-		512,515,1,0,0,0,513,511,1,0,0,0,513,514,1,0,0,0,514,522,1,0,0,0,515,513,
-		1,0,0,0,516,523,3,86,43,0,517,518,3,116,58,0,518,519,5,13,0,0,519,520,
-		3,118,59,0,520,521,5,11,0,0,521,523,1,0,0,0,522,516,1,0,0,0,522,517,1,
-		0,0,0,523,533,1,0,0,0,524,533,3,36,18,0,525,527,5,29,0,0,526,525,1,0,0,
-		0,526,527,1,0,0,0,527,528,1,0,0,0,528,529,3,106,53,0,529,530,5,13,0,0,
-		530,531,3,114,57,0,531,533,1,0,0,0,532,513,1,0,0,0,532,524,1,0,0,0,532,
-		526,1,0,0,0,533,85,1,0,0,0,534,536,5,24,0,0,535,534,1,0,0,0,535,536,1,
-		0,0,0,536,538,1,0,0,0,537,539,5,29,0,0,538,537,1,0,0,0,538,539,1,0,0,0,
-		539,540,1,0,0,0,540,541,3,106,53,0,541,543,5,7,0,0,542,544,3,88,44,0,543,
-		542,1,0,0,0,543,544,1,0,0,0,544,545,1,0,0,0,545,547,5,8,0,0,546,548,3,
-		94,47,0,547,546,1,0,0,0,547,548,1,0,0,0,548,577,1,0,0,0,549,551,5,24,0,
-		0,550,549,1,0,0,0,550,551,1,0,0,0,551,553,1,0,0,0,552,554,5,29,0,0,553,
-		552,1,0,0,0,553,554,1,0,0,0,554,555,1,0,0,0,555,556,3,134,67,0,556,557,
-		5,7,0,0,557,559,5,8,0,0,558,560,3,94,47,0,559,558,1,0,0,0,559,560,1,0,
-		0,0,560,577,1,0,0,0,561,563,5,24,0,0,562,561,1,0,0,0,562,563,1,0,0,0,563,
-		565,1,0,0,0,564,566,5,29,0,0,565,564,1,0,0,0,565,566,1,0,0,0,566,567,1,
-		0,0,0,567,568,3,136,68,0,568,570,5,7,0,0,569,571,3,88,44,0,570,569,1,0,
-		0,0,570,571,1,0,0,0,571,572,1,0,0,0,572,574,5,8,0,0,573,575,3,94,47,0,
-		574,573,1,0,0,0,574,575,1,0,0,0,575,577,1,0,0,0,576,535,1,0,0,0,576,550,
-		1,0,0,0,576,562,1,0,0,0,577,87,1,0,0,0,578,583,3,90,45,0,579,580,5,12,
-		0,0,580,582,3,90,45,0,581,579,1,0,0,0,582,585,1,0,0,0,583,581,1,0,0,0,
-		583,584,1,0,0,0,584,588,1,0,0,0,585,583,1,0,0,0,586,587,5,12,0,0,587,589,
-		3,92,46,0,588,586,1,0,0,0,588,589,1,0,0,0,589,592,1,0,0,0,590,592,3,92,
-		46,0,591,578,1,0,0,0,591,590,1,0,0,0,592,89,1,0,0,0,593,596,3,116,58,0,
-		594,595,5,13,0,0,595,597,3,114,57,0,596,594,1,0,0,0,596,597,1,0,0,0,597,
-		91,1,0,0,0,598,599,5,16,0,0,599,600,3,114,57,0,600,93,1,0,0,0,601,603,
-		5,9,0,0,602,604,3,96,48,0,603,602,1,0,0,0,603,604,1,0,0,0,604,605,1,0,
-		0,0,605,606,5,10,0,0,606,95,1,0,0,0,607,609,3,2,1,0,608,607,1,0,0,0,609,
-		610,1,0,0,0,610,608,1,0,0,0,610,611,1,0,0,0,611,97,1,0,0,0,612,613,5,5,
-		0,0,613,614,3,100,50,0,614,615,5,6,0,0,615,99,1,0,0,0,616,618,5,12,0,0,
-		617,616,1,0,0,0,618,621,1,0,0,0,619,617,1,0,0,0,619,620,1,0,0,0,620,623,
-		1,0,0,0,621,619,1,0,0,0,622,624,3,102,51,0,623,622,1,0,0,0,623,624,1,0,
-		0,0,624,633,1,0,0,0,625,627,5,12,0,0,626,625,1,0,0,0,627,628,1,0,0,0,628,
-		626,1,0,0,0,628,629,1,0,0,0,629,630,1,0,0,0,630,632,3,102,51,0,631,626,
-		1,0,0,0,632,635,1,0,0,0,633,631,1,0,0,0,633,634,1,0,0,0,634,639,1,0,0,
-		0,635,633,1,0,0,0,636,638,5,12,0,0,637,636,1,0,0,0,638,641,1,0,0,0,639,
-		637,1,0,0,0,639,640,1,0,0,0,640,101,1,0,0,0,641,639,1,0,0,0,642,644,5,
-		16,0,0,643,642,1,0,0,0,643,644,1,0,0,0,644,645,1,0,0,0,645,646,3,114,57,
-		0,646,103,1,0,0,0,647,648,3,106,53,0,648,649,5,15,0,0,649,650,3,114,57,
-		0,650,690,1,0,0,0,651,652,5,5,0,0,652,653,3,114,57,0,653,654,5,6,0,0,654,
-		655,5,15,0,0,655,656,3,114,57,0,656,690,1,0,0,0,657,659,5,105,0,0,658,
-		657,1,0,0,0,658,659,1,0,0,0,659,661,1,0,0,0,660,662,5,24,0,0,661,660,1,
-		0,0,0,661,662,1,0,0,0,662,663,1,0,0,0,663,664,3,106,53,0,664,666,5,7,0,
-		0,665,667,3,88,44,0,666,665,1,0,0,0,666,667,1,0,0,0,667,668,1,0,0,0,668,
-		670,5,8,0,0,669,671,3,94,47,0,670,669,1,0,0,0,670,671,1,0,0,0,671,690,
-		1,0,0,0,672,673,3,134,67,0,673,674,5,7,0,0,674,676,5,8,0,0,675,677,3,94,
-		47,0,676,675,1,0,0,0,676,677,1,0,0,0,677,690,1,0,0,0,678,679,3,136,68,
-		0,679,680,5,7,0,0,680,681,3,90,45,0,681,683,5,8,0,0,682,684,3,94,47,0,
-		683,682,1,0,0,0,683,684,1,0,0,0,684,690,1,0,0,0,685,687,5,16,0,0,686,685,
-		1,0,0,0,686,687,1,0,0,0,687,688,1,0,0,0,688,690,3,114,57,0,689,647,1,0,
-		0,0,689,651,1,0,0,0,689,658,1,0,0,0,689,672,1,0,0,0,689,678,1,0,0,0,689,
-		686,1,0,0,0,690,105,1,0,0,0,691,699,3,138,69,0,692,699,5,118,0,0,693,699,
-		3,130,65,0,694,695,5,5,0,0,695,696,3,114,57,0,696,697,5,6,0,0,697,699,
-		1,0,0,0,698,691,1,0,0,0,698,692,1,0,0,0,698,693,1,0,0,0,698,694,1,0,0,
-		0,699,107,1,0,0,0,700,712,5,7,0,0,701,706,3,110,55,0,702,703,5,12,0,0,
-		703,705,3,110,55,0,704,702,1,0,0,0,705,708,1,0,0,0,706,704,1,0,0,0,706,
-		707,1,0,0,0,707,710,1,0,0,0,708,706,1,0,0,0,709,711,5,12,0,0,710,709,1,
-		0,0,0,710,711,1,0,0,0,711,713,1,0,0,0,712,701,1,0,0,0,712,713,1,0,0,0,
-		713,714,1,0,0,0,714,715,5,8,0,0,715,109,1,0,0,0,716,718,5,16,0,0,717,716,
-		1,0,0,0,717,718,1,0,0,0,718,721,1,0,0,0,719,722,3,114,57,0,720,722,3,140,
-		70,0,721,719,1,0,0,0,721,720,1,0,0,0,722,111,1,0,0,0,723,728,3,114,57,
-		0,724,725,5,12,0,0,725,727,3,114,57,0,726,724,1,0,0,0,727,730,1,0,0,0,
-		728,726,1,0,0,0,728,729,1,0,0,0,729,113,1,0,0,0,730,728,1,0,0,0,731,732,
-		6,57,-1,0,732,783,3,120,60,0,733,735,5,98,0,0,734,736,3,140,70,0,735,734,
-		1,0,0,0,735,736,1,0,0,0,736,737,1,0,0,0,737,783,3,82,41,0,738,739,5,76,
-		0,0,739,741,3,114,57,0,740,742,3,108,54,0,741,740,1,0,0,0,741,742,1,0,
-		0,0,742,783,1,0,0,0,743,744,5,76,0,0,744,745,5,17,0,0,745,783,3,140,70,
-		0,746,747,5,93,0,0,747,783,3,114,57,37,748,749,5,81,0,0,749,783,3,114,
-		57,36,750,751,5,73,0,0,751,783,3,114,57,35,752,753,5,18,0,0,753,783,3,
-		114,57,34,754,755,5,19,0,0,755,783,3,114,57,33,756,757,5,20,0,0,757,783,
-		3,114,57,32,758,759,5,21,0,0,759,783,3,114,57,31,760,761,5,22,0,0,761,
-		783,3,114,57,30,762,763,5,23,0,0,763,783,3,114,57,29,764,765,5,106,0,0,
-		765,783,3,114,57,28,766,767,5,104,0,0,767,768,5,7,0,0,768,769,3,114,57,
-		0,769,770,5,8,0,0,770,783,1,0,0,0,771,783,3,52,26,0,772,783,5,88,0,0,773,
-		783,3,140,70,0,774,783,5,101,0,0,775,783,3,128,64,0,776,783,3,98,49,0,
-		777,783,3,118,59,0,778,779,5,7,0,0,779,780,3,112,56,0,780,781,5,8,0,0,
-		781,783,1,0,0,0,782,731,1,0,0,0,782,733,1,0,0,0,782,738,1,0,0,0,782,743,
-		1,0,0,0,782,746,1,0,0,0,782,748,1,0,0,0,782,750,1,0,0,0,782,752,1,0,0,
-		0,782,754,1,0,0,0,782,756,1,0,0,0,782,758,1,0,0,0,782,760,1,0,0,0,782,
-		762,1,0,0,0,782,764,1,0,0,0,782,766,1,0,0,0,782,771,1,0,0,0,782,772,1,
-		0,0,0,782,773,1,0,0,0,782,774,1,0,0,0,782,775,1,0,0,0,782,776,1,0,0,0,
-		782,777,1,0,0,0,782,778,1,0,0,0,783,865,1,0,0,0,784,785,10,27,0,0,785,
-		786,5,27,0,0,786,864,3,114,57,27,787,788,10,26,0,0,788,789,7,0,0,0,789,
-		864,3,114,57,27,790,791,10,25,0,0,791,792,7,1,0,0,792,864,3,114,57,26,
-		793,794,10,24,0,0,794,795,5,28,0,0,795,864,3,114,57,25,796,797,10,23,0,
-		0,797,798,7,2,0,0,798,864,3,114,57,24,799,800,10,22,0,0,800,801,7,3,0,
-		0,801,864,3,114,57,23,802,803,10,21,0,0,803,804,5,72,0,0,804,864,3,114,
-		57,22,805,806,10,20,0,0,806,807,5,94,0,0,807,864,3,114,57,21,808,809,10,
-		19,0,0,809,810,7,4,0,0,810,864,3,114,57,20,811,812,10,18,0,0,812,813,5,
-		41,0,0,813,864,3,114,57,19,814,815,10,17,0,0,815,816,5,42,0,0,816,864,
-		3,114,57,18,817,818,10,16,0,0,818,819,5,43,0,0,819,864,3,114,57,17,820,
-		821,10,15,0,0,821,822,5,44,0,0,822,864,3,114,57,16,823,824,10,14,0,0,824,
-		825,5,45,0,0,825,864,3,114,57,15,826,827,10,13,0,0,827,828,5,14,0,0,828,
-		829,3,114,57,0,829,830,5,15,0,0,830,831,3,114,57,14,831,864,1,0,0,0,832,
-		833,10,12,0,0,833,834,5,13,0,0,834,864,3,114,57,12,835,836,10,11,0,0,836,
-		837,3,126,63,0,837,838,3,114,57,11,838,864,1,0,0,0,839,840,10,44,0,0,840,
-		841,5,5,0,0,841,842,3,112,56,0,842,843,5,6,0,0,843,864,1,0,0,0,844,846,
-		10,43,0,0,845,847,5,14,0,0,846,845,1,0,0,0,846,847,1,0,0,0,847,848,1,0,
-		0,0,848,850,5,17,0,0,849,851,5,29,0,0,850,849,1,0,0,0,850,851,1,0,0,0,
-		851,852,1,0,0,0,852,864,3,138,69,0,853,854,10,42,0,0,854,864,3,108,54,
-		0,855,856,10,39,0,0,856,857,4,57,29,0,857,864,5,18,0,0,858,859,10,38,0,
-		0,859,860,4,57,31,0,860,864,5,19,0,0,861,862,10,9,0,0,862,864,5,119,0,
-		0,863,784,1,0,0,0,863,787,1,0,0,0,863,790,1,0,0,0,863,793,1,0,0,0,863,
-		796,1,0,0,0,863,799,1,0,0,0,863,802,1,0,0,0,863,805,1,0,0,0,863,808,1,
-		0,0,0,863,811,1,0,0,0,863,814,1,0,0,0,863,817,1,0,0,0,863,820,1,0,0,0,
-		863,823,1,0,0,0,863,826,1,0,0,0,863,832,1,0,0,0,863,835,1,0,0,0,863,839,
-		1,0,0,0,863,844,1,0,0,0,863,853,1,0,0,0,863,855,1,0,0,0,863,858,1,0,0,
-		0,863,861,1,0,0,0,864,867,1,0,0,0,865,863,1,0,0,0,865,866,1,0,0,0,866,
-		115,1,0,0,0,867,865,1,0,0,0,868,872,3,140,70,0,869,872,3,98,49,0,870,872,
-		3,118,59,0,871,868,1,0,0,0,871,869,1,0,0,0,871,870,1,0,0,0,872,117,1,0,
-		0,0,873,882,5,9,0,0,874,879,3,104,52,0,875,876,5,12,0,0,876,878,3,104,
-		52,0,877,875,1,0,0,0,878,881,1,0,0,0,879,877,1,0,0,0,879,880,1,0,0,0,880,
-		883,1,0,0,0,881,879,1,0,0,0,882,874,1,0,0,0,882,883,1,0,0,0,883,885,1,
-		0,0,0,884,886,5,12,0,0,885,884,1,0,0,0,885,886,1,0,0,0,886,887,1,0,0,0,
-		887,888,5,10,0,0,888,119,1,0,0,0,889,913,3,78,39,0,890,892,5,105,0,0,891,
-		890,1,0,0,0,891,892,1,0,0,0,892,893,1,0,0,0,893,895,5,87,0,0,894,896,5,
-		24,0,0,895,894,1,0,0,0,895,896,1,0,0,0,896,897,1,0,0,0,897,899,5,7,0,0,
-		898,900,3,88,44,0,899,898,1,0,0,0,899,900,1,0,0,0,900,901,1,0,0,0,901,
-		903,5,8,0,0,902,904,3,94,47,0,903,902,1,0,0,0,903,904,1,0,0,0,904,913,
-		1,0,0,0,905,907,5,105,0,0,906,905,1,0,0,0,906,907,1,0,0,0,907,908,1,0,
-		0,0,908,909,3,122,61,0,909,910,5,58,0,0,910,911,3,124,62,0,911,913,1,0,
-		0,0,912,889,1,0,0,0,912,891,1,0,0,0,912,906,1,0,0,0,913,121,1,0,0,0,914,
-		921,3,140,70,0,915,917,5,7,0,0,916,918,3,88,44,0,917,916,1,0,0,0,917,918,
-		1,0,0,0,918,919,1,0,0,0,919,921,5,8,0,0,920,914,1,0,0,0,920,915,1,0,0,
-		0,921,123,1,0,0,0,922,925,3,114,57,0,923,925,3,94,47,0,924,922,1,0,0,0,
-		924,923,1,0,0,0,925,125,1,0,0,0,926,927,7,5,0,0,927,127,1,0,0,0,928,936,
-		5,59,0,0,929,936,5,60,0,0,930,936,5,118,0,0,931,936,5,119,0,0,932,936,
-		5,4,0,0,933,936,3,130,65,0,934,936,3,132,66,0,935,928,1,0,0,0,935,929,
-		1,0,0,0,935,930,1,0,0,0,935,931,1,0,0,0,935,932,1,0,0,0,935,933,1,0,0,
-		0,935,934,1,0,0,0,936,129,1,0,0,0,937,938,7,6,0,0,938,131,1,0,0,0,939,
-		940,7,7,0,0,940,133,1,0,0,0,941,942,4,67,33,0,942,943,3,140,70,0,943,944,
-		3,106,53,0,944,135,1,0,0,0,945,946,4,68,34,0,946,947,3,140,70,0,947,948,
-		3,106,53,0,948,137,1,0,0,0,949,952,3,140,70,0,950,952,3,142,71,0,951,949,
-		1,0,0,0,951,950,1,0,0,0,952,139,1,0,0,0,953,954,7,8,0,0,954,141,1,0,0,
-		0,955,959,3,144,72,0,956,959,5,59,0,0,957,959,5,60,0,0,958,955,1,0,0,0,
-		958,956,1,0,0,0,958,957,1,0,0,0,959,143,1,0,0,0,960,1007,5,70,0,0,961,
-		1007,5,71,0,0,962,1007,5,72,0,0,963,1007,5,73,0,0,964,1007,5,74,0,0,965,
-		1007,5,75,0,0,966,1007,5,76,0,0,967,1007,5,77,0,0,968,1007,5,78,0,0,969,
-		1007,5,79,0,0,970,1007,5,80,0,0,971,1007,5,81,0,0,972,1007,5,82,0,0,973,
-		1007,5,83,0,0,974,1007,5,84,0,0,975,1007,5,85,0,0,976,1007,5,86,0,0,977,
-		1007,5,87,0,0,978,1007,5,88,0,0,979,1007,5,89,0,0,980,1007,5,90,0,0,981,
-		1007,5,91,0,0,982,1007,5,92,0,0,983,1007,5,93,0,0,984,1007,5,94,0,0,985,
-		1007,5,95,0,0,986,1007,5,98,0,0,987,1007,5,99,0,0,988,1007,5,100,0,0,989,
-		1007,5,101,0,0,990,1007,5,102,0,0,991,1007,5,103,0,0,992,1007,5,104,0,
-		0,993,1007,5,107,0,0,994,1007,3,146,73,0,995,1007,5,110,0,0,996,1007,5,
-		111,0,0,997,1007,5,112,0,0,998,1007,5,113,0,0,999,1007,5,114,0,0,1000,
-		1007,5,115,0,0,1001,1007,5,116,0,0,1002,1007,5,105,0,0,1003,1007,5,106,
-		0,0,1004,1007,5,97,0,0,1005,1007,5,96,0,0,1006,960,1,0,0,0,1006,961,1,
-		0,0,0,1006,962,1,0,0,0,1006,963,1,0,0,0,1006,964,1,0,0,0,1006,965,1,0,
-		0,0,1006,966,1,0,0,0,1006,967,1,0,0,0,1006,968,1,0,0,0,1006,969,1,0,0,
-		0,1006,970,1,0,0,0,1006,971,1,0,0,0,1006,972,1,0,0,0,1006,973,1,0,0,0,
-		1006,974,1,0,0,0,1006,975,1,0,0,0,1006,976,1,0,0,0,1006,977,1,0,0,0,1006,
-		978,1,0,0,0,1006,979,1,0,0,0,1006,980,1,0,0,0,1006,981,1,0,0,0,1006,982,
-		1,0,0,0,1006,983,1,0,0,0,1006,984,1,0,0,0,1006,985,1,0,0,0,1006,986,1,
-		0,0,0,1006,987,1,0,0,0,1006,988,1,0,0,0,1006,989,1,0,0,0,1006,990,1,0,
-		0,0,1006,991,1,0,0,0,1006,992,1,0,0,0,1006,993,1,0,0,0,1006,994,1,0,0,
-		0,1006,995,1,0,0,0,1006,996,1,0,0,0,1006,997,1,0,0,0,1006,998,1,0,0,0,
-		1006,999,1,0,0,0,1006,1000,1,0,0,0,1006,1001,1,0,0,0,1006,1002,1,0,0,0,
-		1006,1003,1,0,0,0,1006,1004,1,0,0,0,1006,1005,1,0,0,0,1007,145,1,0,0,0,
-		1008,1009,7,9,0,0,1009,147,1,0,0,0,1010,1015,5,11,0,0,1011,1015,5,0,0,
-		1,1012,1015,4,74,35,0,1013,1015,4,74,36,0,1014,1010,1,0,0,0,1014,1011,
-		1,0,0,0,1014,1012,1,0,0,0,1014,1013,1,0,0,0,1015,149,1,0,0,0,119,151,154,
-		180,184,191,197,201,208,216,221,223,232,236,244,249,258,266,270,275,286,
-		292,307,327,331,335,343,352,357,365,370,375,382,389,396,414,418,420,427,
-		433,438,453,456,461,464,475,479,484,488,496,502,511,513,522,526,532,535,
-		538,543,547,550,553,559,562,565,570,574,576,583,588,591,596,603,610,619,
-		623,628,633,639,643,658,661,666,670,676,683,686,689,698,706,710,712,717,
-		721,728,735,741,782,846,850,863,865,871,879,882,885,891,895,899,903,906,
-		912,917,920,924,935,951,958,1006,1014
+		1,57,1,57,1,57,1,57,1,57,1,57,1,57,3,57,845,8,57,1,57,1,57,3,57,849,8,
+		57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,1,57,5,57,862,8,57,
+		10,57,12,57,865,9,57,1,58,1,58,1,58,3,58,870,8,58,1,59,1,59,1,59,1,59,
+		5,59,876,8,59,10,59,12,59,879,9,59,1,59,3,59,882,8,59,3,59,884,8,59,1,
+		59,1,59,1,60,1,60,3,60,890,8,60,1,60,1,60,3,60,894,8,60,1,60,1,60,3,60,
+		898,8,60,1,60,1,60,1,60,3,60,903,8,60,1,60,1,60,1,60,1,60,3,60,909,8,60,
+		1,61,1,61,1,61,3,61,914,8,61,1,61,3,61,917,8,61,1,62,1,62,3,62,921,8,62,
+		1,63,1,63,1,64,1,64,1,64,1,64,1,64,1,64,1,64,3,64,932,8,64,1,65,1,65,5,
+		65,936,8,65,10,65,12,65,939,9,65,1,65,1,65,1,66,1,66,1,66,1,66,1,66,3,
+		66,948,8,66,1,67,1,67,1,68,1,68,1,69,1,69,1,69,1,69,1,70,1,70,1,70,1,70,
+		1,71,1,71,3,71,964,8,71,1,72,1,72,1,73,1,73,1,73,3,73,971,8,73,1,74,1,
+		74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,
+		74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,
+		74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,74,1,
+		74,1,74,1,74,3,74,1019,8,74,1,75,1,75,1,76,1,76,1,76,1,76,3,76,1027,8,
+		76,1,76,0,1,114,77,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,
+		38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,
+		86,88,90,92,94,96,98,100,102,104,106,108,110,112,114,116,118,120,122,124,
+		126,128,130,132,134,136,138,140,142,144,146,148,150,152,0,10,1,0,25,27,
+		1,0,21,22,1,0,31,33,1,0,34,37,1,0,38,41,1,0,47,58,1,0,62,66,1,0,67,70,
+		3,0,106,106,111,111,118,118,1,0,110,111,1193,0,155,1,0,0,0,2,162,1,0,0,
+		0,4,184,1,0,0,0,6,186,1,0,0,0,8,193,1,0,0,0,10,197,1,0,0,0,12,212,1,0,
+		0,0,14,214,1,0,0,0,16,231,1,0,0,0,18,236,1,0,0,0,20,242,1,0,0,0,22,245,
+		1,0,0,0,24,262,1,0,0,0,26,274,1,0,0,0,28,279,1,0,0,0,30,281,1,0,0,0,32,
+		284,1,0,0,0,34,293,1,0,0,0,36,298,1,0,0,0,38,300,1,0,0,0,40,304,1,0,0,
+		0,42,369,1,0,0,0,44,374,1,0,0,0,46,376,1,0,0,0,48,383,1,0,0,0,50,390,1,
+		0,0,0,52,397,1,0,0,0,54,404,1,0,0,0,56,410,1,0,0,0,58,416,1,0,0,0,60,429,
+		1,0,0,0,62,433,1,0,0,0,64,439,1,0,0,0,66,444,1,0,0,0,68,448,1,0,0,0,70,
+		453,1,0,0,0,72,462,1,0,0,0,74,472,1,0,0,0,76,475,1,0,0,0,78,479,1,0,0,
+		0,80,493,1,0,0,0,82,499,1,0,0,0,84,535,1,0,0,0,86,576,1,0,0,0,88,591,1,
+		0,0,0,90,593,1,0,0,0,92,598,1,0,0,0,94,601,1,0,0,0,96,608,1,0,0,0,98,612,
+		1,0,0,0,100,619,1,0,0,0,102,643,1,0,0,0,104,686,1,0,0,0,106,695,1,0,0,
+		0,108,697,1,0,0,0,110,714,1,0,0,0,112,720,1,0,0,0,114,780,1,0,0,0,116,
+		869,1,0,0,0,118,871,1,0,0,0,120,908,1,0,0,0,122,916,1,0,0,0,124,920,1,
+		0,0,0,126,922,1,0,0,0,128,931,1,0,0,0,130,933,1,0,0,0,132,947,1,0,0,0,
+		134,949,1,0,0,0,136,951,1,0,0,0,138,953,1,0,0,0,140,957,1,0,0,0,142,963,
+		1,0,0,0,144,965,1,0,0,0,146,970,1,0,0,0,148,1018,1,0,0,0,150,1020,1,0,
+		0,0,152,1026,1,0,0,0,154,156,5,1,0,0,155,154,1,0,0,0,155,156,1,0,0,0,156,
+		158,1,0,0,0,157,159,3,96,48,0,158,157,1,0,0,0,158,159,1,0,0,0,159,160,
+		1,0,0,0,160,161,5,0,0,1,161,1,1,0,0,0,162,163,3,4,2,0,163,3,1,0,0,0,164,
+		185,3,6,3,0,165,185,3,30,15,0,166,185,3,10,5,0,167,185,3,24,12,0,168,185,
+		3,36,18,0,169,185,3,80,40,0,170,185,3,38,19,0,171,185,3,40,20,0,172,185,
+		3,42,21,0,173,185,3,46,23,0,174,185,3,48,24,0,175,185,3,50,25,0,176,185,
+		3,52,26,0,177,185,3,54,27,0,178,185,3,66,33,0,179,185,3,56,28,0,180,185,
+		3,68,34,0,181,185,3,70,35,0,182,185,3,76,38,0,183,185,3,78,39,0,184,164,
+		1,0,0,0,184,165,1,0,0,0,184,166,1,0,0,0,184,167,1,0,0,0,184,168,1,0,0,
+		0,184,169,1,0,0,0,184,170,1,0,0,0,184,171,1,0,0,0,184,172,1,0,0,0,184,
+		173,1,0,0,0,184,174,1,0,0,0,184,175,1,0,0,0,184,176,1,0,0,0,184,177,1,
+		0,0,0,184,178,1,0,0,0,184,179,1,0,0,0,184,180,1,0,0,0,184,181,1,0,0,0,
+		184,182,1,0,0,0,184,183,1,0,0,0,185,5,1,0,0,0,186,188,5,9,0,0,187,189,
+		3,8,4,0,188,187,1,0,0,0,188,189,1,0,0,0,189,190,1,0,0,0,190,191,5,11,0,
+		0,191,7,1,0,0,0,192,194,3,4,2,0,193,192,1,0,0,0,194,195,1,0,0,0,195,193,
+		1,0,0,0,195,196,1,0,0,0,196,9,1,0,0,0,197,198,5,105,0,0,198,199,3,12,6,
+		0,199,11,1,0,0,0,200,202,3,16,8,0,201,200,1,0,0,0,201,202,1,0,0,0,202,
+		205,1,0,0,0,203,206,3,18,9,0,204,206,3,14,7,0,205,203,1,0,0,0,205,204,
+		1,0,0,0,206,207,1,0,0,0,207,208,3,20,10,0,208,209,3,152,76,0,209,213,1,
+		0,0,0,210,211,5,119,0,0,211,213,3,152,76,0,212,201,1,0,0,0,212,210,1,0,
+		0,0,213,13,1,0,0,0,214,220,5,9,0,0,215,216,3,22,11,0,216,217,5,13,0,0,
+		217,219,1,0,0,0,218,215,1,0,0,0,219,222,1,0,0,0,220,218,1,0,0,0,220,221,
+		1,0,0,0,221,227,1,0,0,0,222,220,1,0,0,0,223,225,3,22,11,0,224,226,5,13,
+		0,0,225,224,1,0,0,0,225,226,1,0,0,0,226,228,1,0,0,0,227,223,1,0,0,0,227,
+		228,1,0,0,0,228,229,1,0,0,0,229,230,5,11,0,0,230,15,1,0,0,0,231,232,3,
+		22,11,0,232,233,5,13,0,0,233,17,1,0,0,0,234,237,5,25,0,0,235,237,3,142,
+		71,0,236,234,1,0,0,0,236,235,1,0,0,0,237,240,1,0,0,0,238,239,5,97,0,0,
+		239,241,3,142,71,0,240,238,1,0,0,0,240,241,1,0,0,0,241,19,1,0,0,0,242,
+		243,5,98,0,0,243,244,5,119,0,0,244,21,1,0,0,0,245,248,3,142,71,0,246,247,
+		5,97,0,0,247,249,3,142,71,0,248,246,1,0,0,0,248,249,1,0,0,0,249,23,1,0,
+		0,0,250,253,5,104,0,0,251,254,3,26,13,0,252,254,3,28,14,0,253,251,1,0,
+		0,0,253,252,1,0,0,0,254,255,1,0,0,0,255,256,3,152,76,0,256,263,1,0,0,0,
+		257,258,5,104,0,0,258,259,5,91,0,0,259,260,3,114,57,0,260,261,3,152,76,
+		0,261,263,1,0,0,0,262,250,1,0,0,0,262,257,1,0,0,0,263,25,1,0,0,0,264,265,
+		3,18,9,0,265,266,3,20,10,0,266,267,3,152,76,0,267,275,1,0,0,0,268,270,
+		3,14,7,0,269,271,3,20,10,0,270,269,1,0,0,0,270,271,1,0,0,0,271,272,1,0,
+		0,0,272,273,3,152,76,0,273,275,1,0,0,0,274,264,1,0,0,0,274,268,1,0,0,0,
+		275,27,1,0,0,0,276,280,3,30,15,0,277,280,3,80,40,0,278,280,3,78,39,0,279,
+		276,1,0,0,0,279,277,1,0,0,0,279,278,1,0,0,0,280,29,1,0,0,0,281,282,3,32,
+		16,0,282,283,3,152,76,0,283,31,1,0,0,0,284,285,3,44,22,0,285,290,3,34,
+		17,0,286,287,5,13,0,0,287,289,3,34,17,0,288,286,1,0,0,0,289,292,1,0,0,
+		0,290,288,1,0,0,0,290,291,1,0,0,0,291,33,1,0,0,0,292,290,1,0,0,0,293,296,
+		3,116,58,0,294,295,5,14,0,0,295,297,3,114,57,0,296,294,1,0,0,0,296,297,
+		1,0,0,0,297,35,1,0,0,0,298,299,5,12,0,0,299,37,1,0,0,0,300,301,4,19,0,
+		0,301,302,3,112,56,0,302,303,3,152,76,0,303,39,1,0,0,0,304,305,5,92,0,
+		0,305,306,5,7,0,0,306,307,3,112,56,0,307,308,5,8,0,0,308,311,3,4,2,0,309,
+		310,5,76,0,0,310,312,3,4,2,0,311,309,1,0,0,0,311,312,1,0,0,0,312,41,1,
+		0,0,0,313,314,5,72,0,0,314,315,3,4,2,0,315,316,5,86,0,0,316,317,5,7,0,
+		0,317,318,3,112,56,0,318,319,5,8,0,0,319,320,3,152,76,0,320,370,1,0,0,
+		0,321,322,5,86,0,0,322,323,5,7,0,0,323,324,3,112,56,0,324,325,5,8,0,0,
+		325,326,3,4,2,0,326,370,1,0,0,0,327,328,5,84,0,0,328,331,5,7,0,0,329,332,
+		3,112,56,0,330,332,3,32,16,0,331,329,1,0,0,0,331,330,1,0,0,0,331,332,1,
+		0,0,0,332,333,1,0,0,0,333,335,5,12,0,0,334,336,3,112,56,0,335,334,1,0,
+		0,0,335,336,1,0,0,0,336,337,1,0,0,0,337,339,5,12,0,0,338,340,3,112,56,
+		0,339,338,1,0,0,0,339,340,1,0,0,0,340,341,1,0,0,0,341,342,5,8,0,0,342,
+		370,3,4,2,0,343,344,5,84,0,0,344,347,5,7,0,0,345,348,3,114,57,0,346,348,
+		3,32,16,0,347,345,1,0,0,0,347,346,1,0,0,0,348,349,1,0,0,0,349,350,5,95,
+		0,0,350,351,3,112,56,0,351,352,5,8,0,0,352,353,3,4,2,0,353,370,1,0,0,0,
+		354,356,5,84,0,0,355,357,5,107,0,0,356,355,1,0,0,0,356,357,1,0,0,0,357,
+		358,1,0,0,0,358,361,5,7,0,0,359,362,3,114,57,0,360,362,3,32,16,0,361,359,
+		1,0,0,0,361,360,1,0,0,0,362,363,1,0,0,0,363,364,3,144,72,0,364,365,4,21,
+		1,0,365,366,3,112,56,0,366,367,5,8,0,0,367,368,3,4,2,0,368,370,1,0,0,0,
+		369,313,1,0,0,0,369,321,1,0,0,0,369,327,1,0,0,0,369,343,1,0,0,0,369,354,
+		1,0,0,0,370,43,1,0,0,0,371,375,5,78,0,0,372,375,3,150,75,0,373,375,5,103,
+		0,0,374,371,1,0,0,0,374,372,1,0,0,0,374,373,1,0,0,0,375,45,1,0,0,0,376,
+		379,5,83,0,0,377,378,4,23,2,0,378,380,3,144,72,0,379,377,1,0,0,0,379,380,
+		1,0,0,0,380,381,1,0,0,0,381,382,3,152,76,0,382,47,1,0,0,0,383,386,5,71,
+		0,0,384,385,4,24,3,0,385,387,3,144,72,0,386,384,1,0,0,0,386,387,1,0,0,
+		0,387,388,1,0,0,0,388,389,3,152,76,0,389,49,1,0,0,0,390,393,5,81,0,0,391,
+		392,4,25,4,0,392,394,3,112,56,0,393,391,1,0,0,0,393,394,1,0,0,0,394,395,
+		1,0,0,0,395,396,3,152,76,0,396,51,1,0,0,0,397,400,5,108,0,0,398,399,4,
+		26,5,0,399,401,3,112,56,0,400,398,1,0,0,0,400,401,1,0,0,0,401,402,1,0,
+		0,0,402,403,3,152,76,0,403,53,1,0,0,0,404,405,5,90,0,0,405,406,5,7,0,0,
+		406,407,3,112,56,0,407,408,5,8,0,0,408,409,3,4,2,0,409,55,1,0,0,0,410,
+		411,5,85,0,0,411,412,5,7,0,0,412,413,3,112,56,0,413,414,5,8,0,0,414,415,
+		3,58,29,0,415,57,1,0,0,0,416,418,5,9,0,0,417,419,3,60,30,0,418,417,1,0,
+		0,0,418,419,1,0,0,0,419,424,1,0,0,0,420,422,3,64,32,0,421,423,3,60,30,
+		0,422,421,1,0,0,0,422,423,1,0,0,0,423,425,1,0,0,0,424,420,1,0,0,0,424,
+		425,1,0,0,0,425,426,1,0,0,0,426,427,5,11,0,0,427,59,1,0,0,0,428,430,3,
+		62,31,0,429,428,1,0,0,0,430,431,1,0,0,0,431,429,1,0,0,0,431,432,1,0,0,
+		0,432,61,1,0,0,0,433,434,5,75,0,0,434,435,3,112,56,0,435,437,5,16,0,0,
+		436,438,3,8,4,0,437,436,1,0,0,0,437,438,1,0,0,0,438,63,1,0,0,0,439,440,
+		5,91,0,0,440,442,5,16,0,0,441,443,3,8,4,0,442,441,1,0,0,0,442,443,1,0,
+		0,0,443,65,1,0,0,0,444,445,3,144,72,0,445,446,5,16,0,0,446,447,3,4,2,0,
+		447,67,1,0,0,0,448,449,5,93,0,0,449,450,4,34,6,0,450,451,3,112,56,0,451,
+		452,3,152,76,0,452,69,1,0,0,0,453,454,5,96,0,0,454,460,3,6,3,0,455,457,
+		3,72,36,0,456,458,3,74,37,0,457,456,1,0,0,0,457,458,1,0,0,0,458,461,1,
+		0,0,0,459,461,3,74,37,0,460,455,1,0,0,0,460,459,1,0,0,0,461,71,1,0,0,0,
+		462,468,5,79,0,0,463,465,5,7,0,0,464,466,3,116,58,0,465,464,1,0,0,0,465,
+		466,1,0,0,0,466,467,1,0,0,0,467,469,5,8,0,0,468,463,1,0,0,0,468,469,1,
+		0,0,0,469,470,1,0,0,0,470,471,3,6,3,0,471,73,1,0,0,0,472,473,5,80,0,0,
+		473,474,3,6,3,0,474,75,1,0,0,0,475,476,5,87,0,0,476,477,3,152,76,0,477,
+		77,1,0,0,0,478,480,5,106,0,0,479,478,1,0,0,0,479,480,1,0,0,0,480,481,1,
+		0,0,0,481,483,5,88,0,0,482,484,5,25,0,0,483,482,1,0,0,0,483,484,1,0,0,
+		0,484,485,1,0,0,0,485,486,3,144,72,0,486,488,5,7,0,0,487,489,3,88,44,0,
+		488,487,1,0,0,0,488,489,1,0,0,0,489,490,1,0,0,0,490,491,5,8,0,0,491,492,
+		3,94,47,0,492,79,1,0,0,0,493,494,5,99,0,0,494,495,3,144,72,0,495,496,3,
+		82,41,0,496,81,1,0,0,0,497,498,5,101,0,0,498,500,3,114,57,0,499,497,1,
+		0,0,0,499,500,1,0,0,0,500,501,1,0,0,0,501,505,5,9,0,0,502,504,3,84,42,
+		0,503,502,1,0,0,0,504,507,1,0,0,0,505,503,1,0,0,0,505,506,1,0,0,0,506,
+		508,1,0,0,0,507,505,1,0,0,0,508,509,5,11,0,0,509,83,1,0,0,0,510,515,5,
+		117,0,0,511,512,4,42,7,0,512,515,3,144,72,0,513,515,5,106,0,0,514,510,
+		1,0,0,0,514,511,1,0,0,0,514,513,1,0,0,0,515,518,1,0,0,0,516,514,1,0,0,
+		0,516,517,1,0,0,0,517,525,1,0,0,0,518,516,1,0,0,0,519,526,3,86,43,0,520,
+		521,3,116,58,0,521,522,5,14,0,0,522,523,3,118,59,0,523,524,5,12,0,0,524,
+		526,1,0,0,0,525,519,1,0,0,0,525,520,1,0,0,0,526,536,1,0,0,0,527,536,3,
+		36,18,0,528,530,5,30,0,0,529,528,1,0,0,0,529,530,1,0,0,0,530,531,1,0,0,
+		0,531,532,3,106,53,0,532,533,5,14,0,0,533,534,3,114,57,0,534,536,1,0,0,
+		0,535,516,1,0,0,0,535,527,1,0,0,0,535,529,1,0,0,0,536,85,1,0,0,0,537,539,
+		5,25,0,0,538,537,1,0,0,0,538,539,1,0,0,0,539,541,1,0,0,0,540,542,5,30,
+		0,0,541,540,1,0,0,0,541,542,1,0,0,0,542,543,1,0,0,0,543,544,3,106,53,0,
+		544,546,5,7,0,0,545,547,3,88,44,0,546,545,1,0,0,0,546,547,1,0,0,0,547,
+		548,1,0,0,0,548,549,5,8,0,0,549,550,3,94,47,0,550,577,1,0,0,0,551,553,
+		5,25,0,0,552,551,1,0,0,0,552,553,1,0,0,0,553,555,1,0,0,0,554,556,5,30,
+		0,0,555,554,1,0,0,0,555,556,1,0,0,0,556,557,1,0,0,0,557,558,3,138,69,0,
+		558,559,5,7,0,0,559,560,5,8,0,0,560,561,3,94,47,0,561,577,1,0,0,0,562,
+		564,5,25,0,0,563,562,1,0,0,0,563,564,1,0,0,0,564,566,1,0,0,0,565,567,5,
+		30,0,0,566,565,1,0,0,0,566,567,1,0,0,0,567,568,1,0,0,0,568,569,3,140,70,
+		0,569,571,5,7,0,0,570,572,3,88,44,0,571,570,1,0,0,0,571,572,1,0,0,0,572,
+		573,1,0,0,0,573,574,5,8,0,0,574,575,3,94,47,0,575,577,1,0,0,0,576,538,
+		1,0,0,0,576,552,1,0,0,0,576,563,1,0,0,0,577,87,1,0,0,0,578,583,3,90,45,
+		0,579,580,5,13,0,0,580,582,3,90,45,0,581,579,1,0,0,0,582,585,1,0,0,0,583,
+		581,1,0,0,0,583,584,1,0,0,0,584,588,1,0,0,0,585,583,1,0,0,0,586,587,5,
+		13,0,0,587,589,3,92,46,0,588,586,1,0,0,0,588,589,1,0,0,0,589,592,1,0,0,
+		0,590,592,3,92,46,0,591,578,1,0,0,0,591,590,1,0,0,0,592,89,1,0,0,0,593,
+		596,3,116,58,0,594,595,5,14,0,0,595,597,3,114,57,0,596,594,1,0,0,0,596,
+		597,1,0,0,0,597,91,1,0,0,0,598,599,5,17,0,0,599,600,3,114,57,0,600,93,
+		1,0,0,0,601,603,5,9,0,0,602,604,3,96,48,0,603,602,1,0,0,0,603,604,1,0,
+		0,0,604,605,1,0,0,0,605,606,5,11,0,0,606,95,1,0,0,0,607,609,3,2,1,0,608,
+		607,1,0,0,0,609,610,1,0,0,0,610,608,1,0,0,0,610,611,1,0,0,0,611,97,1,0,
+		0,0,612,613,5,5,0,0,613,614,3,100,50,0,614,615,5,6,0,0,615,99,1,0,0,0,
+		616,618,5,13,0,0,617,616,1,0,0,0,618,621,1,0,0,0,619,617,1,0,0,0,619,620,
+		1,0,0,0,620,623,1,0,0,0,621,619,1,0,0,0,622,624,3,102,51,0,623,622,1,0,
+		0,0,623,624,1,0,0,0,624,633,1,0,0,0,625,627,5,13,0,0,626,625,1,0,0,0,627,
+		628,1,0,0,0,628,626,1,0,0,0,628,629,1,0,0,0,629,630,1,0,0,0,630,632,3,
+		102,51,0,631,626,1,0,0,0,632,635,1,0,0,0,633,631,1,0,0,0,633,634,1,0,0,
+		0,634,639,1,0,0,0,635,633,1,0,0,0,636,638,5,13,0,0,637,636,1,0,0,0,638,
+		641,1,0,0,0,639,637,1,0,0,0,639,640,1,0,0,0,640,101,1,0,0,0,641,639,1,
+		0,0,0,642,644,5,17,0,0,643,642,1,0,0,0,643,644,1,0,0,0,644,645,1,0,0,0,
+		645,646,3,114,57,0,646,103,1,0,0,0,647,648,3,106,53,0,648,649,5,16,0,0,
+		649,650,3,114,57,0,650,687,1,0,0,0,651,652,5,5,0,0,652,653,3,114,57,0,
+		653,654,5,6,0,0,654,655,5,16,0,0,655,656,3,114,57,0,656,687,1,0,0,0,657,
+		659,5,106,0,0,658,657,1,0,0,0,658,659,1,0,0,0,659,661,1,0,0,0,660,662,
+		5,25,0,0,661,660,1,0,0,0,661,662,1,0,0,0,662,663,1,0,0,0,663,664,3,106,
+		53,0,664,666,5,7,0,0,665,667,3,88,44,0,666,665,1,0,0,0,666,667,1,0,0,0,
+		667,668,1,0,0,0,668,669,5,8,0,0,669,670,3,94,47,0,670,687,1,0,0,0,671,
+		672,3,138,69,0,672,673,5,7,0,0,673,674,5,8,0,0,674,675,3,94,47,0,675,687,
+		1,0,0,0,676,677,3,140,70,0,677,678,5,7,0,0,678,679,3,90,45,0,679,680,5,
+		8,0,0,680,681,3,94,47,0,681,687,1,0,0,0,682,684,5,17,0,0,683,682,1,0,0,
+		0,683,684,1,0,0,0,684,685,1,0,0,0,685,687,3,114,57,0,686,647,1,0,0,0,686,
+		651,1,0,0,0,686,658,1,0,0,0,686,671,1,0,0,0,686,676,1,0,0,0,686,683,1,
+		0,0,0,687,105,1,0,0,0,688,696,3,142,71,0,689,696,5,119,0,0,690,696,3,134,
+		67,0,691,692,5,5,0,0,692,693,3,114,57,0,693,694,5,6,0,0,694,696,1,0,0,
+		0,695,688,1,0,0,0,695,689,1,0,0,0,695,690,1,0,0,0,695,691,1,0,0,0,696,
+		107,1,0,0,0,697,709,5,7,0,0,698,703,3,110,55,0,699,700,5,13,0,0,700,702,
+		3,110,55,0,701,699,1,0,0,0,702,705,1,0,0,0,703,701,1,0,0,0,703,704,1,0,
+		0,0,704,707,1,0,0,0,705,703,1,0,0,0,706,708,5,13,0,0,707,706,1,0,0,0,707,
+		708,1,0,0,0,708,710,1,0,0,0,709,698,1,0,0,0,709,710,1,0,0,0,710,711,1,
+		0,0,0,711,712,5,8,0,0,712,109,1,0,0,0,713,715,5,17,0,0,714,713,1,0,0,0,
+		714,715,1,0,0,0,715,718,1,0,0,0,716,719,3,114,57,0,717,719,3,144,72,0,
+		718,716,1,0,0,0,718,717,1,0,0,0,719,111,1,0,0,0,720,725,3,114,57,0,721,
+		722,5,13,0,0,722,724,3,114,57,0,723,721,1,0,0,0,724,727,1,0,0,0,725,723,
+		1,0,0,0,725,726,1,0,0,0,726,113,1,0,0,0,727,725,1,0,0,0,728,729,6,57,-1,
+		0,729,781,3,120,60,0,730,732,5,99,0,0,731,733,3,144,72,0,732,731,1,0,0,
+		0,732,733,1,0,0,0,733,734,1,0,0,0,734,781,3,82,41,0,735,736,5,77,0,0,736,
+		737,3,114,57,0,737,738,3,108,54,0,738,781,1,0,0,0,739,740,5,77,0,0,740,
+		781,3,114,57,42,741,742,5,77,0,0,742,743,5,18,0,0,743,781,3,144,72,0,744,
+		745,5,94,0,0,745,781,3,114,57,37,746,747,5,82,0,0,747,781,3,114,57,36,
+		748,749,5,74,0,0,749,781,3,114,57,35,750,751,5,19,0,0,751,781,3,114,57,
+		34,752,753,5,20,0,0,753,781,3,114,57,33,754,755,5,21,0,0,755,781,3,114,
+		57,32,756,757,5,22,0,0,757,781,3,114,57,31,758,759,5,23,0,0,759,781,3,
+		114,57,30,760,761,5,24,0,0,761,781,3,114,57,29,762,763,5,107,0,0,763,781,
+		3,114,57,28,764,765,5,105,0,0,765,766,5,7,0,0,766,767,3,114,57,0,767,768,
+		5,8,0,0,768,781,1,0,0,0,769,781,3,52,26,0,770,781,5,89,0,0,771,781,3,144,
+		72,0,772,781,5,102,0,0,773,781,3,128,64,0,774,781,3,98,49,0,775,781,3,
+		118,59,0,776,777,5,7,0,0,777,778,3,112,56,0,778,779,5,8,0,0,779,781,1,
+		0,0,0,780,728,1,0,0,0,780,730,1,0,0,0,780,735,1,0,0,0,780,739,1,0,0,0,
+		780,741,1,0,0,0,780,744,1,0,0,0,780,746,1,0,0,0,780,748,1,0,0,0,780,750,
+		1,0,0,0,780,752,1,0,0,0,780,754,1,0,0,0,780,756,1,0,0,0,780,758,1,0,0,
+		0,780,760,1,0,0,0,780,762,1,0,0,0,780,764,1,0,0,0,780,769,1,0,0,0,780,
+		770,1,0,0,0,780,771,1,0,0,0,780,772,1,0,0,0,780,773,1,0,0,0,780,774,1,
+		0,0,0,780,775,1,0,0,0,780,776,1,0,0,0,781,863,1,0,0,0,782,783,10,27,0,
+		0,783,784,5,28,0,0,784,862,3,114,57,27,785,786,10,26,0,0,786,787,7,0,0,
+		0,787,862,3,114,57,27,788,789,10,25,0,0,789,790,7,1,0,0,790,862,3,114,
+		57,26,791,792,10,24,0,0,792,793,5,29,0,0,793,862,3,114,57,25,794,795,10,
+		23,0,0,795,796,7,2,0,0,796,862,3,114,57,24,797,798,10,22,0,0,798,799,7,
+		3,0,0,799,862,3,114,57,23,800,801,10,21,0,0,801,802,5,73,0,0,802,862,3,
+		114,57,22,803,804,10,20,0,0,804,805,5,95,0,0,805,862,3,114,57,21,806,807,
+		10,19,0,0,807,808,7,4,0,0,808,862,3,114,57,20,809,810,10,18,0,0,810,811,
+		5,42,0,0,811,862,3,114,57,19,812,813,10,17,0,0,813,814,5,43,0,0,814,862,
+		3,114,57,18,815,816,10,16,0,0,816,817,5,44,0,0,817,862,3,114,57,17,818,
+		819,10,15,0,0,819,820,5,45,0,0,820,862,3,114,57,16,821,822,10,14,0,0,822,
+		823,5,46,0,0,823,862,3,114,57,15,824,825,10,13,0,0,825,826,5,15,0,0,826,
+		827,3,114,57,0,827,828,5,16,0,0,828,829,3,114,57,14,829,862,1,0,0,0,830,
+		831,10,12,0,0,831,832,5,14,0,0,832,862,3,114,57,12,833,834,10,11,0,0,834,
+		835,3,126,63,0,835,836,3,114,57,11,836,862,1,0,0,0,837,838,10,45,0,0,838,
+		839,5,5,0,0,839,840,3,112,56,0,840,841,5,6,0,0,841,862,1,0,0,0,842,844,
+		10,44,0,0,843,845,5,15,0,0,844,843,1,0,0,0,844,845,1,0,0,0,845,846,1,0,
+		0,0,846,848,5,18,0,0,847,849,5,30,0,0,848,847,1,0,0,0,848,849,1,0,0,0,
+		849,850,1,0,0,0,850,862,3,142,71,0,851,852,10,41,0,0,852,862,3,108,54,
+		0,853,854,10,39,0,0,854,855,4,57,29,0,855,862,5,19,0,0,856,857,10,38,0,
+		0,857,858,4,57,31,0,858,862,5,20,0,0,859,860,10,9,0,0,860,862,3,130,65,
+		0,861,782,1,0,0,0,861,785,1,0,0,0,861,788,1,0,0,0,861,791,1,0,0,0,861,
+		794,1,0,0,0,861,797,1,0,0,0,861,800,1,0,0,0,861,803,1,0,0,0,861,806,1,
+		0,0,0,861,809,1,0,0,0,861,812,1,0,0,0,861,815,1,0,0,0,861,818,1,0,0,0,
+		861,821,1,0,0,0,861,824,1,0,0,0,861,830,1,0,0,0,861,833,1,0,0,0,861,837,
+		1,0,0,0,861,842,1,0,0,0,861,851,1,0,0,0,861,853,1,0,0,0,861,856,1,0,0,
+		0,861,859,1,0,0,0,862,865,1,0,0,0,863,861,1,0,0,0,863,864,1,0,0,0,864,
+		115,1,0,0,0,865,863,1,0,0,0,866,870,3,144,72,0,867,870,3,98,49,0,868,870,
+		3,118,59,0,869,866,1,0,0,0,869,867,1,0,0,0,869,868,1,0,0,0,870,117,1,0,
+		0,0,871,883,5,9,0,0,872,877,3,104,52,0,873,874,5,13,0,0,874,876,3,104,
+		52,0,875,873,1,0,0,0,876,879,1,0,0,0,877,875,1,0,0,0,877,878,1,0,0,0,878,
+		881,1,0,0,0,879,877,1,0,0,0,880,882,5,13,0,0,881,880,1,0,0,0,881,882,1,
+		0,0,0,882,884,1,0,0,0,883,872,1,0,0,0,883,884,1,0,0,0,884,885,1,0,0,0,
+		885,886,5,11,0,0,886,119,1,0,0,0,887,909,3,78,39,0,888,890,5,106,0,0,889,
+		888,1,0,0,0,889,890,1,0,0,0,890,891,1,0,0,0,891,893,5,88,0,0,892,894,5,
+		25,0,0,893,892,1,0,0,0,893,894,1,0,0,0,894,895,1,0,0,0,895,897,5,7,0,0,
+		896,898,3,88,44,0,897,896,1,0,0,0,897,898,1,0,0,0,898,899,1,0,0,0,899,
+		900,5,8,0,0,900,909,3,94,47,0,901,903,5,106,0,0,902,901,1,0,0,0,902,903,
+		1,0,0,0,903,904,1,0,0,0,904,905,3,122,61,0,905,906,5,59,0,0,906,907,3,
+		124,62,0,907,909,1,0,0,0,908,887,1,0,0,0,908,889,1,0,0,0,908,902,1,0,0,
+		0,909,121,1,0,0,0,910,917,3,144,72,0,911,913,5,7,0,0,912,914,3,88,44,0,
+		913,912,1,0,0,0,913,914,1,0,0,0,914,915,1,0,0,0,915,917,5,8,0,0,916,910,
+		1,0,0,0,916,911,1,0,0,0,917,123,1,0,0,0,918,921,3,114,57,0,919,921,3,94,
+		47,0,920,918,1,0,0,0,920,919,1,0,0,0,921,125,1,0,0,0,922,923,7,5,0,0,923,
+		127,1,0,0,0,924,932,5,60,0,0,925,932,5,61,0,0,926,932,5,119,0,0,927,932,
+		3,130,65,0,928,932,5,4,0,0,929,932,3,134,67,0,930,932,3,136,68,0,931,924,
+		1,0,0,0,931,925,1,0,0,0,931,926,1,0,0,0,931,927,1,0,0,0,931,928,1,0,0,
+		0,931,929,1,0,0,0,931,930,1,0,0,0,932,129,1,0,0,0,933,937,5,120,0,0,934,
+		936,3,132,66,0,935,934,1,0,0,0,936,939,1,0,0,0,937,935,1,0,0,0,937,938,
+		1,0,0,0,938,940,1,0,0,0,939,937,1,0,0,0,940,941,5,120,0,0,941,131,1,0,
+		0,0,942,948,5,127,0,0,943,944,5,126,0,0,944,945,3,114,57,0,945,946,5,10,
+		0,0,946,948,1,0,0,0,947,942,1,0,0,0,947,943,1,0,0,0,948,133,1,0,0,0,949,
+		950,7,6,0,0,950,135,1,0,0,0,951,952,7,7,0,0,952,137,1,0,0,0,953,954,4,
+		69,33,0,954,955,3,144,72,0,955,956,3,106,53,0,956,139,1,0,0,0,957,958,
+		4,70,34,0,958,959,3,144,72,0,959,960,3,106,53,0,960,141,1,0,0,0,961,964,
+		3,144,72,0,962,964,3,146,73,0,963,961,1,0,0,0,963,962,1,0,0,0,964,143,
+		1,0,0,0,965,966,7,8,0,0,966,145,1,0,0,0,967,971,3,148,74,0,968,971,5,60,
+		0,0,969,971,5,61,0,0,970,967,1,0,0,0,970,968,1,0,0,0,970,969,1,0,0,0,971,
+		147,1,0,0,0,972,1019,5,71,0,0,973,1019,5,72,0,0,974,1019,5,73,0,0,975,
+		1019,5,74,0,0,976,1019,5,75,0,0,977,1019,5,76,0,0,978,1019,5,77,0,0,979,
+		1019,5,78,0,0,980,1019,5,79,0,0,981,1019,5,80,0,0,982,1019,5,81,0,0,983,
+		1019,5,82,0,0,984,1019,5,83,0,0,985,1019,5,84,0,0,986,1019,5,85,0,0,987,
+		1019,5,86,0,0,988,1019,5,87,0,0,989,1019,5,88,0,0,990,1019,5,89,0,0,991,
+		1019,5,90,0,0,992,1019,5,91,0,0,993,1019,5,92,0,0,994,1019,5,93,0,0,995,
+		1019,5,94,0,0,996,1019,5,95,0,0,997,1019,5,96,0,0,998,1019,5,99,0,0,999,
+		1019,5,100,0,0,1000,1019,5,101,0,0,1001,1019,5,102,0,0,1002,1019,5,103,
+		0,0,1003,1019,5,104,0,0,1004,1019,5,105,0,0,1005,1019,5,109,0,0,1006,1019,
+		3,150,75,0,1007,1019,5,112,0,0,1008,1019,5,113,0,0,1009,1019,5,114,0,0,
+		1010,1019,5,115,0,0,1011,1019,5,116,0,0,1012,1019,5,117,0,0,1013,1019,
+		5,108,0,0,1014,1019,5,106,0,0,1015,1019,5,107,0,0,1016,1019,5,98,0,0,1017,
+		1019,5,97,0,0,1018,972,1,0,0,0,1018,973,1,0,0,0,1018,974,1,0,0,0,1018,
+		975,1,0,0,0,1018,976,1,0,0,0,1018,977,1,0,0,0,1018,978,1,0,0,0,1018,979,
+		1,0,0,0,1018,980,1,0,0,0,1018,981,1,0,0,0,1018,982,1,0,0,0,1018,983,1,
+		0,0,0,1018,984,1,0,0,0,1018,985,1,0,0,0,1018,986,1,0,0,0,1018,987,1,0,
+		0,0,1018,988,1,0,0,0,1018,989,1,0,0,0,1018,990,1,0,0,0,1018,991,1,0,0,
+		0,1018,992,1,0,0,0,1018,993,1,0,0,0,1018,994,1,0,0,0,1018,995,1,0,0,0,
+		1018,996,1,0,0,0,1018,997,1,0,0,0,1018,998,1,0,0,0,1018,999,1,0,0,0,1018,
+		1000,1,0,0,0,1018,1001,1,0,0,0,1018,1002,1,0,0,0,1018,1003,1,0,0,0,1018,
+		1004,1,0,0,0,1018,1005,1,0,0,0,1018,1006,1,0,0,0,1018,1007,1,0,0,0,1018,
+		1008,1,0,0,0,1018,1009,1,0,0,0,1018,1010,1,0,0,0,1018,1011,1,0,0,0,1018,
+		1012,1,0,0,0,1018,1013,1,0,0,0,1018,1014,1,0,0,0,1018,1015,1,0,0,0,1018,
+		1016,1,0,0,0,1018,1017,1,0,0,0,1019,149,1,0,0,0,1020,1021,7,9,0,0,1021,
+		151,1,0,0,0,1022,1027,5,12,0,0,1023,1027,5,0,0,1,1024,1027,4,76,35,0,1025,
+		1027,4,76,36,0,1026,1022,1,0,0,0,1026,1023,1,0,0,0,1026,1024,1,0,0,0,1026,
+		1025,1,0,0,0,1027,153,1,0,0,0,112,155,158,184,188,195,201,205,212,220,
+		225,227,236,240,248,253,262,270,274,279,290,296,311,331,335,339,347,356,
+		361,369,374,379,386,393,400,418,422,424,431,437,442,457,460,465,468,479,
+		483,488,499,505,514,516,525,529,535,538,541,546,552,555,563,566,571,576,
+		583,588,591,596,603,610,619,623,628,633,639,643,658,661,666,683,686,695,
+		703,707,709,714,718,725,732,780,844,848,861,863,869,877,881,883,889,893,
+		897,902,908,913,916,920,931,937,947,963,970,1018,1026
 	};
 
 	public static readonly ATN _ATN =

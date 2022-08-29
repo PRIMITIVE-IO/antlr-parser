@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from /Users/maxfarsikov/IdeaProjects/antlr-parser/antlr-parser/grammars/TypeScriptParser.g4 by ANTLR 4.10.1
+// Generated from /Users/max/RiderProjects/antlr-parser/antlr-parser/grammars/TypeScriptParser.g4 by ANTLR 4.10.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -1044,17 +1044,17 @@ public partial class TypeScriptParserBaseListener : ITypeScriptParserListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitVariableDeclaration([NotNull] TypeScriptParser.VariableDeclarationContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="TypeScriptParser.emptyStatement"/>.
+	/// Enter a parse tree produced by <see cref="TypeScriptParser.emptyStatement_"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterEmptyStatement([NotNull] TypeScriptParser.EmptyStatementContext context) { }
+	public virtual void EnterEmptyStatement_([NotNull] TypeScriptParser.EmptyStatement_Context context) { }
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="TypeScriptParser.emptyStatement"/>.
+	/// Exit a parse tree produced by <see cref="TypeScriptParser.emptyStatement_"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitEmptyStatement([NotNull] TypeScriptParser.EmptyStatementContext context) { }
+	public virtual void ExitEmptyStatement_([NotNull] TypeScriptParser.EmptyStatement_Context context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="TypeScriptParser.expressionStatement"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -2635,6 +2635,30 @@ public partial class TypeScriptParserBaseListener : ITypeScriptParserListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitLiteral([NotNull] TypeScriptParser.LiteralContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="TypeScriptParser.templateStringLiteral"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterTemplateStringLiteral([NotNull] TypeScriptParser.TemplateStringLiteralContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="TypeScriptParser.templateStringLiteral"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitTemplateStringLiteral([NotNull] TypeScriptParser.TemplateStringLiteralContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="TypeScriptParser.templateStringAtom"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterTemplateStringAtom([NotNull] TypeScriptParser.TemplateStringAtomContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="TypeScriptParser.templateStringAtom"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitTemplateStringAtom([NotNull] TypeScriptParser.TemplateStringAtomContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="TypeScriptParser.numericLiteral"/>.
 	/// <para>The default implementation does nothing.</para>

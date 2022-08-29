@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from /Users/maxfarsikov/IdeaProjects/antlr-parser/antlr-parser/grammars/JavaScriptParser.g4 by ANTLR 4.10.1
+// Generated from /Users/max/RiderProjects/antlr-parser/antlr-parser/grammars/JavaScriptParser.g4 by ANTLR 4.10.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -148,11 +148,11 @@ public interface IJavaScriptParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitVariableDeclaration([NotNull] JavaScriptParser.VariableDeclarationContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="JavaScriptParser.emptyStatement"/>.
+	/// Visit a parse tree produced by <see cref="JavaScriptParser.emptyStatement_"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitEmptyStatement([NotNull] JavaScriptParser.EmptyStatementContext context);
+	Result VisitEmptyStatement_([NotNull] JavaScriptParser.EmptyStatement_Context context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="JavaScriptParser.expressionStatement"/>.
 	/// </summary>
@@ -825,6 +825,18 @@ public interface IJavaScriptParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitLiteral([NotNull] JavaScriptParser.LiteralContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="JavaScriptParser.templateStringLiteral"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitTemplateStringLiteral([NotNull] JavaScriptParser.TemplateStringLiteralContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="JavaScriptParser.templateStringAtom"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitTemplateStringAtom([NotNull] JavaScriptParser.TemplateStringAtomContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="JavaScriptParser.numericLiteral"/>.
 	/// </summary>

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from /Users/maxfarsikov/IdeaProjects/antlr-parser/antlr-parser/grammars/TypeScriptParser.g4 by ANTLR 4.10.1
+// Generated from /Users/max/RiderProjects/antlr-parser/antlr-parser/grammars/TypeScriptParser.g4 by ANTLR 4.10.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -875,15 +875,15 @@ public interface ITypeScriptParserListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitVariableDeclaration([NotNull] TypeScriptParser.VariableDeclarationContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="TypeScriptParser.emptyStatement"/>.
+	/// Enter a parse tree produced by <see cref="TypeScriptParser.emptyStatement_"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterEmptyStatement([NotNull] TypeScriptParser.EmptyStatementContext context);
+	void EnterEmptyStatement_([NotNull] TypeScriptParser.EmptyStatement_Context context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="TypeScriptParser.emptyStatement"/>.
+	/// Exit a parse tree produced by <see cref="TypeScriptParser.emptyStatement_"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitEmptyStatement([NotNull] TypeScriptParser.EmptyStatementContext context);
+	void ExitEmptyStatement_([NotNull] TypeScriptParser.EmptyStatement_Context context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="TypeScriptParser.expressionStatement"/>.
 	/// </summary>
@@ -2222,6 +2222,26 @@ public interface ITypeScriptParserListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitLiteral([NotNull] TypeScriptParser.LiteralContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="TypeScriptParser.templateStringLiteral"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterTemplateStringLiteral([NotNull] TypeScriptParser.TemplateStringLiteralContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="TypeScriptParser.templateStringLiteral"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitTemplateStringLiteral([NotNull] TypeScriptParser.TemplateStringLiteralContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="TypeScriptParser.templateStringAtom"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterTemplateStringAtom([NotNull] TypeScriptParser.TemplateStringAtomContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="TypeScriptParser.templateStringAtom"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitTemplateStringAtom([NotNull] TypeScriptParser.TemplateStringAtomContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="TypeScriptParser.numericLiteral"/>.
 	/// </summary>

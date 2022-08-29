@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from /Users/maxfarsikov/IdeaProjects/antlr-parser/antlr-parser/grammars/TypeScriptParser.g4 by ANTLR 4.10.1
+// Generated from /Users/max/RiderProjects/antlr-parser/antlr-parser/grammars/TypeScriptParser.g4 by ANTLR 4.10.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -536,11 +536,11 @@ public interface ITypeScriptParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitVariableDeclaration([NotNull] TypeScriptParser.VariableDeclarationContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="TypeScriptParser.emptyStatement"/>.
+	/// Visit a parse tree produced by <see cref="TypeScriptParser.emptyStatement_"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitEmptyStatement([NotNull] TypeScriptParser.EmptyStatementContext context);
+	Result VisitEmptyStatement_([NotNull] TypeScriptParser.EmptyStatement_Context context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="TypeScriptParser.expressionStatement"/>.
 	/// </summary>
@@ -1331,6 +1331,18 @@ public interface ITypeScriptParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitLiteral([NotNull] TypeScriptParser.LiteralContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="TypeScriptParser.templateStringLiteral"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitTemplateStringLiteral([NotNull] TypeScriptParser.TemplateStringLiteralContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="TypeScriptParser.templateStringAtom"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitTemplateStringAtom([NotNull] TypeScriptParser.TemplateStringAtomContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="TypeScriptParser.numericLiteral"/>.
 	/// </summary>
