@@ -29,6 +29,17 @@ public abstract class JavaScriptLexerBase : Lexer
     /// </summary>
     private bool _useStrictCurrent = false;
 
+    /// <summary>
+    /// Keeps track of the the current depth of nested template string backticks.
+    /// E.g. after the X in:
+    ///
+    /// `${a ? `${X
+    ///
+    /// templateDepth will be 2. This variable is needed to determine if a `}` is a
+    /// plain CloseBrace, or one that closes an expression inside a template string.
+    /// </summary>
+    private int _templateDepth = 0;
+
     public JavaScriptLexerBase(ICharStream input)
         : base(input)
     {
@@ -38,14 +49,16 @@ public abstract class JavaScriptLexerBase : Lexer
     {
     }
 
-    public bool IsStartOfFile()
-    {
+    public bool IsStartOfFile(){
         return _lastToken == null;
     }
 
     public bool UseStrictDefault
     {
-        get { return _useStrictDefault; }
+        get
+        {
+            return _useStrictDefault;
+        }
         set
         {
             _useStrictDefault = value;
@@ -56,6 +69,11 @@ public abstract class JavaScriptLexerBase : Lexer
     public bool IsStrictMode()
     {
         return _useStrictCurrent;
+    }
+
+    public bool IsInTemplateString()
+    {
+        return _templateDepth > 0;
     }
 
     /// <summary>
@@ -105,6 +123,16 @@ public abstract class JavaScriptLexerBase : Lexer
                 scopeStrictModes.Push(_useStrictCurrent);
             }
         }
+    }
+
+    public void IncreaseTemplateDepth()
+    {
+        _templateDepth++;
+    }
+
+    public void DecreaseTemplateDepth()
+    {
+        _templateDepth--;
     }
 
     /// <summary>

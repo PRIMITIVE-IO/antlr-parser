@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from /Users/maxfarsikov/IdeaProjects/antlr-parser/antlr-parser/grammars/JavaScriptParser.g4 by ANTLR 4.10.1
+// Generated from /Users/max/RiderProjects/antlr-parser/antlr-parser/grammars/JavaScriptParser.g4 by ANTLR 4.10.1
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -227,7 +227,7 @@ public partial class JavaScriptParserBaseVisitor<Result> : AbstractParseTreeVisi
 	/// <return>The visitor result.</return>
 	public virtual Result VisitVariableDeclaration([NotNull] JavaScriptParser.VariableDeclarationContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="JavaScriptParser.emptyStatement"/>.
+	/// Visit a parse tree produced by <see cref="JavaScriptParser.emptyStatement_"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -235,7 +235,7 @@ public partial class JavaScriptParserBaseVisitor<Result> : AbstractParseTreeVisi
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitEmptyStatement([NotNull] JavaScriptParser.EmptyStatementContext context) { return VisitChildren(context); }
+	public virtual Result VisitEmptyStatement_([NotNull] JavaScriptParser.EmptyStatement_Context context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="JavaScriptParser.expressionStatement"/>.
 	/// <para>
@@ -1316,6 +1316,26 @@ public partial class JavaScriptParserBaseVisitor<Result> : AbstractParseTreeVisi
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	public virtual Result VisitLiteral([NotNull] JavaScriptParser.LiteralContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="JavaScriptParser.templateStringLiteral"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitTemplateStringLiteral([NotNull] JavaScriptParser.TemplateStringLiteralContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="JavaScriptParser.templateStringAtom"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitTemplateStringAtom([NotNull] JavaScriptParser.TemplateStringAtomContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="JavaScriptParser.numericLiteral"/>.
 	/// <para>

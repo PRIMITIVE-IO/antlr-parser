@@ -269,4 +269,21 @@ public class AntlrParseJavaScriptTest
 
         res.Classes[0].Methods[0].CodeRange.Should().Be(TestUtils.CodeRange(2, 1, 4, 2));
     }
+    
+    
+    [Fact]
+    public void FieldWithLambda()
+    {
+        string source = @"
+            class c{
+                handleEdit=e=>{e.preventDefault();this.setState({isEditing:true,});}
+            }
+            ".Unindent();
+        FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
+
+        MethodDto methodDto = res.Classes[0].Methods[0];
+        methodDto.Name.Should().Be("handleEdit");
+        methodDto.CodeRange.Of(source).Should()
+            .Be("handleEdit=e=>{e.preventDefault();this.setState({isEditing:true,});}");
+    }
 }

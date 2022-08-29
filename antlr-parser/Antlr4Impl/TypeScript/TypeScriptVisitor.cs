@@ -21,10 +21,32 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
         public override AstNode VisitProgram(TypeScriptParser.ProgramContext context)
         {
+            if (context.Stop == null)
+            {
+                string[] lines = MethodBodyRemovalResult.OriginalSource.Split('\n');
+
+                return new AstNode.FileNode(
+                    path: Path,
+                    packageNode: new AstNode.PackageNode(null),
+                    classes: new List<AstNode.ClassNode>(),
+                    fields: new List<AstNode.FieldNode>(),
+                    methods: new List<AstNode.MethodNode>(),
+                    header: "",
+                    language: SourceCodeLanguage.TypeScript,
+                    isTest: false,
+                    namespaces: new List<AstNode.Namespace>(),
+                    codeRange: new CodeRange(
+                        new CodeLocation(1, 1),
+                        new CodeLocation(lines.Length, lines.Last().Length)
+                    )
+                );
+            }
+
             List<AstNode> children = context.sourceElements()
-                .sourceElement()
-                .Select(it => it.Accept(this))
-                .ToList();
+                                         ?.sourceElement()
+                                         ?.Select(it => it.Accept(this))
+                                         .ToList()
+                                     ?? new List<AstNode>();
 
             List<AstNode.ClassNode> classes = children.OfType<AstNode.ClassNode>().ToList();
             List<AstNode.FieldNode> fields = children.OfType<AstNode.FieldNode>().ToList();

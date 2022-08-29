@@ -8,12 +8,19 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 {
     public static class AntlrParseTypeScript
     {
-        public static FileDto Parse(string source, string filePath)
+        public static FileDto? Parse(string source, string filePath)
         {
-            return AstNodeToClassDtoConverter.ToFileDto(ParseFileNode(source, filePath), source);
+            return ParseFileNode(source, filePath)
+                ?.Let(fileNode => AstNodeToClassDtoConverter.ToFileDto(fileNode, source));
         }
 
-        static AstNode.FileNode ParseFileNode(string source, string filePath)
+        //TODO move to library
+        public static R Let<T, R>(this T t, Func<T, R> block)
+        {
+            return block(t);
+        }
+
+        static AstNode.FileNode? ParseFileNode(string source, string filePath)
         {
             try
             {
