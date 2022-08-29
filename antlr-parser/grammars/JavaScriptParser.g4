@@ -224,7 +224,7 @@ debuggerStatement
     ;
 
 functionDeclaration
-    : Async? Function_ '*'? identifier '(' formalParameterList? ')' functionBody
+    : Async? Function_ '*'? identifier '(' formalParameterList? ')' functionBody?
     ;
 
 classDeclaration
@@ -242,9 +242,9 @@ classElement
     ;
 
 methodDefinition
-    : '*'? '#'? propertyName '(' formalParameterList? ')' functionBody
-    | '*'? '#'? getter '(' ')' functionBody
-    | '*'? '#'? setter '(' formalParameterList? ')' functionBody
+    : '*'? '#'? propertyName '(' formalParameterList? ')' functionBody?
+    | '*'? '#'? getter '(' ')' functionBody?
+    | '*'? '#'? setter '(' formalParameterList? ')' functionBody?
     ;
 
 formalParameterList
@@ -283,9 +283,9 @@ arrayElement
 propertyAssignment
     : propertyName ':' singleExpression                                             # PropertyExpressionAssignment
     | '[' singleExpression ']' ':' singleExpression                                 # ComputedPropertyExpressionAssignment
-    | Async? '*'? propertyName '(' formalParameterList?  ')'  functionBody  # FunctionProperty
-    | getter '(' ')' functionBody                                           # PropertyGetter
-    | setter '(' formalParameterArg ')' functionBody                        # PropertySetter
+    | Async? '*'? propertyName '(' formalParameterList?  ')'  functionBody?  # FunctionProperty
+    | getter '(' ')' functionBody?                                           # PropertyGetter
+    | setter '(' formalParameterArg ')' functionBody?                        # PropertySetter
     | Ellipsis? singleExpression                                                    # PropertyShorthand
     ;
 
@@ -371,8 +371,8 @@ objectLiteral
 
 anonymousFunction
     : functionDeclaration                                                       # FunctionDecl
-    | Async? Function_ '*'? '(' formalParameterList? ')' functionBody    # AnonymousFunctionDecl
-    | Async? arrowFunctionParameters '=>' arrowFunctionBody                     # ArrowFunction
+    | Async? Function_ '*'? '(' formalParameterList? ')' functionBody?    # AnonymousFunctionDecl
+    | Async? arrowFunctionParameters '=>' arrowFunctionBody?                     # ArrowFunction
     ;
 
 arrowFunctionParameters
@@ -382,7 +382,7 @@ arrowFunctionParameters
 
 arrowFunctionBody
     : singleExpression
-    | functionBody
+    | functionBody?
     ;
 
 assignmentOperator
