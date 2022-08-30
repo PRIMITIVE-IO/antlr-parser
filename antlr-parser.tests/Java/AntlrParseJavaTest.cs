@@ -46,8 +46,7 @@ public class AntlrParseJavaTest
         myField.Name.Should().Be("myField");
         myField.AccFlag.Should().Be(AccessFlags.AccPublic);
         myField.CodeRange.Of(source).Should().Be(@"
-                |
-                |    //field comment
+                |//field comment
                 |    public String myField;
             ".TrimMargin());
 
@@ -56,8 +55,7 @@ public class AntlrParseJavaTest
         constructor.Name.Should().Be("MyClass");
         constructor.AccFlag.Should().Be(AccessFlags.AccPublic);
         constructor.CodeRange.Of(source).Should().Be(@"
-                |
-                |    //constructor comment
+                |//constructor comment
                 |    public MyClass(){
                 |    }
             ".TrimMargin());
@@ -66,8 +64,7 @@ public class AntlrParseJavaTest
         myMethod.Name.Should().Be("myMethod");
         myMethod.AccFlag.Should().Be(AccessFlags.AccPublic);
         myMethod.CodeRange.Of(source).Should().Be(@"
-                |
-                |    //method comment
+                |//method comment
                 |    public String myMethod(){
                 |        return """";
                 |    }
@@ -143,8 +140,7 @@ public class AntlrParseJavaTest
         innerClass.Name.Should().Be("InnerClass");
         innerClass.FullyQualifiedName.Should().Be("MyPackage.MyClass$InnerClass");
         innerClass.CodeRange.Of(source).Should().Be(@"
-                |
-                |    //inner class comment
+                |//inner class comment
                 |    static class InnerClass {
             ".TrimMargin());
     }
@@ -173,8 +169,7 @@ public class AntlrParseJavaTest
         myMethod.Name.Should().Be("myMethod");
         myMethod.AccFlag.Should().Be(AccessFlags.AccPublic);
         myMethod.CodeRange.Of(source).Should().Be(@"
-                |
-                |    //method comment
+                |//method comment
                 |    public void myMethod();
             ".TrimMargin());
 
@@ -190,14 +185,13 @@ public class AntlrParseJavaTest
     public void ParseMethodArguments()
     {
         string source = @"
-
                 public class MyClass {
 
                     public String myMethod(String x, int y){
                         return """";
                     }               
                 }
-            ".Unindent();
+            ".TrimIndent2();
 
         FileDto fileDto = AntlrParseJava.Parse(source, "some/path");
 

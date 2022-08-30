@@ -31,10 +31,19 @@ namespace antlr_parser.Antlr4Impl.CPP
             parser.RemoveErrorListeners();
             parser.AddErrorListener(new ErrorListener()); // add ours
 
+            CodeRangeCalculator codeRangeCalculator = new CodeRangeCalculator(source);
+
             // a translationunit is the highest level container -> start there
             // do not call parser.translationUnit() more than once
             CPP14Parser.TranslationUnitContext translationUnit = parser.translationUnit();
-            return translationUnit.Accept(new CppAstVisitor(filePath, methodBodyRemovalResult)) as AstNode.FileNode;
+            
+            return translationUnit.Accept(
+                new CppAstVisitor(
+                    filePath,
+                    methodBodyRemovalResult,
+                    codeRangeCalculator
+                )
+            ) as AstNode.FileNode;
         }
     }
 }

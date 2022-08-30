@@ -11,15 +11,21 @@ namespace antlr_parser.Antlr4Impl.C
 {
     public class CVisitor : CBaseVisitor<AstNode>
     {
-        readonly string filePath;
-        readonly MethodBodyRemovalResult methodBodyRemovalResult;
+        readonly string FilePath;
+        readonly MethodBodyRemovalResult MethodBodyRemovalResult;
         readonly IndexToLocationConverter IndexToLocationConverter;
+        private readonly CodeRangeCalculator CodeRangeCalculator;
 
-        public CVisitor(string filePath, MethodBodyRemovalResult methodBodyRemovalResult)
+        public CVisitor(
+            string filePath,
+            MethodBodyRemovalResult methodBodyRemovalResult,
+            CodeRangeCalculator codeRangeCalculator
+        )
         {
-            this.filePath = filePath;
-            this.methodBodyRemovalResult = methodBodyRemovalResult;
+            FilePath = filePath;
+            MethodBodyRemovalResult = methodBodyRemovalResult;
             IndexToLocationConverter = new IndexToLocationConverter(methodBodyRemovalResult.OriginalSource);
+            CodeRangeCalculator = codeRangeCalculator;
         }
 
         public override AstNode VisitCompilationUnit(CParser.CompilationUnitContext context)
@@ -42,14 +48,20 @@ namespace antlr_parser.Antlr4Impl.C
 
             int headerEnd = methods.Select(it => it.StartIdx - 1)
                 .Concat(structs.Select(it => it.StartIdx - 1))
-                .DefaultIfEmpty(methodBodyRemovalResult.RestoreIdx(context.Stop?.StopIndex ?? 0))
+                .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop?.StopIndex ?? 0))
                 .Min();
 
-            CodeLocation headerEndLocation = IndexToLocationConverter.IdxToLocation(headerEnd);
+
+            CodeRange headerCodeRange = CodeRangeCalculator.Trim(
+                new CodeRange(
+                    new CodeLocation(1, 1),
+                    IndexToLocationConverter.IdxToLocation(headerEnd)
+                )
+            );
 
             return new AstNode.FileNode(
-                path: filePath,
-                packageNode: new AstNode.PackageNode(""),
+                path: FilePath,
+                packageNode: null,
                 classes: structs,
                 fields: new List<AstNode.FieldNode>(),
                 methods: methods,
@@ -57,7 +69,7 @@ namespace antlr_parser.Antlr4Impl.C
                 namespaces: new List<AstNode.Namespace>(),
                 language: SourceCodeLanguage.C,
                 isTest: false,
-                codeRange: new CodeRange(new CodeLocation(1, 1), headerEndLocation)
+                codeRange: headerCodeRange
             );
         }
 
@@ -92,10 +104,12 @@ namespace antlr_parser.Antlr4Impl.C
 
             int headerEnd = fields.Select(it => it.StartIdx - 1)
                 .Concat(innerClasses.Select(it => it.StartIdx - 1))
-                .DefaultIfEmpty(methodBodyRemovalResult.RestoreIdx(context.Stop?.StopIndex ?? 0))
+                .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop?.StopIndex ?? 0))
                 .Min();
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(headerStart, headerEnd);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(headerStart, headerEnd)
+            );
 
             return new AstNode.ClassNode(
                 name,
@@ -103,8 +117,8 @@ namespace antlr_parser.Antlr4Impl.C
                 fields,
                 innerClasses,
                 AccessFlags.AccPublic,
-                methodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
-                methodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex),
+                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex),
                 "",
                 codeRange
             );
@@ -118,12 +132,12 @@ namespace antlr_parser.Antlr4Impl.C
                 CParser.StructDeclarationListContext structDeclarationListContext => structDeclarationListContext
                     .structDeclaration()
                     .TakeWhile(it => it != self)
-                    .Select(it => methodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
+                    .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
                     .DefaultIfEmpty(-1)
                     .Max(),
                 CParser.TranslationUnitContext translationUnitContext => translationUnitContext.externalDeclaration()
                     .TakeWhile(it => it != self)
-                    .Select(it => methodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
+                    .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
                     .DefaultIfEmpty(-1)
                     .Max(),
                 _ => PreviousPeerEndPosition(parent.Parent, parent)
@@ -137,9 +151,10 @@ namespace antlr_parser.Antlr4Impl.C
                                ?? ExtractReferenceFieldName(context)
                                ?? ExtractMultiName(context);
 
-            int startIdx = methodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
-            int endIdx = methodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+
+            CodeRange codeRange = CodeRangeCalculator.Trim(IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx));
 
             return new AstNode.FieldNode(
                 fieldName,
@@ -197,10 +212,11 @@ namespace antlr_parser.Antlr4Impl.C
         {
             string fName = ExtractFunctionName(context.declarator().directDeclarator());
 
-            int startIdx = methodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             //+1 forces to restore removed part
-            int endIdx = methodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex + 1);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex + 1);
+
+            CodeRange codeRange = CodeRangeCalculator.Trim(IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx));
 
             return new AstNode.MethodNode(
                 fName,

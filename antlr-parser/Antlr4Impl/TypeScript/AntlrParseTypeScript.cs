@@ -37,7 +37,13 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 parser.RemoveErrorListeners();
                 parser.AddErrorListener(new ErrorListener()); // add ours
 
-                TypeScriptVisitor visitor = new TypeScriptVisitor(filePath, removalResult);
+                CodeRangeCalculator codeRangeCalculator = new CodeRangeCalculator(source);
+
+                TypeScriptVisitor visitor = new TypeScriptVisitor(
+                    filePath,
+                    removalResult,
+                    codeRangeCalculator
+                );
                 AstNode.FileNode res = parser.program().Accept(visitor) as AstNode.FileNode;
                 return res;
             }

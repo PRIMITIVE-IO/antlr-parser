@@ -12,21 +12,20 @@ namespace antlr_parser.Antlr4Impl.Python
     public class Python3AstVisitor : Python3ParserBaseVisitor<AstNode>
     {
         readonly string FilePath;
-        readonly Dictionary<int, int> IdxToLastNonWhiteSpace;
         readonly MethodBodyRemovalResult MethodBodyRemovalResult;
         readonly IndexToLocationConverter IndexToLocationConverter;
+        readonly CodeRangeCalculator CodeRangeCalculator;
 
-        public Python3AstVisitor(
-            string filePath,
-            Dictionary<int, int> idxToLastNonWhiteSpace,
+        public Python3AstVisitor(string filePath,
             MethodBodyRemovalResult methodBodyRemovalResult,
-            IndexToLocationConverter indexToLocationConverter
+            IndexToLocationConverter indexToLocationConverter,
+            CodeRangeCalculator codeRangeCalculator
         )
         {
             FilePath = filePath;
-            IdxToLastNonWhiteSpace = idxToLastNonWhiteSpace;
             MethodBodyRemovalResult = methodBodyRemovalResult;
             IndexToLocationConverter = indexToLocationConverter;
+            CodeRangeCalculator = codeRangeCalculator;
         }
 
         public override AstNode VisitFile_input(Python3Parser.File_inputContext context)
@@ -45,7 +44,9 @@ namespace antlr_parser.Antlr4Impl.Python
                 .Concat(methodNodes.Select(m => m.CodeRange.End))
                 .MinOrDefault();
 
-            CodeRange codeRange = new CodeRange(new CodeLocation(1, 1), headerEnd);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                new CodeRange(new CodeLocation(1, 1), headerEnd)
+            );
 
             return new AstNode.FileNode(
                 path: FilePath,
@@ -73,13 +74,15 @@ namespace antlr_parser.Antlr4Impl.Python
             int endIdx = firstChild switch
             {
                 AstNode.Comment comment => comment.EndIdx,
-                AstNode.FieldNode field => IdxToLastNonWhiteSpace[field.StartIdx - 1],
-                AstNode.MethodNode method => IdxToLastNonWhiteSpace[method.StartIdx - 1],
+                AstNode.FieldNode field => field.StartIdx - 1,
+                AstNode.MethodNode method => method.StartIdx - 1,
                 null => MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex),
                 _ => throw new Exception($"Unexpected child node: {firstChild.GetType()} in class {context.GetText()}")
             };
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
+            );
 
             return new AstNode.ClassNode(
                 name: context.NAME().GetText(),
@@ -89,7 +92,7 @@ namespace antlr_parser.Antlr4Impl.Python
                 modifier: AccessFlags.None,
                 startIdx: startIdx,
                 endIdx: endIdx,
-                header: codeRange.Of(MethodBodyRemovalResult.OriginalSource),
+                header: "",
                 codeRange: codeRange
             );
         }
@@ -102,15 +105,7 @@ namespace antlr_parser.Antlr4Impl.Python
             {
                 int commentStartIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
 
-                int commentEndIdx;
-                if (Char.IsWhiteSpace(MethodBodyRemovalResult.ShortenedSource[context.Stop.StopIndex]))
-                {
-                    commentEndIdx = IdxToLastNonWhiteSpace[MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)];
-                }
-                else
-                {
-                    commentEndIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
-                }
+                int commentEndIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
                 return new AstNode.Comment(text, commentStartIdx, commentEndIdx);
             }
@@ -125,7 +120,7 @@ namespace antlr_parser.Antlr4Impl.Python
             if (text.StartsWith("\"\"\""))
             {
                 int commentStartIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
-                int commentEndIdx = IdxToLastNonWhiteSpace[MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)];
+                int commentEndIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
                 return new AstNode.Comment(text, commentStartIdx, commentEndIdx);
             }
 
@@ -134,17 +129,11 @@ namespace antlr_parser.Antlr4Impl.Python
                 .MaxOrDefault();
 
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
-            int endIdx;
-            if (Char.IsWhiteSpace(MethodBodyRemovalResult.ShortenedSource[maxStopLocation]))
-            {
-                endIdx = IdxToLastNonWhiteSpace[MethodBodyRemovalResult.RestoreIdx(maxStopLocation)];
-            }
-            else
-            {
-                endIdx = MethodBodyRemovalResult.RestoreIdx(maxStopLocation);
-            }
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(maxStopLocation);
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
+            );
 
             return new AstNode.FieldNode(
                 name: context.testlist_star_expr()[0].GetText(),
@@ -165,17 +154,11 @@ namespace antlr_parser.Antlr4Impl.Python
                 .MaxOrDefault();
 
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
-            int stopIdx;
-            if (Char.IsWhiteSpace(MethodBodyRemovalResult.ShortenedSource[endIdx]))
-            {
-                stopIdx = IdxToLastNonWhiteSpace[MethodBodyRemovalResult.RestoreIdx(endIdx)];
-            }
-            else
-            {
-                stopIdx = MethodBodyRemovalResult.RestoreIdx(endIdx + 1) - 1;
-            }
+            int stopIdx = MethodBodyRemovalResult.RestoreIdx(endIdx);
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, stopIdx);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(startIdx, stopIdx)
+            );
 
             return new AstNode.MethodNode(
                 name: context.NAME().GetText(),

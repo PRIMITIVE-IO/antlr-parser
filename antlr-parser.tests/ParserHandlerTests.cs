@@ -60,28 +60,31 @@ public class ParserHandlerTests
 
         //Verify
         ClassDto fileInfo = result.Classes.First();
-        fileInfo.CodeRange.Of(source).Should().Be(@"
-                  |package pkg
-                  |
-                  |/** comment */
-                  |
-            ".TrimMargin());
+        fileInfo.CodeRange.Of(source).Should().Be(
+            @"
+                  package pkg
+                  
+                  /** comment */
+            ".TrimIndent2()
+        );
 
         ClassDto classInfo = result.Classes[1];
         classInfo.Name.Should().Be("C");
-        classInfo.CodeRange.Of(source).Should().Be(@"
-                |package pkg
-                |
-                |/** comment */
-                |class C {
-                |  
-            ".TrimMargin());
+        classInfo.CodeRange.Of(source).Should().Be(
+            @"
+                package pkg
+                
+                /** comment */
+                class C {
+            ".TrimIndent2()
+        );
 
-        classInfo.Methods.Single().CodeRange.Of(source).Should().Be(@"
-                |fun method() {
-                |    println()
-                |  }
-                |
-            ".TrimMargin());
+        classInfo.Methods.Single().CodeRange.Of(source).Should().Be(
+            @"
+                fun method() {
+                    println()
+                  }
+            ".TrimIndent2()
+        );
     }
 }

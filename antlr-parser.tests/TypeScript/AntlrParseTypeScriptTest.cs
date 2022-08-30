@@ -37,16 +37,19 @@ public class AntlrParseTypeScriptTest
         res.Classes.Count.Should().Be(1);
         res.Classes[0].Name.Should().Be("Employee");
         res.Classes[0].Fields.Count.Should().Be(2);
-        res.Classes[0].CodeRange.Of(source).Should().Be(@"
-                |class Employee {
-                |        
-            ".TrimMargin());
+        res.Classes[0].CodeRange.Of(source).Should().Be(
+            @"
+                class Employee {
+            ".TrimIndent2()
+        );
 
         FieldDto empCodeField = res.Classes[0].Fields[0];
         empCodeField.Name.Should().Be("empCode");
-        empCodeField.CodeRange.Of(source).Should().Be(@"
+        empCodeField.CodeRange.Of(source).Should().Be(
+            @"
                 public empCode: number;
-            ".TrimIndent2());
+            ".TrimIndent2()
+        );
         empCodeField.AccFlag.Should().Be(AccessFlags.AccPublic);
 
         FieldDto empNameField = res.Classes[0].Fields[1];
@@ -55,19 +58,23 @@ public class AntlrParseTypeScriptTest
 
         res.Classes[0].Methods.Count.Should().Be(2);
         res.Classes[0].Methods[0].Name.Should().Be("constructor");
-        res.Classes[0].Methods[0].CodeRange.Of(source).Should().Be(@"
-                |constructor(code: number, name: string) {
-                |                this.empName = name;
-                |                this.empCode = code;
-                |        }
-            ".TrimMargin());
+        res.Classes[0].Methods[0].CodeRange.Of(source).Should().Be(
+            @"
+                constructor(code: number, name: string) {
+                                this.empName = name;
+                                this.empCode = code;
+                        }
+            ".TrimIndent2()
+        );
 
         res.Classes[0].Methods[1].Name.Should().Be("getSalary");
-        res.Classes[0].Methods[1].CodeRange.Of(source).Should().Be(@"
-                |private getSalary() : number {
-                |            return 10000;
-                |        }
-            ".TrimMargin());
+        res.Classes[0].Methods[1].CodeRange.Of(source).Should().Be(
+            @"
+                private getSalary() : number {
+                            return 10000;
+                        }
+            ".TrimIndent2()
+        );
 
         res.Classes[0].Methods[1].AccFlag.Should().Be(AccessFlags.AccPrivate);
     }

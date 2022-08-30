@@ -11,12 +11,18 @@ namespace antlr_parser.Antlr4Impl.Java
         readonly string Path;
         readonly MethodBodyRemovalResult MethodBodyRemovalResult;
         readonly IndexToLocationConverter IndexToLocationConverter;
+        readonly CodeRangeCalculator CodeRangeCalculator;
 
-        public JavaAstVisitor(MethodBodyRemovalResult methodBodyRemovalResult, string path)
+        public JavaAstVisitor(
+            MethodBodyRemovalResult methodBodyRemovalResult,
+            string path,
+            CodeRangeCalculator codeRangeCalculator
+        )
         {
             Path = path;
             MethodBodyRemovalResult = methodBodyRemovalResult;
             IndexToLocationConverter = new IndexToLocationConverter(methodBodyRemovalResult.OriginalSource);
+            CodeRangeCalculator = codeRangeCalculator;
         }
 
         public override AstNode VisitCompilationUnit(JavaParser.CompilationUnitContext context)
@@ -73,6 +79,10 @@ namespace antlr_parser.Antlr4Impl.Java
             int restoredStartIdx = MethodBodyRemovalResult.RestoreIdx(startIdx);
             int restoredEndIdx = MethodBodyRemovalResult.RestoreIdx(context.classBody().LBRACE().Symbol.StartIndex);
 
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx)
+            );
+
             return new AstNode.ClassNode(
                 name: context.IDENTIFIER().GetText(),
                 methods: methodNodes,
@@ -81,7 +91,7 @@ namespace antlr_parser.Antlr4Impl.Java
                 modifier: AccessFlag(topLevelClassModifier ?? innerClassModifier),
                 startIdx: restoredStartIdx,
                 endIdx: restoredEndIdx,
-                codeRange: IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx),
+                codeRange: codeRange,
                 header: ""
             );
         }
@@ -145,7 +155,9 @@ namespace antlr_parser.Antlr4Impl.Java
             int restoredStartIdx = MethodBodyRemovalResult.RestoreIdx(startIdx);
             int restoredEndIdx = MethodBodyRemovalResult.RestoreIdx(endIdx);
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx)
+            );
 
             return new AstNode.ClassNode(
                 name: context.IDENTIFIER().GetText(),
@@ -175,7 +187,9 @@ namespace antlr_parser.Antlr4Impl.Java
             int restoredStartIdx = MethodBodyRemovalResult.RestoreIdx(startIdx);
             int restoredEndIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx)
+            );
 
             List<AstNode.ArgumentNode> arguments = context.formalParameters()?.formalParameterList()?.formalParameter()
                 .Select(parameter => parameter.Accept(this) as AstNode.ArgumentNode)
@@ -212,7 +226,9 @@ namespace antlr_parser.Antlr4Impl.Java
             int restoredStartIdx = MethodBodyRemovalResult.RestoreIdx(startIdx);
             int restoredEndIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx)
+            );
 
             List<AstNode.ArgumentNode> arguments = context.formalParameters()?.formalParameterList()?.formalParameter()
                 .Select(param => param.Accept(this) as AstNode.ArgumentNode)
@@ -242,7 +258,9 @@ namespace antlr_parser.Antlr4Impl.Java
             int restoredStartIdx = MethodBodyRemovalResult.RestoreIdx(startIdx);
             int restoredEndIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx)
+            );
 
             return new AstNode.FieldNode(
                 name: name,
@@ -280,7 +298,9 @@ namespace antlr_parser.Antlr4Impl.Java
             int restoredStartIdx = MethodBodyRemovalResult.RestoreIdx(startIdx);
             int restoredStopIdx = MethodBodyRemovalResult.RestoreIdx(stopIdx);
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredStopIdx);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredStopIdx)
+            );
 
             string modifier = TypeDeclarationModifier(context.Parent as JavaParser.TypeDeclarationContext) ??
                               ClassBodyDeclarationModifier(
@@ -332,7 +352,9 @@ namespace antlr_parser.Antlr4Impl.Java
             int restoredStartIdx = MethodBodyRemovalResult.RestoreIdx(startIdx);
             int restoredEndIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(restoredStartIdx, restoredEndIdx)
+            );
 
             List<AstNode.ArgumentNode> arguments = context.formalParameters()?.formalParameterList()?.formalParameter()
                 .Select(parameter => parameter.Accept(this) as AstNode.ArgumentNode)

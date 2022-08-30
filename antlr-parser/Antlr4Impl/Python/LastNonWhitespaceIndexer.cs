@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 namespace antlr_parser.Antlr4Impl.Python
 {
+    //TODO remove in favor of CodeRangeCalculator?
     public static class LastNonWhitespaceIndexer
     {
         public static Dictionary<int, int> IdxToLastNonWhiteSpace(string source)

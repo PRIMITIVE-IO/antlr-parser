@@ -12,12 +12,18 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         readonly string FilePath;
         readonly MethodBodyRemovalResult MethodBodyRemovalResult;
         readonly IndexToLocationConverter IndexToLocationConverter;
+        readonly CodeRangeCalculator CodeRangeCalculator;
 
-        public KotlinVisitor(string filePath, MethodBodyRemovalResult methodBodyRemovalResult)
+        public KotlinVisitor(
+            string filePath,
+            MethodBodyRemovalResult methodBodyRemovalResult,
+            CodeRangeCalculator codeRangeCalculator
+        )
         {
             FilePath = filePath;
             MethodBodyRemovalResult = methodBodyRemovalResult;
             IndexToLocationConverter = new IndexToLocationConverter(methodBodyRemovalResult.OriginalSource);
+            CodeRangeCalculator = codeRangeCalculator;
         }
 
         public override AstNode VisitKotlinFile(KotlinParser.KotlinFileContext context)
@@ -38,7 +44,10 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex))
                 .Min();
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(0, headerEnd);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(0, headerEnd)
+            );
+
             return new AstNode.FileNode(
                 path: FilePath,
                 packageNode: pkg,
@@ -71,7 +80,10 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             AccessFlags modifier = ExtractVisibilityModifier(context.modifierList());
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex + 1);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
+            );
 
             return new AstNode.MethodNode(
                 context.identifier().GetFullText(),
@@ -137,9 +149,11 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             }.Max();
 
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
-
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StartIndex);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(headerStart, headerEndIdx);
+
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(headerStart, headerEndIdx)
+            );
 
             return new AstNode.ClassNode(
                 context.simpleIdentifier().GetFullText(),
@@ -193,7 +207,10 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             AccessFlags modifier = ExtractVisibilityModifier(context.modifierList());
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
+            );
 
             return new AstNode.FieldNode(
                 context.variableDeclaration().simpleIdentifier().GetFullText(),

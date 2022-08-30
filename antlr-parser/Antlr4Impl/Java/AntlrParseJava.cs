@@ -43,10 +43,12 @@ namespace antlr_parser.Antlr4Impl.Java
                 parser.RemoveErrorListeners();
                 parser.AddErrorListener(new ErrorListener()); // add ours
 
+                CodeRangeCalculator codeRangeCalculator = new CodeRangeCalculator(source);
                 // a compilation unit is the highest level container -> start there
                 // do not call parser.compilationUnit() more than once
-                return parser.compilationUnit().Accept(new JavaAstVisitor(methodBodyRemovalResult, filePath)) as
-                    AstNode.FileNode;
+                return parser.compilationUnit().Accept(
+                    new JavaAstVisitor(methodBodyRemovalResult, filePath, codeRangeCalculator)
+                ) as AstNode.FileNode;
             }
             catch (Exception e)
             {
