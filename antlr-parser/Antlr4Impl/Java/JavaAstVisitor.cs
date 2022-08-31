@@ -30,7 +30,7 @@ namespace antlr_parser.Antlr4Impl.Java
             List<AstNode> nodes = context.children.Select(it => it.Accept(this))
                 .ToList();
 
-            AstNode.PackageNode package = nodes.OfType<AstNode.PackageNode>().SingleOrDefault();
+            AstNode.PackageNode? package = nodes.OfType<AstNode.PackageNode>().SingleOrDefault();
             List<AstNode.ClassNode> classes = nodes.OfType<AstNode.ClassNode>().ToList();
 
             return new AstNode.FileNode(

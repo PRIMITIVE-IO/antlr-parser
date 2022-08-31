@@ -28,7 +28,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
         public override AstNode VisitKotlinFile(KotlinParser.KotlinFileContext context)
         {
-            AstNode.PackageNode pkg = context.preamble().packageHeader().Accept(this) as AstNode.PackageNode;
+            AstNode.PackageNode? pkg = context.preamble().packageHeader().Accept(this) as AstNode.PackageNode;
             List<AstNode> parsed = context.topLevelObject()
                 .Select(obj => obj.Accept(this))
                 .Where(it => it != null)
