@@ -32,7 +32,7 @@ namespace antlr_parser.Antlr4Impl.Java
         {
             IEnumerable<Match> matches = MethodDeclarationRegex.Matches(source).Cast<Match>();
 
-            List<Tuple<int, int>> blocksToRemove = matches.Select(currentMatch =>
+            List<Tuple<int, int>> blocksToRemove = matches.SelectNotNull(currentMatch =>
                 {
                     int openedCurlyPosition = currentMatch.Groups[10].Index;
                     int closedCurlyPosition = StringUtil.ClosedCurlyPosition(source, openedCurlyPosition);
@@ -45,7 +45,6 @@ namespace antlr_parser.Antlr4Impl.Java
 
                     return new Tuple<int, int>(start, end);
                 })
-                .Where(it => it != null)
                 .ToList();
 
             return blocksToRemove;

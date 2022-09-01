@@ -73,12 +73,12 @@ static class Program
 
             foreach (FieldDto field in classDto.Fields)
             {
-                Console.WriteLine($"    field: {field.Name}: {field.SourceCode}");
+                Console.WriteLine($"    field: {field.Name}: {field.CodeRange.Of(fileDto.Text)}");
             }
 
             foreach (MethodDto method in classDto.Methods)
             {
-                Console.WriteLine($"    method: {method.Name}: {method.SourceCode}");
+                Console.WriteLine($"    method: {method.Name}: {method.CodeRange.Of(fileDto.Text)}");
             }
         }
     }

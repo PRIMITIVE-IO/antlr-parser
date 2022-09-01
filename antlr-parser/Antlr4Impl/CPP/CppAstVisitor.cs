@@ -13,12 +13,18 @@ namespace antlr_parser.Antlr4Impl.CPP
         readonly string Path;
         readonly MethodBodyRemovalResult MethodBodyRemovalResult;
         readonly IndexToLocationConverter IndexToLocationConverter;
+        readonly CodeRangeCalculator CodeRangeCalculator;
 
-        public CppAstVisitor(string path, MethodBodyRemovalResult methodBodyRemovalResult)
+        public CppAstVisitor(
+            string path,
+            MethodBodyRemovalResult methodBodyRemovalResult,
+            CodeRangeCalculator codeRangeCalculator
+        )
         {
             Path = path;
             MethodBodyRemovalResult = methodBodyRemovalResult;
             IndexToLocationConverter = new IndexToLocationConverter(methodBodyRemovalResult.OriginalSource);
+            CodeRangeCalculator = codeRangeCalculator;
         }
 
         public override AstNode VisitTranslationUnit(CPP14Parser.TranslationUnitContext context)
@@ -96,7 +102,7 @@ namespace antlr_parser.Antlr4Impl.CPP
 
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+            CodeRange codeRange = CodeRangeCalculator.Trim(IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx));
             if (fieldNames.Any())
             {
                 return new AstNode.FieldNode(
@@ -192,7 +198,8 @@ namespace antlr_parser.Antlr4Impl.CPP
             string name = context.Identifier().GetText();
             int headerStart = PreviousPeerEndPosition(context.Parent, context) + 1;
             int headerEnd = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(headerStart, headerEnd);
+            CodeRange codeRange =
+                CodeRangeCalculator.Trim(IndexToLocationConverter.IdxToCodeRange(headerStart, headerEnd));
 
             return new AstNode.ClassNode(
                 name,
@@ -221,7 +228,7 @@ namespace antlr_parser.Antlr4Impl.CPP
 
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+            CodeRange codeRange = CodeRangeCalculator.Trim(IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx));
 
             return new AstNode.MethodNode(
                 methodName,
@@ -248,7 +255,10 @@ namespace antlr_parser.Antlr4Impl.CPP
 
             int headerStart = PreviousPeerEndPosition(context, context.Parent) + 1;
             int headerEnd = MethodBodyRemovalResult.RestoreIdx(context.LeftBrace().Symbol.StartIndex);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(headerStart, headerEnd);
+
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(headerStart, headerEnd)
+            );
 
             return new AstNode.ClassNode(
                 name,
@@ -267,7 +277,10 @@ namespace antlr_parser.Antlr4Impl.CPP
         {
             int headerStart = PreviousPeerEndPosition(context, context.Parent) + 1;
             int headerEnd = MethodBodyRemovalResult.RestoreIdx(context.LeftBrace().Symbol.StartIndex);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(headerStart, headerEnd);
+
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(headerStart, headerEnd)
+            );
 
             return new AstNode.ClassNode(
                 context.enumHead().Identifier().GetText(),
@@ -307,7 +320,7 @@ namespace antlr_parser.Antlr4Impl.CPP
 
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+            CodeRange codeRange = CodeRangeCalculator.Trim(IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx));
 
             if (fieldNames.Count != 0)
             {

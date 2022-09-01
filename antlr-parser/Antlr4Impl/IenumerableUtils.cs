@@ -25,8 +25,12 @@ namespace antlr_parser.Antlr4Impl
             this.extractor = extractor;
         }
 
-        public override int Compare(T x, T y)
+        public override int Compare(T? x, T? y)
         {
+            if (x == null && y == null) return 0;
+            if (x == null) return -1;
+            if (y == null) return 1;
+
             return extractor(x).CompareTo(extractor(y));
         }
     }

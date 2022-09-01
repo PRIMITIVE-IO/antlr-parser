@@ -408,10 +408,9 @@ public class AntlrParseCppTest
 
         ClassDto classInfo = classInfos.Classes[1];
         classInfo.CodeRange.Of(source).Should().Be(@"
-                |
-                |/**comment*/
-                |class A{
-            ".TrimMargin());
+                /**comment*/
+                class A{
+            ".TrimIndent2());
     }
 
     [Fact]
@@ -431,9 +430,8 @@ public class AntlrParseCppTest
         ClassDto classInfo = classInfos.Classes.ToArray()[1];
         classInfo.Name.Should().Be("B");
         classInfo.CodeRange.Of(source).Should().Be(@"
-                |
-                |/**comment*/
-                |class B{
-            ".TrimMargin());
+                /**comment*/
+                class B{
+            ".TrimIndent2());
     }
 }

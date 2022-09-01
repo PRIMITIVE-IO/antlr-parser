@@ -31,9 +31,9 @@ namespace antlr_parser.Antlr4Impl.CSharp
                 parser.AddErrorListener(new ErrorListener()); // add ours
 
                 CSharpParser.Compilation_unitContext compilationUnitContext = parser.compilation_unit();
-
+                CodeRangeCalculator codeRangeCalculator = new CodeRangeCalculator(source);
                 AstNode.FileNode fileNode = (AstNode.FileNode)compilationUnitContext
-                    .Accept(new CSharpAstVisitor(filePath, methodBodyRemovalResult));
+                    .Accept(new CSharpAstVisitor(filePath, methodBodyRemovalResult, codeRangeCalculator));
 
                 return AstNodeToClassDtoConverter.ToFileDto(fileNode, source);
             }

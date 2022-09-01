@@ -12,13 +12,18 @@ namespace antlr_parser.Antlr4Impl.Solidity
         readonly string Path;
         readonly MethodBodyRemovalResult MethodBodyRemovalResult;
         readonly IndexToLocationConverter IndexToLocationConverter;
+        readonly CodeRangeCalculator CodeRangeCalculator;
 
-
-        public SolidityAstVisitor(string path, MethodBodyRemovalResult methodBodyRemovalResult)
+        public SolidityAstVisitor(
+            string path,
+            MethodBodyRemovalResult methodBodyRemovalResult,
+            CodeRangeCalculator codeRangeCalculator
+        )
         {
             Path = path;
             MethodBodyRemovalResult = methodBodyRemovalResult;
             IndexToLocationConverter = new IndexToLocationConverter(methodBodyRemovalResult.OriginalSource);
+            CodeRangeCalculator = codeRangeCalculator;
         }
 
         public override AstNode VisitSourceUnit(SolidityParser.SourceUnitContext context)
@@ -100,7 +105,9 @@ namespace antlr_parser.Antlr4Impl.Solidity
                 .Symbol
                 .StartIndex;
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
+            );
 
             return new AstNode.ClassNode(
                 name: context.identifier().GetText(),
@@ -127,7 +134,9 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
             int endIdx = context.Stop.StopIndex;
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
+            );
 
             return new AstNode.FieldNode(
                 name: context.identifier().GetText(),
@@ -150,7 +159,9 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
             int endIdx = context.Stop.StopIndex;
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
+            );
 
             return new AstNode.MethodNode(
                 name: name,
@@ -169,7 +180,6 @@ namespace antlr_parser.Antlr4Impl.Solidity
             if (context.PrivateKeyword() != null) return AccessFlags.AccPrivate;
             return AccessFlags.None;
         }
-
 
         protected override AstNode AggregateResult(AstNode aggregate, AstNode nextResult)
         {

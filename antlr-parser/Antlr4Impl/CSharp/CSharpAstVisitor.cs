@@ -12,12 +12,18 @@ namespace antlr_parser.Antlr4Impl.CSharp
         readonly string Path;
         readonly IndexToLocationConverter IndexToLocationConverter;
         readonly MethodBodyRemovalResult MethodBodyRemovalResult;
+        readonly CodeRangeCalculator CodeRangeCalculator;
 
-        public CSharpAstVisitor(string path, MethodBodyRemovalResult methodBodyRemovalResult)
+        public CSharpAstVisitor(
+            string path,
+            MethodBodyRemovalResult methodBodyRemovalResult,
+            CodeRangeCalculator codeRangeCalculator
+        )
         {
             Path = path;
             MethodBodyRemovalResult = methodBodyRemovalResult;
             IndexToLocationConverter = new IndexToLocationConverter(methodBodyRemovalResult.OriginalSource);
+            CodeRangeCalculator = codeRangeCalculator;
         }
 
         public override AstNode VisitCompilation_unit(CSharpParser.Compilation_unitContext context)
@@ -87,9 +93,11 @@ namespace antlr_parser.Antlr4Impl.CSharp
             int headerStartIdx = (prevEndPosition ?? -1) + 1;
 
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(
-                MethodBodyRemovalResult.RestoreIdx(headerStartIdx),
-                MethodBodyRemovalResult.RestoreIdx(endIdx)
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(
+                    MethodBodyRemovalResult.RestoreIdx(headerStartIdx),
+                    MethodBodyRemovalResult.RestoreIdx(endIdx)
+                )
             );
 
             return new AstNode.ClassNode(
@@ -126,9 +134,11 @@ namespace antlr_parser.Antlr4Impl.CSharp
 
             int headerStartIdx = (prevEndPosition ?? -1) + 1;
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(
-                MethodBodyRemovalResult.RestoreIdx(headerStartIdx),
-                MethodBodyRemovalResult.RestoreIdx(endIdx)
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(
+                    MethodBodyRemovalResult.RestoreIdx(headerStartIdx),
+                    MethodBodyRemovalResult.RestoreIdx(endIdx)
+                )
             );
 
             return new AstNode.ClassNode(
@@ -165,9 +175,11 @@ namespace antlr_parser.Antlr4Impl.CSharp
 
             int headerStartIdx = (prevEndPosition ?? -1) + 1;
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(
-                MethodBodyRemovalResult.RestoreIdx(headerStartIdx),
-                MethodBodyRemovalResult.RestoreIdx(endIdx)
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(
+                    MethodBodyRemovalResult.RestoreIdx(headerStartIdx),
+                    MethodBodyRemovalResult.RestoreIdx(endIdx)
+                )
             );
 
             return new AstNode.ClassNode(
@@ -196,9 +208,11 @@ namespace antlr_parser.Antlr4Impl.CSharp
 
             int headerStartIdx = (prevEndPosition ?? -1) + 1;
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(
-                MethodBodyRemovalResult.RestoreIdx(headerStartIdx),
-                MethodBodyRemovalResult.RestoreIdx(endIdx)
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(
+                    MethodBodyRemovalResult.RestoreIdx(headerStartIdx),
+                    MethodBodyRemovalResult.RestoreIdx(endIdx)
+                )
             );
 
             return new AstNode.ClassNode(
@@ -266,9 +280,11 @@ namespace antlr_parser.Antlr4Impl.CSharp
             AccessFlags accFlag = FieldAccessFlag(context);
             int startIdx = CalculateFieldStartIdx(context);
             int endIdx = context.Stop.StopIndex;
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(
-                MethodBodyRemovalResult.RestoreIdx(startIdx),
-                MethodBodyRemovalResult.RestoreIdx(endIdx)
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(
+                    MethodBodyRemovalResult.RestoreIdx(startIdx),
+                    MethodBodyRemovalResult.RestoreIdx(endIdx)
+                )
             );
 
             string name = context.variable_declarators().variable_declarator()
@@ -291,9 +307,11 @@ namespace antlr_parser.Antlr4Impl.CSharp
             int startIdx = CalculateFieldStartIdx(context);
             int endIdx = context.Stop.StopIndex;
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(
-                MethodBodyRemovalResult.RestoreIdx(startIdx),
-                MethodBodyRemovalResult.RestoreIdx(endIdx)
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(
+                    MethodBodyRemovalResult.RestoreIdx(startIdx),
+                    MethodBodyRemovalResult.RestoreIdx(endIdx)
+                )
             );
 
             string name = context.member_name().namespace_or_type_name().identifier().First().GetText();
@@ -314,14 +332,16 @@ namespace antlr_parser.Antlr4Impl.CSharp
             int startIdx = CalculateFieldStartIdx(context);
             int endIdx = context.Stop.StopIndex;
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(
-                MethodBodyRemovalResult.RestoreIdx(startIdx),
-                MethodBodyRemovalResult.RestoreIdx(endIdx)
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(
+                    MethodBodyRemovalResult.RestoreIdx(startIdx),
+                    MethodBodyRemovalResult.RestoreIdx(endIdx)
+                )
             );
 
             string name = context.member_name()?.namespace_or_type_name()?.identifier()?.First()?.GetText()
                           ?? context.variable_declarators().variable_declarator().First().identifier().GetText();
-            
+
             return new AstNode.FieldNode(
                 name: name,
                 accFlag: accFlag,
@@ -400,9 +420,11 @@ namespace antlr_parser.Antlr4Impl.CSharp
 
             int endIdx = context.Stop.StopIndex;
 
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(
-                MethodBodyRemovalResult.RestoreIdx(startIdx),
-                MethodBodyRemovalResult.RestoreIdx(endIdx)
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(
+                    MethodBodyRemovalResult.RestoreIdx(startIdx),
+                    MethodBodyRemovalResult.RestoreIdx(endIdx)
+                )
             );
 
             return new AstNode.MethodNode(

@@ -25,11 +25,18 @@ namespace antlr_parser.Antlr4Impl.Solidity
                 parser.RemoveErrorListeners();
                 parser.AddErrorListener(new ErrorListener()); // add ours 
 
+                CodeRangeCalculator codeRangeCalculator = new CodeRangeCalculator(source);
+
                 // a sourceUnit is the highest level container -> start there
                 // do not call parser.sourceUnit() more than once
-                AstNode.FileNode fileNode =
-                    parser.sourceUnit().Accept(new SolidityAstVisitor(filePath, methodBodyRemovalResult)) as
-                        AstNode.FileNode;
+                AstNode.FileNode fileNode = parser.sourceUnit().Accept(
+                    new SolidityAstVisitor(
+                        filePath,
+                        methodBodyRemovalResult,
+                        codeRangeCalculator
+                    )
+                ) as AstNode.FileNode;
+
                 return AstNodeToClassDtoConverter.ToFileDto(fileNode, source);
             }
             catch (Exception e)

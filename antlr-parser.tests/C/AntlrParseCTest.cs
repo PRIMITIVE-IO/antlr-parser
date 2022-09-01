@@ -8,11 +8,8 @@ using Xunit;
 
 namespace antlr_parser.tests.C;
 
-public class AntlrParseCTest
-{
-    public AntlrParseCTest()
+    public class AntlrParseCTest
     {
-    }
 
     [Fact]
     void ParseFunctions()
@@ -86,7 +83,7 @@ public class AntlrParseCTest
         dateClass.Name.Should().Be("Date");
     }
 
-    //TODO [Fact]
+     [Fact]
     public void ClassNameWithoutNamespace()
     {
         string source = @"
@@ -201,25 +198,61 @@ public class AntlrParseCTest
         fMethod.Should().NotBeNull();
 
         fMethod.CodeRange.Of(source).Should().Be(@"
-                |int f(int a, int b)
-                |{
-                |#if 1
-                |    for(i = 0; i<0; i++){
-                |#else
-                |    for(j = 0; j<0; j++){
-                |#endif
-                |    };
-                |}
-                |
-            ".TrimMargin());
+                int f(int a, int b)
+                {
+                #if 1
+                    for(i = 0; i<0; i++){
+                #else
+                    for(j = 0; j<0; j++){
+                #endif
+                    };
+                }
+            ".TrimIndent2());
 
         methodInfos.SingleOrDefault(it => it.Name == "g").Should().NotBeNull();
     }
+        
+        [Fact]
+        void ParseMethods()
+        {
+            string source = @"
+                int f(int a, int b)
+                {
+                }
 
-    [Fact]
-    void ParseReferenceFieldNames()
-    {
-        string source = @"
+                int g(int a, int b)  
+                {
+     
+                }
+            ".TrimIndent2();
+
+            FileDto fileDto = AntlrParseC.Parse(source, "file/path");
+
+            List<MethodDto> methodInfos = fileDto.Classes[0].Methods;
+            MethodDto fMethod = methodInfos.Single(it => it.Name == "f");
+            fMethod.Should().NotBeNull();
+
+            fMethod.CodeRange.Of(source).Should().Be(@"
+                int f(int a, int b)
+                {
+                }
+            ".TrimIndent2());
+            
+            MethodDto gMethod = methodInfos.Single(it => it.Name == "g");
+            gMethod.Should().NotBeNull();
+
+            gMethod.CodeRange.Of(source).Should().Be(@"
+                int g(int a, int b)  
+                {
+     
+                }
+            ".TrimIndent2());
+        }
+
+        [Fact]
+        void ParseReferenceFieldNames()
+        {
+            string source = @"
                 struct A {
                     const struct b *c;
                 };
@@ -258,11 +291,10 @@ public class AntlrParseCTest
         FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
         fileDto.Classes.Single().CodeRange.Of(source).Should().Be(@"
-                |#include ""something""
-                |/**comment*/
-                |struct A {
-                |   
-            ".TrimMargin());
+                #include ""something""
+                /**comment*/
+                struct A {
+            ".TrimIndent2());
     }
 
     [Fact]
@@ -283,11 +315,8 @@ public class AntlrParseCTest
         FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
         fileDto.Classes.Single(x => x.Name == "B").CodeRange.Of(source).Should().Be(@"
-                |
-                |
-                |/**comment2*/
-                |struct B {
-                |    
-            ".TrimMargin());
+                /**comment2*/
+                struct B {
+            ".TrimIndent2());
     }
 }

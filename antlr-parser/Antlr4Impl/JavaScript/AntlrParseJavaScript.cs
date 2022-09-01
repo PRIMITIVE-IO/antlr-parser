@@ -28,10 +28,14 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             parser.RemoveErrorListeners();
             parser.AddErrorListener(new ErrorListener()); // add ours
 
+            CodeRangeCalculator codeRangeCalculator = new CodeRangeCalculator(source);
+
             // a program is the highest level container -> start there
             // do not call parser.program() more than once
             JavaScriptParser.ProgramContext programContext = parser.program();
-            return programContext.Accept(new JavaScriptAstVisitor(filePath, removalResult)) as AstNode.FileNode;
+            return programContext.Accept(
+                new JavaScriptAstVisitor(filePath, removalResult, codeRangeCalculator)
+            ) as AstNode.FileNode;
         }
     }
 }

@@ -34,10 +34,19 @@ namespace antlr_parser.Antlr4Impl.C
             parser.RemoveErrorListeners();
             parser.AddErrorListener(new ErrorListener()); // add ours
 
+            CodeRangeCalculator codeRangeCalculator = new CodeRangeCalculator(source);
+
             // a compilation unit is the highest level container -> start there
             // do not call parser.compilationUnit() more than once
             CParser.CompilationUnitContext compilationUnitContext = parser.compilationUnit();
-            return (AstNode.FileNode)compilationUnitContext.Accept(new CVisitor(filePath, methodBodyRemovalResult));
+            
+            return (AstNode.FileNode)compilationUnitContext.Accept(
+                new CVisitor(
+                    filePath,
+                    methodBodyRemovalResult,
+                    codeRangeCalculator
+                )
+            );
         }
     }
 }

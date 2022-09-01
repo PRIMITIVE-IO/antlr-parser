@@ -13,12 +13,18 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         readonly string FilePath;
         readonly MethodBodyRemovalResult MethodBodyRemovalResult;
         readonly IndexToLocationConverter IndexToLocationConverter;
+        readonly CodeRangeCalculator CodeRangeCalculator;
 
-        public JavaScriptAstVisitor(string filePath, MethodBodyRemovalResult methodBodyRemovalResult)
+        public JavaScriptAstVisitor(
+            string filePath,
+            MethodBodyRemovalResult methodBodyRemovalResult,
+            CodeRangeCalculator codeRangeCalculator
+        )
         {
             FilePath = filePath;
             MethodBodyRemovalResult = methodBodyRemovalResult;
             IndexToLocationConverter = new IndexToLocationConverter(methodBodyRemovalResult.OriginalSource);
+            CodeRangeCalculator = codeRangeCalculator;
         }
 
         public override AstNode VisitProgram(JavaScriptParser.ProgramContext context)
@@ -75,6 +81,10 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
             CodeLocation headerEndLocation = IndexToLocationConverter.IdxToLocation(headerEnd);
 
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                new CodeRange(new CodeLocation(1, 1), headerEndLocation)
+            );
+
             return new AstNode.FileNode(
                 path: FilePath,
                 packageNode: new AstNode.PackageNode(""),
@@ -85,7 +95,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 namespaces: new List<AstNode.Namespace>(),
                 language: SourceCodeLanguage.Java,
                 isTest: false,
-                codeRange: new CodeRange(new CodeLocation(1, 1), headerEndLocation)
+                codeRange: codeRange
             );
         }
 
@@ -116,7 +126,9 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         {
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex + 1);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
+            );
 
             return new AstNode.MethodNode(
                 context.identifier().GetFullText(),
@@ -154,7 +166,9 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             }.Max();
 
             int startIdx = MethodBodyRemovalResult.RestoreIdx(headerStart);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, headerEnd);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(startIdx, headerEnd)
+            );
 
             return new AstNode.ClassNode(
                 context.identifier().GetFullText(),
@@ -201,7 +215,10 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         {
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex + 1);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
+            );
 
             return new AstNode.MethodNode(
                 context.propertyName().GetFullText(),
@@ -239,7 +256,10 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
 
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
-            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
+            );
 
             return new AstNode.FieldNode(
                 name,

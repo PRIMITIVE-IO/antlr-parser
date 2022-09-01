@@ -22,7 +22,7 @@ public class AntlrParseSolidityTest
                       return storedData;
                    }
                 }
-            ".Unindent();
+            ".TrimIndent2();
         FileDto fileDto = AntlrParseSolidity.Parse(source, "some/path");
 
         fileDto.Classes.Should().HaveCount(1);
@@ -52,13 +52,19 @@ public class AntlrParseSolidityTest
                       uint result = a + b;
                       return result;
                    }
-                }".Unindent();
+                }
+            ".TrimIndent2();
         FileDto fileDto = AntlrParseSolidity.Parse(source, "some/path");
 
         fileDto.Classes[0].Methods.Should().HaveCount(2);
         MethodDto constructor = fileDto.Classes[0].Methods[0];
         constructor.Name.Should().Be("constructor");
-        constructor.CodeRange.Should().Be(TestUtils.CodeRange(3, 24, 5, 4));
+        constructor.CodeRange.Of(source).Should().Be(
+            @"
+               constructor() public{
+                  }
+            ".TrimIndent2()
+        );
         constructor.AccFlag.Should().Be(AccessFlags.AccPublic);
     }
 
@@ -96,11 +102,12 @@ public class AntlrParseSolidityTest
         FileDto fileDto = AntlrParseSolidity.Parse(source, "some/path");
 
         ClassDto classDto = fileDto.Classes[1];
-        classDto.CodeRange.Of(source).Should().Be(@"
-                |
-                |/*comment2*/
-                |contract SimpleStorage2 {
-            ".TrimMargin());
+        classDto.CodeRange.Of(source).Should().Be(
+            @"
+                /*comment2*/
+                contract SimpleStorage2 {
+            ".TrimIndent2()
+        );
     }
 
     [Fact]
@@ -122,8 +129,7 @@ public class AntlrParseSolidityTest
 
         MethodDto methodDto = fileDto.Classes[0].Methods[0];
         methodDto.CodeRange.Of(source).Should().Be(@"
-                   |
-                   |   /*comment*/
+                   |/*comment*/
                    |   function getResult() public view returns(uint){
                    |      uint a = 1;
                    |      uint b = 2;

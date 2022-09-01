@@ -290,7 +290,7 @@ public class AntlrParsePython3Test
 
         fileDto.Classes.Should().HaveCount(2);
         fileDto.Classes[0].Methods.Should().HaveCount(6);
-        fileDto.Classes[0].Methods[5].SourceCode.Should().Be(@"
+        fileDto.Classes[0].Methods[5].CodeRange.Of(source).Should().Be(@"
                 def digest_locals(obj, keys=None):
                     caller_locals = filtered_locals(
                         inspect.currentframe().f_back.f_locals

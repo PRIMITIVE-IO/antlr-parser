@@ -51,13 +51,13 @@ namespace antlr_parser.Antlr4Impl.Python
                 parser3.AddErrorListener(new ErrorListener());
 
                 Python3Parser.File_inputContext fileUnit3 = parser3.file_input();
-
+                CodeRangeCalculator codeRangeCalculator = new CodeRangeCalculator(source);
 
                 return fileUnit3.Accept(new Python3AstVisitor(
                     filePath,
-                    LastNonWhitespaceIndexer.IdxToLastNonWhiteSpace(source),
                     methodBodyRemovalResult,
-                    indexToLocationConverter
+                    indexToLocationConverter,
+                    codeRangeCalculator
                 )) as AstNode.FileNode;
             }
             catch (Exception ex)

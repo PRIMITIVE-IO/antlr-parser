@@ -29,11 +29,14 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             parser.RemoveErrorListeners();
             parser.AddErrorListener(new ErrorListener()); // add ours 
 
+            CodeRangeCalculator codeRangeCalculator = new CodeRangeCalculator(source);
+
             // a KotlinFile is the highest level container -> start there
             // do not call parser.kotlinFile() more than once
             KotlinParser.KotlinFileContext kotlinFileContext = parser.kotlinFile();
-            return kotlinFileContext.Accept(new KotlinVisitor(filePath, removalMethodBodyRemovalResult)) as
-                AstNode.FileNode;
+            return kotlinFileContext.Accept(
+                    new KotlinVisitor(filePath, removalMethodBodyRemovalResult, codeRangeCalculator)
+                ) as AstNode.FileNode;
         }
     }
 }

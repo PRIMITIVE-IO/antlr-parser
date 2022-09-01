@@ -58,14 +58,12 @@ public class AntlrParseCSharpTest
         ClassDto classDto = fileDto.Classes.Single();
 
         classDto.CodeRange.Of(source).Should().Be(@"
-                |using Y;
-                |namespace X 
-                |{
-                |    ///comment
-                |    public class MyClass
-                |    
-            ".TrimMargin());
-        classDto.CodeRange.Should().Be(CodeRange(1, 1, 6, 4));
+                using Y;
+                namespace X 
+                {
+                    ///comment
+                    public class MyClass
+            ".TrimIndent2());
     }
 
 
@@ -92,12 +90,9 @@ public class AntlrParseCSharpTest
         ClassDto classDto = fileDto.Classes[1];
 
         classDto.CodeRange.Of(source).Should().Be(@"
-                    |
-                    |    ///comment
+                    |///comment
                     |    public class SecondClass
-                    |    
             ".TrimMargin());
-        classDto.CodeRange.Should().Be(CodeRange(8, 6, 11, 4));
     }
 
     [Fact]
@@ -128,13 +123,9 @@ public class AntlrParseCSharpTest
         nestedClass.FullyQualifiedName.Should().Be("X.MyClass$SecondClass");
 
         nestedClass.CodeRange.Of(source).Should().Be(@"
-                    |
-                    |        ///comment
+                    |///comment
                     |        public class SecondClass
-                    |        
             ".TrimMargin());
-
-        nestedClass.CodeRange.Should().Be(CodeRange(6, 6, 9, 8));
     }
 
     [Fact]
@@ -163,8 +154,7 @@ public class AntlrParseCSharpTest
         ClassDto classDto = fileDto.Classes[0];
         MethodDto method1 = classDto.Methods[0];
         method1.CodeRange.Of(source).Should().Be(@"
-                |
-                |        ///comment
+                |///comment
                 |        public int MyMethod1()  
                 |        {
                 |        }
@@ -172,9 +162,7 @@ public class AntlrParseCSharpTest
 
         MethodDto method2 = classDto.Methods[1];
         method2.CodeRange.Of(source).Should().Be(@"
-                |
-                |
-                |        ///comment
+                |///comment
                 |        public int MyMethod2()
                 |        {
                 |        }
@@ -203,15 +191,12 @@ public class AntlrParseCSharpTest
         ClassDto classDto = fileDto.Classes[0];
         FieldDto field1 = classDto.Fields[0];
         field1.CodeRange.Of(source).Should().Be(@"
-                |
-                |        ///comment
+                |///comment
                 |        public int MyField1;
             ".TrimMargin());
         FieldDto field2 = classDto.Fields[1];
         field2.CodeRange.Of(source).Should().Be(@"
-                |
-                |
-                |        ///comment
+                |///comment
                 |        public int MyField2;
             ".TrimMargin());
     }
@@ -241,17 +226,14 @@ public class AntlrParseCSharpTest
         var method1 = classDto.Methods[0];
         method1.Name.Should().Be("MyMethod1");
         method1.CodeRange.Of(source).Should().Be(@"
-                |
-                |        ///comment
+                |///comment
                 |        public int MyMethod1();
             ".TrimMargin());
 
         var method2 = classDto.Methods[1];
         method2.Name.Should().Be("MyMethod2");
         method2.CodeRange.Of(source).Should().Be(@"
-                |
-                |
-                |        ///comment
+                |///comment
                 |        public int MyMethod2();
             ".TrimMargin());
     }
@@ -332,9 +314,7 @@ public class AntlrParseCSharpTest
         field1.Name.Should().Be("MyField1");
         field1.AccFlag.Should().Be(AccessFlags.AccPublic);
         field1.CodeRange.Of(source).Should().Be(@"
-                |
-                |
-                |    /// <summary>
+                |/// <summary>
                 |    /// comment
                 |    /// </summary>
                 |    public string MyField1;
@@ -344,8 +324,7 @@ public class AntlrParseCSharpTest
         field2.Name.Should().Be("MyField2");
         field2.AccFlag.Should().Be(AccessFlags.AccPublic);
         field2.CodeRange.Of(source).Should().Be(@"
-                |
-                |    /// <summary>
+                |/// <summary>
                 |    /// comment
                 |    /// </summary>
                 |    public string MyField2;
@@ -355,9 +334,7 @@ public class AntlrParseCSharpTest
 
         method.Name.Should().Be("f");
         method.CodeRange.Of(source).Should().Be(@"
-                |
-                |
-                |    ///Comment
+                |///Comment
                 |    public void f(){
                 |    }
             ".TrimMargin());
@@ -382,8 +359,7 @@ public class AntlrParseCSharpTest
 
         field.Name.Should().Be("Path");
         field.CodeRange.Of(source).Should().Be(@"
-               |
-               |    internal string Path
+               |internal string Path
                |    {
                |        get => Type == RequestType.http ? HttpRequest?.Path : RequestPath;
                |        set => HttpRequest.Path = value;
@@ -399,10 +375,7 @@ public class AntlrParseCSharpTest
 
         fileDto.Classes.Single().Methods.Single(x => x.Name == "StaticReset")
             .CodeRange.Of(source).Should().Be(@"
-                    |
-                    |
-                    |
-                    |        #if SUPPORTED_UNITY
+                    |#if SUPPORTED_UNITY
                     |
                     |        #if UNITY_2019_4_OR_NEWER
                     |
@@ -446,8 +419,7 @@ public class AntlrParseCSharpTest
         var field = fileDto.Classes.Single().Fields.Single();
         field.Name.Should().Be("alias");
         field.CodeRange.Of(source).Should().Be(@"
-                |
-                |        /// <summary>
+                |/// <summary>
                 |        public string alias { get; set; }
             ".TrimMargin());
     }
@@ -482,9 +454,7 @@ public class AntlrParseCSharpTest
         fieldDto.Name.Should().Be("onEvent");
             
         fieldDto.CodeRange.Of(source).Should().Be(@"
-                |
-                |
-                |    /// comment
+                |/// comment
                 |    public event Action<InputEventPtr> onEvent
                 |    {
                 |        add
