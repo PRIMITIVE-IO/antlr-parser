@@ -83,7 +83,7 @@ public class AntlrParseJavaScriptTest
 
         script.Fields.Count().Should().Be(1);
         script.Fields.First().Name.Should().Be("x");
-        script.Fields.First().SourceCode.Should().Be("x = 10");
+        script.Fields.First().CodeRange.Of(source).Should().Be("x = 10");
     }
 
     [Fact]
@@ -99,7 +99,7 @@ public class AntlrParseJavaScriptTest
 
         script.Fields.Count().Should().Be(1);
         script.Fields.First().Name.Should().Be("x");
-        script.Fields.First().SourceCode.Should().Be("{ y: { x } } = obj");
+        script.Fields.First().CodeRange.Of(source).Should().Be("{ y: { x } } = obj");
     }
 
     [Fact]
@@ -115,7 +115,7 @@ public class AntlrParseJavaScriptTest
 
         script.Fields.Count().Should().Be(1);
         script.Fields.First().Name.Should().Be("x,y");
-        script.Fields.First().SourceCode.Should().Be("{ a: { x, y } } = obj");
+        script.Fields.First().CodeRange.Of(source).Should().Be("{ a: { x, y } } = obj");
     }
 
     [Fact]
@@ -131,7 +131,7 @@ public class AntlrParseJavaScriptTest
 
         script.Fields.Count().Should().Be(1);
         script.Fields.First().Name.Should().Be("x,y");
-        script.Fields.First().SourceCode.Should().Be("[x, ...y] = obj");
+        script.Fields.First().CodeRange.Of(source).Should().Be("[x, ...y] = obj");
     }
 
     [Fact]
@@ -147,7 +147,7 @@ public class AntlrParseJavaScriptTest
 
         script.Fields.Count().Should().Be(1);
         script.Fields.First().Name.Should().Be("x,y");
-        script.Fields.First().SourceCode.Should().Be("{ a: [x, ...y]} = obj");
+        script.Fields.First().CodeRange.Of(source).Should().Be("{ a: [x, ...y]} = obj");
     }
 
     [Fact]
@@ -163,7 +163,7 @@ public class AntlrParseJavaScriptTest
 
         script.Fields.Count().Should().Be(1);
         script.Fields.First().Name.Should().Be("x,y,z");
-        script.Fields.First().SourceCode.Should().Be("{ a: [{x}, ...y], z} = obj");
+        script.Fields.First().CodeRange.Of(source).Should().Be("{ a: [{x}, ...y], z} = obj");
     }
 
     [Fact]

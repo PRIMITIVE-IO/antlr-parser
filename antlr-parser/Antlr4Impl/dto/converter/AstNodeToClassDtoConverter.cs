@@ -36,10 +36,9 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                     methods: fileNode.Methods.Select(it => ToDto(it, fileNode.Path)).ToList(),
                     fields: fileNode.Fields.Select(ToDto).ToList(),
                     modifier: AccessFlags.None,
-                    startIdx: 0,
-                    endIdx: fileNode.Header.Length - 1, //TODO
-                    header: fileNode.Header,
-                    codeRange: fileNode.CodeRange
+                    codeRange: fileNode.CodeRange,
+                    referencesFromThis: new List<ClassReferenceDto>(),
+                    parentClassFqn: null
                 ));
                 fakePresent = true;
             }
@@ -100,10 +99,9 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                         methods: ns.Methods.Select(it => ToDto(it, fileNode.Path)).ToList(),
                         fields: ns.Fields.Select(it => ToDto(it)).ToList(),
                         modifier: AccessFlags.None,
-                        startIdx: 0, //ns.StartIdx, 
-                        endIdx: fileNode.Header.Length, //ns.EndIdx,
-                        header: fileNode.Header, //ns.Header,
-                        codeRange: fileNode.CodeRange //ns.CodeRange
+                        codeRange: fileNode.CodeRange, //ns.CodeRange
+                        referencesFromThis: new List<ClassReferenceDto>(),
+                        parentClassFqn: null
                     )
                 };
             }
@@ -142,11 +140,9 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                         classNode.Methods.Select(it => ToDto(it, fullyQualifiedName)).ToList(),
                         classNode.Fields.Select(ToDto).ToList(),
                         classNode.Modifier,
-                        classNode.StartIdx,
-                        classNode.EndIdx,
-                        classNode.Header,
                         parentClassFqn: parentFqn,
-                        codeRange: classNode.CodeRange
+                        codeRange: classNode.CodeRange!,
+                        referencesFromThis: new List<ClassReferenceDto>()
                     )
                 }
                 .Concat(classNode.InnerClasses.SelectMany(it => ToDto(
@@ -172,10 +168,9 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                 accFlag: methodNode.AccFlag,
                 arguments: arguments,
                 returnType: "void",
-                sourceCode: methodNode.SourceCode,
-                startIdx: methodNode.StartIdx,
-                endIdx: methodNode.EndIdx,
-                codeRange: methodNode.CodeRange
+                codeRange: methodNode.CodeRange,
+                methodReferences: new List<MethodReferenceDto>(),
+                cyclomaticScore: null
             );
         }
 
@@ -185,10 +180,7 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                 name: fieldNode.Name,
                 type: "void",
                 accFlag: fieldNode.AccFlag,
-                sourceCode: fieldNode.SourceCode,
-                startIdx: fieldNode.StartIdx,
-                endIdx: fieldNode.EndIdx,
-                codeRange: fieldNode.CodeRange
+                codeRange: fieldNode.CodeRange!
             );
         }
     }
