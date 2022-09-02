@@ -28,11 +28,15 @@ namespace antlr_parser
         public static FileDto? FileDtoFromSourceText(
             string filePath,
             string sourceExtension,
-            string sourceText)
+            string sourceText,
+            bool verbose = false)
         {
             if (!SupportedParsableFiles.Contains(sourceExtension)) return null;
 
-            PrimitiveLogger.Logger.Instance().Info($"Parsing: {filePath}");
+            if (verbose)
+            {
+                PrimitiveLogger.Logger.Instance().Info($"Parsing: {filePath}");
+            }
 
             switch (sourceExtension)
             {
@@ -81,7 +85,7 @@ namespace antlr_parser
             return null;
         }
 
-        public static string GetTextFromFilePath(string filePath)
+        public static string GetTextFromFilePath(string filePath, bool verbose = false)
         {
             string ext = Path.GetExtension(filePath);
             try

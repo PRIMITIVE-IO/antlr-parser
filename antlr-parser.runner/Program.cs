@@ -5,10 +5,10 @@ using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using JetBrains.Annotations;
 using log4net;
 using log4net.Config;
 using log4net.Repository;
+using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
 using FileInfo = System.IO.FileInfo;
 
@@ -18,16 +18,19 @@ static class Program
 {
     class Args
     {
+        public bool Verbose { get; set; }
         public string InputPath { get; set; }
     }
 
     static void Main(string[] args)
     {
-        SetupLogger();
-
         // Create a root command with some options 
         RootCommand rootCommand = new RootCommand
         {
+            new Option<bool>(
+                new[] { "--verbose", "-v" },
+                () => false,
+                "Verbose"),
             new Argument<string>("InputPath")
         };
 
@@ -36,49 +39,55 @@ static class Program
         // Note that the parameters of the handler method are matched according to the names of the options 
         rootCommand.Handler = CommandHandler.Create<Args>(Parse);
 
+        SetupLogger();
         rootCommand.Invoke(args);
     }
 
     static void Parse(Args args)
     {
-        FilePathsFrom(args.InputPath)
+        IEnumerable<FileDto> fileDtos = FilePathsFrom(args.InputPath, args.Verbose)
             .Where(filePath => ParserHandler.SupportedParsableFiles.Contains(Path.GetExtension(filePath)))
-            .Select(ParseFile)
-            .Where(it => it != null)
-            .ToList()
-            .ForEach(PrintFileDto);
+            .SelectNotNull(filePath => ParseFile(filePath, args.Verbose));
+
+        if (args.Verbose)
+        {
+            foreach (FileDto fileDto in fileDtos)
+            {
+                PrintFileDto(fileDto);
+            }
+        }
     }
 
-    static IEnumerable<string> FilePathsFrom(string inputPath)
+    static IEnumerable<string> FilePathsFrom(string inputPath, bool verbose)
     {
         return File.GetAttributes(inputPath).HasFlag(FileAttributes.Directory) 
             ? Directory.GetFiles(inputPath, "*.*", SearchOption.AllDirectories) 
             : new[] { inputPath };
     }
 
-    [CanBeNull]
-    static FileDto ParseFile(string filePath)
+    static FileDto? ParseFile(string filePath, bool verbose)
     {
         return ParserHandler.FileDtoFromSourceText(
             filePath,
             Path.GetExtension(filePath),
-            ParserHandler.GetTextFromFilePath(filePath));
+            ParserHandler.GetTextFromFilePath(filePath),
+            verbose);
     }
 
     static void PrintFileDto(FileDto fileDto)
     {
         foreach (ClassDto classDto in fileDto.Classes)
         {
-            Console.WriteLine("class: " + classDto.FullyQualifiedName);
+            PrimitiveLogger.Logger.Instance().Info("class: " + classDto.FullyQualifiedName);
 
             foreach (FieldDto field in classDto.Fields)
             {
-                Console.WriteLine($"    field: {field.Name}: {field.CodeRange.Of(fileDto.Text)}");
+                PrimitiveLogger.Logger.Instance().Info($"-field: {field.Name}");
             }
 
             foreach (MethodDto method in classDto.Methods)
             {
-                Console.WriteLine($"    method: {method.Name}: {method.CodeRange.Of(fileDto.Text)}");
+                PrimitiveLogger.Logger.Instance().Info($"-method: {method.Name}");
             }
         }
     }
