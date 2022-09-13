@@ -41,6 +41,8 @@ static class Program
 
         SetupLogger();
         rootCommand.Invoke(args);
+        
+        Environment.Exit(0);
     }
 
     static void Parse(Args args)

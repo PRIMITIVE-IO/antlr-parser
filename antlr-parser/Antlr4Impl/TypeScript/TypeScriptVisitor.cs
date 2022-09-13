@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PrimitiveCodebaseElements.Primitive;
@@ -48,11 +49,15 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 );
             }
 
-            List<AstNode> children = context.sourceElements()
-                                         ?.sourceElement()
-                                         ?.Select(it => it.Accept(this))
-                                         .ToList()
-                                     ?? new List<AstNode>();
+            List<AstNode> children = AntlrUtil.WalkUntilType(context.children,
+                new HashSet<Type>
+                {
+                    typeof(TypeScriptParser.ClassDeclarationContext),
+                    typeof(TypeScriptParser.FunctionDeclarationContext),
+                    typeof(TypeScriptParser.NamespaceDeclarationContext),
+                    typeof(TypeScriptParser.VariableDeclarationContext)
+                },
+                this);
 
             List<AstNode.ClassNode> classes = children.OfType<AstNode.ClassNode>().ToList();
             List<AstNode.FieldNode> fields = children.OfType<AstNode.FieldNode>().ToList();
@@ -104,9 +109,16 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
         public override AstNode VisitClassDeclaration(TypeScriptParser.ClassDeclarationContext context)
         {
-            List<AstNode> children = context.children
-                .SelectMany(it => it.Accept(this)?.AsList() ?? new List<AstNode>())
-                .ToList();
+            List<AstNode> children = AntlrUtil.WalkUntilType(context.children,
+                new HashSet<Type>
+                {
+                    typeof(TypeScriptParser.ConstructorDeclarationContext),
+                    typeof(TypeScriptParser.MethodDeclarationExpressionContext),
+                    typeof(TypeScriptParser.PropertyDeclarationExpressionContext),
+                    typeof(TypeScriptParser.VariableDeclarationContext),
+                    typeof(TypeScriptParser.ClassDeclarationContext)
+                },
+                this);
 
             List<AstNode.FieldNode> fields = children.OfType<AstNode.FieldNode>().ToList();
             List<AstNode.MethodNode> methods = children.OfType<AstNode.MethodNode>().ToList();
@@ -127,8 +139,14 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
             );
 
+            string? classNameString = context.Identifier().ToString();
+            if (string.IsNullOrEmpty(classNameString))
+            {
+                classNameString = "anonymous";
+            }
+
             return new AstNode.ClassNode(
-                name: context.Identifier().ToString(),
+                name: classNameString,
                 methods: methods,
                 fields: fields,
                 innerClasses: innerClasses,
@@ -146,14 +164,25 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
-            AccessFlags accessFlags = AccessFlagsFrom(context.propertyMemberBase().accessibilityModifier()?.GetText());
+            string? accFlagString = context.propertyMemberBase().accessibilityModifier()?.GetText();
+            AccessFlags accessFlags = AccessFlags.AccPublic;
+            if (!string.IsNullOrEmpty(accFlagString))
+            {
+                accessFlags = AccessFlagsFrom(accFlagString);
+            }
 
             CodeRange codeRange = CodeRangeCalculator.Trim(
                 IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
             );
 
+            string? methodNameString = context.propertyName().identifierName().Identifier().ToString();
+            if (string.IsNullOrEmpty(methodNameString))
+            {
+                methodNameString = "anonymous";
+            }
+
             return new AstNode.MethodNode(
-                name: context.propertyName().identifierName().Identifier().ToString(),
+                name: methodNameString,
                 sourceCode: "",
                 accFlag: accessFlags,
                 startIdx: startIdx,
@@ -183,21 +212,31 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             );
         }
 
-
         public override AstNode VisitPropertyDeclarationExpression(
             TypeScriptParser.PropertyDeclarationExpressionContext context)
         {
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
-            AccessFlags accessFlags = AccessFlagsFrom(context.propertyMemberBase().accessibilityModifier()?.GetText());
+            string? accFlagString = context.propertyMemberBase().accessibilityModifier()?.GetText();
+            AccessFlags accessFlags = AccessFlags.AccPublic;
+            if (!string.IsNullOrEmpty(accFlagString))
+            {
+                accessFlags = AccessFlagsFrom(accFlagString);
+            }
 
             CodeRange codeRange = CodeRangeCalculator.Trim(
                 IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
             );
 
+            string? propertyNameString = context.propertyName().identifierName().Identifier().ToString();
+            if (string.IsNullOrEmpty(propertyNameString))
+            {
+                propertyNameString = "anonymous";
+            }
+            
             return new AstNode.FieldNode(
-                name: context.propertyName().identifierName().Identifier().ToString(),
+                name: propertyNameString,
                 accessFlags,
                 sourceCode: "",
                 startIdx: startIdx,
@@ -208,6 +247,24 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
         public override AstNode VisitVariableDeclaration(TypeScriptParser.VariableDeclarationContext context)
         {
+            string varName = "anonymous";
+            if (context.identifierOrKeyWord() != null &&
+                context.identifierOrKeyWord().Identifier() != null)
+            {
+                varName = context.identifierOrKeyWord().Identifier().GetText();
+            }
+
+            bool isFunction = false;
+            foreach (TypeScriptParser.SingleExpressionContext singleExpressionContext in context.singleExpression())
+            {
+                string s = singleExpressionContext.GetText();
+                if (s.Contains("function"))
+                {
+                    isFunction = true;
+                    break;
+                }
+            }
+
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
@@ -215,14 +272,30 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
             );
 
-            return new AstNode.FieldNode(
-                name: context.identifierOrKeyWord()?.Identifier().ToString(),
-                accFlag: AccessFlags.None,
-                sourceCode: "",
-                startIdx: startIdx,
-                endIdx: endIdx,
-                codeRange: codeRange
-            );
+            AstNode returnNode;
+            if (isFunction)
+            {
+                returnNode = new AstNode.MethodNode(
+                    name: varName,
+                    sourceCode: "",
+                    accFlag: AccessFlags.None,
+                    startIdx: startIdx,
+                    endIdx: endIdx,
+                    codeRange: codeRange,
+                    arguments: new List<AstNode.ArgumentNode>());
+            }
+            else
+            {
+                returnNode = new AstNode.FieldNode(
+                    name: varName,
+                    accFlag: AccessFlags.None,
+                    sourceCode: "",
+                    startIdx: startIdx,
+                    endIdx: endIdx,
+                    codeRange: codeRange);
+            }
+
+            return returnNode;
         }
 
         protected override AstNode AggregateResult(AstNode aggregate, AstNode nextResult)
@@ -234,8 +307,13 @@ namespace antlr_parser.Antlr4Impl.TypeScript
         {
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
-
-            AccessFlags accessFlags = AccessFlagsFrom(context.accessibilityModifier()?.GetText());
+            
+            string? accFlagString = context.accessibilityModifier()?.GetText();
+            AccessFlags accessFlags = AccessFlags.AccPublic;
+            if (!string.IsNullOrEmpty(accFlagString))
+            {
+                accessFlags = AccessFlagsFrom(accFlagString);
+            }
 
             CodeRange codeRange = CodeRangeCalculator.Trim(
                 IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
@@ -252,7 +330,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             );
         }
 
-        AccessFlags AccessFlagsFrom(string text)
+        static AccessFlags AccessFlagsFrom(string text)
         {
             return text switch
             {

@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
+using Antlr4.Runtime.Tree;
 using PrimitiveCodebaseElements.Primitive.dto;
 
 namespace antlr_parser.Antlr4Impl
@@ -62,6 +64,32 @@ namespace antlr_parser.Antlr4Impl
                 .SelectMany(FlattenChildren) ?? new List<ParserRuleContext>();
 
             return new[] { c }.Concat(flattenedChildren);
+        }
+        
+        public static List<AstNode> WalkUntilType(
+            IEnumerable<IParseTree> children, 
+            HashSet<Type> searchTypes, 
+            IParseTreeVisitor<AstNode> visitorParent)
+        {
+            List<AstNode> returnList = new List<AstNode>();
+            foreach (IParseTree child in children)
+            {
+                if (searchTypes.Contains(child.GetType()))
+                {
+                    returnList.Add(child.Accept(visitorParent));
+                }
+                else
+                {
+                    List<IParseTree> grandChildren = new List<IParseTree>();
+                    for (int i = 0; i < child.ChildCount; i++)
+                    {
+                        grandChildren.Add(child.GetChild(i));
+                    }
+                    returnList.AddRange(WalkUntilType(grandChildren, searchTypes, visitorParent));
+                }
+            }
+
+            return returnList;
         }
     }
 }

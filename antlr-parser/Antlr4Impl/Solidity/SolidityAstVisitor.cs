@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using PrimitiveCodebaseElements.Primitive;
+using PrimitiveCodebaseElements.Primitive.dto;
 using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
 
 namespace antlr_parser.Antlr4Impl.Solidity
@@ -28,11 +30,20 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
         public override AstNode VisitSourceUnit(SolidityParser.SourceUnitContext context)
         {
-            List<AstNode.ClassNode> classNodes =
-                context.children.Select(it => it.Accept(this)).OfType<AstNode.ClassNode>().ToList();
+            List<AstNode.ClassNode> classNodes = AntlrUtil.WalkUntilType(
+                    context.children,
+                    new HashSet<Type>
+                    {
+                        typeof(SolidityParser.ContractDefinitionContext)
+                    },
+                    this)
+                .OfType<AstNode.ClassNode>()
+                .ToList();
+            
+            string[] lines = MethodBodyRemovalResult.OriginalSource.Split('\n');
 
             return new AstNode.FileNode(
-                path: "",
+                path: Path,
                 packageNode: null,
                 classes: classNodes,
                 fields: new List<AstNode.FieldNode>(),
@@ -41,11 +52,14 @@ namespace antlr_parser.Antlr4Impl.Solidity
                 namespaces: new List<AstNode.Namespace>(),
                 language: SourceCodeLanguage.Solidity,
                 isTest: false,
-                codeRange: null
+                codeRange: new CodeRange(
+                    new CodeLocation(1, 1),
+                    new CodeLocation(lines.Length, lines.Last().Length)
+                )
             );
         }
 
-        public int? NearestPeerEndIndex(RuleContext context, int selfStartIdx)
+        static int? NearestPeerEndIndex(RuleContext context, int selfStartIdx)
         {
             switch (context.Parent)
             {
@@ -61,7 +75,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
             }
         }
 
-        public int? NearestPeerClassEndIndex(RuleContext context, int selfStartIdx)
+        static int? NearestPeerClassEndIndex(RuleContext context, int selfStartIdx)
         {
             switch (context.Parent)
             {
@@ -91,7 +105,15 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
         public override AstNode VisitContractDefinition(SolidityParser.ContractDefinitionContext context)
         {
-            List<AstNode> children = context.children.Select(it => it.Accept(this)).ToList();
+            List<AstNode> children = AntlrUtil.WalkUntilType(
+                context.children, 
+                new HashSet<Type>
+                {
+                    typeof(SolidityParser.StateVariableDeclarationContext),
+                    typeof(SolidityParser.FunctionDefinitionContext),
+                    typeof(SolidityParser.ContractDefinitionContext)
+                }, 
+                this);
 
             List<AstNode.MethodNode> methods = children.OfType<AstNode.MethodNode>().ToList();
             List<AstNode.FieldNode> fields = children.OfType<AstNode.FieldNode>().ToList();
@@ -150,7 +172,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
         public override AstNode VisitFunctionDefinition(SolidityParser.FunctionDefinitionContext context)
         {
-            string name = context.functionDescriptor().identifier()?.GetText() ??
+            string? name = context.functionDescriptor().identifier()?.GetText() ??
                           context.functionDescriptor().ConstructorKeyword()?.GetText();
 
             int startIdx = (NearestPeerEndIndex(context, context.Start.StartIndex)
@@ -164,7 +186,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
             );
 
             return new AstNode.MethodNode(
-                name: name,
+                name: !string.IsNullOrEmpty(name) ? name : "anonymous",
                 accFlag: ExtractAccFlags(context.modifierList()),
                 sourceCode: "",
                 startIdx: startIdx,

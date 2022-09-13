@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
@@ -29,49 +30,18 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         public override AstNode VisitProgram(JavaScriptParser.ProgramContext context)
         {
-            List<AstNode.ClassNode> classes = new List<AstNode.ClassNode>();
-            List<AstNode.MethodNode> methods = new List<AstNode.MethodNode>();
-            List<AstNode.FieldNode> fields = new List<AstNode.FieldNode>();
-
-            if (context.sourceElements() == null)
-            {
-                return new AstNode.FileNode(
-                    FilePath,
-                    null,
-                    classes,
-                    fields,
-                    methods,
-                    "",
-                    new List<AstNode.Namespace>(),
-                    SourceCodeLanguage.JavaScript,
-                    false,
-                    new CodeRange(new CodeLocation(0, 0), new CodeLocation(0, 0)));
-            }
-
-            foreach (JavaScriptParser.SourceElementContext sourceElementContext in context.sourceElements()
-                         .sourceElement())
-            {
-                JavaScriptParser.StatementContext statement = sourceElementContext.statement();
-
-
-                if (statement.classDeclaration()?.Accept(this) is AstNode.ClassNode klass) classes.Add(klass);
-                if (statement.functionDeclaration()?.Accept(this) is AstNode.MethodNode method) methods.Add(method);
-
-                methods.AddRange(statement.expressionStatement()?.expressionSequence()?.singleExpression()
-                    ?.Select(singleExpressionContext => singleExpressionContext
-                        .GetChild<JavaScriptParser.FunctionDeclContext>(0)
-                        ?.GetChild<JavaScriptParser.FunctionDeclarationContext>(0)
-                        ?.Accept(this) as AstNode.MethodNode)
-                    .Where(it => it != null) ?? new List<AstNode.MethodNode>());
-
-                fields.AddRange(statement.variableStatement()
-                        ?.variableDeclarationList()
-                        ?.variableDeclaration()
-                        ?.Select(variableDecl => variableDecl.Accept(this))
-                        .OfType<AstNode.FieldNode>()
-                        .ToList() ?? new List<AstNode.FieldNode>()
-                );
-            }
+            List<AstNode> children = AntlrUtil.WalkUntilType(context.children, new HashSet<Type>
+                {
+                    typeof(JavaScriptParser.FunctionDeclarationContext),
+                    typeof(JavaScriptParser.ClassDeclarationContext),
+                    typeof(JavaScriptParser.VariableDeclarationContext),
+                    typeof(JavaScriptParser.PropertyAssignmentContext)
+                },
+                this);
+            
+            List<AstNode.ClassNode> classes = children.OfType<AstNode.ClassNode>().ToList();
+            List<AstNode.MethodNode> methods = children.OfType<AstNode.MethodNode>().ToList();
+            List<AstNode.FieldNode> fields = children.OfType<AstNode.FieldNode>().ToList();
 
             int headerEnd = classes.Select(it => it.StartIdx - 1)
                 .Concat(methods.Select(it => it.StartIdx - 1))
@@ -87,7 +57,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
             return new AstNode.FileNode(
                 path: FilePath,
-                packageNode: new AstNode.PackageNode(""),
+                packageNode: new AstNode.PackageNode(null),
                 classes: classes,
                 fields: fields,
                 methods: methods,
@@ -99,7 +69,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             );
         }
 
-        int PreviousPeerEndPosition(RuleContext parent, IParseTree self)
+        static int PreviousPeerEndPosition(RuleContext parent, ITree self)
         {
             switch (parent)
             {
@@ -143,9 +113,15 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         public override AstNode VisitClassDeclaration(JavaScriptParser.ClassDeclarationContext context)
         {
-            List<AstNode> classElements = context.classTail().classElement()
-                .Select(elem => elem.Accept(this))
-                .ToList();
+            List<AstNode> classElements = AntlrUtil.WalkUntilType(context.children, new HashSet<Type>
+                {
+                    typeof(JavaScriptParser.FunctionDeclarationContext),
+                    typeof(JavaScriptParser.ClassDeclarationContext),
+                    typeof(JavaScriptParser.MethodDefinitionContext),
+                    typeof(JavaScriptParser.VariableDeclarationContext),
+                    typeof(JavaScriptParser.PropertyAssignmentContext)
+                },
+                this);
 
             List<AstNode.MethodNode> methodNodes = classElements.OfType<AstNode.MethodNode>().ToList();
             List<AstNode.FieldNode> fieldNodes = classElements.OfType<AstNode.FieldNode>().ToList();
@@ -183,32 +159,22 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             );
         }
 
-        public override AstNode VisitClassElement(JavaScriptParser.ClassElementContext context)
+        public override AstNode VisitPropertyExpressionAssignment(JavaScriptParser.PropertyExpressionAssignmentContext context)
         {
-            if (context.methodDefinition() != null)
-            {
-                return context.methodDefinition().Accept(this);
-            }
+            // field containing lambda, like `field = x => { return 10 }` 
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+            CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
 
-            if (context.propertyName() != null)
-            {
-                // field containing lambda, like `field = x => { return 10 }` 
-                int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
-                int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
-                CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
-
-                return new AstNode.MethodNode(
-                    name: context.propertyName().GetText(),
-                    accFlag: AccessFlags.None,
-                    sourceCode: "",
-                    startIdx: -1,
-                    endIdx: -1,
-                    codeRange: codeRange,
-                    arguments: new List<AstNode.ArgumentNode>()
-                );
-            }
-
-            return null;
+            return new AstNode.MethodNode(
+                name: context.GetText(),
+                accFlag: AccessFlags.None,
+                sourceCode: "",
+                startIdx: -1,
+                endIdx: -1,
+                codeRange: codeRange,
+                arguments: new List<AstNode.ArgumentNode>()
+            );
         }
 
         public override AstNode VisitMethodDefinition(JavaScriptParser.MethodDefinitionContext context)
@@ -251,7 +217,6 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             {
                 name = string.Join(",", x.objectLiteral().Accept(new DeconstructionAssignmentVisitor()));
             }
-
 
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
 
@@ -298,16 +263,14 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                         .Concat<IParseTree>(property.children.OfType<JavaScriptParser.ArrayLiteralExpressionContext>())
                         .ToList();
 
-                    if (furtherDeconstructions.Count == 0)
+                    if (!furtherDeconstructions.Any())
                     {
                         return property.children.OfType<JavaScriptParser.IdentifierExpressionContext>()
                             .Single()
                             .Accept(this);
                     }
-                    else
-                    {
-                        return furtherDeconstructions.SelectMany(it => it.Accept(this)).ToList();
-                    }
+
+                    return furtherDeconstructions.SelectMany(it => it.Accept(this)).ToList();
                 })
                 .ToList();
         }
