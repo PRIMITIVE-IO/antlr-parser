@@ -26,7 +26,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
             bool compiliedTokens = true;
             while (index < tokens.Count)
             {
-                var token = tokens[index];
+                IToken? token = tokens[index];
                 if (token.Type == CSharpLexer.SHARP)
                 {
                     directiveTokens.Clear();

@@ -17,7 +17,7 @@ namespace antlr_parser.tests
                 |4 spaces there ->    
             ".TrimMargin();
 
-            var calc = new CodeRangeCalculator(source);
+            CodeRangeCalculator calc = new CodeRangeCalculator(source);
 
             CodeRange firstLineCodeRange = CodeRange.Of(1, 1, 1, 21);
             CodeRange secondLineCodeRange = CodeRange.Of(2, 1, 2, 21);
@@ -44,7 +44,7 @@ namespace antlr_parser.tests
                 |    <- 4 spaces there 
             ".TrimMargin();
 
-            var calc = new CodeRangeCalculator(source);
+            CodeRangeCalculator calc = new CodeRangeCalculator(source);
 
             CodeRange expectedTextWithWhitespaces = CodeRange.Of(1, 18, 3, 4);
 
@@ -68,7 +68,7 @@ namespace antlr_parser.tests
             |    
         ".TrimMargin();
 
-            var calc = new CodeRangeCalculator(source);
+            CodeRangeCalculator calc = new CodeRangeCalculator(source);
 
             CodeRange wholeDocCodeRrange = CodeRange.Of(1, 1, 3, 4);
 
@@ -87,7 +87,7 @@ namespace antlr_parser.tests
             |    {
         ".TrimMargin();
 
-            var calc = new CodeRangeCalculator(source);
+            CodeRangeCalculator calc = new CodeRangeCalculator(source);
 
             CodeRange expectedRange = CodeRange.Of(1, 1, 1, 12);
 
@@ -109,7 +109,7 @@ namespace antlr_parser.tests
             |X
         ".TrimMargin();
 
-            var calc = new CodeRangeCalculator(source);
+            CodeRangeCalculator calc = new CodeRangeCalculator(source);
 
             CodeLocation codeLocation = new CodeLocation(1, 1);
 
@@ -136,7 +136,7 @@ namespace antlr_parser.tests
                 }
             ".TrimIndent2();
 
-            var calc = new CodeRangeCalculator(source);
+            CodeRangeCalculator calc = new CodeRangeCalculator(source);
 
             CodeLocation codeLocation = new CodeLocation(1, 1);
 

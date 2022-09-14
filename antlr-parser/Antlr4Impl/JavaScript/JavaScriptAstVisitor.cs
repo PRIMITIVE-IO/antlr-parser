@@ -68,29 +68,6 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             );
         }
 
-        static int PreviousPeerEndPosition(RuleContext parent, ITree self)
-        {
-            switch (parent)
-            {
-                case null:
-                    return -1;
-                case JavaScriptParser.StatementContext _:
-                case JavaScriptParser.SourceElementContext _:
-                    return PreviousPeerEndPosition(parent.Parent, parent);
-                default:
-                {
-                    JavaScriptParser.SourceElementsContext sourceElementsContext =
-                        parent as JavaScriptParser.SourceElementsContext;
-
-                    return sourceElementsContext.sourceElement()
-                        .TakeWhile(it => it != self)
-                        .Select(it => it.Stop.StopIndex + 1)
-                        .DefaultIfEmpty(-1)
-                        .Max();
-                }
-            }
-        }
-
         public override AstNode VisitFunctionDeclaration(JavaScriptParser.FunctionDeclarationContext context)
         {
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
@@ -224,6 +201,29 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 codeRange: codeRange
             );
         }
+        
+        static int PreviousPeerEndPosition(RuleContext parent, ITree self)
+        {
+            switch (parent)
+            {
+                case null:
+                    return -1;
+                case JavaScriptParser.StatementContext _:
+                case JavaScriptParser.SourceElementContext _:
+                    return PreviousPeerEndPosition(parent.Parent, parent);
+                default:
+                {
+                    JavaScriptParser.SourceElementsContext sourceElementsContext =
+                        parent as JavaScriptParser.SourceElementsContext;
+
+                    return sourceElementsContext.sourceElement()
+                        .TakeWhile(it => it != self)
+                        .Select(it => it.Stop.StopIndex + 1)
+                        .DefaultIfEmpty(-1)
+                        .Max();
+                }
+            }
+        }
     }
 
     public class DeconstructionAssignmentVisitor : JavaScriptParserBaseVisitor<List<string>>
@@ -240,8 +240,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             return new List<string> { context.singleExpression().GetFullText() };
         }
 
-        public override List<string> VisitObjectLiteralExpression(
-            JavaScriptParser.ObjectLiteralExpressionContext context)
+        public override List<string> VisitObjectLiteralExpression(JavaScriptParser.ObjectLiteralExpressionContext context)
         {
             JavaScriptParser.PropertyAssignmentContext[] properties = context.objectLiteral().propertyAssignment();
 

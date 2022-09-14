@@ -26,10 +26,10 @@ public class AntlrParseCSharpTest
                     }
                 }
             ";
-        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        FileDto? fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
         fileDto.Classes.Should().HaveCount(1);
-        var classDto = fileDto.Classes[0];
+        ClassDto classDto = fileDto.Classes[0];
         classDto.PackageName.Should().Be("X");
         classDto.FullyQualifiedName.Should().Be("X.MyClass");
         classDto.Name.Should().Be("MyClass");
@@ -85,7 +85,7 @@ public class AntlrParseCSharpTest
                     }
                 }
             ".TrimIndent2();
-        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        FileDto? fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
         ClassDto classDto = fileDto.Classes[1];
 
@@ -112,7 +112,7 @@ public class AntlrParseCSharpTest
                     }
                 }
             ".TrimIndent2();
-        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        FileDto? fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
         ClassDto topLevelClass = fileDto.Classes[0];
         topLevelClass.FullyQualifiedName.Should().Be("X.MyClass");
@@ -218,19 +218,19 @@ public class AntlrParseCSharpTest
                     }
                 }
             ".TrimIndent2();
-        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        FileDto? fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
-        var classDto = fileDto.Classes[0];
+        ClassDto classDto = fileDto.Classes[0];
         classDto.Name.Should().Be("IMyClass");
 
-        var method1 = classDto.Methods[0];
+        MethodDto method1 = classDto.Methods[0];
         method1.Name.Should().Be("MyMethod1");
         method1.CodeRange.Of(source).Should().Be(@"
                 |///comment
                 |        public int MyMethod1();
             ".TrimMargin());
 
-        var method2 = classDto.Methods[1];
+        MethodDto method2 = classDto.Methods[1];
         method2.Name.Should().Be("MyMethod2");
         method2.CodeRange.Of(source).Should().Be(@"
                 |///comment
@@ -253,8 +253,8 @@ public class AntlrParseCSharpTest
                     }
                 }
             ".TrimIndent2();
-        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
-        var classDto = fileDto.Classes[0];
+        FileDto? fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        ClassDto classDto = fileDto.Classes[0];
         classDto.Name.Should().Be("MyEnum");
         classDto.CodeRange.Of(source).Should().Be(@"
                 namespace X 
@@ -305,7 +305,7 @@ public class AntlrParseCSharpTest
                     }
                 }
             ".TrimIndent2();
-        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        FileDto? fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
         fileDto.Classes.Should().HaveCount(1);
         fileDto.Classes[0].Fields.Should().HaveCount(2);
@@ -353,9 +353,9 @@ public class AntlrParseCSharpTest
                 }
             ".TrimIndent2();
 
-        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        FileDto? fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
-        var field = fileDto.Classes[0].Fields[0];
+        FieldDto field = fileDto.Classes[0].Fields[0];
 
         field.Name.Should().Be("Path");
         field.CodeRange.Of(source).Should().Be(@"
@@ -371,7 +371,7 @@ public class AntlrParseCSharpTest
     public void Directives()
     {
         string source = Resource("TestCsharp.txt");
-        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        FileDto? fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
         fileDto.Classes.Single().Methods.Single(x => x.Name == "StaticReset")
             .CodeRange.Of(source).Should().Be(@"
@@ -414,9 +414,9 @@ public class AntlrParseCSharpTest
                 }
             ".TrimIndent2();
 
-        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        FileDto? fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
-        var field = fileDto.Classes.Single().Fields.Single();
+        FieldDto field = fileDto.Classes.Single().Fields.Single();
         field.Name.Should().Be("alias");
         field.CodeRange.Of(source).Should().Be(@"
                 |/// <summary>
@@ -448,7 +448,7 @@ public class AntlrParseCSharpTest
                     }
                 }
             ".TrimIndent2();
-        var fileDto = AntlrParseCSharp.Parse(source, "some/path");
+        FileDto? fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
         FieldDto fieldDto = fileDto.Classes.Single().Fields.Single();
         fieldDto.Name.Should().Be("onEvent");

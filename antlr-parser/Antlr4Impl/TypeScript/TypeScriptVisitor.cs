@@ -26,6 +26,8 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             CodeRangeCalculator = codeRangeCalculator;
         }
 
+        #region VISITORS
+
         public override AstNode VisitProgram(TypeScriptParser.ProgramContext context)
         {
             if (context.Stop == null)
@@ -152,8 +154,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             );
         }
 
-        public override AstNode VisitMethodDeclarationExpression(
-            TypeScriptParser.MethodDeclarationExpressionContext context)
+        public override AstNode VisitMethodDeclarationExpression(TypeScriptParser.MethodDeclarationExpressionContext context)
         {
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
@@ -202,8 +203,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             );
         }
 
-        public override AstNode VisitPropertyDeclarationExpression(
-            TypeScriptParser.PropertyDeclarationExpressionContext context)
+        public override AstNode VisitPropertyDeclarationExpression(TypeScriptParser.PropertyDeclarationExpressionContext context)
         {
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
@@ -281,12 +281,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
             return returnNode;
         }
-
-        protected override AstNode AggregateResult(AstNode aggregate, AstNode nextResult)
-        {
-            return AstNode.NodeList.Combine(aggregate, nextResult);
-        }
-
+        
         public override AstNode VisitConstructorDeclaration(TypeScriptParser.ConstructorDeclarationContext context)
         {
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
@@ -311,6 +306,15 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 arguments: new List<AstNode.ArgumentNode>()
             );
         }
+        
+        #endregion
+
+        #region UTIL
+
+        protected override AstNode AggregateResult(AstNode aggregate, AstNode nextResult)
+        {
+            return AstNode.NodeList.Combine(aggregate, nextResult);
+        }
 
         static AccessFlags AccessFlagsFrom(string text)
         {
@@ -321,5 +325,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 _ => AccessFlags.None
             };
         }
+        
+        #endregion
     }
 }

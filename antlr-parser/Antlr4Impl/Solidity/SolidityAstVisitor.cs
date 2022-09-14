@@ -28,6 +28,8 @@ namespace antlr_parser.Antlr4Impl.Solidity
             CodeRangeCalculator = codeRangeCalculator;
         }
 
+        #region VISITORS
+
         public override AstNode VisitSourceUnit(SolidityParser.SourceUnitContext context)
         {
             List<AstNode.ClassNode> classNodes = AntlrUtil.WalkUntilType(
@@ -57,51 +59,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
                 )
             );
         }
-
-        static int? NearestPeerEndIndex(RuleContext context, int selfStartIdx)
-        {
-            switch (context.Parent)
-            {
-                case SolidityParser.SourceUnitContext c: return null;
-                case SolidityParser.ContractDefinitionContext c:
-                {
-                    return c.contractPart()
-                        .Select(it => it.Stop.StopIndex as int?)
-                        .TakeWhile(it => it < selfStartIdx)
-                        .Max();
-                }
-                default: return NearestPeerEndIndex(context.Parent, selfStartIdx);
-            }
-        }
-
-        static int? NearestPeerClassEndIndex(RuleContext context, int selfStartIdx)
-        {
-            switch (context.Parent)
-            {
-                case SolidityParser.SourceUnitContext c:
-                    return c.contractDefinition()
-                        .Select(it => it.Stop.StopIndex as int?)
-                        .TakeWhile(it => it < selfStartIdx)
-                        .Max();
-
-                default: return NearestPeerClassEndIndex(context.Parent, selfStartIdx);
-            }
-        }
-
-        static int? EnclosingClassHeaderEnd(RuleContext context)
-        {
-            switch (context.Parent)
-            {
-                case SolidityParser.ContractDefinitionContext c:
-                    return c.children
-                        .OfType<TerminalNodeImpl>()
-                        .First(it => it.GetText() == "{")
-                        .Symbol.StartIndex;
-                case SolidityParser.SourceUnitContext _: return null;
-                default: return EnclosingClassHeaderEnd(context.Parent);
-            }
-        }
-
+        
         public override AstNode VisitContractDefinition(SolidityParser.ContractDefinitionContext context)
         {
             List<AstNode> children = AntlrUtil.WalkUntilType(
@@ -188,8 +146,56 @@ namespace antlr_parser.Antlr4Impl.Solidity
                 arguments: new List<AstNode.ArgumentNode>()
             );
         }
+        
+        #endregion
 
-        AccessFlags ExtractAccFlags(SolidityParser.ModifierListContext context)
+        #region UTIL
+
+        static int? NearestPeerEndIndex(RuleContext context, int selfStartIdx)
+        {
+            switch (context.Parent)
+            {
+                case SolidityParser.SourceUnitContext c: return null;
+                case SolidityParser.ContractDefinitionContext c:
+                {
+                    return c.contractPart()
+                        .Select(it => it.Stop.StopIndex as int?)
+                        .TakeWhile(it => it < selfStartIdx)
+                        .Max();
+                }
+                default: return NearestPeerEndIndex(context.Parent, selfStartIdx);
+            }
+        }
+
+        static int? NearestPeerClassEndIndex(RuleContext context, int selfStartIdx)
+        {
+            switch (context.Parent)
+            {
+                case SolidityParser.SourceUnitContext c:
+                    return c.contractDefinition()
+                        .Select(it => it.Stop.StopIndex as int?)
+                        .TakeWhile(it => it < selfStartIdx)
+                        .Max();
+
+                default: return NearestPeerClassEndIndex(context.Parent, selfStartIdx);
+            }
+        }
+
+        static int? EnclosingClassHeaderEnd(RuleContext context)
+        {
+            switch (context.Parent)
+            {
+                case SolidityParser.ContractDefinitionContext c:
+                    return c.children
+                        .OfType<TerminalNodeImpl>()
+                        .First(it => it.GetText() == "{")
+                        .Symbol.StartIndex;
+                case SolidityParser.SourceUnitContext _: return null;
+                default: return EnclosingClassHeaderEnd(context.Parent);
+            }
+        }
+
+        static AccessFlags ExtractAccFlags(SolidityParser.ModifierListContext context)
         {
             if (context.PublicKeyword() != null) return AccessFlags.AccPublic;
             if (context.PrivateKeyword() != null) return AccessFlags.AccPrivate;
@@ -200,5 +206,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
         {
             return AstNode.NodeList.Combine(aggregate, nextResult);
         }
+        
+        #endregion
     }
 }

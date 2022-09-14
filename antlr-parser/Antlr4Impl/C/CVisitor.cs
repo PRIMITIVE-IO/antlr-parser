@@ -14,7 +14,7 @@ namespace antlr_parser.Antlr4Impl.C
         readonly string FilePath;
         readonly MethodBodyRemovalResult MethodBodyRemovalResult;
         readonly IndexToLocationConverter IndexToLocationConverter;
-        private readonly CodeRangeCalculator CodeRangeCalculator;
+        readonly CodeRangeCalculator CodeRangeCalculator;
 
         public CVisitor(
             string filePath,
@@ -27,6 +27,8 @@ namespace antlr_parser.Antlr4Impl.C
             IndexToLocationConverter = new IndexToLocationConverter(methodBodyRemovalResult.OriginalSource);
             CodeRangeCalculator = codeRangeCalculator;
         }
+
+        #region VISITORS
 
         public override AstNode VisitCompilationUnit(CParser.CompilationUnitContext context)
         {
@@ -45,12 +47,10 @@ namespace antlr_parser.Antlr4Impl.C
                 .Where(it => it != null)
                 .ToList() ?? new List<AstNode.ClassNode>();
 
-
             int headerEnd = methods.Select(it => it.StartIdx - 1)
                 .Concat(structs.Select(it => it.StartIdx - 1))
                 .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop?.StopIndex ?? 0))
                 .Min();
-
 
             CodeRange headerCodeRange = CodeRangeCalculator.Trim(
                 new CodeRange(
@@ -121,26 +121,6 @@ namespace antlr_parser.Antlr4Impl.C
             );
         }
 
-        int PreviousPeerEndPosition(RuleContext parent, IParseTree self)
-        {
-            return parent switch
-            {
-                null => -1,
-                CParser.StructDeclarationListContext structDeclarationListContext => structDeclarationListContext
-                    .structDeclaration()
-                    .TakeWhile(it => it != self)
-                    .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
-                    .DefaultIfEmpty(-1)
-                    .Max(),
-                CParser.TranslationUnitContext translationUnitContext => translationUnitContext.externalDeclaration()
-                    .TakeWhile(it => it != self)
-                    .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
-                    .DefaultIfEmpty(-1)
-                    .Max(),
-                _ => PreviousPeerEndPosition(parent.Parent, parent)
-            };
-        }
-
         public override AstNode VisitStructDeclaration(CParser.StructDeclarationContext context)
         {
             string fieldName = ExtractPlainFieldName(context)
@@ -159,6 +139,49 @@ namespace antlr_parser.Antlr4Impl.C
                 startIdx,
                 codeRange
             );
+        }
+        
+        public override AstNode VisitFunctionDefinition(CParser.FunctionDefinitionContext context)
+        {
+            string fName = ExtractFunctionName(context.declarator().directDeclarator());
+
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            //+1 forces to restore removed part
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex + 1);
+
+            CodeRange codeRange = CodeRangeCalculator.Trim(IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx));
+
+            return new AstNode.MethodNode(
+                fName,
+                AccessFlags.AccPublic,
+                startIdx: startIdx,
+                codeRange: codeRange,
+                arguments: new List<AstNode.ArgumentNode>()
+            );
+        }
+        
+        #endregion
+
+        #region UTIL
+        
+        int PreviousPeerEndPosition(RuleContext parent, ITree self)
+        {
+            return parent switch
+            {
+                null => -1,
+                CParser.StructDeclarationListContext structDeclarationListContext => structDeclarationListContext
+                    .structDeclaration()
+                    .TakeWhile(it => it != self)
+                    .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
+                    .DefaultIfEmpty(-1)
+                    .Max(),
+                CParser.TranslationUnitContext translationUnitContext => translationUnitContext.externalDeclaration()
+                    .TakeWhile(it => it != self)
+                    .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
+                    .DefaultIfEmpty(-1)
+                    .Max(),
+                _ => PreviousPeerEndPosition(parent.Parent, parent)
+            };
         }
 
         static string ExtractMultiName(CParser.StructDeclarationContext context)
@@ -203,26 +226,7 @@ namespace antlr_parser.Antlr4Impl.C
                 ?.ToString();
         }
 
-        public override AstNode VisitFunctionDefinition(CParser.FunctionDefinitionContext context)
-        {
-            string fName = ExtractFunctionName(context.declarator().directDeclarator());
-
-            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
-            //+1 forces to restore removed part
-            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex + 1);
-
-            CodeRange codeRange = CodeRangeCalculator.Trim(IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx));
-
-            return new AstNode.MethodNode(
-                fName,
-                AccessFlags.AccPublic,
-                startIdx: startIdx,
-                codeRange: codeRange,
-                arguments: new List<AstNode.ArgumentNode>()
-            );
-        }
-
-        string ExtractFunctionName(CParser.DirectDeclaratorContext context)
+        static string ExtractFunctionName(CParser.DirectDeclaratorContext context)
         {
             if (context.directDeclarator() == null)
             {
@@ -231,5 +235,7 @@ namespace antlr_parser.Antlr4Impl.C
 
             return ExtractFunctionName(context.directDeclarator());
         }
+        
+        #endregion
     }
 }

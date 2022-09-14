@@ -13,7 +13,7 @@ namespace antlr_parser.Antlr4Impl
             lines = text.Split("\n");
         }
 
-        public CodeLocation? NextNonWhitespace(CodeLocation loc)
+        CodeLocation? NextNonWhitespace(CodeLocation loc)
         {
             string firstLine = lines[loc.Line - 1];
 

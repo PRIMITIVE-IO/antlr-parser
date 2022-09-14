@@ -109,7 +109,7 @@ public class AntlrParseTypeScriptTest
     [Fact]
     public void EmptyFile()
     {
-        var source = @"
+        string source = @"
             /// some comment
         ".TrimIndent2();
         

@@ -29,12 +29,12 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
                 // a sourceUnit is the highest level container -> start there
                 // do not call parser.sourceUnit() more than once
-                SolidityAstVisitor astVisitor = new SolidityAstVisitor(
-                    filePath,
-                    methodBodyRemovalResult,
-                    codeRangeCalculator
-                );
-                AstNode.FileNode fileNode = parser.sourceUnit().Accept(astVisitor) as AstNode.FileNode;
+                AstNode.FileNode fileNode = parser.sourceUnit().Accept(
+                    new SolidityAstVisitor(
+                        filePath,
+                        methodBodyRemovalResult,
+                        codeRangeCalculator
+                    )) as AstNode.FileNode;
 
                 return AstNodeToClassDtoConverter.ToFileDto(fileNode, source);
             }

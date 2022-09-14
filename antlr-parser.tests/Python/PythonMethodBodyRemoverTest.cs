@@ -21,7 +21,7 @@ public class PythonMethodBodyRemoverTest
 
         List<Tuple<int, int>> blocksToRemove = PythonMethodBodyRemover.FindBlocksToRemove(source);
 
-        var methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+        MethodBodyRemovalResult methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
 
         methodBodyRemovalResult.ShortenedSource.Should().Be(@"
                 def f():
@@ -45,7 +45,7 @@ public class PythonMethodBodyRemoverTest
 
         List<Tuple<int, int>> blocksToRemove = PythonMethodBodyRemover.FindBlocksToRemove(source);
 
-        var methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+        MethodBodyRemovalResult methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
 
         methodBodyRemovalResult.ShortenedSource.Should().Be(@"
                 def f():
@@ -85,7 +85,7 @@ public class PythonMethodBodyRemoverTest
 
         List<Tuple<int, int>> blocksToRemove = PythonMethodBodyRemover.FindBlocksToRemove(source);
 
-        var methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+        MethodBodyRemovalResult methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
 
         methodBodyRemovalResult.ShortenedSource.Should().Be(@"
                 def get_test_tfdataset(self, test_dataset: tf.data.Dataset) -> tf.data.Data_set:
@@ -166,7 +166,7 @@ public class PythonMethodBodyRemoverTest
 
         List<Tuple<int, int>> blocksToRemove = PythonMethodBodyRemover.FindBlocksToRemove(source);
 
-        var methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+        MethodBodyRemovalResult methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
 
         methodBodyRemovalResult.ShortenedSource.Should().Be(@"
                 import inspect
@@ -228,7 +228,7 @@ public class PythonMethodBodyRemoverTest
 
         List<Tuple<int, int>> blocksToRemove = PythonMethodBodyRemover.FindBlocksToRemove(source);
 
-        var methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
+        MethodBodyRemovalResult methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
 
         methodBodyRemovalResult.ShortenedSource.Should().Be(@"
                 def partial_bezier_points(

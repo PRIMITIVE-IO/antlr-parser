@@ -28,6 +28,8 @@ namespace antlr_parser.Antlr4Impl.CPP
             CodeRangeCalculator = codeRangeCalculator;
         }
 
+        #region VISITORS
+        
         public override AstNode VisitTranslationUnit(CPP14Parser.TranslationUnitContext context)
         {
             List<AstNode> members = context.declarationseq()?.declaration()
@@ -55,7 +57,6 @@ namespace antlr_parser.Antlr4Impl.CPP
                 codeRange: codeRange
             );
         }
-
 
         public override AstNode VisitNamespaceDefinition(CPP14Parser.NamespaceDefinitionContext context)
         {
@@ -284,17 +285,6 @@ namespace antlr_parser.Antlr4Impl.CPP
             );
         }
 
-        static string? ExtractFieldNameOrNull(CPP14Parser.DeclaratorContext? context)
-        {
-            return context?.pointerDeclarator()
-                ?.noPointerDeclarator()
-                ?.declaratorid()
-                ?.idExpression()
-                ?.unqualifiedId()
-                ?.Identifier()
-                ?.GetText();
-        }
-
         public override AstNode? VisitMemberdeclaration(CPP14Parser.MemberdeclarationContext context)
         {
             if (context.functionDefinition() != null)
@@ -350,7 +340,23 @@ namespace antlr_parser.Antlr4Impl.CPP
 
             return null;
         }
+        
+        #endregion
 
+        #region UTIL
+        
+        static string? ExtractFieldNameOrNull(CPP14Parser.DeclaratorContext? context)
+        {
+            return context?.pointerDeclarator()
+                ?.noPointerDeclarator()
+                ?.declaratorid()
+                ?.idExpression()
+                ?.unqualifiedId()
+                ?.Identifier()
+                ?.GetText();
+        }
+
+        
         static CPP14Parser.IdExpressionContext? ExtractIdExpression(CPP14Parser.DeclaratorContext? declarator)
         {
             return declarator
@@ -420,7 +426,7 @@ namespace antlr_parser.Antlr4Impl.CPP
                 ?.GetText();
         }
 
-        int PreviousPeerEndPosition(RuleContext parent, IParseTree self)
+        int PreviousPeerEndPosition(RuleContext parent, ITree self)
         {
             return parent switch
             {
@@ -434,5 +440,7 @@ namespace antlr_parser.Antlr4Impl.CPP
                 _ => PreviousPeerEndPosition(parent.Parent, parent)
             };
         }
+        
+        #endregion
     }
 }

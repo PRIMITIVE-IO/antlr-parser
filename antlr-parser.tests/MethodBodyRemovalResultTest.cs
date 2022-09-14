@@ -108,7 +108,7 @@ public class MethodBodyRemovalResultTest
             block(original, '(', ')')
         };
 
-        var rem = MethodBodyRemovalResult.From(original, blocksToRemove1);
+        MethodBodyRemovalResult rem = MethodBodyRemovalResult.From(original, blocksToRemove1);
 
         rem.ShortenedSource.Should().Be(@"
                 textBefore*[

@@ -39,7 +39,7 @@ namespace antlr_parser.Antlr4Impl.Python
             List<AstNode.FieldNode> fieldNodes = children.OfType<AstNode.FieldNode>().ToList();
             List<AstNode.MethodNode> methodNodes = children.OfType<AstNode.MethodNode>().ToList();
 
-            var headerEnd = classNodes.Select(c => c.CodeRange.End)
+            CodeLocation? headerEnd = classNodes.Select(c => c.CodeRange.End)
                 .Concat(fieldNodes.Select(f => f.CodeRange.End))
                 .Concat(methodNodes.Select(m => m.CodeRange.End))
                 .MinOrDefault();
