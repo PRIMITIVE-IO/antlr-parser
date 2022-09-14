@@ -52,7 +52,6 @@ namespace antlr_parser.Antlr4Impl.Java
                 classes: classes,
                 fields: new List<AstNode.FieldNode>(),
                 methods: new List<AstNode.MethodNode>(),
-                header: "", //This header was used for creating fake classes, Java does not have top-level functions so there is no need in fake classes
                 namespaces: new List<AstNode.Namespace>(),
                 language: SourceCodeLanguage.Java,
                 isTest: false,
@@ -102,9 +101,7 @@ namespace antlr_parser.Antlr4Impl.Java
                 innerClasses: classNodes,
                 modifier: AccessFlag(topLevelClassModifier ?? innerClassModifier),
                 startIdx: restoredStartIdx,
-                endIdx: restoredEndIdx,
-                codeRange: codeRange,
-                header: ""
+                codeRange: codeRange
             );
         }
 
@@ -138,9 +135,7 @@ namespace antlr_parser.Antlr4Impl.Java
                 innerClasses: classNodes,
                 modifier: AccessFlag(modifier),
                 startIdx: restoredStartIdx,
-                endIdx: restoredEndIdx,
-                codeRange: codeRange,
-                header: ""
+                codeRange: codeRange
             );
         }
 
@@ -170,9 +165,7 @@ namespace antlr_parser.Antlr4Impl.Java
             return new AstNode.MethodNode(
                 name: name,
                 accFlag: AccessFlag(modifier),
-                sourceCode: "",
                 startIdx: restoredStartIdx,
-                endIdx: restoredEndIdx,
                 codeRange: codeRange,
                 arguments: arguments
             );
@@ -209,9 +202,7 @@ namespace antlr_parser.Antlr4Impl.Java
             return new AstNode.MethodNode(
                 name: name,
                 accFlag: AccessFlag(modifier),
-                sourceCode: "",
                 startIdx: restoredStartIdx,
-                endIdx: restoredEndIdx,
                 codeRange: codeRange,
                 arguments: arguments
             );
@@ -237,9 +228,7 @@ namespace antlr_parser.Antlr4Impl.Java
             return new AstNode.FieldNode(
                 name: name,
                 accFlag: AccessFlag(modifier),
-                sourceCode: "",
                 startIdx: restoredStartIdx,
-                endIdx: restoredEndIdx,
                 codeRange: codeRange
             );
         }
@@ -277,9 +266,7 @@ namespace antlr_parser.Antlr4Impl.Java
                 innerClasses: classNodes,
                 modifier: AccessFlag(modifier),
                 startIdx: restoredStartIdx,
-                endIdx: restoredStopIdx,
-                codeRange: codeRange,
-                header: ""
+                codeRange: codeRange
             );
         }
 
@@ -309,9 +296,7 @@ namespace antlr_parser.Antlr4Impl.Java
             return new AstNode.MethodNode(
                 name: name,
                 accFlag: AccessFlag(modifier),
-                sourceCode: "",
                 startIdx: restoredStartIdx,
-                endIdx: restoredEndIdx,
                 codeRange: codeRange,
                 arguments: arguments
             );

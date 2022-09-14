@@ -38,7 +38,6 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                     classes: new List<AstNode.ClassNode>(),
                     fields: new List<AstNode.FieldNode>(),
                     methods: new List<AstNode.MethodNode>(),
-                    header: "",
                     language: SourceCodeLanguage.TypeScript,
                     isTest: false,
                     namespaces: new List<AstNode.Namespace>(),
@@ -82,7 +81,6 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 classes: classes,
                 fields: fields,
                 methods: methods,
-                header: "",
                 language: SourceCodeLanguage.TypeScript,
                 isTest: false,
                 namespaces: namespaces,
@@ -101,9 +99,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 classes: children.OfType<AstNode.ClassNode>().ToList(),
                 fields: children.OfType<AstNode.FieldNode>().ToList(),
                 methods: children.OfType<AstNode.MethodNode>().ToList(),
-                namespaces: children.OfType<AstNode.Namespace>().ToList(),
-                startIdx: context.Start.StartIndex,
-                endIdx: context.Stop.StopIndex
+                namespaces: children.OfType<AstNode.Namespace>().ToList()
             );
         }
 
@@ -152,8 +148,6 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 innerClasses: innerClasses,
                 modifier: AccessFlags.None,
                 startIdx: startIdx,
-                endIdx: endIdx,
-                header: "",
                 codeRange: codeRange
             );
         }
@@ -183,10 +177,8 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
             return new AstNode.MethodNode(
                 name: methodNameString,
-                sourceCode: "",
                 accFlag: accessFlags,
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange,
                 arguments: new List<AstNode.ArgumentNode>()
             );
@@ -203,10 +195,8 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
             return new AstNode.MethodNode(
                 name: context.Identifier().GetText(),
-                sourceCode: "",
                 accFlag: AccessFlags.None,
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange,
                 arguments: new List<AstNode.ArgumentNode>()
             );
@@ -238,9 +228,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             return new AstNode.FieldNode(
                 name: propertyNameString,
                 accessFlags,
-                sourceCode: "",
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange
             );
         }
@@ -277,10 +265,8 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             {
                 returnNode = new AstNode.MethodNode(
                     name: varName,
-                    sourceCode: "",
                     accFlag: AccessFlags.None,
                     startIdx: startIdx,
-                    endIdx: endIdx,
                     codeRange: codeRange,
                     arguments: new List<AstNode.ArgumentNode>());
             }
@@ -289,9 +275,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 returnNode = new AstNode.FieldNode(
                     name: varName,
                     accFlag: AccessFlags.None,
-                    sourceCode: "",
                     startIdx: startIdx,
-                    endIdx: endIdx,
                     codeRange: codeRange);
             }
 
@@ -322,9 +306,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             return new AstNode.MethodNode(
                 name: "constructor",
                 accFlag: accessFlags,
-                sourceCode: "",
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange,
                 arguments: new List<AstNode.ArgumentNode>()
             );

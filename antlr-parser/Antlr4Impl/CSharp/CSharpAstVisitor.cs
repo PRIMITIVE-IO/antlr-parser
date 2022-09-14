@@ -44,7 +44,6 @@ namespace antlr_parser.Antlr4Impl.CSharp
                 classes: parsedChildren.OfType<AstNode.ClassNode>().ToList(),
                 methods: new List<AstNode.MethodNode>(),
                 fields: new List<AstNode.FieldNode>(),
-                header: "",
                 namespaces: parsedChildren.OfType<AstNode.Namespace>().ToList(),
                 language: SourceCodeLanguage.CSharp,
                 isTest: false,
@@ -69,9 +68,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
                 classes: classes,
                 fields: new List<AstNode.FieldNode>(),
                 methods: new List<AstNode.MethodNode>(),
-                namespaces: namespaces,
-                startIdx: context.Start.StartIndex,
-                endIdx: context.Stop.StopIndex
+                namespaces: namespaces
             );
         }
 
@@ -113,8 +110,6 @@ namespace antlr_parser.Antlr4Impl.CSharp
                 innerClasses: children.OfType<AstNode.ClassNode>().ToList(),
                 modifier: AccessFlags.None, //TODO
                 startIdx: headerStartIdx,
-                endIdx: endIdx,
-                header: "",
                 codeRange: codeRange
             );
         }
@@ -154,8 +149,6 @@ namespace antlr_parser.Antlr4Impl.CSharp
                 innerClasses: children.OfType<AstNode.ClassNode>().ToList(),
                 modifier: AccessFlags.None, //TODO
                 startIdx: headerStartIdx,
-                endIdx: endIdx,
-                header: "",
                 codeRange: codeRange
             );
         }
@@ -195,8 +188,6 @@ namespace antlr_parser.Antlr4Impl.CSharp
                 innerClasses: children.OfType<AstNode.ClassNode>().ToList(),
                 modifier: AccessFlags.None, //TODO
                 startIdx: headerStartIdx,
-                endIdx: endIdx,
-                header: "",
                 codeRange: codeRange
             );
         }
@@ -228,8 +219,6 @@ namespace antlr_parser.Antlr4Impl.CSharp
                 innerClasses: new List<AstNode.ClassNode>(),
                 modifier: AccessFlags.None, //TODO
                 startIdx: headerStartIdx,
-                endIdx: endIdx,
-                header: "",
                 codeRange: codeRange
             );
         }
@@ -272,9 +261,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
             return new AstNode.FieldNode(
                 name: name,
                 accFlag: accFlag,
-                sourceCode: "",
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange
             );
         }
@@ -297,9 +284,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
             return new AstNode.FieldNode(
                 name: name,
                 accFlag: accFlag,
-                sourceCode: "",
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange
             );
         }
@@ -323,9 +308,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
             return new AstNode.FieldNode(
                 name: name,
                 accFlag: accFlag,
-                sourceCode: "",
                 startIdx: -1,
-                endIdx: -1,
                 codeRange: codeRange
             );
         }
@@ -348,9 +331,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
             return new AstNode.MethodNode(
                 name: context.method_member_name().identifier().First().GetText(),
                 accFlag: accFlag,
-                sourceCode: "",
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange,
                 arguments: new List<AstNode.ArgumentNode>() //TODO 
             );

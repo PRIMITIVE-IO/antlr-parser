@@ -61,7 +61,6 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 classes: classes,
                 fields: fields,
                 methods: methods,
-                header: "",
                 namespaces: new List<AstNode.Namespace>(),
                 language: SourceCodeLanguage.Java,
                 isTest: false,
@@ -103,9 +102,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             return new AstNode.MethodNode(
                 context.identifier().GetFullText(),
                 AccessFlags.None,
-                "",
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange,
                 arguments: new List<AstNode.ArgumentNode>()
             );
@@ -153,8 +150,6 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 innerClasses,
                 AccessFlags.None,
                 startIdx,
-                endIdx,
-                "",
                 codeRange: codeRange
             );
         }
@@ -169,9 +164,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             return new AstNode.MethodNode(
                 name: context.GetText(),
                 accFlag: AccessFlags.None,
-                sourceCode: "",
                 startIdx: -1,
-                endIdx: -1,
                 codeRange: codeRange,
                 arguments: new List<AstNode.ArgumentNode>()
             );
@@ -189,9 +182,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             return new AstNode.MethodNode(
                 context.propertyName().GetFullText(),
                 AccessFlags.None,
-                "",
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange,
                 arguments: new List<AstNode.ArgumentNode>()
             );
@@ -229,9 +220,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             return new AstNode.FieldNode(
                 name,
                 AccessFlags.None,
-                context.GetFullText(),
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange
             );
         }

@@ -60,7 +60,6 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 classes: classes,
                 fields: fields,
                 methods: methods,
-                header: "",
                 namespaces: new List<AstNode.Namespace>(),
                 language: SourceCodeLanguage.Kotlin,
                 isTest: false,
@@ -81,9 +80,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             return new AstNode.MethodNode(
                 context.identifier().GetFullText(),
                 modifier,
-                "",
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange,
                 arguments: new List<AstNode.ArgumentNode>()
             );
@@ -163,8 +160,6 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 innerClasses,
                 modifier,
                 startIdx: startIdx,
-                endIdx: endIdx,
-                header: "",
                 codeRange: codeRange
             );
         }
@@ -182,9 +177,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             return new AstNode.FieldNode(
                 context.variableDeclaration().simpleIdentifier().GetFullText(),
                 modifier,
-                "",
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange
             );
         }
@@ -202,9 +195,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             return new AstNode.FieldNode(
                 context.simpleIdentifier().GetFullText(),
                 modifier,
-                "",
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange
             );
         }

@@ -48,7 +48,6 @@ namespace antlr_parser.Antlr4Impl.Solidity
                 classes: classNodes,
                 fields: new List<AstNode.FieldNode>(),
                 methods: new List<AstNode.MethodNode>(),
-                header: "",
                 namespaces: new List<AstNode.Namespace>(),
                 language: SourceCodeLanguage.Solidity,
                 isTest: false,
@@ -138,8 +137,6 @@ namespace antlr_parser.Antlr4Impl.Solidity
                 innerClasses: classes,
                 modifier: AccessFlags.None,
                 startIdx: startIdx,
-                endIdx: endIdx,
-                header: "",
                 codeRange: codeRange
             );
         }
@@ -163,9 +160,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
             return new AstNode.FieldNode(
                 name: context.identifier().GetText(),
                 accFlag: accFlag,
-                sourceCode: "",
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange
             );
         }
@@ -188,9 +183,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
             return new AstNode.MethodNode(
                 name: !string.IsNullOrEmpty(name) ? name : "anonymous",
                 accFlag: ExtractAccFlags(context.modifierList()),
-                sourceCode: "",
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange,
                 arguments: new List<AstNode.ArgumentNode>()
             );

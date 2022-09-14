@@ -62,7 +62,6 @@ namespace antlr_parser.Antlr4Impl.Java
                     classes: new List<AstNode.ClassNode>(),
                     fields: new List<AstNode.FieldNode>(),
                     methods: new List<AstNode.MethodNode>(),
-                    header: source,
                     namespaces: new List<AstNode.Namespace>(),
                     language: SourceCodeLanguage.Java,
                     isTest: false,

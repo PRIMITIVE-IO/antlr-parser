@@ -54,7 +54,6 @@ namespace antlr_parser.Antlr4Impl.Python
                 classes: classNodes,
                 fields: fieldNodes,
                 methods: methodNodes,
-                header: "",
                 namespaces: new List<AstNode.Namespace>(),
                 language: SourceCodeLanguage.Python,
                 isTest: false,
@@ -91,8 +90,6 @@ namespace antlr_parser.Antlr4Impl.Python
                 innerClasses: children.OfType<AstNode.ClassNode>().ToList(),
                 modifier: AccessFlags.None,
                 startIdx: startIdx,
-                endIdx: endIdx,
-                header: "",
                 codeRange: codeRange
             );
         }
@@ -138,9 +135,7 @@ namespace antlr_parser.Antlr4Impl.Python
             return new AstNode.FieldNode(
                 name: context.testlist_star_expr()[0].GetText(),
                 accFlag: AccessFlags.None,
-                sourceCode: codeRange.Of(MethodBodyRemovalResult.OriginalSource),
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange
             );
         }
@@ -163,9 +158,7 @@ namespace antlr_parser.Antlr4Impl.Python
             return new AstNode.MethodNode(
                 name: context.NAME().GetText(),
                 accFlag: AccessFlags.None,
-                sourceCode: codeRange.Of(MethodBodyRemovalResult.OriginalSource),
                 startIdx: startIdx,
-                endIdx: stopIdx,
                 codeRange: codeRange,
                 arguments: new List<AstNode.ArgumentNode>()
             );

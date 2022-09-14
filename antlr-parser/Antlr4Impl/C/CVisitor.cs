@@ -65,7 +65,6 @@ namespace antlr_parser.Antlr4Impl.C
                 classes: structs,
                 fields: new List<AstNode.FieldNode>(),
                 methods: methods,
-                header: "",
                 namespaces: new List<AstNode.Namespace>(),
                 language: SourceCodeLanguage.C,
                 isTest: false,
@@ -118,8 +117,6 @@ namespace antlr_parser.Antlr4Impl.C
                 innerClasses,
                 AccessFlags.AccPublic,
                 MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
-                MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex),
-                "",
                 codeRange
             );
         }
@@ -159,9 +156,7 @@ namespace antlr_parser.Antlr4Impl.C
             return new AstNode.FieldNode(
                 fieldName,
                 AccessFlags.AccPublic,
-                context.GetFullText(),
                 startIdx,
-                endIdx,
                 codeRange
             );
         }
@@ -221,9 +216,7 @@ namespace antlr_parser.Antlr4Impl.C
             return new AstNode.MethodNode(
                 fName,
                 AccessFlags.AccPublic,
-                "",
                 startIdx: startIdx,
-                endIdx: endIdx,
                 codeRange: codeRange,
                 arguments: new List<AstNode.ArgumentNode>()
             );

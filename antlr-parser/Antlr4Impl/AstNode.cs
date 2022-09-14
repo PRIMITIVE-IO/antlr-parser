@@ -14,7 +14,6 @@ namespace antlr_parser.Antlr4Impl
 
         public class FileNode : AstNode
         {
-            public readonly string Header;
             public readonly string Path;
             public readonly PackageNode? PackageNode;
             public readonly List<ClassNode> Classes;
@@ -30,7 +29,6 @@ namespace antlr_parser.Antlr4Impl
                 List<ClassNode> classes,
                 List<FieldNode> fields,
                 List<MethodNode> methods,
-                string header,
                 List<Namespace> namespaces,
                 SourceCodeLanguage language,
                 bool isTest,
@@ -41,7 +39,6 @@ namespace antlr_parser.Antlr4Impl
                 Classes = classes;
                 Fields = fields;
                 Methods = methods;
-                Header = header;
                 Namespaces = namespaces;
                 Language = language;
                 IsTest = isTest;
@@ -67,8 +64,6 @@ namespace antlr_parser.Antlr4Impl
             public readonly List<ClassNode> InnerClasses;
             public readonly AccessFlags Modifier;
             public readonly int StartIdx;
-            public readonly int EndIdx;
-            public readonly string Header;
             public readonly CodeRange? CodeRange;
 
             public ClassNode(string name,
@@ -77,8 +72,6 @@ namespace antlr_parser.Antlr4Impl
                 List<ClassNode> innerClasses,
                 AccessFlags modifier,
                 int startIdx,
-                int endIdx,
-                string header,
                 CodeRange? codeRange
             )
             {
@@ -88,8 +81,6 @@ namespace antlr_parser.Antlr4Impl
                 InnerClasses = innerClasses;
                 Modifier = modifier;
                 StartIdx = startIdx;
-                EndIdx = endIdx;
-                Header = header;
                 CodeRange = codeRange;
             }
         }
@@ -98,19 +89,19 @@ namespace antlr_parser.Antlr4Impl
         {
             public readonly string Name;
             public readonly AccessFlags AccFlag;
-            public readonly string SourceCode;
             public readonly int StartIdx;
-            public readonly int EndIdx;
             public readonly CodeRange? CodeRange;
             public readonly List<ArgumentNode> Arguments;
 
-            public MethodNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx,
-                CodeRange? codeRange, List<ArgumentNode> arguments)
+            public MethodNode(
+                string name,
+                AccessFlags accFlag,
+                int startIdx,
+                CodeRange? codeRange,
+                List<ArgumentNode> arguments)
             {
                 Name = name;
                 AccFlag = accFlag;
-                SourceCode = sourceCode;
-                EndIdx = endIdx;
                 CodeRange = codeRange;
                 StartIdx = startIdx;
                 Arguments = arguments;
@@ -133,19 +124,15 @@ namespace antlr_parser.Antlr4Impl
         {
             public readonly string Name;
             public readonly AccessFlags AccFlag;
-            public readonly string SourceCode;
             public readonly int StartIdx;
-            public readonly int EndIdx;
             public readonly CodeRange? CodeRange;
 
-            public FieldNode(string name, AccessFlags accFlag, string sourceCode, int startIdx, int endIdx,
+            public FieldNode(string name, AccessFlags accFlag, int startIdx,
                 CodeRange? codeRange)
             {
                 Name = name;
                 AccFlag = accFlag;
-                SourceCode = sourceCode;
                 StartIdx = startIdx;
-                EndIdx = endIdx;
                 CodeRange = codeRange;
             }
         }
@@ -157,19 +144,19 @@ namespace antlr_parser.Antlr4Impl
             public readonly List<FieldNode> Fields;
             public readonly List<MethodNode> Methods;
             public readonly List<Namespace> Namespaces;
-            public readonly int StartIdx;
-            public readonly int EndIdx;
 
-            public Namespace(string name, List<ClassNode> classes, List<FieldNode> fields, List<MethodNode> methods,
-                List<Namespace> namespaces, int startIdx, int endIdx)
+            public Namespace(
+                string name,
+                List<ClassNode> classes,
+                List<FieldNode> fields,
+                List<MethodNode> methods,
+                List<Namespace> namespaces)
             {
                 Name = name;
                 Classes = classes;
                 Fields = fields;
                 Methods = methods;
                 Namespaces = namespaces;
-                StartIdx = startIdx;
-                EndIdx = endIdx;
             }
         }
 
