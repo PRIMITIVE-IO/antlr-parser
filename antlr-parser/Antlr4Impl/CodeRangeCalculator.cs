@@ -1,5 +1,4 @@
 using System.Linq;
-using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
 using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
 
@@ -8,7 +7,6 @@ namespace antlr_parser.Antlr4Impl
     public class CodeRangeCalculator
     {
         readonly string[] lines;
-
 
         public CodeRangeCalculator(string text)
         {
@@ -83,6 +81,11 @@ namespace antlr_parser.Antlr4Impl
                 NextNonWhitespace(codeRange.Start) ?? codeRange.Start,
                 PreviousNonWhitespace(codeRange.End) ?? codeRange.End
             );
+        }
+
+        public CodeLocation EndPosition()
+        {
+            return new CodeLocation(lines.Length, lines.Last().Length);
         }
     }
 }

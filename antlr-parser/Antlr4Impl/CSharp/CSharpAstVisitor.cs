@@ -3,6 +3,7 @@ using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using PrimitiveCodebaseElements.Primitive;
+using PrimitiveCodebaseElements.Primitive.dto;
 using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
 
 namespace antlr_parser.Antlr4Impl.CSharp
@@ -26,11 +27,16 @@ namespace antlr_parser.Antlr4Impl.CSharp
             CodeRangeCalculator = codeRangeCalculator;
         }
 
+        #region VISITORS
+
         public override AstNode VisitCompilation_unit(CSharpParser.Compilation_unitContext context)
         {
             List<AstNode> parsedChildren = context.children
                 .Select(it => it.Accept(this))
                 .ToList();
+
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                new CodeRange(new CodeLocation(1, 1), CodeRangeCalculator.EndPosition()));
 
             return new AstNode.FileNode(
                 path: Path,
@@ -38,11 +44,11 @@ namespace antlr_parser.Antlr4Impl.CSharp
                 classes: parsedChildren.OfType<AstNode.ClassNode>().ToList(),
                 methods: new List<AstNode.MethodNode>(),
                 fields: new List<AstNode.FieldNode>(),
-                header: null,
+                header: "",
                 namespaces: parsedChildren.OfType<AstNode.Namespace>().ToList(),
                 language: SourceCodeLanguage.CSharp,
                 isTest: false,
-                codeRange: null
+                codeRange: codeRange
             );
         }
 
@@ -228,35 +234,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
             );
         }
 
-        int? NearestPeerEndIdx(CSharpParser.Class_bodyContext? ctx, int startIdx)
-        {
-            return ctx?.class_member_declarations().class_member_declaration()
-                .Select(it => it.Stop.StopIndex as int?)
-                .TakeWhile(it => it < startIdx)
-                .Max();
-        }
-
-        int? NearestPeerEndIdx(CSharpParser.Struct_bodyContext? ctx, int startIdx)
-        {
-            return ctx?.struct_member_declaration()
-                .Select(it => it.Stop.StopIndex as int?)
-                .TakeWhile(it => it < startIdx)
-                .Max();
-        }
-
-        int? PreviousPeerClassEndPosition(ParserRuleContext context, int startIdx)
-        {
-            CSharpParser.Namespace_member_declarationsContext ns =
-                FindParent<CSharpParser.Namespace_member_declarationsContext>(context);
-            List<CSharpParser.Class_definitionContext> classes = FindClassDefinitionContexts(ns);
-
-            return classes
-                .Select(it => it.Stop.StopIndex as int?)
-                .TakeWhile(it => it < startIdx)
-                .Max();
-        }
-
-        List<CSharpParser.Class_definitionContext> FindClassDefinitionContexts(IParseTree parseTree)
+        static IEnumerable<CSharpParser.Class_definitionContext> FindClassDefinitionContexts(IParseTree parseTree)
         {
             List<CSharpParser.Class_definitionContext> result = new List<CSharpParser.Class_definitionContext>();
             for (int i = 0; i < parseTree.ChildCount; i++)
@@ -352,66 +330,6 @@ namespace antlr_parser.Antlr4Impl.CSharp
             );
         }
 
-        int CalculateFieldStartIdx(ParserRuleContext context)
-        {
-            CSharpParser.Class_bodyContext? parentClassBodyContext =
-                FindParent<CSharpParser.Class_bodyContext>(context);
-            if (parentClassBodyContext != null)
-            {
-                return (NearestPeerEndIdx(parentClassBodyContext, context.Start.StartIndex) ??
-                        parentClassBodyContext.OPEN_BRACE().Symbol.StartIndex) + 1;
-            }
-
-            CSharpParser.Struct_bodyContext? parentStructBodyContext =
-                FindParent<CSharpParser.Struct_bodyContext>(context);
-
-            return (NearestPeerEndIdx(parentStructBodyContext, context.Start.StartIndex) ??
-                    parentStructBodyContext.OPEN_BRACE().Symbol.StartIndex) + 1;
-        }
-
-        AccessFlags FieldAccessFlag(ParserRuleContext context)
-        {
-            CSharpParser.Class_member_declarationContext? classMemberDeclarationContext =
-                FindParent<CSharpParser.Class_member_declarationContext>(context);
-
-            if (classMemberDeclarationContext != null)
-            {
-                return classMemberDeclarationContext
-                    .all_member_modifiers()
-                    ?.all_member_modifier()
-                    .Select(it => Flags(it.GetText()))
-                    .FirstOrDefault(it => it != null) ?? AccessFlags.None;
-            }
-
-            return FindParent<CSharpParser.Struct_member_declarationContext>(context)
-                ?.all_member_modifiers()
-                ?.all_member_modifier()
-                .Select(it => Flags(it.GetText()))
-                .FirstOrDefault(it => it != null) ?? AccessFlags.None;
-        }
-
-        T? FindParent<T>(ParserRuleContext context) where T : ParserRuleContext
-        {
-            RuleContext? cur = context;
-            do
-            {
-                cur = cur.Parent;
-            } while (cur != null && !(cur is T));
-
-            return cur as T;
-        }
-
-        AccessFlags? Flags(string flag)
-        {
-            switch (flag)
-            {
-                case "private": return AccessFlags.AccPrivate;
-                case "protected": return AccessFlags.AccProtected;
-                case "public": return AccessFlags.AccPublic;
-                default: return null;
-            }
-        }
-
         public override AstNode VisitMethod_declaration(CSharpParser.Method_declarationContext context)
         {
             AccessFlags accFlag = MethodAccessFlag(context);
@@ -437,8 +355,100 @@ namespace antlr_parser.Antlr4Impl.CSharp
                 arguments: new List<AstNode.ArgumentNode>() //TODO 
             );
         }
+        
+        #endregion
 
-        int MethodStartIdx(CSharpParser.Method_declarationContext context)
+        #region UTIL
+
+        static int CalculateFieldStartIdx(ParserRuleContext context)
+        {
+            CSharpParser.Class_bodyContext? parentClassBodyContext =
+                FindParent<CSharpParser.Class_bodyContext>(context);
+            if (parentClassBodyContext != null)
+            {
+                return (NearestPeerEndIdx(parentClassBodyContext, context.Start.StartIndex) ??
+                        parentClassBodyContext.OPEN_BRACE().Symbol.StartIndex) + 1;
+            }
+
+            CSharpParser.Struct_bodyContext? parentStructBodyContext =
+                FindParent<CSharpParser.Struct_bodyContext>(context);
+
+            return (NearestPeerEndIdx(parentStructBodyContext, context.Start.StartIndex) ??
+                    parentStructBodyContext.OPEN_BRACE().Symbol.StartIndex) + 1;
+        }
+
+        static int? NearestPeerEndIdx(CSharpParser.Class_bodyContext? ctx, int startIdx)
+        {
+            return ctx?.class_member_declarations().class_member_declaration()
+                .Select(it => it.Stop.StopIndex as int?)
+                .TakeWhile(it => it < startIdx)
+                .Max();
+        }
+
+        static int? NearestPeerEndIdx(CSharpParser.Struct_bodyContext? ctx, int startIdx)
+        {
+            return ctx?.struct_member_declaration()
+                .Select(it => it.Stop.StopIndex as int?)
+                .TakeWhile(it => it < startIdx)
+                .Max();
+        }
+
+        static int? PreviousPeerClassEndPosition(ParserRuleContext context, int startIdx)
+        {
+            CSharpParser.Namespace_member_declarationsContext ns =
+                FindParent<CSharpParser.Namespace_member_declarationsContext>(context);
+            IEnumerable<CSharpParser.Class_definitionContext> classes = FindClassDefinitionContexts(ns);
+
+            return classes
+                .Select(it => it.Stop.StopIndex as int?)
+                .TakeWhile(it => it < startIdx)
+                .Max();
+        }
+
+        static AccessFlags FieldAccessFlag(ParserRuleContext context)
+        {
+            CSharpParser.Class_member_declarationContext? classMemberDeclarationContext =
+                FindParent<CSharpParser.Class_member_declarationContext>(context);
+
+            if (classMemberDeclarationContext != null)
+            {
+                return classMemberDeclarationContext
+                    .all_member_modifiers()
+                    ?.all_member_modifier()
+                    .Select(it => Flags(it.GetText()))
+                    .FirstOrDefault(it => it != null) ?? AccessFlags.None;
+            }
+
+            return FindParent<CSharpParser.Struct_member_declarationContext>(context)
+                ?.all_member_modifiers()
+                ?.all_member_modifier()
+                .Select(it => Flags(it.GetText()))
+                .FirstOrDefault(it => it != null) ?? AccessFlags.None;
+        }
+
+        static T? FindParent<T>(ParserRuleContext context) where T : ParserRuleContext
+        {
+            RuleContext? cur = context;
+            do
+            {
+                cur = cur.Parent;
+            } while (cur != null && !(cur is T));
+
+            return cur as T;
+        }
+
+        static AccessFlags? Flags(string flag)
+        {
+            switch (flag)
+            {
+                case "private": return AccessFlags.AccPrivate;
+                case "protected": return AccessFlags.AccProtected;
+                case "public": return AccessFlags.AccPublic;
+                default: return null;
+            }
+        }
+
+        static int MethodStartIdx(CSharpParser.Method_declarationContext context)
         {
             CSharpParser.Class_bodyContext? parentClassBodyContext =
                 FindParent<CSharpParser.Class_bodyContext>(context);
@@ -454,7 +464,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
                     parentStructBodyContext.OPEN_BRACE().Symbol.StartIndex) + 1;
         }
 
-        AccessFlags MethodAccessFlag(CSharpParser.Method_declarationContext context)
+        static AccessFlags MethodAccessFlag(CSharpParser.Method_declarationContext context)
         {
             CSharpParser.Class_member_declarationContext? classMemberDeclarationContext =
                 FindParent<CSharpParser.Class_member_declarationContext>(context);
@@ -482,5 +492,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
         {
             return AstNode.NodeList.Combine(aggregate, nextResult);
         }
+        
+        #endregion
     }
 }

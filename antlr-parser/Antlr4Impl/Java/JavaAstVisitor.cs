@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive;
+using PrimitiveCodebaseElements.Primitive.dto;
 using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
 
 namespace antlr_parser.Antlr4Impl.Java
@@ -25,13 +27,24 @@ namespace antlr_parser.Antlr4Impl.Java
             CodeRangeCalculator = codeRangeCalculator;
         }
 
+        #region VISITORS
+
         public override AstNode VisitCompilationUnit(JavaParser.CompilationUnitContext context)
         {
-            List<AstNode> nodes = context.children.Select(it => it.Accept(this))
-                .ToList();
+            List<AstNode> nodes = AntlrUtil.WalkUntilType(
+                context.children,
+                new HashSet<Type>
+                {
+                    typeof(JavaParser.PackageDeclarationContext),
+                    typeof(JavaParser.ClassDeclarationContext),
+                },
+                this);
 
             AstNode.PackageNode? package = nodes.OfType<AstNode.PackageNode>().SingleOrDefault();
             List<AstNode.ClassNode> classes = nodes.OfType<AstNode.ClassNode>().ToList();
+
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                new CodeRange(new CodeLocation(1, 1), CodeRangeCalculator.EndPosition()));
 
             return new AstNode.FileNode(
                 path: Path,
@@ -43,7 +56,7 @@ namespace antlr_parser.Antlr4Impl.Java
                 namespaces: new List<AstNode.Namespace>(),
                 language: SourceCodeLanguage.Java,
                 isTest: false,
-                codeRange: null //Used for fake classes
+                codeRange: codeRange
             );
         }
 
@@ -61,7 +74,6 @@ namespace antlr_parser.Antlr4Impl.Java
             List<AstNode.FieldNode> fieldNodes = astNodes.OfType<AstNode.FieldNode>().ToList();
             List<AstNode.MethodNode> methodNodes = astNodes.OfType<AstNode.MethodNode>().ToList();
             List<AstNode.ClassNode> classNodes = astNodes.OfType<AstNode.ClassNode>().ToList();
-
 
             //top-level class
             string topLevelClassModifier = TypeDeclarationModifier(context.Parent as JavaParser.TypeDeclarationContext);
@@ -95,46 +107,6 @@ namespace antlr_parser.Antlr4Impl.Java
                 header: ""
             );
         }
-
-        static int? NearestPeerEndIdx(RuleContext context, int selfStartIdx)
-        {
-            return context.Parent switch
-            {
-                JavaParser.CompilationUnitContext c => null,
-                JavaParser.InterfaceBodyContext c => c.interfaceBodyDeclaration()
-                    .Select(it => it.Stop.StopIndex as int?)
-                    .TakeWhile(it => it < selfStartIdx)
-                    .Max(),
-                JavaParser.ClassBodyContext c => c.classBodyDeclaration()
-                    .Select(it => it.Stop.StopIndex as int?)
-                    .TakeWhile(it => it < selfStartIdx)
-                    .Max(),
-                _ => NearestPeerEndIdx(context.Parent, selfStartIdx)
-            };
-        }
-
-        static int? EnclosingClassHeaderEnd(RuleContext context)
-        {
-            return context.Parent switch
-            {
-                JavaParser.InterfaceDeclarationContext c => c.interfaceBody().LBRACE().Symbol.StartIndex,
-                JavaParser.ClassDeclarationContext c => c.classBody().LBRACE().Symbol.StartIndex,
-                JavaParser.CompilationUnitContext _ => null,
-                _ => EnclosingClassHeaderEnd(context.Parent)
-            };
-        }
-
-        static AccessFlags AccessFlag(string modifier)
-        {
-            return modifier switch
-            {
-                "private" => AccessFlags.AccPrivate,
-                "protected" => AccessFlags.AccProtected,
-                "public" => AccessFlags.AccPublic,
-                _ => AccessFlags.None
-            };
-        }
-
 
         public override AstNode VisitInterfaceDeclaration(JavaParser.InterfaceDeclarationContext context)
         {
@@ -272,14 +244,6 @@ namespace antlr_parser.Antlr4Impl.Java
             );
         }
 
-        static string? ClassBodyDeclarationModifier(JavaParser.ClassBodyDeclarationContext? context)
-        {
-            return context
-                ?.modifier()
-                ?.Select(it => it.GetText())
-                .SingleOrDefault(it => it == "private" || it == "protected" || it == "public");
-        }
-
         public override AstNode VisitEnumDeclaration(JavaParser.EnumDeclarationContext context)
         {
             List<AstNode> astNodes = context.children
@@ -319,24 +283,6 @@ namespace antlr_parser.Antlr4Impl.Java
             );
         }
 
-        static string? TypeDeclarationModifier(JavaParser.TypeDeclarationContext? context)
-        {
-            return context
-                ?.classOrInterfaceModifier()
-                ?.Select(it => it.GetText())
-                .SingleOrDefault(it => it == "private" || it == "protected" || it == "public");
-        }
-
-        static string? ParentName(ParserRuleContext context)
-        {
-            return (context.Parent?.Parent?.Parent?.Parent as JavaParser.EnumDeclarationContext)?.IDENTIFIER()
-                   .GetText() ??
-                   (context.Parent?.Parent?.Parent?.Parent as JavaParser.ClassDeclarationContext)?.IDENTIFIER()
-                   .GetText() ??
-                   (context.Parent?.Parent?.Parent?.Parent as JavaParser.InterfaceDeclarationContext)?.IDENTIFIER()
-                   .GetText();
-        }
-
         public override AstNode VisitConstructorDeclaration(JavaParser.ConstructorDeclarationContext context)
         {
             string modifier = (context.Parent.Parent as JavaParser.ClassBodyDeclarationContext)
@@ -370,10 +316,81 @@ namespace antlr_parser.Antlr4Impl.Java
                 arguments: arguments
             );
         }
+        
+        #endregion
+
+        #region UTIL
+
+        static string? ClassBodyDeclarationModifier(JavaParser.ClassBodyDeclarationContext? context)
+        {
+            return context
+                ?.modifier()
+                ?.Select(it => it.GetText())
+                .SingleOrDefault(it => it == "private" || it == "protected" || it == "public");
+        }
+
+        static int? NearestPeerEndIdx(RuleContext context, int selfStartIdx)
+        {
+            return context.Parent switch
+            {
+                JavaParser.CompilationUnitContext c => null,
+                JavaParser.InterfaceBodyContext c => c.interfaceBodyDeclaration()
+                    .Select(it => it.Stop.StopIndex as int?)
+                    .TakeWhile(it => it < selfStartIdx)
+                    .Max(),
+                JavaParser.ClassBodyContext c => c.classBodyDeclaration()
+                    .Select(it => it.Stop.StopIndex as int?)
+                    .TakeWhile(it => it < selfStartIdx)
+                    .Max(),
+                _ => NearestPeerEndIdx(context.Parent, selfStartIdx)
+            };
+        }
+
+        static int? EnclosingClassHeaderEnd(RuleContext context)
+        {
+            return context.Parent switch
+            {
+                JavaParser.InterfaceDeclarationContext c => c.interfaceBody().LBRACE().Symbol.StartIndex,
+                JavaParser.ClassDeclarationContext c => c.classBody().LBRACE().Symbol.StartIndex,
+                JavaParser.CompilationUnitContext _ => null,
+                _ => EnclosingClassHeaderEnd(context.Parent)
+            };
+        }
+
+        static AccessFlags AccessFlag(string modifier)
+        {
+            return modifier switch
+            {
+                "private" => AccessFlags.AccPrivate,
+                "protected" => AccessFlags.AccProtected,
+                "public" => AccessFlags.AccPublic,
+                _ => AccessFlags.None
+            };
+        }
+
+        static string? TypeDeclarationModifier(JavaParser.TypeDeclarationContext? context)
+        {
+            return context
+                ?.classOrInterfaceModifier()
+                ?.Select(it => it.GetText())
+                .SingleOrDefault(it => it == "private" || it == "protected" || it == "public");
+        }
+
+        static string? ParentName(ParserRuleContext context)
+        {
+            return (context.Parent?.Parent?.Parent?.Parent as JavaParser.EnumDeclarationContext)?.IDENTIFIER()
+                   .GetText() ??
+                   (context.Parent?.Parent?.Parent?.Parent as JavaParser.ClassDeclarationContext)?.IDENTIFIER()
+                   .GetText() ??
+                   (context.Parent?.Parent?.Parent?.Parent as JavaParser.InterfaceDeclarationContext)?.IDENTIFIER()
+                   .GetText();
+        }
 
         protected override AstNode AggregateResult(AstNode aggregate, AstNode nextResult)
         {
             return AstNode.NodeList.Combine(aggregate, nextResult);
         }
+        
+        #endregion
     }
 }

@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using PrimitiveCodebaseElements.Primitive;
+using PrimitiveCodebaseElements.Primitive.dto;
 using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
 
 namespace antlr_parser.Antlr4Impl.Kotlin
@@ -26,31 +28,35 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             CodeRangeCalculator = codeRangeCalculator;
         }
 
+        #region VISITORS
+
         public override AstNode VisitKotlinFile(KotlinParser.KotlinFileContext context)
         {
-            AstNode.PackageNode? pkg = context.preamble().packageHeader().Accept(this) as AstNode.PackageNode;
-            List<AstNode> parsed = context.topLevelObject()
-                .Select(obj => obj.Accept(this))
-                .Where(it => it != null)
-                .ToList();
+            List<AstNode> nodes = AntlrUtil.WalkUntilType(
+                context.children,
+                new HashSet<Type>
+                {
+                    typeof(KotlinParser.FunctionDeclarationContext),
+                    typeof(KotlinParser.PackageHeaderContext),
+                    typeof(KotlinParser.ClassDeclarationContext),
+                    typeof(KotlinParser.PropertyDeclarationContext),
+                    typeof(KotlinParser.ObjectDeclarationContext),
+                    typeof(KotlinParser.VariableDeclarationContext)
+                },
+                this);
 
-            List<AstNode.ClassNode> classes = parsed.OfType<AstNode.ClassNode>().ToList();
-            List<AstNode.MethodNode> methods = parsed.OfType<AstNode.MethodNode>().ToList();
-            List<AstNode.FieldNode> fields = parsed.OfType<AstNode.FieldNode>().ToList();
-
-            int headerEnd = classes.Select(it => it.StartIdx - 1)
-                .Concat(methods.Select(it => it.StartIdx - 1))
-                .Concat(fields.Select(it => it.StartIdx - 1))
-                .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex))
-                .Min();
-
+            AstNode.PackageNode? package = nodes.OfType<AstNode.PackageNode>().SingleOrDefault();
+            List<AstNode.ClassNode> classes = nodes.OfType<AstNode.ClassNode>().ToList();
+            List<AstNode.MethodNode> methods = nodes.OfType<AstNode.MethodNode>().ToList();
+            List<AstNode.FieldNode> fields = nodes.OfType<AstNode.FieldNode>().ToList();
+            List<AstNode.PackageNode> packages = nodes.OfType<AstNode.PackageNode>().ToList();
+            
             CodeRange codeRange = CodeRangeCalculator.Trim(
-                IndexToLocationConverter.IdxToCodeRange(0, headerEnd)
-            );
+                new CodeRange(new CodeLocation(1, 1), CodeRangeCalculator.EndPosition()));
 
             return new AstNode.FileNode(
                 path: FilePath,
-                packageNode: pkg,
+                packageNode: package,
                 classes: classes,
                 fields: fields,
                 methods: methods,
@@ -60,19 +66,6 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 isTest: false,
                 codeRange: codeRange
             );
-        }
-
-        public override AstNode VisitTopLevelObject(KotlinParser.TopLevelObjectContext context)
-        {
-            ParserRuleContext declaration = new List<ParserRuleContext>()
-                {
-                    context.classDeclaration(),
-                    context.functionDeclaration(),
-                    context.objectDeclaration(),
-                    context.propertyDeclaration()
-                }
-                .FirstOrDefault(it => it != null);
-            return declaration?.Accept(this);
         }
 
         public override AstNode VisitFunctionDeclaration(KotlinParser.FunctionDeclarationContext context)
@@ -96,27 +89,6 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             );
         }
 
-        static AccessFlags ExtractVisibilityModifier(KotlinParser.ModifierListContext ctx)
-        {
-            string accFlag = ctx?.modifier()
-                ?.Select(it => it.visibilityModifier())
-                .FirstOrDefault()
-                ?.GetFullText();
-
-            switch (accFlag)
-            {
-                case null:
-                case "public":
-                    return AccessFlags.AccPublic;
-                case "private":
-                    return AccessFlags.AccPrivate;
-                case "internal":
-                    return AccessFlags.AccProtected;
-                default:
-                    return AccessFlags.AccPublic;
-            }
-        }
-
         public override AstNode VisitPackageHeader(KotlinParser.PackageHeaderContext context)
         {
             return new AstNode.PackageNode(context.identifier()?.GetText() ?? "");
@@ -124,12 +96,41 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
         public override AstNode VisitClassDeclaration(KotlinParser.ClassDeclarationContext context)
         {
-            AccessFlags modifier = ExtractVisibilityModifier(context.modifierList());
-            List<AstNode> parsedMembers = context.classBody()?.classMemberDeclaration()
-                ?.Select(decl => decl.Accept(this))
-                .Where(it => it != null)
-                .ToList() ?? new List<AstNode>();
+            return VisitClassOrObject(context);
+        }
 
+        public override AstNode VisitObjectDeclaration(KotlinParser.ObjectDeclarationContext context)
+        {
+            return VisitClassOrObject(context);
+        }
+
+        AstNode VisitClassOrObject(ParserRuleContext context)
+        {
+            KotlinParser.ModifierListContext modifierListContext = null;
+            KotlinParser.SimpleIdentifierContext simpleIdentifierContext = null;
+            if (context is KotlinParser.ClassDeclarationContext classDeclarationContext)
+            {
+                modifierListContext = classDeclarationContext.modifierList();
+                simpleIdentifierContext = classDeclarationContext.simpleIdentifier();
+            }
+            else if (context is KotlinParser.ObjectDeclarationContext objectDeclarationContext)
+            {
+                modifierListContext = objectDeclarationContext.modifierList();
+                simpleIdentifierContext = objectDeclarationContext.simpleIdentifier();
+            }
+            
+            AccessFlags modifier = ExtractVisibilityModifier(modifierListContext);
+            List<AstNode> parsedMembers = AntlrUtil.WalkUntilType(
+                context.children,
+                new HashSet<Type>
+                {
+                    typeof(KotlinParser.FunctionDeclarationContext),
+                    typeof(KotlinParser.PropertyDeclarationContext),
+                    typeof(KotlinParser.ClassDeclarationContext),
+                    typeof(KotlinParser.ObjectDeclarationContext),
+                    typeof(KotlinParser.VariableDeclarationContext)
+                },
+                this);
 
             List<AstNode.ClassNode> innerClasses = parsedMembers.OfType<AstNode.ClassNode>().ToList();
             List<AstNode.FieldNode> fieldNodes = parsedMembers.OfType<AstNode.FieldNode>().ToList();
@@ -156,7 +157,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             );
 
             return new AstNode.ClassNode(
-                context.simpleIdentifier().GetFullText(),
+                simpleIdentifierContext.GetFullText(),
                 methodNodes,
                 fieldNodes,
                 innerClasses,
@@ -166,40 +167,6 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 header: "",
                 codeRange: codeRange
             );
-        }
-
-        int OutboundClassBodyStartPosition(RuleContext parent)
-        {
-            if (parent == null)
-            {
-                return -1;
-            }
-
-            if (parent is KotlinParser.ClassBodyContext)
-            {
-                return MethodBodyRemovalResult.RestoreIdx(
-                    (parent as KotlinParser.ClassBodyContext).Start.StartIndex + 1); // +1 to exclude '{'
-            }
-
-            return OutboundClassBodyStartPosition(parent.Parent);
-        }
-
-        int PreviousPeerEndPosition(RuleContext parent, IParseTree self)
-        {
-            return parent switch
-            {
-                null => -1,
-                KotlinParser.TopLevelObjectContext _ => PreviousPeerEndPosition(parent.Parent, parent),
-                _ => (parent as ParserRuleContext).children
-                    .Where(it =>
-                        it is KotlinParser.ClassDeclarationContext || it is KotlinParser.FunctionDeclarationContext ||
-                        it is KotlinParser.PropertyDeclarationContext || it is KotlinParser.TopLevelObjectContext)
-                    .TakeWhile(it => it != self)
-                    .OfType<ParserRuleContext>()
-                    .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
-                    .DefaultIfEmpty(-1)
-                    .Max()
-            };
         }
 
         public override AstNode VisitPropertyDeclaration(KotlinParser.PropertyDeclarationContext context)
@@ -222,17 +189,89 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             );
         }
 
-        public override AstNode VisitClassMemberDeclaration(KotlinParser.ClassMemberDeclarationContext context)
+        public override AstNode VisitVariableDeclaration(KotlinParser.VariableDeclarationContext context)
         {
-            ParserRuleContext declaration = new List<ParserRuleContext>
-            {
-                context.functionDeclaration(),
-                context.classDeclaration(),
-                context.propertyDeclaration(),
-                context.objectDeclaration()
-            }.FirstOrDefault(it => it != null);
+            AccessFlags modifier = AccessFlags.AccPrivate;
+            int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
-            return declaration?.Accept(this);
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
+            );
+
+            return new AstNode.FieldNode(
+                context.simpleIdentifier().GetFullText(),
+                modifier,
+                "",
+                startIdx: startIdx,
+                endIdx: endIdx,
+                codeRange: codeRange
+            );
         }
+
+        #endregion
+        
+        #region UTIL
+
+        static AccessFlags ExtractVisibilityModifier(KotlinParser.ModifierListContext ctx)
+        {
+            string? accFlag = ctx?.modifier()
+                ?.Select(it => it.visibilityModifier())
+                .FirstOrDefault()
+                ?.GetFullText();
+
+            switch (accFlag)
+            {
+                case null:
+                case "public":
+                    return AccessFlags.AccPublic;
+                case "private":
+                    return AccessFlags.AccPrivate;
+                case "internal":
+                    return AccessFlags.AccProtected;
+                default:
+                    return AccessFlags.AccPublic;
+            }
+        }
+        
+        int OutboundClassBodyStartPosition(RuleContext? parent)
+        {
+            while (true)
+            {
+                switch (parent)
+                {
+                    case null:
+                        return -1;
+                    case KotlinParser.ClassBodyContext classBodyContext:
+                        return MethodBodyRemovalResult.RestoreIdx(classBodyContext.Start.StartIndex +
+                                                                  1); // +1 to exclude '{'
+                    default:
+                        parent = parent.Parent;
+                        break;
+                }
+            }
+        }
+
+        int PreviousPeerEndPosition(RuleContext parent, IParseTree self)
+        {
+            return parent switch
+            {
+                null => -1,
+                KotlinParser.TopLevelObjectContext _ => PreviousPeerEndPosition(parent.Parent, parent),
+                _ => (parent as ParserRuleContext).children
+                    .Where(it =>
+                        it is KotlinParser.ClassDeclarationContext
+                            or KotlinParser.FunctionDeclarationContext
+                            or KotlinParser.PropertyDeclarationContext
+                            or KotlinParser.TopLevelObjectContext)
+                    .TakeWhile(it => it != self)
+                    .OfType<ParserRuleContext>()
+                    .Select(it => MethodBodyRemovalResult.RestoreIdx(it.Stop.StopIndex + 1))
+                    .DefaultIfEmpty(-1)
+                    .Max()
+            };
+        }
+        
+        #endregion
     }
 }
