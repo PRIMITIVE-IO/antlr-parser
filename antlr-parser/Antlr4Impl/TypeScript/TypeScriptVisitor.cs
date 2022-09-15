@@ -175,13 +175,17 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             {
                 methodNameString = "anonymous";
             }
+            
+            List<AstNode.ArgumentNode> arguments = context.callSignature()?.parameterList()?.parameter()?
+                .Select(param => param.Accept(this) as AstNode.ArgumentNode)
+                .ToList() ?? new List<AstNode.ArgumentNode>();
 
             return new AstNode.MethodNode(
                 name: methodNameString,
                 accFlag: accessFlags,
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: new List<AstNode.ArgumentNode>()
+                arguments: arguments
             );
         }
 
@@ -193,14 +197,27 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             CodeRange codeRange = CodeRangeCalculator.Trim(
                 IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
             );
+            
+            List<AstNode.ArgumentNode> arguments = context.callSignature()?.parameterList()?.parameter()?
+                .Select(param => param.Accept(this) as AstNode.ArgumentNode)
+                .ToList() ?? new List<AstNode.ArgumentNode>();
 
             return new AstNode.MethodNode(
                 name: context.Identifier().GetText(),
                 accFlag: AccessFlags.None,
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: new List<AstNode.ArgumentNode>()
+                arguments: arguments
             );
+        }
+
+        public override AstNode VisitParameter(TypeScriptParser.ParameterContext context)
+        {
+            string? paramName = context.requiredParameter()?.identifierOrPattern()?.identifierName()?.GetText();
+            string? paramType = context.requiredParameter()?.typeAnnotation()?.type_()?.GetText(); 
+            return new AstNode.ArgumentNode(
+                name: paramName ?? "",
+                type: paramType ?? "");
         }
 
         public override AstNode VisitPropertyDeclarationExpression(TypeScriptParser.PropertyDeclarationExpressionContext context)

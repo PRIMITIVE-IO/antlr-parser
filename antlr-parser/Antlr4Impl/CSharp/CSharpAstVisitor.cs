@@ -327,14 +327,25 @@ namespace antlr_parser.Antlr4Impl.CSharp
                     MethodBodyRemovalResult.RestoreIdx(endIdx)
                 )
             );
+            
+            List<AstNode.ArgumentNode> arguments = context.formal_parameter_list()?.fixed_parameters()?.fixed_parameter()?
+                .Select(param => param.Accept(this) as AstNode.ArgumentNode)
+                .ToList() ?? new List<AstNode.ArgumentNode>();
 
             return new AstNode.MethodNode(
                 name: context.method_member_name().identifier().First().GetText(),
                 accFlag: accFlag,
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: new List<AstNode.ArgumentNode>() //TODO 
+                arguments: arguments 
             );
+        }
+
+        public override AstNode VisitFixed_parameter(CSharpParser.Fixed_parameterContext context)
+        {
+            return new AstNode.ArgumentNode(
+                name: context.arg_declaration().identifier().GetText(),
+                type: context.arg_declaration().type_().GetText());
         }
         
         #endregion

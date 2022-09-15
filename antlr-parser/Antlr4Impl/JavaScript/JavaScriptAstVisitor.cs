@@ -75,13 +75,17 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             CodeRange codeRange = CodeRangeCalculator.Trim(
                 IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
             );
+            
+            List<AstNode.ArgumentNode> arguments = context.formalParameterList()?.formalParameterArg()?
+                .Select(param => param.Accept(this) as AstNode.ArgumentNode)
+                .ToList() ?? new List<AstNode.ArgumentNode>();
 
             return new AstNode.MethodNode(
                 context.identifier().GetFullText(),
                 AccessFlags.None,
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: new List<AstNode.ArgumentNode>()
+                arguments: arguments
             );
         }
 
@@ -155,14 +159,25 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             CodeRange codeRange = CodeRangeCalculator.Trim(
                 IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
             );
+            
+            List<AstNode.ArgumentNode> arguments = context.formalParameterList()?.formalParameterArg()?
+                .Select(param => param.Accept(this) as AstNode.ArgumentNode)
+                .ToList() ?? new List<AstNode.ArgumentNode>();
 
             return new AstNode.MethodNode(
                 context.propertyName().GetFullText(),
                 AccessFlags.None,
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: new List<AstNode.ArgumentNode>()
+                arguments: arguments
             );
+        }
+        
+        public override AstNode VisitFormalParameterArg(JavaScriptParser.FormalParameterArgContext context)
+        {
+            return new AstNode.ArgumentNode(
+                name: context.GetText(),
+                type: "");
         }
 
         public override AstNode VisitVariableDeclaration(JavaScriptParser.VariableDeclarationContext context)

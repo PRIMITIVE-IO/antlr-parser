@@ -137,14 +137,25 @@ namespace antlr_parser.Antlr4Impl.Solidity
             CodeRange codeRange = CodeRangeCalculator.Trim(
                 IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
             );
+            
+            List<AstNode.ArgumentNode> arguments = context.parameterList()?.parameter()?
+                .Select(param => param.Accept(this) as AstNode.ArgumentNode)
+                .ToList() ?? new List<AstNode.ArgumentNode>();
 
             return new AstNode.MethodNode(
                 name: !string.IsNullOrEmpty(name) ? name : "anonymous",
                 accFlag: ExtractAccFlags(context.modifierList()),
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: new List<AstNode.ArgumentNode>()
+                arguments: arguments
             );
+        }
+        
+        public override AstNode VisitParameter(SolidityParser.ParameterContext context)
+        {
+            return new AstNode.ArgumentNode(
+                name: context.identifier()?.GetText() ?? "",
+                type: context.typeName()?.GetText() ?? "");
         }
         
         #endregion

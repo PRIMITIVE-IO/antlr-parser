@@ -76,14 +76,25 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             CodeRange codeRange = CodeRangeCalculator.Trim(
                 IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
             );
+            
+            List<AstNode.ArgumentNode> arguments = context.functionValueParameters()?.functionValueParameter()?
+                .Select(parameter => parameter.Accept(this) as AstNode.ArgumentNode)
+                .ToList() ?? new List<AstNode.ArgumentNode>();
 
             return new AstNode.MethodNode(
                 context.identifier().GetFullText(),
                 modifier,
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: new List<AstNode.ArgumentNode>()
+                arguments: arguments
             );
+        }
+        
+        public override AstNode VisitFunctionValueParameter(KotlinParser.FunctionValueParameterContext context)
+        {
+            return new AstNode.ArgumentNode(
+                name: context.parameter()?.simpleIdentifier()?.GetText() ?? "",
+                type: context.parameter()?.type()?.GetText() ?? "");
         }
 
         public override AstNode VisitPackageHeader(KotlinParser.PackageHeaderContext context)
