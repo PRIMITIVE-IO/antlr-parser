@@ -162,12 +162,15 @@ namespace antlr_parser.Antlr4Impl.Java
                 .Select(parameter => parameter.Accept(this) as AstNode.ArgumentNode)
                 .ToList() ?? new List<AstNode.ArgumentNode>();
 
+            string returnType = context.typeTypeOrVoid()?.typeType()?.GetText() ?? "void";
+
             return new AstNode.MethodNode(
                 name: name,
                 accFlag: AccessFlag(modifier),
                 startIdx: restoredStartIdx,
                 codeRange: codeRange,
-                arguments: arguments
+                arguments: arguments,
+                returnType: returnType
             );
         }
 
@@ -198,13 +201,16 @@ namespace antlr_parser.Antlr4Impl.Java
             List<AstNode.ArgumentNode> arguments = context.formalParameters()?.formalParameterList()?.formalParameter()
                 .Select(param => param.Accept(this) as AstNode.ArgumentNode)
                 .ToList() ?? new List<AstNode.ArgumentNode>();
+            
+            string returnType = context.typeTypeOrVoid()?.typeType()?.GetText() ?? "void";
 
             return new AstNode.MethodNode(
                 name: name,
                 accFlag: AccessFlag(modifier),
                 startIdx: restoredStartIdx,
                 codeRange: codeRange,
-                arguments: arguments
+                arguments: arguments,
+                returnType: returnType
             );
         }
 
@@ -298,7 +304,8 @@ namespace antlr_parser.Antlr4Impl.Java
                 accFlag: AccessFlag(modifier),
                 startIdx: restoredStartIdx,
                 codeRange: codeRange,
-                arguments: arguments
+                arguments: arguments,
+                returnType: "void"
             );
         }
         

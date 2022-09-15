@@ -332,12 +332,19 @@ namespace antlr_parser.Antlr4Impl.CSharp
                 .Select(param => param.Accept(this) as AstNode.ArgumentNode)
                 .ToList() ?? new List<AstNode.ArgumentNode>();
 
+            List<string> returnTypes = context.type_parameter_list()?.type_parameter()?
+                .Select(param => param.identifier()?.GetText() ?? "void")
+                .ToList() ?? new List<string> { "void" };
+
+            string commaSeparatedTypes = string.Join(",", returnTypes);
+            
             return new AstNode.MethodNode(
                 name: context.method_member_name().identifier().First().GetText(),
                 accFlag: accFlag,
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: arguments 
+                arguments: arguments ,
+                returnType: commaSeparatedTypes
             );
         }
 

@@ -85,7 +85,8 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 AccessFlags.None,
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: arguments
+                arguments: arguments,
+                returnType: "void"
             );
         }
 
@@ -147,7 +148,8 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 accFlag: AccessFlags.None,
                 startIdx: -1,
                 codeRange: codeRange,
-                arguments: new List<AstNode.ArgumentNode>()
+                arguments: new List<AstNode.ArgumentNode>(),
+                returnType: "void"
             );
         }
 
@@ -169,7 +171,8 @@ namespace antlr_parser.Antlr4Impl.JavaScript
                 AccessFlags.None,
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: arguments
+                arguments: arguments,
+                returnType: "void"
             );
         }
         

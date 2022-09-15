@@ -5,7 +5,7 @@ using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
 using static PrimitiveCodebaseElements.Primitive.IEnumerableUtils;
 
-namespace antlr_parser.Antlr4Impl.dto.converter
+namespace antlr_parser.Antlr4Impl
 {
     public static class AstNodeToClassDtoConverter
     {
@@ -169,7 +169,7 @@ namespace antlr_parser.Antlr4Impl.dto.converter
                 name: methodNode.Name,
                 accFlag: methodNode.AccFlag,
                 arguments: arguments,
-                returnType: "void",
+                returnType: methodNode.ReturnType,
                 codeRange: methodNode.CodeRange,
                 methodReferences: new List<MethodReferenceDto>(),
                 cyclomaticScore: null

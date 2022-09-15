@@ -1,5 +1,5 @@
 using antlr_parser.Antlr4Impl.C;
-using antlr_parser.Antlr4Impl.dto.converter;
+using antlr_parser.Antlr4Impl;
 using Antlr4.Runtime;
 using PrimitiveCodebaseElements.Primitive.dto;
 

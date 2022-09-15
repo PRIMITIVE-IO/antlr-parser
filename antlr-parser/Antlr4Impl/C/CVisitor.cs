@@ -156,7 +156,8 @@ namespace antlr_parser.Antlr4Impl.C
                 AccessFlags.AccPublic,
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: new List<AstNode.ArgumentNode>()
+                arguments: new List<AstNode.ArgumentNode>(),
+                returnType: "void"
             );
         }
         

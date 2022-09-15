@@ -81,15 +81,22 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                 .Select(parameter => parameter.Accept(this) as AstNode.ArgumentNode)
                 .ToList() ?? new List<AstNode.ArgumentNode>();
 
+            List<string> types = context.type()?
+                .Select(param => param.functionType()?.GetText() ?? "void")
+                .ToList() ?? new List<string> { "void" };
+
+            string returnType = string.Join(",", types);
+
             return new AstNode.MethodNode(
                 context.identifier().GetFullText(),
                 modifier,
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: arguments
+                arguments: arguments,
+                returnType: returnType
             );
         }
-        
+
         public override AstNode VisitFunctionValueParameter(KotlinParser.FunctionValueParameterContext context)
         {
             return new AstNode.ArgumentNode(

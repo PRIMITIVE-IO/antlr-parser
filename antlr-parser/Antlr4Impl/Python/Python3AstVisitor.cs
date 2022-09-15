@@ -155,12 +155,17 @@ namespace antlr_parser.Antlr4Impl.Python
                 IndexToLocationConverter.IdxToCodeRange(startIdx, stopIdx)
             );
 
+            List<AstNode.ArgumentNode> arguments = context.parameters()?.typedargslist().tfpdef()
+                .Select(param => new AstNode.ArgumentNode(param.GetText(), ""))
+                .ToList() ?? new List<AstNode.ArgumentNode>();
+
             return new AstNode.MethodNode(
                 name: context.NAME().GetText(),
                 accFlag: AccessFlags.None,
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: new List<AstNode.ArgumentNode>()
+                arguments: arguments,
+                returnType: "void"
             );
         }
 

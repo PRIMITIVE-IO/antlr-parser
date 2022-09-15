@@ -142,12 +142,19 @@ namespace antlr_parser.Antlr4Impl.Solidity
                 .Select(param => param.Accept(this) as AstNode.ArgumentNode)
                 .ToList() ?? new List<AstNode.ArgumentNode>();
 
+            List<string> returnTypes = context.returnParameters()?.parameterList()?.parameter()?
+                .Select(param => param.identifier()?.GetText() ?? "void")
+                .ToList() ?? new List<string>();
+
+            string returnType = string.Join(",", returnTypes);
+
             return new AstNode.MethodNode(
                 name: !string.IsNullOrEmpty(name) ? name : "anonymous",
                 accFlag: ExtractAccFlags(context.modifierList()),
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: arguments
+                arguments: arguments,
+                returnType: returnType
             );
         }
         

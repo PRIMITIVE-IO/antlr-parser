@@ -92,19 +92,22 @@ namespace antlr_parser.Antlr4Impl
             public readonly int StartIdx;
             public readonly CodeRange? CodeRange;
             public readonly List<ArgumentNode> Arguments;
+            public readonly string ReturnType;
 
             public MethodNode(
                 string name,
                 AccessFlags accFlag,
                 int startIdx,
                 CodeRange? codeRange,
-                List<ArgumentNode> arguments)
+                List<ArgumentNode> arguments,
+                string returnType)
             {
                 Name = name;
                 AccFlag = accFlag;
                 CodeRange = codeRange;
                 StartIdx = startIdx;
                 Arguments = arguments;
+                ReturnType = returnType;
             }
         }
 

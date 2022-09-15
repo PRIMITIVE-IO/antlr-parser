@@ -180,12 +180,18 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 .Select(param => param.Accept(this) as AstNode.ArgumentNode)
                 .ToList() ?? new List<AstNode.ArgumentNode>();
 
+            List<string> returnTypes = context.callSignature()?.typeParameters()?.typeParameterList()?.typeParameter()?
+                .Select(param => param.Identifier()?.GetText() ?? "void").ToList() ?? new List<string>();
+
+            string returnType = string.Join(",", returnTypes);
+
             return new AstNode.MethodNode(
                 name: methodNameString,
                 accFlag: accessFlags,
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: arguments
+                arguments: arguments,
+                returnType: returnType
             );
         }
 
@@ -201,13 +207,19 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             List<AstNode.ArgumentNode> arguments = context.callSignature()?.parameterList()?.parameter()?
                 .Select(param => param.Accept(this) as AstNode.ArgumentNode)
                 .ToList() ?? new List<AstNode.ArgumentNode>();
+            
+            List<string> returnTypes = context.callSignature()?.typeParameters()?.typeParameterList()?.typeParameter()?
+                .Select(param => param.Identifier()?.GetText() ?? "void").ToList() ?? new List<string>();
 
+            string returnType = string.Join(",", returnTypes);
+            
             return new AstNode.MethodNode(
                 name: context.Identifier().GetText(),
                 accFlag: AccessFlags.None,
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: arguments
+                arguments: arguments,
+                returnType: returnType
             );
         }
 
@@ -285,7 +297,8 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                     accFlag: AccessFlags.None,
                     startIdx: startIdx,
                     codeRange: codeRange,
-                    arguments: new List<AstNode.ArgumentNode>());
+                    arguments: new List<AstNode.ArgumentNode>(),
+                    returnType: "void");
             }
             else
             {
@@ -315,12 +328,19 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
             );
 
+            List<AstNode.ArgumentNode> arguments = context.formalParameterList()?.formalParameterArg()?
+                .Select(param => new AstNode.ArgumentNode(
+                    param.identifierOrKeyWord()?.Identifier()?.GetText() ?? "",
+                    param.typeAnnotation()?.type_()?.GetText() ?? ""))?
+                .ToList() ?? new List<AstNode.ArgumentNode>();
+
             return new AstNode.MethodNode(
                 name: "constructor",
                 accFlag: accessFlags,
                 startIdx: startIdx,
                 codeRange: codeRange,
-                arguments: new List<AstNode.ArgumentNode>()
+                arguments: arguments,
+                "void"
             );
         }
         

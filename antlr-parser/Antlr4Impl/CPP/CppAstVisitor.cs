@@ -138,7 +138,8 @@ namespace antlr_parser.Antlr4Impl.CPP
                     AccessFlags.AccPublic,
                     startIdx,
                     codeRange,
-                    new List<AstNode.ArgumentNode>()
+                    new List<AstNode.ArgumentNode>(),
+                    "void"
                 );
             }
 
@@ -231,7 +232,8 @@ namespace antlr_parser.Antlr4Impl.CPP
                 AccessFlags.AccPublic,
                 startIdx,
                 codeRange,
-                new List<AstNode.ArgumentNode>()
+                new List<AstNode.ArgumentNode>(),
+                "void"
             );
         }
 
@@ -325,7 +327,8 @@ namespace antlr_parser.Antlr4Impl.CPP
                     AccessFlags.AccPublic,
                     startIdx,
                     codeRange,
-                    new List<AstNode.ArgumentNode>()
+                    new List<AstNode.ArgumentNode>(),
+                    "void"
                 );
             }
 
