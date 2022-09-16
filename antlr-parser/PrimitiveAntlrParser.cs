@@ -8,6 +8,7 @@ using antlr_parser.Antlr4Impl.Java;
 using antlr_parser.Antlr4Impl.JavaScript;
 using antlr_parser.Antlr4Impl.Kotlin;
 using antlr_parser.Antlr4Impl.Python;
+using antlr_parser.Antlr4Impl.Rust;
 using antlr_parser.Antlr4Impl.Solidity;
 using antlr_parser.Antlr4Impl.TypeScript;
 using PrimitiveCodebaseElements.Primitive.dto;
@@ -20,7 +21,7 @@ namespace antlr_parser
         public static readonly HashSet<string> SupportedParsableFiles = new()
         {
             ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3", ".js", ".jsx", ".kt",
-            ".sol", ".ts", ".go"
+            ".sol", ".ts", ".go", ".rs"
         };
 
         public static FileDto? FileDtoFromSourceText(
@@ -80,6 +81,10 @@ namespace antlr_parser
                         filePath);
                 case ".go":
                     return AntlrParseGo.Parse(
+                        sourceText,
+                        filePath);
+                case ".rs":
+                    return AntlrParseRust.Parse(
                         sourceText,
                         filePath);
             }
