@@ -278,8 +278,8 @@ public class AntlrParseJavaScriptTest
             ".TrimIndent2()
         );
     }
-    
-    
+
+
     [Fact]
     public void FieldWithLambda()
     {
@@ -343,5 +343,14 @@ public class AntlrParseJavaScriptTest
 
         FileDto fileDto = AntlrParseJavaScript.Parse(source, "any/path");
         fileDto.Classes[0].Methods[0].Name.Should().Be("autoImporter");
+    }
+
+    [Fact]
+    public void EmptySourceFile()
+    {
+        string source = @"";
+        AntlrParseJavaScript.Parse(source, "any/path");
+
+        // should not fail
     }
 }

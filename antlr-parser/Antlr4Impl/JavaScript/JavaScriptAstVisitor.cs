@@ -29,6 +29,8 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         public override AstNode VisitProgram(JavaScriptParser.ProgramContext context)
         {
+            
+
             List<AstNode.ClassNode> classes = new List<AstNode.ClassNode>();
             List<AstNode.MethodNode> methods = new List<AstNode.MethodNode>();
             List<AstNode.FieldNode> fields = new List<AstNode.FieldNode>();
@@ -83,7 +85,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             int headerEnd = classes.Select(it => it.StartIdx - 1)
                 .Concat(methods.Select(it => it.StartIdx - 1))
                 .Concat(fields.Select(it => it.StartIdx - 1))
-                .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex))
+                .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop?.StopIndex ?? 0))
                 .Min();
 
             CodeLocation headerEndLocation = IndexToLocationConverter.IdxToLocation(headerEnd);

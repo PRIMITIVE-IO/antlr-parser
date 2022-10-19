@@ -1,0 +1,185 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using PrimitiveCodebaseElements.Primitive;
+using PrimitiveCodebaseElements.Primitive.dto;
+using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
+
+namespace antlr_parser.Antlr4Impl.Go
+{
+    public class GoAstVisitor : GoParserBaseVisitor<AstNode>
+    {
+        readonly string Path;
+        readonly MethodBodyRemovalResult MethodBodyRemovalResult;
+        readonly IndexToLocationConverter IndexToLocationConverter;
+        readonly CodeRangeCalculator CodeRangeCalculator;
+
+        public GoAstVisitor(
+            string path,
+            MethodBodyRemovalResult methodBodyRemovalResult,
+            CodeRangeCalculator codeRangeCalculator
+        )
+        {
+            Path = path;
+            MethodBodyRemovalResult = methodBodyRemovalResult;
+            IndexToLocationConverter = new IndexToLocationConverter(methodBodyRemovalResult.OriginalSource);
+            CodeRangeCalculator = codeRangeCalculator;
+        }
+
+        public override AstNode VisitSourceFile(GoParser.SourceFileContext context)
+        {
+            List<AstNode> nodes = context.children.SelectNotNull(child => child.Accept(this))
+                .SelectMany(node => node.AsList())
+                .ToList();
+
+            List<AstNode.ClassNode> classes = nodes.OfType<AstNode.ClassNode>().ToList();
+            List<AstNode.FieldNode> fields = nodes.OfType<AstNode.FieldNode>().ToList();
+            List<AstNode.MethodNode> methods = nodes.OfType<AstNode.MethodNode>().ToList();
+
+            var stopIndex = classes.Select(cls => cls.StartIdx - 1)
+                .Concat(methods.Select(method => method.StartIdx - 1))
+                .Concat(fields.Select(field => field.StartIdx - 1))
+                .Concat(new[] { context.Stop.StopIndex })
+                .MinOrDefault();
+
+
+            return new AstNode.FileNode(
+                path: Path,
+                packageNode: null,
+                classes: classes,
+                fields: fields,
+                methods: methods,
+                namespaces: new List<AstNode.Namespace>(),
+                language: SourceCodeLanguage.Solidity,
+                isTest: false,
+                codeRange: CodeRangeCalculator.Trim(
+                    new CodeRange(
+                        new CodeLocation(1, 1),
+                        IndexToLocationConverter.IdxToLocation(MethodBodyRemovalResult.RestoreIdx(stopIndex))
+                    )
+                )
+            );
+        }
+
+        public override AstNode VisitTypeDecl(GoParser.TypeDeclContext context)
+        {
+            List<AstNode> children = context.children.SelectNotNull(x => x.Accept(this))
+                .SelectMany(x => x.AsList())
+                .ToList();
+
+            List<AstNode.MethodNode> methods = children.OfType<AstNode.MethodNode>().ToList();
+            List<AstNode.FieldNode> fields = children.OfType<AstNode.FieldNode>().ToList();
+            List<AstNode.ClassNode> classes = children.OfType<AstNode.ClassNode>().ToList();
+
+            int startIdx = context.Start.StartIndex;
+
+            return new AstNode.ClassNode(
+                name: context.typeSpec().FirstOrDefault()?.IDENTIFIER()?.GetText() ?? "anon",
+                methods: methods,
+                fields: fields,
+                innerClasses: classes,
+                modifier: AccessFlags.None,
+                startIdx: startIdx,
+                codeRange: CodeRangeCalculator.Trim(
+                    IndexToLocationConverter.IdxToCodeRange(
+                        startIdx,
+                        context.typeSpec()?.FirstOrDefault()?.type_()?.typeLit()?.structType()?.L_CURLY()?
+                            .Symbol?
+                            .StartIndex ?? context.Stop.StopIndex
+                    )
+                )
+            );
+        }
+
+        public override AstNode VisitFieldDecl(GoParser.FieldDeclContext context)
+        {
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(
+                    MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                    MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
+                )
+            );
+
+            return context.identifierList()?.IDENTIFIER()?.Select(name =>
+                new AstNode.FieldNode(
+                    name: name.GetText(),
+                    accFlag: AccessFlags.None,
+                    codeRange: codeRange,
+                    startIdx: context.Start.StartIndex
+                ) as AstNode
+            ).Aggregate(AstNode.NodeList.Combine) ??
+                   new AstNode.FieldNode(
+                       "anon",
+                       AccessFlags.None,
+                       context.Start.StartIndex,
+                       codeRange);
+        }
+
+        public override AstNode VisitFunctionDecl(GoParser.FunctionDeclContext context)
+        {
+            string name = context.IDENTIFIER().ToString() ?? "anon";
+
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(
+                    context.Start.StartIndex,
+                    context.Stop.StopIndex
+                )
+            );
+
+            List<AstNode.ArgumentNode> arguments = context.signature().parameters().parameterDecl()
+                .Select(param => param.Accept(this))
+                .Cast<AstNode.ArgumentNode>()
+                .ToList();
+
+            string returnType = context.signature()?.result()?.type_()?.typeName()?.IDENTIFIER()?.GetText() ?? "void";
+
+            return new AstNode.MethodNode(
+                name: name,
+                accFlag: AccessFlags.None,
+                startIdx: context.Start.StartIndex,
+                codeRange: codeRange,
+                arguments: arguments,
+                returnType: returnType
+            );
+        }
+
+        public override AstNode VisitParameterDecl(GoParser.ParameterDeclContext context)
+        {
+            return new AstNode.ArgumentNode(
+                name: context.identifierList()?.GetText() ?? "anon",
+                type: context.type_()?.typeName()?.IDENTIFIER()?.GetText() ?? "anon"
+            );
+        }
+
+        public override AstNode VisitMethodDecl(GoParser.MethodDeclContext context)
+        {
+            CodeRange codeRange = CodeRangeCalculator.Trim(
+                IndexToLocationConverter.IdxToCodeRange(
+                    context.Start.StartIndex,
+                    context.Stop.StopIndex
+                )
+            );
+
+            List<AstNode.ArgumentNode> arguments = context.signature().parameters().parameterDecl()
+                .Select(param => param.Accept(this))
+                .Cast<AstNode.ArgumentNode>()
+                .ToList();
+
+            string returnType = context.signature()?.result()?.type_()?.typeName()?.IDENTIFIER()?.Symbol?.Text ?? "void";
+
+            return new AstNode.MethodNode(
+                name: context.IDENTIFIER().GetText(),
+                accFlag: AccessFlags.None,
+                startIdx: context.Start.StartIndex,
+                codeRange: codeRange,
+                arguments: arguments,
+                returnType: returnType
+            );
+        }
+
+        protected override AstNode AggregateResult(AstNode aggregate, AstNode nextResult)
+        {
+            return AstNode.NodeList.Combine(aggregate, nextResult);
+        }
+    }
+}
