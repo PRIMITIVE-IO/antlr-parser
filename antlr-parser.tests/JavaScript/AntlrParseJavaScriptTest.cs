@@ -295,4 +295,53 @@ public class AntlrParseJavaScriptTest
         methodDto.CodeRange.Of(source).Should()
             .Be("handleEdit=e=>{e.preventDefault();this.setState({isEditing:true,});}");
     }
+
+    [Fact]
+    void FakeClassForAlmostEmptyFile()
+    {
+        string source = @"
+            // JSON artifacts of the contracts
+
+            // Core contracts
+            import * as PermissionManager from '../artifacts/contracts/core/permission/PermissionManager.sol/PermissionManager.json';
+
+            export default {
+              PermissionManager,
+            };
+        ".TrimIndent2();
+
+        FileDto fileDto = AntlrParseJavaScript.Parse(source, "any/path");
+        ClassDto fakeClass = fileDto.Classes.Single();
+
+        fakeClass.CodeRange.Of(source).Should().Be(source);
+    }
+    
+    [Fact]
+    void DoesntFailOnDeconstruction()
+    {
+        string source = @"
+            @inject(() => {
+              const {from, to} = location?.query;
+              return {
+                pools,
+              };
+            })
+            class ClusterNode extends Component {
+             
+            }
+        ".TrimIndent2();
+
+        FileDto fileDto = AntlrParseJavaScript.Parse(source, "any/path");
+    }
+    
+    [Fact]
+    void ParseExportedFunctionAsMethod()
+    {
+        string source = @"
+            module.exports = function autoImporter(babel) {}
+        ";
+
+        FileDto fileDto = AntlrParseJavaScript.Parse(source, "any/path");
+        fileDto.Classes[0].Methods[0].Name.Should().Be("autoImporter");
+    }
 }

@@ -118,7 +118,8 @@ namespace antlr_parser.tests.C;
                 #include ""SymbolsX.h""
             ".Unindent();
         FileDto fileDto = AntlrParseC.Parse(source, "file/path");
-        fileDto.Classes.Should().HaveCount(0);
+        fileDto.Classes.Should().HaveCount(1);
+        fileDto.Classes[0].CodeRange.Of(source).Should().Be(source.TrimIndent2());
     }
 
     [Fact]

@@ -41,7 +41,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                     }
                 }
 
-                if (IsCompletedClassWord(s, i))
+                if (IsCompletedClassWord(s, i) || IsCompletedObjectWord(s, i) || IsCompletedInterfaceWord(s, i))
                 {
                     keepNextCurly = true;
                 }
@@ -64,6 +64,28 @@ namespace antlr_parser.Antlr4Impl.Kotlin
 
             return (nextChar == ' ' || nextChar == '\t' || nextChar == '\n' || nextChar == '\r' || nextChar == '{')
                    && s[i] == 's' && s.Substring(i - 4, 5) == "class";
+        }
+
+        static bool IsCompletedObjectWord(string s, int i)
+        {
+            if (i < 5 || i == s.Length - 1) return false; // start of file or end of file
+            if (6 <= i && !IsEmptyChar(s[i - 6])) return false; // 'class' is part of bigger name 
+
+            char nextChar = s[i + 1];
+
+            return (nextChar == ' ' || nextChar == '\t' || nextChar == '\n' || nextChar == '\r' || nextChar == '{')
+                   && s[i] == 't' && s.Substring(i - 5, 6) == "object";
+        }
+
+        static bool IsCompletedInterfaceWord(string s, int i)
+        {
+            if (i < 8 || i == s.Length - 1) return false; // start of file or end of file
+            if (9 <= i && !IsEmptyChar(s[i - 9])) return false; // 'class' is part of bigger name 
+
+            char nextChar = s[i + 1];
+
+            return (nextChar == ' ' || nextChar == '\t' || nextChar == '\n' || nextChar == '\r' || nextChar == '{')
+                   && s[i] == 'e' && s.Substring(i - 8, 9) == "interface";
         }
 
         static bool IsEmptyChar(char c)

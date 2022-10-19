@@ -49,7 +49,10 @@ namespace antlr_parser.Antlr4Impl.C
 
             int headerEnd = methods.Select(it => it.StartIdx - 1)
                 .Concat(structs.Select(it => it.StartIdx - 1))
-                .DefaultIfEmpty(MethodBodyRemovalResult.RestoreIdx(context.Stop?.StopIndex ?? 0))
+                .DefaultIfEmpty(
+                    MethodBodyRemovalResult.RestoreIdx(context.Stop?.StopIndex ??
+                                                       context.Start
+                                                           .StartIndex)) // for 'empty' files context starts at the end of file
                 .Min();
 
             CodeRange headerCodeRange = CodeRangeCalculator.Trim(
@@ -111,13 +114,13 @@ namespace antlr_parser.Antlr4Impl.C
             );
 
             return new AstNode.ClassNode(
-                name,
-                new List<AstNode.MethodNode>(),
-                fields,
-                innerClasses,
-                AccessFlags.AccPublic,
-                MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
-                codeRange
+                name: name,
+                methods: new List<AstNode.MethodNode>(),
+                fields: fields,
+                innerClasses: innerClasses,
+                modifier: AccessFlags.AccPublic,
+                startIdx: MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                codeRange: codeRange
             );
         }
 
@@ -134,13 +137,13 @@ namespace antlr_parser.Antlr4Impl.C
             CodeRange codeRange = CodeRangeCalculator.Trim(IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx));
 
             return new AstNode.FieldNode(
-                fieldName,
-                AccessFlags.AccPublic,
-                startIdx,
-                codeRange
+                name: fieldName,
+                accFlag: AccessFlags.AccPublic,
+                startIdx: startIdx,
+                codeRange: codeRange
             );
         }
-        
+
         public override AstNode VisitFunctionDefinition(CParser.FunctionDefinitionContext context)
         {
             string fName = ExtractFunctionName(context.declarator().directDeclarator());
@@ -152,15 +155,15 @@ namespace antlr_parser.Antlr4Impl.C
             CodeRange codeRange = CodeRangeCalculator.Trim(IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx));
 
             return new AstNode.MethodNode(
-                fName,
-                AccessFlags.AccPublic,
+                name: fName,
+                accFlag: AccessFlags.AccPublic,
                 startIdx: startIdx,
                 codeRange: codeRange,
                 arguments: new List<AstNode.ArgumentNode>(),
                 returnType: "void"
             );
         }
-        
+
         #endregion
 
         #region UTIL

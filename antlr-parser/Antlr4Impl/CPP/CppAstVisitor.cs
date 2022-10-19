@@ -29,7 +29,7 @@ namespace antlr_parser.Antlr4Impl.CPP
         }
 
         #region VISITORS
-        
+
         public override AstNode VisitTranslationUnit(CPP14Parser.TranslationUnitContext context)
         {
             List<AstNode> members = context.declarationseq()?.declaration()
@@ -41,17 +41,21 @@ namespace antlr_parser.Antlr4Impl.CPP
             List<AstNode.ClassNode> classes = members.OfType<AstNode.ClassNode>().ToList();
             List<AstNode.FieldNode> fields = members.OfType<AstNode.FieldNode>().ToList();
             List<AstNode.Namespace> namespaces = members.OfType<AstNode.Namespace>().ToList();
-            
+
             CodeRange codeRange = CodeRangeCalculator.Trim(
-                new CodeRange(new CodeLocation(1, 1), CodeRangeCalculator.EndPosition()));
+                new CodeRange(
+                    new CodeLocation(1, 1),
+                    CodeRangeCalculator.EndPosition()
+                )
+            );
 
             return new AstNode.FileNode(
-                Path,
-                new AstNode.PackageNode(""),
-                classes,
-                fields,
-                methods,
-                namespaces,
+                path: Path,
+                packageNode: new AstNode.PackageNode(""),
+                classes: classes,
+                fields: fields,
+                methods: methods,
+                namespaces: namespaces,
                 language: SourceCodeLanguage.Cpp,
                 isTest: false,
                 codeRange: codeRange
@@ -105,13 +109,14 @@ namespace antlr_parser.Antlr4Impl.CPP
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
             CodeRange codeRange = CodeRangeCalculator.Trim(IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx));
+
             if (fieldNames.Any())
             {
                 return new AstNode.FieldNode(
-                    string.Join(",", fieldNames),
-                    AccessFlags.AccPublic,
-                    startIdx,
-                    codeRange
+                    name: string.Join(",", fieldNames),
+                    accFlag: AccessFlags.AccPublic,
+                    codeRange: codeRange,
+                    startIdx: startIdx
                 );
             }
 
@@ -134,11 +139,11 @@ namespace antlr_parser.Antlr4Impl.CPP
             if (methodName != null)
             {
                 return new AstNode.MethodNode(
-                    methodName,
-                    AccessFlags.AccPublic,
-                    startIdx,
-                    codeRange,
-                    new List<AstNode.ArgumentNode>(),
+                    name: methodName,
+                    accFlag: AccessFlags.AccPublic,
+                    startIdx: startIdx,
+                    codeRange: codeRange,
+                    arguments: new List<AstNode.ArgumentNode>(),
                     "void"
                 );
             }
@@ -201,13 +206,13 @@ namespace antlr_parser.Antlr4Impl.CPP
                 CodeRangeCalculator.Trim(IndexToLocationConverter.IdxToCodeRange(headerStart, headerEnd));
 
             return new AstNode.ClassNode(
-                name,
-                new List<AstNode.MethodNode>(),
-                new List<AstNode.FieldNode>(),
-                new List<AstNode.ClassNode>(),
-                AccessFlags.AccPublic,
-                headerStart,
-                codeRange
+                name: name,
+                methods: new List<AstNode.MethodNode>(),
+                fields: new List<AstNode.FieldNode>(),
+                innerClasses: new List<AstNode.ClassNode>(),
+                modifier: AccessFlags.AccPublic,
+                startIdx: headerStart,
+                codeRange: codeRange
             );
         }
 
@@ -228,11 +233,11 @@ namespace antlr_parser.Antlr4Impl.CPP
             CodeRange codeRange = CodeRangeCalculator.Trim(IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx));
 
             return new AstNode.MethodNode(
-                methodName,
-                AccessFlags.AccPublic,
-                startIdx,
-                codeRange,
-                new List<AstNode.ArgumentNode>(),
+                name: methodName,
+                accFlag: AccessFlags.AccPublic,
+                startIdx: startIdx,
+                codeRange: codeRange,
+                arguments: new List<AstNode.ArgumentNode>(),
                 "void"
             );
         }
@@ -257,13 +262,13 @@ namespace antlr_parser.Antlr4Impl.CPP
             );
 
             return new AstNode.ClassNode(
-                name,
-                methods,
-                fields,
-                classes,
-                AccessFlags.AccPublic,
-                headerEnd,
-                codeRange
+                name: name,
+                methods: methods,
+                fields: fields,
+                innerClasses: classes,
+                modifier: AccessFlags.AccPublic,
+                startIdx: headerStart,
+                codeRange: codeRange
             );
         }
 
@@ -277,13 +282,13 @@ namespace antlr_parser.Antlr4Impl.CPP
             );
 
             return new AstNode.ClassNode(
-                context.enumHead().Identifier().GetText(),
-                new List<AstNode.MethodNode>(),
-                new List<AstNode.FieldNode>(),
-                new List<AstNode.ClassNode>(),
-                AccessFlags.AccPublic,
-                headerEnd,
-                codeRange
+                name: context.enumHead().Identifier().GetText(),
+                methods: new List<AstNode.MethodNode>(),
+                fields: new List<AstNode.FieldNode>(),
+                innerClasses: new List<AstNode.ClassNode>(),
+                modifier: AccessFlags.AccPublic,
+                startIdx: headerStart,
+                codeRange: codeRange
             );
         }
 
@@ -306,10 +311,10 @@ namespace antlr_parser.Antlr4Impl.CPP
             if (fieldNames.Count != 0)
             {
                 return new AstNode.FieldNode(
-                    string.Join(",", fieldNames),
-                    AccessFlags.AccPublic,
-                    startIdx,
-                    codeRange
+                    name: string.Join(",", fieldNames),
+                    accFlag: AccessFlags.AccPublic,
+                    startIdx: startIdx,
+                    codeRange: codeRange
                 );
             }
 
@@ -323,11 +328,11 @@ namespace antlr_parser.Antlr4Impl.CPP
             if (methodName != null)
             {
                 return new AstNode.MethodNode(
-                    methodName,
-                    AccessFlags.AccPublic,
-                    startIdx,
-                    codeRange,
-                    new List<AstNode.ArgumentNode>(),
+                    name: methodName,
+                    accFlag: AccessFlags.AccPublic,
+                    startIdx: startIdx,
+                    codeRange: codeRange,
+                    arguments: new List<AstNode.ArgumentNode>(),
                     "void"
                 );
             }

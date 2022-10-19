@@ -101,4 +101,57 @@ public class AntlrParserKotlinTest
             ".TrimIndent2()
         );
     }
+
+    [Fact]
+    void ParseObject()
+    {
+        string source = @"
+                // comment
+                object X {
+                    val y = 10
+                    fun f(x: Int): Int { 
+                        return 10 
+                    }
+                }
+            ".TrimIndent2();
+        FileDto res = AntlrParseKotlin.Parse(source, "path");
+        res.Classes.Should().HaveCount(1);
+        ClassDto obj = res.Classes[0];
+        obj.CodeRange.Of(source).Should().Be(
+            @"
+                // comment
+                object X {
+            ".TrimIndent2()
+        );
+        obj.Fields.Should().HaveCount(1);
+        FieldDto field = obj.Fields.First();
+        field.Name.Should().Be("y");
+        obj.Methods.Should().HaveCount(1);
+        MethodDto method = obj.Methods.First();
+        method.Name.Should().Be("f");
+    }
+    
+    
+    [Fact]
+    void ParseInterface()
+    {
+        string source = @"
+                // comment
+                interface X {
+                    fun f(x: Int)
+                }
+            ".TrimIndent2();
+        FileDto res = AntlrParseKotlin.Parse(source, "path");
+        res.Classes.Should().HaveCount(1);
+        ClassDto obj = res.Classes[0];
+        obj.CodeRange.Of(source).Should().Be(
+            @"
+                // comment
+                interface X {
+            ".TrimIndent2()
+        );
+        obj.Methods.Should().HaveCount(1);
+        MethodDto method = obj.Methods.First();
+        method.Name.Should().Be("f");
+    }
 }

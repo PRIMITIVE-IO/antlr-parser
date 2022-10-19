@@ -25,7 +25,9 @@ namespace antlr_parser.Antlr4Impl
             List<ClassDto> classes = new List<ClassDto>();
             bool fakePresent = false;
             string? fakeClassFqn = null;
-            if (fileNode.Fields.Any() || fileNode.Methods.Any())
+            List<ClassDto> classesFromNestedNamespaces = ExtractNested(fileNode.Namespaces, fileNode);
+
+            if (fileNode.Fields.Any() || fileNode.Methods.Any() || !fileNode.Classes.Any() && !classesFromNestedNamespaces.Any() )
             {
                 // a fake class is a representation of the file with members -> put this first
                 string fakeClassName = Path.GetFileNameWithoutExtension(fileNode.Path);
@@ -35,6 +37,7 @@ namespace antlr_parser.Antlr4Impl
                 {
                     fakeClassFqn = $"{packageNameString}.{fakeClassName}";
                 }
+
                 classes.Add(new ClassDto(
                     path: fileNode.Path,
                     packageName: fileNode.PackageNode?.Name,
@@ -56,8 +59,6 @@ namespace antlr_parser.Antlr4Impl
                     fileNode: fileNode,
                     parentFqn: fakePresent ? fakeClassFqn : null,
                     nameSpace: null));
-            
-            IEnumerable<ClassDto> classesFromNestedNamespaces = ExtractNested(fileNode.Namespaces, fileNode);
 
             return classes
                 .Concat(classesDeclaredInFile)
@@ -69,11 +70,11 @@ namespace antlr_parser.Antlr4Impl
         /// extracts nested fields, methods, or classes from list of namespaces
         /// </summary>
         /// <returns></returns>
-        static IEnumerable<ClassDto> ExtractNested(IEnumerable<AstNode.Namespace> namespaces, AstNode.FileNode fileNode)
+        static List<ClassDto> ExtractNested(List<AstNode.Namespace> namespaces, AstNode.FileNode fileNode)
         {
             return namespaces.SelectMany(nameSpace =>
                 {
-                    IEnumerable<ClassDto> fakeClass = ExtractFakeClass(nameSpace, fileNode, null);
+                    List<ClassDto> fakeClass = ExtractFakeClass(nameSpace, fileNode, null);
 
                     IEnumerable<ClassDto> classes =
                         nameSpace.Classes.SelectMany(it => ToDto(
@@ -86,18 +87,18 @@ namespace antlr_parser.Antlr4Impl
 
                     return fakeClass.Concat(classes).Concat(nested);
                 }
-            );
+            ).ToList();
         }
 
-        static IEnumerable<ClassDto> ExtractFakeClass(AstNode.Namespace ns, AstNode.FileNode fileNode, string? parentFqn)
+        static List<ClassDto> ExtractFakeClass(AstNode.Namespace ns, AstNode.FileNode fileNode, string? parentFqn)
         {
             if (!ns.Fields.Any() && !ns.Methods.Any()) return new List<ClassDto>();
-            
+
             string fqn = EnumerableOfNotNull(parentFqn, ns.Name).JoinToString(".");
             return new List<ClassDto>
             {
                 //TODO implement fake classes for namespaces
-                new(
+                new (
                     path: fileNode.Path,
                     packageName: ns.Name,
                     name: ns.Name,
@@ -116,7 +117,8 @@ namespace antlr_parser.Antlr4Impl
             AstNode.ClassNode classNode,
             AstNode.FileNode fileNode,
             string? parentFqn,
-            AstNode.Namespace? nameSpace)
+            AstNode.Namespace? nameSpace
+        )
         {
             string fullyQualifiedName;
             string? packageName = nameSpace?.Name ?? fileNode.PackageNode?.Name;
@@ -137,14 +139,14 @@ namespace antlr_parser.Antlr4Impl
                     new(
                         path: fileNode.Path,
                         packageName: packageName,
-                        classNode.Name,
-                        fullyQualifiedName,
-                        classNode.Methods.Select(it => ToDto(it, fullyQualifiedName)).ToList(),
-                        classNode.Fields.Select(ToDto).ToList(),
-                        classNode.Modifier,
-                        classNode.CodeRange,
-                        new List<ClassReferenceDto>(),
-                        parentFqn
+                        name: classNode.Name,
+                        fullyQualifiedName: fullyQualifiedName,
+                        methods: classNode.Methods.Select(it => ToDto(it, fullyQualifiedName)).ToList(),
+                        fields: classNode.Fields.Select(ToDto).ToList(),
+                        modifier: classNode.Modifier,
+                        parentClassFqn: parentFqn,
+                        codeRange: classNode.CodeRange!,
+                        referencesFromThis: new List<ClassReferenceDto>()
                     )
                 }
                 .Concat(classNode.InnerClasses.SelectMany(it => ToDto(

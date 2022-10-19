@@ -99,11 +99,12 @@ public class AntlrParseTypeScriptTest
         );
         res.Classes[0].Methods[0].Name.Should().Be("add");
         res.Classes[0].Name.Should().Be("path");
-        res.Classes[0].Fields[0].Name.Should().Be("myAdd");
+        res.Classes[0].Fields.Should().BeEmpty();// myAdd method is treated as method
+        res.Classes[0].Methods[1].Name.Should().Be("myAdd");
         res.Classes[0].ParentClassFqn.Should().Be(null);
-        res.Classes[0].FullyQualifiedName.Should().Be("repo/path");
+        res.Classes[0].FullyQualifiedName.Should().Be("path");
         res.Classes[1].Name.Should().Be("MyClass");
-        res.Classes[1].ParentClassFqn.Should().Be("repo/path");
+        res.Classes[1].ParentClassFqn.Should().Be("path");
     }
 
     [Fact]

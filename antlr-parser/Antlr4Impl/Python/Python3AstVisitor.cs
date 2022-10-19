@@ -100,11 +100,9 @@ namespace antlr_parser.Antlr4Impl.Python
 
             if (text.StartsWith("\"\"\""))
             {
-                int commentStartIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
-
                 int commentEndIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
-                return new AstNode.Comment(text, commentStartIdx, commentEndIdx);
+                return new AstNode.Comment(commentEndIdx);
             }
 
             return VisitChildren(context);
@@ -117,8 +115,7 @@ namespace antlr_parser.Antlr4Impl.Python
             if (text.StartsWith("\"\"\""))
             {
                 int commentStartIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
-                int commentEndIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
-                return new AstNode.Comment(text, commentStartIdx, commentEndIdx);
+                return new AstNode.Comment(commentStartIdx);
             }
 
             int maxStopLocation = FlattenChildren(context.Parent.Parent as ParserRuleContext)
@@ -155,7 +152,7 @@ namespace antlr_parser.Antlr4Impl.Python
                 IndexToLocationConverter.IdxToCodeRange(startIdx, stopIdx)
             );
 
-            List<AstNode.ArgumentNode> arguments = context.parameters()?.typedargslist().tfpdef()
+            List<AstNode.ArgumentNode> arguments = context.parameters()?.typedargslist()?.tfpdef()
                 .Select(param => new AstNode.ArgumentNode(param.GetText(), ""))
                 .ToList() ?? new List<AstNode.ArgumentNode>();
 

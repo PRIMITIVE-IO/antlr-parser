@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
@@ -31,20 +30,18 @@ namespace antlr_parser.Antlr4Impl.Java
 
         public override AstNode VisitCompilationUnit(JavaParser.CompilationUnitContext context)
         {
-            List<AstNode> nodes = AntlrUtil.WalkUntilType(
-                context.children,
-                new HashSet<Type>
-                {
-                    typeof(JavaParser.PackageDeclarationContext),
-                    typeof(JavaParser.ClassDeclarationContext),
-                },
-                this);
+            List<AstNode> nodes = context.children.Select(it => it.Accept(this))
+                .ToList();
 
             AstNode.PackageNode? package = nodes.OfType<AstNode.PackageNode>().SingleOrDefault();
             List<AstNode.ClassNode> classes = nodes.OfType<AstNode.ClassNode>().ToList();
 
             CodeRange codeRange = CodeRangeCalculator.Trim(
-                new CodeRange(new CodeLocation(1, 1), CodeRangeCalculator.EndPosition()));
+                new CodeRange(
+                    new CodeLocation(1, 1),
+                    CodeRangeCalculator.EndPosition()
+                )
+            );
 
             return new AstNode.FileNode(
                 path: Path,
@@ -382,7 +379,7 @@ namespace antlr_parser.Antlr4Impl.Java
         {
             return AstNode.NodeList.Combine(aggregate, nextResult);
         }
-        
+
         #endregion
     }
 }

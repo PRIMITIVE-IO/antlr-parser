@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
@@ -30,18 +29,56 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         public override AstNode VisitProgram(JavaScriptParser.ProgramContext context)
         {
-            List<AstNode> children = AntlrUtil.WalkUntilType(context.children, new HashSet<Type>
-                {
-                    typeof(JavaScriptParser.FunctionDeclarationContext),
-                    typeof(JavaScriptParser.ClassDeclarationContext),
-                    typeof(JavaScriptParser.VariableDeclarationContext),
-                    typeof(JavaScriptParser.PropertyAssignmentContext)
-                },
-                this);
-            
-            List<AstNode.ClassNode> classes = children.OfType<AstNode.ClassNode>().ToList();
-            List<AstNode.MethodNode> methods = children.OfType<AstNode.MethodNode>().ToList();
-            List<AstNode.FieldNode> fields = children.OfType<AstNode.FieldNode>().ToList();
+            List<AstNode.ClassNode> classes = new List<AstNode.ClassNode>();
+            List<AstNode.MethodNode> methods = new List<AstNode.MethodNode>();
+            List<AstNode.FieldNode> fields = new List<AstNode.FieldNode>();
+
+            if (context.sourceElements() == null)
+            {
+                return new AstNode.FileNode(
+                    path: FilePath,
+                    packageNode: null,
+                    classes: classes,
+                    fields: fields,
+                    methods: methods,
+                    namespaces: new List<AstNode.Namespace>(),
+                    language: SourceCodeLanguage.JavaScript,
+                    isTest: false,
+                    codeRange: new CodeRange(
+                        new CodeLocation(0, 0), new CodeLocation(0, 0)
+                    )
+                );
+            }
+
+            foreach (JavaScriptParser.SourceElementContext sourceElementContext in context.sourceElements()
+                         .sourceElement())
+            {
+                JavaScriptParser.StatementContext statement = sourceElementContext.statement();
+
+                AstNode node = statement.Accept(this);
+                if (node is AstNode.MethodNode methodNode) methods.Add(methodNode);
+                if (node is AstNode.ClassNode klass) classes.Add(klass);
+
+                methods.AddRange(
+                    statement.expressionStatement()
+                        ?.expressionSequence()
+                        ?.singleExpression()
+                        ?.SelectNotNull(singleExpressionContext => singleExpressionContext
+                            .GetChild<JavaScriptParser.FunctionDeclContext>(0)
+                            ?.GetChild<JavaScriptParser.FunctionDeclarationContext>(0)
+                            ?.Accept(this) as AstNode.MethodNode
+                        )
+                    ?? new List<AstNode.MethodNode>()
+                );
+
+                fields.AddRange(statement.variableStatement()
+                        ?.variableDeclarationList()
+                        ?.variableDeclaration()
+                        ?.Select(variableDecl => variableDecl.Accept(this))
+                        .OfType<AstNode.FieldNode>()
+                        .ToList() ?? new List<AstNode.FieldNode>()
+                );
+            }
 
             int headerEnd = classes.Select(it => it.StartIdx - 1)
                 .Concat(methods.Select(it => it.StartIdx - 1))
@@ -57,7 +94,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
             return new AstNode.FileNode(
                 path: FilePath,
-                packageNode: new AstNode.PackageNode(null),
+                packageNode: null,
                 classes: classes,
                 fields: fields,
                 methods: methods,
@@ -68,6 +105,19 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             );
         }
 
+        public override AstNode? VisitAssignmentExpression(JavaScriptParser.AssignmentExpressionContext context)
+        {
+            if (context.children.OfType<JavaScriptParser.MemberDotExpressionContext>().FirstOrDefault()?.GetText() !=
+                "module.exports") return null;
+            
+            return context.children.OfType<JavaScriptParser.FunctionExpressionContext>().FirstOrDefault()?.Accept(this);
+        }
+
+        protected override AstNode AggregateResult(AstNode aggregate, AstNode nextResult)
+        {
+            return AstNode.NodeList.Combine(aggregate, nextResult);
+        }
+
         public override AstNode VisitFunctionDeclaration(JavaScriptParser.FunctionDeclarationContext context)
         {
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
@@ -75,14 +125,14 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             CodeRange codeRange = CodeRangeCalculator.Trim(
                 IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
             );
-            
+
             List<AstNode.ArgumentNode> arguments = context.formalParameterList()?.formalParameterArg()?
                 .Select(param => param.Accept(this) as AstNode.ArgumentNode)
                 .ToList() ?? new List<AstNode.ArgumentNode>();
 
             return new AstNode.MethodNode(
-                context.identifier().GetFullText(),
-                AccessFlags.None,
+                name: context.identifier().GetFullText(),
+                accFlag: AccessFlags.None,
                 startIdx: startIdx,
                 codeRange: codeRange,
                 arguments: arguments,
@@ -92,15 +142,9 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         public override AstNode VisitClassDeclaration(JavaScriptParser.ClassDeclarationContext context)
         {
-            List<AstNode> classElements = AntlrUtil.WalkUntilType(context.children, new HashSet<Type>
-                {
-                    typeof(JavaScriptParser.FunctionDeclarationContext),
-                    typeof(JavaScriptParser.ClassDeclarationContext),
-                    typeof(JavaScriptParser.MethodDefinitionContext),
-                    typeof(JavaScriptParser.VariableDeclarationContext),
-                    typeof(JavaScriptParser.PropertyAssignmentContext)
-                },
-                this);
+            List<AstNode> classElements = context.classTail().classElement()
+                .Select(elem => elem.Accept(this))
+                .ToList();
 
             List<AstNode.MethodNode> methodNodes = classElements.OfType<AstNode.MethodNode>().ToList();
             List<AstNode.FieldNode> fieldNodes = classElements.OfType<AstNode.FieldNode>().ToList();
@@ -126,17 +170,45 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             );
 
             return new AstNode.ClassNode(
-                context.identifier().GetFullText(),
-                methodNodes,
-                fieldNodes,
-                innerClasses,
-                AccessFlags.None,
-                startIdx,
+                name: context.identifier().GetFullText(),
+                methods: methodNodes,
+                fields: fieldNodes,
+                innerClasses: innerClasses,
+                modifier: AccessFlags.None,
+                startIdx: startIdx,
                 codeRange: codeRange
             );
         }
 
-        public override AstNode VisitPropertyExpressionAssignment(JavaScriptParser.PropertyExpressionAssignmentContext context)
+        public override AstNode VisitClassElement(JavaScriptParser.ClassElementContext context)
+        {
+            if (context.methodDefinition() != null)
+            {
+                return context.methodDefinition().Accept(this);
+            }
+
+            if (context.propertyName() != null)
+            {
+                // field containing lambda, like `field = x => { return 10 }` 
+                int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+                int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
+                CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
+
+                return new AstNode.MethodNode(
+                    name: context.propertyName().GetText(),
+                    accFlag: AccessFlags.None,
+                    startIdx: -1,
+                    codeRange: codeRange,
+                    arguments: new List<AstNode.ArgumentNode>(),
+                    returnType: "void"
+                );
+            }
+
+            return null;
+        }
+
+        public override AstNode VisitPropertyExpressionAssignment(
+            JavaScriptParser.PropertyExpressionAssignmentContext context)
         {
             // field containing lambda, like `field = x => { return 10 }` 
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
@@ -161,21 +233,21 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             CodeRange codeRange = CodeRangeCalculator.Trim(
                 IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
             );
-            
+
             List<AstNode.ArgumentNode> arguments = context.formalParameterList()?.formalParameterArg()?
                 .Select(param => param.Accept(this) as AstNode.ArgumentNode)
                 .ToList() ?? new List<AstNode.ArgumentNode>();
 
             return new AstNode.MethodNode(
-                context.propertyName().GetFullText(),
-                AccessFlags.None,
+                name: context.propertyName().GetFullText(),
+                accFlag: AccessFlags.None,
                 startIdx: startIdx,
                 codeRange: codeRange,
                 arguments: arguments,
                 returnType: "void"
             );
         }
-        
+
         public override AstNode VisitFormalParameterArg(JavaScriptParser.FormalParameterArgContext context)
         {
             return new AstNode.ArgumentNode(
@@ -214,12 +286,12 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
             return new AstNode.FieldNode(
                 name,
-                AccessFlags.None,
+                accFlag: AccessFlags.None,
                 startIdx: startIdx,
                 codeRange: codeRange
             );
         }
-        
+
         static int PreviousPeerEndPosition(RuleContext parent, ITree self)
         {
             switch (parent)
@@ -249,7 +321,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         public override List<string> VisitObjectLiteral(JavaScriptParser.ObjectLiteralContext context)
         {
             return context.propertyAssignment()
-                .SelectMany(it => it.Accept(this))
+                .SelectMany(it => it.Accept(this) ?? new List<string>())
                 .ToList();
         }
 
@@ -258,7 +330,8 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             return new List<string> { context.singleExpression().GetFullText() };
         }
 
-        public override List<string> VisitObjectLiteralExpression(JavaScriptParser.ObjectLiteralExpressionContext context)
+        public override List<string> VisitObjectLiteralExpression(
+            JavaScriptParser.ObjectLiteralExpressionContext context)
         {
             JavaScriptParser.PropertyAssignmentContext[] properties = context.objectLiteral().propertyAssignment();
 

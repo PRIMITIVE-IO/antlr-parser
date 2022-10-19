@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
@@ -32,16 +31,9 @@ namespace antlr_parser.Antlr4Impl.Solidity
 
         public override AstNode VisitSourceUnit(SolidityParser.SourceUnitContext context)
         {
-            List<AstNode.ClassNode> classNodes = AntlrUtil.WalkUntilType(
-                    context.children,
-                    new HashSet<Type>
-                    {
-                        typeof(SolidityParser.ContractDefinitionContext)
-                    },
-                    this)
-                .OfType<AstNode.ClassNode>()
-                .ToList();
-            
+            List<AstNode.ClassNode> classNodes =
+                context.children.Select(it => it.Accept(this)).OfType<AstNode.ClassNode>().ToList();
+
             string[] lines = MethodBodyRemovalResult.OriginalSource.Split('\n');
 
             return new AstNode.FileNode(
@@ -59,18 +51,10 @@ namespace antlr_parser.Antlr4Impl.Solidity
                 )
             );
         }
-        
+
         public override AstNode VisitContractDefinition(SolidityParser.ContractDefinitionContext context)
         {
-            List<AstNode> children = AntlrUtil.WalkUntilType(
-                context.children, 
-                new HashSet<Type>
-                {
-                    typeof(SolidityParser.StateVariableDeclarationContext),
-                    typeof(SolidityParser.FunctionDefinitionContext),
-                    typeof(SolidityParser.ContractDefinitionContext)
-                }, 
-                this);
+            List<AstNode> children = context.children.Select(it => it.Accept(this)).ToList();
 
             List<AstNode.MethodNode> methods = children.OfType<AstNode.MethodNode>().ToList();
             List<AstNode.FieldNode> fields = children.OfType<AstNode.FieldNode>().ToList();
@@ -126,7 +110,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
         public override AstNode VisitFunctionDefinition(SolidityParser.FunctionDefinitionContext context)
         {
             string? name = context.functionDescriptor().identifier()?.GetText() ??
-                          context.functionDescriptor().ConstructorKeyword()?.GetText();
+                           context.functionDescriptor().ConstructorKeyword()?.GetText();
 
             int startIdx = (NearestPeerEndIndex(context, context.Start.StartIndex)
                             ?? EnclosingClassHeaderEnd(context)
@@ -168,7 +152,7 @@ namespace antlr_parser.Antlr4Impl.Solidity
         #endregion
 
         #region UTIL
-
+        
         static int? NearestPeerEndIndex(RuleContext context, int selfStartIdx)
         {
             switch (context.Parent)

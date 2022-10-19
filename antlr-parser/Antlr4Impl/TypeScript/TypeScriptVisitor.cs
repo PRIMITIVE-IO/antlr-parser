@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using PrimitiveCodebaseElements.Primitive;
@@ -50,15 +49,11 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 );
             }
 
-            List<AstNode> children = AntlrUtil.WalkUntilType(context.children,
-                new HashSet<Type>
-                {
-                    typeof(TypeScriptParser.ClassDeclarationContext),
-                    typeof(TypeScriptParser.FunctionDeclarationContext),
-                    typeof(TypeScriptParser.NamespaceDeclarationContext),
-                    typeof(TypeScriptParser.VariableDeclarationContext)
-                },
-                this);
+            List<AstNode> children = context.sourceElements()
+                                         ?.sourceElement()
+                                         ?.Select(it => it.Accept(this))
+                                         .ToList()
+                                     ?? new List<AstNode>();
 
             List<AstNode.ClassNode> classes = children.OfType<AstNode.ClassNode>().ToList();
             List<AstNode.FieldNode> fields = children.OfType<AstNode.FieldNode>().ToList();
@@ -107,16 +102,9 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
         public override AstNode VisitClassDeclaration(TypeScriptParser.ClassDeclarationContext context)
         {
-            List<AstNode> children = AntlrUtil.WalkUntilType(context.children,
-                new HashSet<Type>
-                {
-                    typeof(TypeScriptParser.ConstructorDeclarationContext),
-                    typeof(TypeScriptParser.MethodDeclarationExpressionContext),
-                    typeof(TypeScriptParser.PropertyDeclarationExpressionContext),
-                    typeof(TypeScriptParser.VariableDeclarationContext),
-                    typeof(TypeScriptParser.ClassDeclarationContext)
-                },
-                this);
+            List<AstNode> children = context.children
+                .SelectMany(it => it.Accept(this)?.AsList() ?? new List<AstNode>())
+                .ToList();
 
             List<AstNode.FieldNode> fields = children.OfType<AstNode.FieldNode>().ToList();
             List<AstNode.MethodNode> methods = children.OfType<AstNode.MethodNode>().ToList();
@@ -136,13 +124,13 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             CodeRange codeRange = CodeRangeCalculator.Trim(
                 IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
             );
-
-            string? classNameString = context.Identifier().ToString();
+            
+            string? classNameString = context.Identifier()?.ToString();
             if (string.IsNullOrEmpty(classNameString))
             {
                 classNameString = "anonymous";
             }
-
+            
             return new AstNode.ClassNode(
                 name: classNameString,
                 methods: methods,
@@ -154,13 +142,14 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             );
         }
 
-        public override AstNode VisitMethodDeclarationExpression(TypeScriptParser.MethodDeclarationExpressionContext context)
+        public override AstNode VisitMethodDeclarationExpression(
+            TypeScriptParser.MethodDeclarationExpressionContext context)
         {
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
             string? accFlagString = context.propertyMemberBase().accessibilityModifier()?.GetText();
-            AccessFlags accessFlags = AccessFlags.AccPublic;
+            AccessFlags accessFlags = AccessFlags.None;
             if (!string.IsNullOrEmpty(accFlagString))
             {
                 accessFlags = AccessFlagsFrom(accFlagString);
@@ -232,13 +221,14 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 type: paramType ?? "");
         }
 
-        public override AstNode VisitPropertyDeclarationExpression(TypeScriptParser.PropertyDeclarationExpressionContext context)
+        public override AstNode VisitPropertyDeclarationExpression(
+            TypeScriptParser.PropertyDeclarationExpressionContext context)
         {
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
             string? accFlagString = context.propertyMemberBase().accessibilityModifier()?.GetText();
-            AccessFlags accessFlags = AccessFlags.AccPublic;
+            AccessFlags accessFlags = AccessFlags.None;
             if (!string.IsNullOrEmpty(accFlagString))
             {
                 accessFlags = AccessFlagsFrom(accFlagString);
@@ -281,7 +271,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                     break;
                 }
             }
-
+            
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
@@ -311,19 +301,19 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
             return returnNode;
         }
-        
+
         public override AstNode VisitConstructorDeclaration(TypeScriptParser.ConstructorDeclarationContext context)
         {
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
-            
+
             string? accFlagString = context.accessibilityModifier()?.GetText();
-            AccessFlags accessFlags = AccessFlags.AccPublic;
+            AccessFlags accessFlags = AccessFlags.None;
             if (!string.IsNullOrEmpty(accFlagString))
             {
                 accessFlags = AccessFlagsFrom(accFlagString);
             }
-
+            
             CodeRange codeRange = CodeRangeCalculator.Trim(
                 IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx)
             );
@@ -347,12 +337,12 @@ namespace antlr_parser.Antlr4Impl.TypeScript
         #endregion
 
         #region UTIL
-
+        
         protected override AstNode AggregateResult(AstNode aggregate, AstNode nextResult)
         {
             return AstNode.NodeList.Combine(aggregate, nextResult);
         }
-
+        
         static AccessFlags AccessFlagsFrom(string text)
         {
             return text switch

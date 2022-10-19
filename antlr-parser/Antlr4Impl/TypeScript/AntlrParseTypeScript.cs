@@ -39,11 +39,12 @@ namespace antlr_parser.Antlr4Impl.TypeScript
 
                 CodeRangeCalculator codeRangeCalculator = new CodeRangeCalculator(source);
 
-                return parser.program().Accept(new TypeScriptVisitor(
+                TypeScriptVisitor visitor = new TypeScriptVisitor(
                     filePath,
                     removalResult,
                     codeRangeCalculator
-                )) as AstNode.FileNode;
+                );
+                return parser.program().Accept(visitor) as AstNode.FileNode;
             }
             catch (Exception e)
             {

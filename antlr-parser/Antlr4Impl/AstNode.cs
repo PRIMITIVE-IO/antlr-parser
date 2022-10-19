@@ -32,7 +32,7 @@ namespace antlr_parser.Antlr4Impl
                 List<Namespace> namespaces,
                 SourceCodeLanguage language,
                 bool isTest,
-                CodeRange codeRange)
+                CodeRange? codeRange)
             {
                 Path = path;
                 PackageNode = packageNode;
@@ -128,10 +128,14 @@ namespace antlr_parser.Antlr4Impl
             public readonly string Name;
             public readonly AccessFlags AccFlag;
             public readonly int StartIdx;
-            public readonly CodeRange? CodeRange;
+            public readonly CodeRange CodeRange;
 
-            public FieldNode(string name, AccessFlags accFlag, int startIdx,
-                CodeRange? codeRange)
+            public FieldNode(
+                string name,
+                AccessFlags accFlag,
+                int startIdx,
+                CodeRange codeRange
+            )
             {
                 Name = name;
                 AccFlag = accFlag;
@@ -153,7 +157,8 @@ namespace antlr_parser.Antlr4Impl
                 List<ClassNode> classes,
                 List<FieldNode> fields,
                 List<MethodNode> methods,
-                List<Namespace> namespaces)
+                List<Namespace> namespaces
+            )
             {
                 Name = name;
                 Classes = classes;
@@ -165,14 +170,10 @@ namespace antlr_parser.Antlr4Impl
 
         public class Comment : AstNode
         {
-            public readonly string Text;
-            public readonly int StartIdx;
             public readonly int EndIdx;
 
-            public Comment(string text, int startIdx, int endIdx)
+            public Comment(int endIdx)
             {
-                Text = text;
-                StartIdx = startIdx;
                 EndIdx = endIdx;
             }
         }

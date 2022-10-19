@@ -223,7 +223,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
             );
         }
 
-        static IEnumerable<CSharpParser.Class_definitionContext> FindClassDefinitionContexts(IParseTree parseTree)
+        static List<CSharpParser.Class_definitionContext> FindClassDefinitionContexts(IParseTree parseTree)
         {
             List<CSharpParser.Class_definitionContext> result = new List<CSharpParser.Class_definitionContext>();
             for (int i = 0; i < parseTree.ChildCount; i++)
@@ -312,7 +312,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
                 codeRange: codeRange
             );
         }
-
+        
         public override AstNode VisitMethod_declaration(CSharpParser.Method_declarationContext context)
         {
             AccessFlags accFlag = MethodAccessFlag(context);
@@ -347,8 +347,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
                 returnType: commaSeparatedTypes
             );
         }
-
-        public override AstNode VisitFixed_parameter(CSharpParser.Fixed_parameterContext context)
+public override AstNode VisitFixed_parameter(CSharpParser.Fixed_parameterContext context)
         {
             return new AstNode.ArgumentNode(
                 name: context.arg_declaration().identifier().GetText(),
@@ -375,7 +374,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
             return (NearestPeerEndIdx(parentStructBodyContext, context.Start.StartIndex) ??
                     parentStructBodyContext.OPEN_BRACE().Symbol.StartIndex) + 1;
         }
-
+        
         static int? NearestPeerEndIdx(CSharpParser.Class_bodyContext? ctx, int startIdx)
         {
             return ctx?.class_member_declarations().class_member_declaration()
@@ -396,7 +395,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
         {
             CSharpParser.Namespace_member_declarationsContext ns =
                 FindParent<CSharpParser.Namespace_member_declarationsContext>(context);
-            IEnumerable<CSharpParser.Class_definitionContext> classes = FindClassDefinitionContexts(ns);
+            List<CSharpParser.Class_definitionContext> classes = FindClassDefinitionContexts(ns);
 
             return classes
                 .Select(it => it.Stop.StopIndex as int?)
