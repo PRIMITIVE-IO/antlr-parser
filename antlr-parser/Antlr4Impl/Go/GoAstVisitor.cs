@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using PrimitiveCodebaseElements.Primitive;
@@ -36,7 +35,7 @@ namespace antlr_parser.Antlr4Impl.Go
             List<AstNode.FieldNode> fields = nodes.OfType<AstNode.FieldNode>().ToList();
             List<AstNode.MethodNode> methods = nodes.OfType<AstNode.MethodNode>().ToList();
 
-            var stopIndex = classes.Select(cls => cls.StartIdx - 1)
+            int stopIndex = classes.Select(cls => cls.StartIdx - 1)
                 .Concat(methods.Select(method => method.StartIdx - 1))
                 .Concat(fields.Select(field => field.StartIdx - 1))
                 .Concat(new[] { context.Stop.StopIndex })
@@ -50,7 +49,7 @@ namespace antlr_parser.Antlr4Impl.Go
                 fields: fields,
                 methods: methods,
                 namespaces: new List<AstNode.Namespace>(),
-                language: SourceCodeLanguage.Solidity,
+                language: SourceCodeLanguage.Go,
                 isTest: false,
                 codeRange: CodeRangeCalculator.Trim(
                     new CodeRange(
