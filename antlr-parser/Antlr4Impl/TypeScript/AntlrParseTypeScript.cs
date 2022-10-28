@@ -14,12 +14,6 @@ namespace antlr_parser.Antlr4Impl.TypeScript
                 ?.Let(fileNode => AstNodeToClassDtoConverter.ToFileDto(fileNode, source));
         }
 
-        //TODO move to library
-        public static R Let<T, R>(this T t, Func<T, R> block)
-        {
-            return block(t);
-        }
-
         static AstNode.FileNode? ParseFileNode(string source, string filePath)
         {
             try

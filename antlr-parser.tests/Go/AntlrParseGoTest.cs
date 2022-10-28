@@ -24,6 +24,7 @@ public class AntlrParseGoTest
 
         ClassDto cls = res.Classes[0];
         cls.Name.Should().Be("person");
+        cls.FullyQualifiedName.Should().Be("main.person");
 
         cls.CodeRange.Of(source).Should().Be("type person struct {");
 
@@ -101,7 +102,7 @@ public class AntlrParseGoTest
 
         MethodDto func = res.Classes[0].Methods[0];
         func.Name.Should().Be("f");
-        func.Signature.Should().Be("path.f()");
+        func.Signature.Should().Be("main.path.f()");
         
         ArgumentDto arg1 = func.Arguments[0];
         arg1.Name.Should().Be("x");

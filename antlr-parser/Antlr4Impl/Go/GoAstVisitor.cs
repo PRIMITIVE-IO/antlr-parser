@@ -27,6 +27,8 @@ namespace antlr_parser.Antlr4Impl.Go
 
         public override AstNode VisitSourceFile(GoParser.SourceFileContext context)
         {
+            string? packageName = context.packageClause()?.packageName?.Text;
+
             List<AstNode> nodes = context.children.SelectNotNull(child => child.Accept(this))
                 .SelectMany(node => node.AsList())
                 .ToList();
@@ -41,10 +43,9 @@ namespace antlr_parser.Antlr4Impl.Go
                 .Concat(new[] { context.Stop.StopIndex })
                 .MinOrDefault();
 
-
             return new AstNode.FileNode(
                 path: Path,
-                packageNode: null,
+                packageNode: packageName?.Let(it => new AstNode.PackageNode(it)),
                 classes: classes,
                 fields: fields,
                 methods: methods,
