@@ -24,7 +24,7 @@ public class AntlrParseGoTest
 
         ClassDto cls = res.Classes[0];
         cls.Name.Should().Be("person");
-        cls.FullyQualifiedName.Should().Be("main.person");
+        cls.FullyQualifiedName.Should().Be("some/path:main.person");
 
         cls.CodeRange.Of(source).Should().Be("type person struct {");
 
@@ -61,7 +61,9 @@ public class AntlrParseGoTest
 
         FileDto? res = AntlrParseGo.Parse(source, "some/path");
 
+        
         ClassDto fakeClass = res.Classes[0];
+        fakeClass.FullyQualifiedName.Should().Be("some/path:main.path");
         fakeClass.Name.Should().Be("path");
 
         fakeClass.CodeRange.Of(source).Should().Be(@"
@@ -102,7 +104,7 @@ public class AntlrParseGoTest
 
         MethodDto func = res.Classes[0].Methods[0];
         func.Name.Should().Be("f");
-        func.Signature.Should().Be("main.path.f()");
+        func.Signature.Should().Be("some/path:main.path.f(int,double)");
         
         ArgumentDto arg1 = func.Arguments[0];
         arg1.Name.Should().Be("x");
@@ -118,5 +120,62 @@ public class AntlrParseGoTest
                 
             }
         ".TrimIndent2());
+    }
+    [Fact]
+    public void ReceiverParameter()
+    {
+        string source = @"
+            package main
+            func (v Vertex) f(x int, y double) float {
+                
+            }
+        ".TrimIndent2();
+
+        FileDto? res = AntlrParseGo.Parse(source, "some/path");
+
+        MethodDto func = res.Classes[0].Methods[0];
+        func.Name.Should().Be("f");
+        func.Signature.Should().Be("some/path:main.path.f(Vertex,int,double)");
+    }
+    
+    [Fact]
+    public void ReceiverParameter2()
+    {
+        string source = @"
+            package main
+            func (s *serverSet) unregister(peer *clientPeer) error {
+
+            }
+        ".TrimIndent2();
+
+        FileDto? res = AntlrParseGo.Parse(source, "some/path");
+
+        MethodDto func = res.Classes[0].Methods[0];
+        func.Name.Should().Be("unregister");
+        func.Signature.Should().Be("some/path:main.path.unregister(serverSet,clientPeer)");
+    }
+    
+    [Fact]
+    public void DuplicatedInitMethods()
+    {
+        string source = @"
+            package main
+            func init() {
+
+            }
+            func init() {
+
+            }
+        ".TrimIndent2();
+
+        FileDto? res = AntlrParseGo.Parse(source, "some/path");
+
+        MethodDto func1 = res.Classes[0].Methods[0];
+        func1.Name.Should().Be("init");
+        func1.Signature.Should().Be("some/path:main.path.init#1()");
+        
+        MethodDto func2 = res.Classes[0].Methods[1];
+        func2.Name.Should().Be("init");
+        func2.Signature.Should().Be("some/path:main.path.init#2()");
     }
 }

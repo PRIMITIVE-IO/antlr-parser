@@ -136,9 +136,9 @@ public class AntlrParseJavaTest
         ClassDto myClass = fileDto.Classes[0];
         myClass.Name.Should().Be("MyClass");
         ClassDto innerClass = fileDto.Classes[1];
-        innerClass.ParentClassFqn.Should().Be("MyPackage.MyClass");
+        innerClass.ParentClassFqn.Should().Be("some/path:MyPackage.MyClass");
         innerClass.Name.Should().Be("InnerClass");
-        innerClass.FullyQualifiedName.Should().Be("MyPackage.MyClass$InnerClass");
+        innerClass.FullyQualifiedName.Should().Be("some/path:MyPackage.MyClass$InnerClass");
         innerClass.CodeRange.Of(source).Should().Be(@"
                 |//inner class comment
                 |    static class InnerClass {

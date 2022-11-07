@@ -101,13 +101,13 @@ namespace antlr_parser.Antlr4Impl.Go
             );
 
             return context.identifierList()?.IDENTIFIER()?.Select(name =>
-                new AstNode.FieldNode(
-                    name: name.GetText(),
-                    accFlag: AccessFlags.None,
-                    codeRange: codeRange,
-                    startIdx: context.Start.StartIndex
-                ) as AstNode
-            ).Aggregate(AstNode.NodeList.Combine) ??
+                       new AstNode.FieldNode(
+                           name: name.GetText(),
+                           accFlag: AccessFlags.None,
+                           codeRange: codeRange,
+                           startIdx: context.Start.StartIndex
+                       ) as AstNode
+                   ).Aggregate(AstNode.NodeList.Combine) ??
                    new AstNode.FieldNode(
                        "anon",
                        AccessFlags.None,
@@ -145,9 +145,12 @@ namespace antlr_parser.Antlr4Impl.Go
 
         public override AstNode VisitParameterDecl(GoParser.ParameterDeclContext context)
         {
+            string type = context.type_()?.typeName()?.IDENTIFIER()?.GetText() ??
+                          context.type_()?.typeLit()?.pointerType()?.type_()?.GetText() ??
+                          "anon";
             return new AstNode.ArgumentNode(
                 name: context.identifierList()?.GetText() ?? "anon",
-                type: context.type_()?.typeName()?.IDENTIFIER()?.GetText() ?? "anon"
+                type: type
             );
         }
 
@@ -160,12 +163,20 @@ namespace antlr_parser.Antlr4Impl.Go
                 )
             );
 
+            List<AstNode.ArgumentNode> receiverParameters = context.receiver()
+                ?.parameters()
+                .parameterDecl()
+                .Select(param => param.Accept(this))
+                .Cast<AstNode.ArgumentNode>()
+                .ToList() ?? new List<AstNode.ArgumentNode>();
+
             List<AstNode.ArgumentNode> arguments = context.signature().parameters().parameterDecl()
                 .Select(param => param.Accept(this))
                 .Cast<AstNode.ArgumentNode>()
                 .ToList();
 
-            string returnType = context.signature()?.result()?.type_()?.typeName()?.IDENTIFIER()?.Symbol?.Text ?? "void";
+            string returnType = context.signature()?.result()?.type_()?.typeName()?.IDENTIFIER()?.Symbol?.Text ??
+                                "void";
 
             return new AstNode.MethodNode(
                 name: context.IDENTIFIER().GetText(),
@@ -173,7 +184,8 @@ namespace antlr_parser.Antlr4Impl.Go
                 startIdx: context.Start.StartIndex,
                 codeRange: codeRange,
                 arguments: arguments,
-                returnType: returnType
+                returnType: returnType,
+                receiver: receiverParameters.FirstOrDefault()
             );
         }
 
