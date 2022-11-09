@@ -146,7 +146,8 @@ namespace antlr_parser.Antlr4Impl.Go
         public override AstNode VisitParameterDecl(GoParser.ParameterDeclContext context)
         {
             string type = context.type_()?.typeName()?.IDENTIFIER()?.GetText() ??
-                          context.type_()?.typeLit()?.pointerType()?.type_()?.GetText() ??
+                          context.type_()?.typeLit()?.pointerType()?.type_()?.GetText().SubstringBefore("{") ??
+                          (context.ELLIPSIS() != null ? "[]" + context.type_().GetText().SubstringBefore("{") : null) ??
                           "anon";
             return new AstNode.ArgumentNode(
                 name: context.identifierList()?.GetText() ?? "anon",

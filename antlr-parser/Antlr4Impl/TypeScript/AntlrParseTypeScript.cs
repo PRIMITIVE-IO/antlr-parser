@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using antlr_parser.Antlr4Impl;
 using Antlr4.Runtime;
+using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
+
 
 namespace antlr_parser.Antlr4Impl.TypeScript
 {

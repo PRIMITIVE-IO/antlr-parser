@@ -61,7 +61,7 @@ public class AntlrParseGoTest
 
         FileDto? res = AntlrParseGo.Parse(source, "some/path");
 
-        
+
         ClassDto fakeClass = res.Classes[0];
         fakeClass.FullyQualifiedName.Should().Be("some/path:main.path");
         fakeClass.Name.Should().Be("path");
@@ -105,15 +105,15 @@ public class AntlrParseGoTest
         MethodDto func = res.Classes[0].Methods[0];
         func.Name.Should().Be("f");
         func.Signature.Should().Be("some/path:main.path.f(int,double)");
-        
+
         ArgumentDto arg1 = func.Arguments[0];
         arg1.Name.Should().Be("x");
         arg1.Type.Should().Be("int");
-        
+
         ArgumentDto arg2 = func.Arguments[1];
         arg2.Name.Should().Be("y");
         arg2.Type.Should().Be("double");
-        
+
         func.ReturnType.Should().Be("float");
         func.CodeRange.Of(source).Should().Be(@"
             func f(x int, y double) float {
@@ -121,6 +121,7 @@ public class AntlrParseGoTest
             }
         ".TrimIndent2());
     }
+
     [Fact]
     public void ReceiverParameter()
     {
@@ -137,7 +138,7 @@ public class AntlrParseGoTest
         func.Name.Should().Be("f");
         func.Signature.Should().Be("some/path:main.path.f(Vertex,int,double)");
     }
-    
+
     [Fact]
     public void ReceiverParameter2()
     {
@@ -154,7 +155,7 @@ public class AntlrParseGoTest
         func.Name.Should().Be("unregister");
         func.Signature.Should().Be("some/path:main.path.unregister(serverSet,clientPeer)");
     }
-    
+
     [Fact]
     public void DuplicatedInitMethods()
     {
@@ -173,9 +174,67 @@ public class AntlrParseGoTest
         MethodDto func1 = res.Classes[0].Methods[0];
         func1.Name.Should().Be("init");
         func1.Signature.Should().Be("some/path:main.path.init#1()");
-        
+
         MethodDto func2 = res.Classes[0].Methods[1];
         func2.Name.Should().Be("init");
         func2.Signature.Should().Be("some/path:main.path.init#2()");
+    }
+
+    // TODO [Fact]
+    public void Comment()
+    {
+        string source = @"
+            package main
+            // Call invokes the (constant) contract method with params as input values and
+            // sets the output to result. The result type might be a single field for simple
+            // returns, a slice of interfaces for anonymous returns and a struct for named
+            // returns.
+            func f() {
+            }
+        ".TrimIndent2();
+
+        FileDto? res = AntlrParseGo.Parse(source, "some/path");
+
+        MethodDto func1 = res.Classes[0].Methods[0];
+
+        func1.CodeRange.Of(source).Should().Be(@"
+            // Call invokes the (constant) contract method with params as input values and
+            // sets the output to result. The result type might be a single field for simple
+            // returns, a slice of interfaces for anonymous returns and a struct for named
+            // returns.
+            func f() {
+            }
+        ".TrimIndent2()
+        );
+    }
+
+    [Fact]
+    public void InterfaceType()
+    {
+        string source = @"
+            package main
+            func Call(result *[]interface{}) {
+            }
+        ".TrimIndent2();
+
+        FileDto? res = AntlrParseGo.Parse(source, "some/path");
+
+        MethodDto func1 = res.Classes[0].Methods[0];
+        func1.Signature.Should().Be("some/path:main.path.Call([]interface)");
+    }
+
+    [Fact]
+    public void Varargs()
+    {
+        string source = @"
+            package main
+            func Call(params ...interface{}) {
+            }
+        ".TrimIndent2();
+
+        FileDto? res = AntlrParseGo.Parse(source, "some/path");
+
+        MethodDto func1 = res.Classes[0].Methods[0];
+        func1.Signature.Should().Be("some/path:main.path.Call([]interface)");
     }
 }
