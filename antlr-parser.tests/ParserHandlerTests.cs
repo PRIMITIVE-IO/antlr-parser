@@ -20,7 +20,7 @@ public class ParserHandlerTests
     public void ParserHandlerShouldReturnCollectionWithOneElement()
     {
         //Act
-        FileDto result = ParserHandler.FileDtoFromSourceText("test.java", ".java", testJavaClassSourceCode);
+        FileDto result = PrimitiveAntlrParser.FileDtoFromSourceText("test.java", testJavaClassSourceCode)!;
 
         //Verify
         result.Should().NotBeNull();
@@ -31,7 +31,7 @@ public class ParserHandlerTests
     public void ParserHandlerShouldReturnCollectionWithAnyClassInfoWithClassName()
     {
         //Act
-        FileDto result = ParserHandler.FileDtoFromSourceText("test.java", ".java", testJavaClassSourceCode);
+        FileDto result = PrimitiveAntlrParser.FileDtoFromSourceText("test.java", testJavaClassSourceCode)!;
 
         //Verify
         result.Classes[0].Methods.Any(x => x.Name == "doWork").Should().BeTrue();
@@ -56,7 +56,7 @@ public class ParserHandlerTests
 
             ".TrimIndent2();
 
-        FileDto result = ParserHandler.FileDtoFromSourceText("kotlin.kt", ".kt", source);
+        FileDto result = PrimitiveAntlrParser.FileDtoFromSourceText("kotlin.kt",  source)!;
 
         //Verify
         ClassDto fileInfo = result.Classes.First();

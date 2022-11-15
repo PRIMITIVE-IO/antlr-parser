@@ -71,7 +71,6 @@ static class Program
     {
         return ParserHandler.FileDtoFromSourceText(
             filePath,
-            Path.GetExtension(filePath),
             ParserHandler.GetTextFromFilePath(filePath),
             verbose);
     }
