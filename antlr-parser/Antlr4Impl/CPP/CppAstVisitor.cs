@@ -107,6 +107,7 @@ namespace antlr_parser.Antlr4Impl.CPP
                 .ToList() ?? new List<string>();
 
             int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
+            //  BUG: context.Stop is null on bitcoin\src\validationinterface.cpp
             int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
             CodeRange codeRange = CodeRangeCalculator.Trim(IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx));
 
