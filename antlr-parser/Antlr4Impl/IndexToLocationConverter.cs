@@ -37,6 +37,8 @@ namespace antlr_parser.Antlr4Impl
                 charCounter += LineLengths[lineIdx];
             }
 
+            // BUG: PRIMITIVE\Library\PackageCache\com.unity.xr.openxr@1.4.2\RuntimeDebugger\Native~\openxr_runtime_debugger\api_exports.h
+            // idx 587 is greater than length of file
             throw new Exception($"Cannot find index: {idx}, in string of length: {LineLengths.Sum()}");
         }
     }
