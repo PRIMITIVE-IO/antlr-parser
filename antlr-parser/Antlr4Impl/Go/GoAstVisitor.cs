@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Antlr4.Runtime.Tree;
 using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
 using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
@@ -72,6 +74,16 @@ namespace antlr_parser.Antlr4Impl.Go
             List<AstNode.ClassNode> classes = children.OfType<AstNode.ClassNode>().ToList();
 
             int startIdx = context.Start.StartIndex;
+            
+            var parent = AntlrUtil.FindParent<GoParser.SourceFileContext>(context);
+            
+            int nearestPeerStopIdx = parent.declaration()
+                .Select(x => x.Stop.StopIndex)
+                .Concat(parent.functionDecl().Select(x => x.Stop.StopIndex))
+                .Concat(parent.methodDecl().Select(x => x.Stop.StopIndex))
+                .Where(x => x < startIdx)
+                .Select(x => x + 1)
+                .MinOrDefault();
 
             return new AstNode.ClassNode(
                 name: context.typeSpec().FirstOrDefault()?.IDENTIFIER()?.GetText() ?? "anon",
@@ -82,7 +94,7 @@ namespace antlr_parser.Antlr4Impl.Go
                 startIdx: startIdx,
                 codeRange: CodeRangeCalculator.Trim(
                     IndexToLocationConverter.IdxToCodeRange(
-                        startIdx,
+                        Math.Min(startIdx, nearestPeerStopIdx),
                         context.typeSpec()?.FirstOrDefault()?.type_()?.typeLit()?.structType()?.L_CURLY()?
                             .Symbol?
                             .StartIndex ?? context.Stop.StopIndex
@@ -93,9 +105,18 @@ namespace antlr_parser.Antlr4Impl.Go
 
         public override AstNode VisitFieldDecl(GoParser.FieldDeclContext context)
         {
+            GoParser.SourceFileContext sourceFileCtx = AntlrUtil.FindParent<GoParser.SourceFileContext>(context)!;
+            
+            int nearestPeerStopIdx = sourceFileCtx.declaration().Select(x => x.Stop.StopIndex)
+                .Concat(sourceFileCtx.functionDecl().Select(x => x.Stop.StopIndex))
+                .Concat(sourceFileCtx.methodDecl().Select(x => x.Stop.StopIndex))
+                .Where(x => x < context.Start.StartIndex)
+                .Select(x => x + 1)
+                .MinOrDefault();
+            
             CodeRange codeRange = CodeRangeCalculator.Trim(
                 IndexToLocationConverter.IdxToCodeRange(
-                    MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex),
+                    MethodBodyRemovalResult.RestoreIdx(Math.Min(context.Start.StartIndex,nearestPeerStopIdx)),
                     MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex)
                 )
             );
@@ -119,9 +140,18 @@ namespace antlr_parser.Antlr4Impl.Go
         {
             string name = context.IDENTIFIER().ToString() ?? "anon";
 
+            GoParser.SourceFileContext sourceFileCtx = AntlrUtil.FindParent<GoParser.SourceFileContext>(context)!;
+            
+            int nearestPeerStopIdx = sourceFileCtx.declaration().Select(x => x.Stop.StopIndex)
+                .Concat(sourceFileCtx.functionDecl().Select(x => x.Stop.StopIndex))
+                .Concat(sourceFileCtx.methodDecl().Select(x => x.Stop.StopIndex))
+                .Where(x => x < context.Start.StartIndex)
+                .Select(x => x + 1)
+                .MinOrDefault();
+            
             CodeRange codeRange = CodeRangeCalculator.Trim(
                 IndexToLocationConverter.IdxToCodeRange(
-                    context.Start.StartIndex,
+                    Math.Min(context.Start.StartIndex, nearestPeerStopIdx),
                     context.Stop.StopIndex
                 )
             );
@@ -157,9 +187,18 @@ namespace antlr_parser.Antlr4Impl.Go
 
         public override AstNode VisitMethodDecl(GoParser.MethodDeclContext context)
         {
+            GoParser.SourceFileContext sourceFileCtx = AntlrUtil.FindParent<GoParser.SourceFileContext>(context)!;
+            
+            int nearestPeerStopIdx = sourceFileCtx.declaration().Select(x => x.Stop.StopIndex)
+                .Concat(sourceFileCtx.functionDecl().Select(x => x.Stop.StopIndex))
+                .Concat(sourceFileCtx.methodDecl().Select(x => x.Stop.StopIndex))
+                .Where(x => x < context.Start.StartIndex)
+                .Select(x => x + 1)
+                .MinOrDefault();
+            
             CodeRange codeRange = CodeRangeCalculator.Trim(
                 IndexToLocationConverter.IdxToCodeRange(
-                    context.Start.StartIndex,
+                    Math.Min(context.Start.StartIndex, nearestPeerStopIdx),
                     context.Stop.StopIndex
                 )
             );

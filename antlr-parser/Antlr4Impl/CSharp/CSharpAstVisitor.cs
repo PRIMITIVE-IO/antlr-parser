@@ -4,6 +4,7 @@ using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
+using static antlr_parser.Antlr4Impl.AntlrUtil;
 using CodeRange = PrimitiveCodebaseElements.Primitive.dto.CodeRange;
 
 namespace antlr_parser.Antlr4Impl.CSharp
@@ -422,17 +423,6 @@ public override AstNode VisitFixed_parameter(CSharpParser.Fixed_parameterContext
                 ?.all_member_modifier()
                 .Select(it => Flags(it.GetText()))
                 .FirstOrDefault(it => it != null) ?? AccessFlags.None;
-        }
-
-        static T? FindParent<T>(ParserRuleContext context) where T : ParserRuleContext
-        {
-            RuleContext? cur = context;
-            do
-            {
-                cur = cur.Parent;
-            } while (cur != null && !(cur is T));
-
-            return cur as T;
         }
 
         static AccessFlags? Flags(string flag)

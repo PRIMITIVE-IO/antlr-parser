@@ -63,5 +63,15 @@ namespace antlr_parser.Antlr4Impl
 
             return new[] { c }.Concat(flattenedChildren);
         }
+        public static T? FindParent<T>(ParserRuleContext context) where T : ParserRuleContext
+        {
+            RuleContext? cur = context;
+            do
+            {
+                cur = cur.Parent;
+            } while (cur != null && !(cur is T));
+
+            return cur as T;
+        }
     }
 }

@@ -180,29 +180,37 @@ public class AntlrParseGoTest
         func2.Signature.Should().Be("some/path:main.path.init#2()");
     }
 
-    // TODO [Fact]
+    [Fact]
     public void Comment()
     {
         string source = @"
             package main
-            // Call invokes the (constant) contract method with params as input values and
-            // sets the output to result. The result type might be a single field for simple
-            // returns, a slice of interfaces for anonymous returns and a struct for named
-            // returns.
+            // comment
             func f() {
+            }
+
+            // comment 2
+            func g() {
             }
         ".TrimIndent2();
 
         FileDto? res = AntlrParseGo.Parse(source, "some/path");
 
-        MethodDto func1 = res.Classes[0].Methods[0];
+        MethodDto funcf = res.Classes[0].Methods.Find(x => x.Name == "f");
 
-        func1.CodeRange.Of(source).Should().Be(@"
-            // Call invokes the (constant) contract method with params as input values and
-            // sets the output to result. The result type might be a single field for simple
-            // returns, a slice of interfaces for anonymous returns and a struct for named
-            // returns.
+        funcf.CodeRange.Of(source).Should().Be(@"
+            package main
+            // comment
             func f() {
+            }
+        ".TrimIndent2()
+        );
+        
+        MethodDto funcg = res.Classes[0].Methods.Find(x => x.Name == "g");
+
+        funcg.CodeRange.Of(source).Should().Be(@"
+            // comment 2
+            func g() {
             }
         ".TrimIndent2()
         );
