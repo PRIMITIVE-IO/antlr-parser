@@ -75,7 +75,7 @@ namespace antlr_parser.Antlr4Impl.CPP
             List<AstNode.Namespace> namespaces = members.OfType<AstNode.Namespace>().ToList();
 
             return new AstNode.Namespace(
-                name: context.Identifier().GetText(),
+                name: context.Identifier()?.GetText() ?? "anon",
                 classes: classes,
                 fields: fields,
                 methods: methods,
@@ -344,7 +344,11 @@ namespace antlr_parser.Antlr4Impl.CPP
                 return node;
             }
 
-            PrimitiveLogger.Logger.Instance().Warn($"Cannot parse MemberdeclarationContext: {context.GetFullText()}");
+            string fullText = context.GetFullText();
+            fullText = fullText.Replace('{', ' ');
+            fullText = fullText.Replace('}', ' ');
+
+            PrimitiveLogger.Logger.Instance().Warn($"Cannot parse MemberdeclarationContext: {fullText}");
 
             return null;
         }
