@@ -31,12 +31,13 @@ public class AntlrParseCSharpTest
         fileDto.Classes.Should().HaveCount(1);
         ClassDto classDto = fileDto.Classes[0];
         classDto.PackageName.Should().Be("X");
-        classDto.FullyQualifiedName.Should().Be("X.MyClass");
+        classDto.FullyQualifiedName.Should().Be("some/path:X.MyClass");
         classDto.Name.Should().Be("MyClass");
         classDto.Fields.Should().HaveCount(1);
         classDto.Fields[0].Name.Should().Be("MyField");
         classDto.Methods.Should().HaveCount(1);
         classDto.Methods[0].Name.Should().Be("MyMethod");
+        classDto.Methods[0].Signature.Should().Be("some/path:X.MyClass.MyMethod()");
     }
 
     [Fact]
@@ -115,12 +116,12 @@ public class AntlrParseCSharpTest
         FileDto? fileDto = AntlrParseCSharp.Parse(source, "some/path");
 
         ClassDto topLevelClass = fileDto.Classes[0];
-        topLevelClass.FullyQualifiedName.Should().Be("X.MyClass");
+        topLevelClass.FullyQualifiedName.Should().Be("some/path:X.MyClass");
 
         ClassDto nestedClass = fileDto.Classes[1];
 
-        nestedClass.ParentClassFqn.Should().Be("X.MyClass");
-        nestedClass.FullyQualifiedName.Should().Be("X.MyClass$SecondClass");
+        nestedClass.ParentClassFqn.Should().Be("some/path:X.MyClass");
+        nestedClass.FullyQualifiedName.Should().Be("some/path:X.MyClass$SecondClass");
 
         nestedClass.CodeRange.Of(source).Should().Be(@"
                     |///comment

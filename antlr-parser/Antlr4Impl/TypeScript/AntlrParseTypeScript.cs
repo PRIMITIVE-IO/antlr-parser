@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using antlr_parser.Antlr4Impl;
 using Antlr4.Runtime;
+using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
+
 
 namespace antlr_parser.Antlr4Impl.TypeScript
 {
@@ -12,12 +13,6 @@ namespace antlr_parser.Antlr4Impl.TypeScript
         {
             return ParseFileNode(source, filePath)
                 ?.Let(fileNode => AstNodeToClassDtoConverter.ToFileDto(fileNode, source));
-        }
-
-        //TODO move to library
-        public static R Let<T, R>(this T t, Func<T, R> block)
-        {
-            return block(t);
         }
 
         static AstNode.FileNode? ParseFileNode(string source, string filePath)

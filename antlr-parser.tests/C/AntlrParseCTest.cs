@@ -92,7 +92,7 @@ namespace antlr_parser.tests.C;
                     int x;
                 };".Unindent();
         FileDto fileDto = AntlrParseC.Parse(source, "file/path");
-        fileDto.Classes[0].FullyQualifiedName.Should().Be("Employee");
+        fileDto.Classes[0].FullyQualifiedName.Should().Be("file/path:Employee");
     }
 
     [Fact]

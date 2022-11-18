@@ -93,6 +93,7 @@ namespace antlr_parser.Antlr4Impl
             public readonly CodeRange? CodeRange;
             public readonly List<ArgumentNode> Arguments;
             public readonly string ReturnType;
+            public readonly ArgumentNode? Receiver;
 
             public MethodNode(
                 string name,
@@ -100,7 +101,9 @@ namespace antlr_parser.Antlr4Impl
                 int startIdx,
                 CodeRange? codeRange,
                 List<ArgumentNode> arguments,
-                string returnType)
+                string returnType,
+                ArgumentNode? receiver = default
+            )
             {
                 Name = name;
                 AccFlag = accFlag;
@@ -108,6 +111,7 @@ namespace antlr_parser.Antlr4Impl
                 StartIdx = startIdx;
                 Arguments = arguments;
                 ReturnType = returnType;
+                Receiver = receiver;
             }
         }
 

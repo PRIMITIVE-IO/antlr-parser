@@ -27,23 +27,25 @@ namespace antlr_parser.Antlr4Impl
             string? fakeClassFqn = null;
             List<ClassDto> classesFromNestedNamespaces = ExtractNested(fileNode.Namespaces, fileNode);
 
-            if (fileNode.Fields.Any() || fileNode.Methods.Any() || !fileNode.Classes.Any() && !classesFromNestedNamespaces.Any() )
+            if (fileNode.Fields.Any() || fileNode.Methods.Any() ||
+                !fileNode.Classes.Any() && !classesFromNestedNamespaces.Any())
             {
                 // a fake class is a representation of the file with members -> put this first
                 string fakeClassName = Path.GetFileNameWithoutExtension(fileNode.Path);
-                string? packageNameString = fileNode.PackageNode?.Name;
-                fakeClassFqn = fakeClassName;
-                if (!string.IsNullOrEmpty(packageNameString))
-                {
-                    fakeClassFqn = $"{packageNameString}.{fakeClassName}";
-                }
+
+                fakeClassFqn = FullyQualifiedName(
+                    path: fileNode.Path,
+                    className: fakeClassName,
+                    parentFqn: null,
+                    packageName: fileNode.PackageNode?.Name
+                );
 
                 classes.Add(new ClassDto(
                     path: fileNode.Path,
                     packageName: fileNode.PackageNode?.Name,
                     name: fakeClassName,
                     fullyQualifiedName: fakeClassFqn,
-                    methods: fileNode.Methods.Select(it => ToDto(it, fakeClassFqn)).ToList(),
+                    methods: ToDtos(fileNode.Methods, fakeClassFqn),
                     fields: fileNode.Fields.Select(ToDto).ToList(),
                     modifier: AccessFlags.None,
                     codeRange: fileNode.CodeRange,
@@ -98,12 +100,12 @@ namespace antlr_parser.Antlr4Impl
             return new List<ClassDto>
             {
                 //TODO implement fake classes for namespaces
-                new (
+                new(
                     path: fileNode.Path,
                     packageName: ns.Name,
                     name: ns.Name,
                     fullyQualifiedName: fqn, //fileNode.Path, //parent + ns.Name,
-                    methods: ns.Methods.Select(it => ToDto(it, fqn)).ToList(),
+                    methods: ToDtos(ns.Methods, fqn),
                     fields: ns.Fields.Select(ToDto).ToList(),
                     modifier: AccessFlags.None,
                     codeRange: fileNode.CodeRange, //ns.CodeRange
@@ -120,19 +122,9 @@ namespace antlr_parser.Antlr4Impl
             AstNode.Namespace? nameSpace
         )
         {
-            string fullyQualifiedName;
             string? packageName = nameSpace?.Name ?? fileNode.PackageNode?.Name;
 
-            if (!string.IsNullOrEmpty(parentFqn))
-            {
-                fullyQualifiedName = EnumerableOfNotNull(parentFqn, classNode.Name)
-                    .JoinToString("$");
-            }
-            else
-            {
-                fullyQualifiedName = EnumerableOfNotNull(packageName, classNode.Name)
-                    .JoinToString(".");
-            }
+            string fullyQualifiedName = FullyQualifiedName(fileNode.Path, classNode.Name, parentFqn, packageName);
 
             return new List<ClassDto>
                 {
@@ -141,7 +133,7 @@ namespace antlr_parser.Antlr4Impl
                         packageName: packageName,
                         name: classNode.Name,
                         fullyQualifiedName: fullyQualifiedName,
-                        methods: classNode.Methods.Select(it => ToDto(it, fullyQualifiedName)).ToList(),
+                        methods: ToDtos(classNode.Methods, fullyQualifiedName),
                         fields: classNode.Fields.Select(ToDto).ToList(),
                         modifier: classNode.Modifier,
                         parentClassFqn: parentFqn,
@@ -158,13 +150,66 @@ namespace antlr_parser.Antlr4Impl
                 .ToList();
         }
 
+        private static List<MethodDto> ToDtos(List<AstNode.MethodNode> methodNodes, string fullyQualifiedName)
+        {
+            List<MethodDto> dtos = methodNodes.Select(it => ToDto(it, fullyQualifiedName)).ToList();
+
+            Dictionary<string, int> duplicatedSignaturesToCounter = dtos
+                .GroupBy(x => x.Signature)
+                .Select(x => new { signature = x.Key, count = x.Count() })
+                .Where(x => x.count > 1)
+                .ToDictionary(x => x.signature, x => 1);
+
+            // rename `func init()` to `func init#1()` in case of duplicates 
+            return dtos.Select(x =>
+                    {
+                        int counter = duplicatedSignaturesToCounter.GetValueOrDefault(x.Signature);
+                        if (counter == 0) return x;
+                        duplicatedSignaturesToCounter[x.Signature] = counter + 1;
+                        return new MethodDto(
+                            signature: x.Signature.Replace("(", $"#{counter}("),
+                            name: x.Name,
+                            accFlag: x.AccFlag,
+                            arguments: x.Arguments,
+                            returnType: x.ReturnType,
+                            codeRange: x.CodeRange,
+                            methodReferences: x.MethodReferences,
+                            cyclomaticScore: x.CyclomaticScore
+                        );
+                    }
+                )
+                .ToList();
+        }
+
+        private static string FullyQualifiedName(string path, string className, string? parentFqn, string? packageName)
+        {
+            if (parentFqn == null)
+            {
+                return path + ":" + EnumerableOfNotNull(packageName, className)
+                    .JoinToString(".");
+            }
+
+            return EnumerableOfNotNull(parentFqn, className)
+                .JoinToString("$");
+        }
+
         static MethodDto ToDto(AstNode.MethodNode methodNode, string classFqn)
         {
-            string signature = MethodDto.MethodSignature(classFqn, methodNode.Name, new List<ArgumentDto>());
-
             List<ArgumentDto> arguments = methodNode.Arguments
                 .Select((arg, i) => new ArgumentDto(i, arg.Name, arg.Type))
                 .ToList();
+
+            // args for signature include receiver argument as a first argument
+            List<ArgumentDto> argsForSignature =
+                EnumerableOfNotNull(methodNode.Receiver?.Let(r => new ArgumentDto(0, r.Name, r.Type)))
+                    .Concat(arguments)
+                    .ToList();
+
+            string signature = MethodDto.MethodSignature(
+                classFqn,
+                methodNode.Name,
+                argsForSignature
+            );
 
             return new MethodDto(
                 signature: signature,
