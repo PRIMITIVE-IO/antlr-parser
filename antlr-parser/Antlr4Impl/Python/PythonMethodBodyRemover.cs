@@ -13,14 +13,16 @@ namespace antlr_parser.Antlr4Impl.Python
 
         public static List<Tuple<int, int>> FindBlocksToRemove(string source)
         {
+            string newLineChar = source.Contains("\r\n") ? "\r\n" : "\n";
             return MethodDeclarationRegex.Matches(source).Select(methodDef =>
                 {
                     int methodIndentation = source.IndentationAt(methodDef.Index);
                     int closedParenthesisPosition =
                         source.ClosedParenthesisPosition(methodDef.Index + methodDef.Length - 1);
                     int endMethodDefIdx = MethodDeclarationEndIdx(source, closedParenthesisPosition);
-                    int fromIdx = (source.IndexAfterComment(endMethodDefIdx) ?? endMethodDefIdx) + 1;
-                    int toIdx = source.LastMethodLineIdx(methodIndentation, fromIdx);
+                    // jump to next char and preserve line ending
+                    int fromIdx = (source.IndexAtLastCommentChar(endMethodDefIdx) ?? endMethodDefIdx) + 1 + newLineChar.Length;
+                    int toIdx = source.LastMethodLineIdx(methodIndentation, fromIdx, newLineChar);
 
                     return Tuple.Create(fromIdx, toIdx);
                 })
@@ -29,10 +31,10 @@ namespace antlr_parser.Antlr4Impl.Python
 
         static int MethodDeclarationEndIdx(string source, int startFrom)
         {
-            return MethodDeclarationEndRegex.Match(source, startFrom).Index + 1;
+            return MethodDeclarationEndRegex.Match(source, startFrom).Index;
         }
 
-        static int? IndexAfterComment(this string source, int startFrom)
+        static int? IndexAtLastCommentChar(this string source, int startFrom)
         {
             int tripleQuoteEnd = 0;
             int linesBeforeComment = 0;
@@ -60,7 +62,7 @@ namespace antlr_parser.Antlr4Impl.Python
             {
                 if (OnTripleQuoteEnd(source, i))
                 {
-                    return i + 1;
+                    return i;
                 }
             }
 
@@ -114,18 +116,19 @@ namespace antlr_parser.Antlr4Impl.Python
                 $"Cannot find close parenthesis starting from {firstParenthesisPosition} for: {source}");
         }
 
-        static int LastMethodLineIdx(this string source, int indentation, int startFrom)
+        static int LastMethodLineIdx(this string source, int indentation, int startFrom, string newLineChar)
         {
             OpenBraceFinder openBraceFinder = new OpenBraceFinder();
-            int excerptLength = source[startFrom..].Split('\n')
-                .TakeWhile(s => Indentation(s) > indentation || s.IsBlank())
+            int excerptLength = source[startFrom..].Split(newLineChar)
+                .TakeWhile(line => Indentation(line) > indentation || line.IsBlank())
                 .Reverse()
-                .SkipWhile(s => s.IsBlank()) // skip empty lines after method
-                .SkipWhile(s => !openBraceFinder.CompletedExpression(s))
+                .SkipWhile(line => line.IsBlank()) // skip empty lines after method
+                .SkipWhile(line => !openBraceFinder.CompletedExpression(line))
                 .Skip(1) // skip last non-empty line of the method
-                .Aggregate(0, (acc, s) => acc + s.Length + 1); // `length + 1` count trimmed new line symbols '\n'
+                .Aggregate(0, (acc, line) => acc + line.Length + newLineChar.Length);
 
-            // -1 keep new line char
+            // keep new line char
+            // int extraNewLineCharCount = excerptLength == 0 ? 0 : newLineChar.Length;
             return startFrom + excerptLength - 1;
         }
 

@@ -24,7 +24,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
         {
             List<Tuple<int, int>> removeFromTo = new List<Tuple<int, int>>();
             bool keepNextCurly = false;
-            int lastNonEmptyCharIdx = 0;
+            int lastNonEmptyCharIdx = -1;
             for (int i = 0; i < s.Length; i++)
             {
                 if (s[i] == '{')
@@ -36,7 +36,8 @@ namespace antlr_parser.Antlr4Impl.Kotlin
                     else
                     {
                         int closedCurlyPosition = StringUtil.ClosedCurlyPosition(s, i);
-                        removeFromTo.Add(new Tuple<int, int>(lastNonEmptyCharIdx + 1, closedCurlyPosition));
+                        int removeFrom = lastNonEmptyCharIdx == -1 ? i : lastNonEmptyCharIdx + 1;// should remove spaces between `) {`. Or start removal from `{` if there is no symbols before
+                        removeFromTo.Add(new Tuple<int, int>(removeFrom, closedCurlyPosition));
                         i = closedCurlyPosition; //jump to the end of removed block
                     }
                 }

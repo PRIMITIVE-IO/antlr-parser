@@ -11,6 +11,9 @@ namespace antlr_parser.Antlr4Impl
         public readonly string OriginalSource;
         readonly List<Tuple<int, int>> BlocksToRemove;
 
+        /// <summary>
+        /// Remove blocks from original text. Indices are zero-based. Both start and end index are included (both will be removed)
+        /// </summary>
         public static MethodBodyRemovalResult From(string originalSource, List<Tuple<int, int>> blocksToRemove)
         {
             List<Tuple<int, int>> topLevelBlocksToRemove = RemoveNested(blocksToRemove.ToSortedSet(x => x.Item1));

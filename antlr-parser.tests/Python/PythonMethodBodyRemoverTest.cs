@@ -87,7 +87,7 @@ public class PythonMethodBodyRemoverTest
 
         MethodBodyRemovalResult methodBodyRemovalResult = MethodBodyRemovalResult.From(source, blocksToRemove);
 
-        methodBodyRemovalResult.ShortenedSource.Should().Be(@"
+        string expected = @"
                 def get_test_tfdataset(self, test_dataset: tf.data.Dataset) -> tf.data.Data_set:
                     """"""comment should be kept""""""
                     should_be_kept()
@@ -106,7 +106,8 @@ public class PythonMethodBodyRemoverTest
                     optimizers: Tuple[tf.keras.optimizers.Optimizer, tf.keras.optimizers.schedules.LearningRateSchedule] = (None, None,)
                 ):
                     should_be_kept()
-            ".TrimIndent2());
+            ".TrimIndent2();
+        methodBodyRemovalResult.ShortenedSource.Should().Be(expected);
     }
 
     [Fact]

@@ -28,7 +28,7 @@ public class AntlrParsePython3Test
         ClassDto classDto = fileDto.Classes[0];
         classDto.Name.Should().Be("MyClass");
         string expectedClassHeader = "class MyClass:\n    \"\"\"A simple example class\"\"\"";
-        classDto.CodeRange.Of(source).Should().Be(expectedClassHeader);
+        classDto.CodeRange.Of(source).Should().Be(expectedClassHeader.PlatformSpecific());
 
         classDto.Fields.Should().HaveCount(1);
         FieldDto fieldDto = classDto.Fields[0];
@@ -39,7 +39,7 @@ public class AntlrParsePython3Test
         MethodDto methodDto = classDto.Methods[0];
         methodDto.Name.Should().Be("f");
         methodDto.CodeRange.Of(source).Should()
-            .Be("def f(self):\n        \"\"\"Method comment\"\"\"\n        return 'hello world'");
+            .Be("def f(self):\n        \"\"\"Method comment\"\"\"\n        return 'hello world'".PlatformSpecific());
     }
 
     [Fact]
@@ -69,12 +69,12 @@ public class AntlrParsePython3Test
         MethodDto fMethodDto = classDto.Methods[0];
         fMethodDto.Name.Should().Be("f");
         fMethodDto.CodeRange.Of(source).Should()
-            .Be("def f(self):\n        \"\"\"Method F comment\"\"\"\n        return 'hello F'");
+            .Be("def f(self):\n        \"\"\"Method F comment\"\"\"\n        return 'hello F'".PlatformSpecific());
 
         MethodDto gMethodDto = classDto.Methods[1];
         gMethodDto.Name.Should().Be("g");
         gMethodDto.CodeRange.Of(source).Should()
-            .Be("def g(self):\n        \"\"\"Method G comment\"\"\"\n        return 'hello G'");
+            .Be("def g(self):\n        \"\"\"Method G comment\"\"\"\n        return 'hello G'".PlatformSpecific());
     }
 
     [Fact]
@@ -102,12 +102,12 @@ public class AntlrParsePython3Test
         MethodDto fMethodDto = classDto.Methods[0];
         fMethodDto.Name.Should().Be("f");
         fMethodDto.CodeRange.Of(source).Should()
-            .Be("def f(self):\n        return 'hello F'");
+            .Be("def f(self):\n        return 'hello F'".PlatformSpecific());
 
         MethodDto gMethodDto = classDto.Methods[1];
         gMethodDto.Name.Should().Be("g");
         gMethodDto.CodeRange.Of(source).Should()
-            .Be("def g(self):\n        return 'hello G'");
+            .Be("def g(self):\n        return 'hello G'".PlatformSpecific());
     }
 
     [Fact]
@@ -128,7 +128,7 @@ public class AntlrParsePython3Test
         MethodDto fMethodDto = classDto.Methods[0];
         fMethodDto.Name.Should().Be("f");
         fMethodDto.CodeRange.Of(source).Should()
-            .Be("def f():\n    \"\"\"Function F comment\"\"\"\n    return 'hello F'");
+            .Be("def f():\n    \"\"\"Function F comment\"\"\"\n    return 'hello F'".PlatformSpecific());
     }
 
     [Fact]

@@ -25,7 +25,7 @@ public class DirectivesRemoverTest
 
         List<Tuple<int, int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
-        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be("\n    textToKeep\n");
+        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be("\n    textToKeep\n".PlatformSpecific());
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public class DirectivesRemoverTest
 
         List<Tuple<int, int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
-        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be("\n    textToKeep\n");
+        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be("\n    textToKeep\n".PlatformSpecific());
     }
 
     [Fact]
@@ -76,7 +76,7 @@ public class DirectivesRemoverTest
         List<Tuple<int, int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
         MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should()
-            .Be("\n    textToKeep\n    textToKeep2\n");
+            .Be("\n    textToKeep\n    textToKeep2\n".PlatformSpecific());
     }
 
     [Fact]
@@ -102,6 +102,6 @@ public class DirectivesRemoverTest
         List<Tuple<int, int>> blocksToRemove = DirectivesRemover.FindBlocksToRemove(source);
 
         MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should()
-            .Be("\n    textToKeep\n    textToKeep2\n");
+            .Be("\n    textToKeep\n    textToKeep2\n".PlatformSpecific());
     }
 }

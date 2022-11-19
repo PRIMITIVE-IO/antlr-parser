@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using antlr_parser.Antlr4Impl;
+using antlr_parser.Antlr4Impl.Kotlin;
 using FluentAssertions;
 using PrimitiveCodebaseElements.Primitive;
 using Xunit;
@@ -12,10 +13,7 @@ public class MethodBodyRemovalResultTest
     [Fact]
     public void CreateCorrectIndicesForRemovedBlocks()
     {
-        string source = @"
-                fun f(){ REMOVE }
-                fun g() { REMOVE }
-            ".Unindent();
+        string source = "\nfun f(){ REMOVE }\nfun g() { REMOVE }";
 
         List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>
         {
@@ -27,10 +25,48 @@ public class MethodBodyRemovalResultTest
         MethodBodyRemovalResult result = MethodBodyRemovalResult.From(source, blocksToRemove);
 
         //Verify
-        string expectedSource = @"
-                fun f()
-                fun g()
-            ".Unindent();
+        string expectedSource = "\nfun f()\nfun g()";
+        result.ShortenedSource.Should().Be(expectedSource);
+    }
+    
+    [Fact]
+    public void Smoke()
+    {
+        string source = "123456";
+
+        List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>
+        {
+            new (0, 0),
+            new (2, 2),
+            new (4, 4),
+        };
+
+        //Act
+        MethodBodyRemovalResult result = MethodBodyRemovalResult.From(source, blocksToRemove);
+
+        //Verify
+        string expectedSource = "246";
+        result.ShortenedSource.Should().Be(expectedSource);
+    }
+    
+    
+    [Fact]
+    public void Smoke2()
+    {
+        string source = "1234567890";
+
+        List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>
+        {
+            new (0, 1),
+            new (3, 4),
+            new (6, 7),
+        };
+
+        //Act
+        MethodBodyRemovalResult result = MethodBodyRemovalResult.From(source, blocksToRemove);
+
+        //Verify
+        string expectedSource = "3690";
         result.ShortenedSource.Should().Be(expectedSource);
     }
 
@@ -40,12 +76,7 @@ public class MethodBodyRemovalResultTest
         string source = @"
                 fun f(){ fun h() {} }
             ".Unindent();
-
-        List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>
-        {
-            new Tuple<int, int>(8, 21), // outer fun f(){ fun h() {} }
-            new Tuple<int, int>(18, 19) // inner fun h() {}
-        };
+        var blocksToRemove = RegexBasedKotlinMethodBodyRemover.FindBlocksToRemove(source);
 
         //Act
         MethodBodyRemovalResult result = MethodBodyRemovalResult.From(source, blocksToRemove);
@@ -65,13 +96,7 @@ public class MethodBodyRemovalResultTest
                 fun g() { REMOVE }
                 fun h() { REMOVE }
             ".Unindent();
-
-        List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>
-        {
-            new Tuple<int, int>(8, 17), // first '{ REMOVE }' block
-            new Tuple<int, int>(26, 36), // second ' { REMOVE }' block including leading space
-            new Tuple<int, int>(45, 55)
-        };
+        var blocksToRemove = RegexBasedKotlinMethodBodyRemover.FindBlocksToRemove(source);
 
         //Act
         MethodBodyRemovalResult result = MethodBodyRemovalResult.From(source, blocksToRemove);

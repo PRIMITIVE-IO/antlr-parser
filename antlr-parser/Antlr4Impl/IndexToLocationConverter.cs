@@ -10,7 +10,8 @@ namespace antlr_parser.Antlr4Impl
 
         public IndexToLocationConverter(string text)
         {
-            LineLengths = text.Split('\n').Select(it => it.Length + 1).ToArray();
+            string newLineChar = text.Contains("\r\n") ? "\r\n" : "\n";
+            LineLengths = text.Split(newLineChar).Select(it => it.Length + newLineChar.Length).ToArray();
         }
 
         public CodeRange IdxToCodeRange(int startIdx, int endIdx)

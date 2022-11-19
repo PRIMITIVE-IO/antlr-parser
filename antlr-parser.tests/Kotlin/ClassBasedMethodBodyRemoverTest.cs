@@ -27,11 +27,18 @@ public class ClassBasedMethodBodyRemoverTest
         List<Tuple<int, int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
 
         //Verify
-        blocksToRemove.Count.Should().Be(4);
-        blocksToRemove[0].Should().Be(new Tuple<int, int>(1, 10));
-        blocksToRemove[1].Should().Be(new Tuple<int, int>(31, 40));
-        blocksToRemove[2].Should().Be(new Tuple<int, int>(53, 63));
-        blocksToRemove[3].Should().Be(new Tuple<int, int>(92, 102));
+        string expected = @"
+
+                class {
+                    fun f()
+                    fun g()
+                    class {
+                        fun h()
+                    }
+                }
+        ".Unindent();
+        
+        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be(expected);
     }
 
     [Fact]
@@ -48,9 +55,12 @@ public class ClassBasedMethodBodyRemoverTest
         List<Tuple<int, int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
 
         //Verify
-        blocksToRemove.Count.Should().Be(2);
-        blocksToRemove[0].Should().Be(new Tuple<int, int>(19, 29));
-        blocksToRemove[1].Should().Be(new Tuple<int, int>(42, 52));
+        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be(@"
+                class {
+                    classes
+                    myclass
+                }
+        ".TrimIndent2());
     }
     
     [Fact]
