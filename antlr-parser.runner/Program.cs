@@ -25,7 +25,7 @@ static class Program
     static void Main(string[] args)
     {
         // Create a root command with some options 
-        RootCommand rootCommand = new RootCommand
+        RootCommand rootCommand = new()
         {
             new Option<bool>(
                 new[] { "--verbose", "-v" },
@@ -47,8 +47,8 @@ static class Program
 
     static void Parse(Args args)
     {
-        IEnumerable<FileDto> fileDtos = FilePathsFrom(args.InputPath, args.Verbose)
-            .Where(filePath => ParserHandler.SupportedParsableFiles.Contains(Path.GetExtension(filePath)))
+        IEnumerable<FileDto> fileDtos = FilePathsFrom(args.InputPath)
+            .Where(filePath => PrimitiveAntlrParser.SupportedParsableFiles.Contains(Path.GetExtension(filePath)))
             .SelectNotNull(filePath => ParseFile(filePath, args.Verbose));
 
         if (args.Verbose)
@@ -60,7 +60,7 @@ static class Program
         }
     }
 
-    static IEnumerable<string> FilePathsFrom(string inputPath, bool verbose)
+    static IEnumerable<string> FilePathsFrom(string inputPath)
     {
         return File.GetAttributes(inputPath).HasFlag(FileAttributes.Directory) 
             ? Directory.GetFiles(inputPath, "*.*", SearchOption.AllDirectories) 
@@ -69,9 +69,9 @@ static class Program
 
     static FileDto? ParseFile(string filePath, bool verbose)
     {
-        return ParserHandler.FileDtoFromSourceText(
+        return PrimitiveAntlrParser.FileDtoFromSourceText(
             filePath,
-            ParserHandler.GetTextFromFilePath(filePath),
+            PrimitiveAntlrParser.GetTextFromFilePath(filePath),
             verbose);
     }
 
