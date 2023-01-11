@@ -304,4 +304,15 @@ public class AntlrParsePython3Test
                 # (and less in keeping with all other attr accesses) dict[""x""]
             ".TrimIndent2());
     }
+
+    [Fact]
+    public void InvalidNewLineSeparators()
+    {
+        string source = TestUtils.Resource("invalid_new_line_separators.py");
+        FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
+
+        fileDto.Classes.Should().HaveCount(1);
+        fileDto.Classes[0].Methods.Should().HaveCount(1);
+        fileDto.Classes[0].Methods[0].CodeRange.Should().Be(CodeRange.Of(10, 1, 18, 25));
+    }
 }

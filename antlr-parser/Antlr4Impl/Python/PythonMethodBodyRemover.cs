@@ -9,7 +9,7 @@ namespace antlr_parser.Antlr4Impl.Python
     public static class PythonMethodBodyRemover
     {
         static Regex MethodDeclarationRegex = new Regex(@"def \w*\(");
-        static Regex MethodDeclarationEndRegex = new Regex(":\r?\n");
+        static Regex MethodDeclarationEndRegex = new Regex(@":\s*\r?\n");
 
         public static List<Tuple<int, int>> FindBlocksToRemove(string source)
         {

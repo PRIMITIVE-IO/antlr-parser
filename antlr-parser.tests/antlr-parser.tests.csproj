@@ -38,9 +38,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Resources\TestCsharp.txt" />
         <EmbeddedResource Include="Resources\TestCsharp.txt" />
-        <None Remove="Resources\TestCsharp2.txt" />
+        <EmbeddedResource Include="Resources\invalid_new_line_separators.py" />
     </ItemGroup>
 
 </Project>
