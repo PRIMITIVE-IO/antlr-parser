@@ -7,19 +7,6 @@
     "unityRelease": "0b12",
     "documentationUrl": "https://primitive.io/",
     "licensesUrl": "https://primitive.io/legal",
-    "dependencies": {
-      "Antlr4.Runtime.Standard": "4.10.1",
-      "PrimitiveCodebaseElements": "0.32.0",
-      "System.CommandLine": "2.0.0-beta4.22272.1",
-      "System.CommandLine.NamingConventionBinder": "2.0.0-beta4.22272.1",
-      "AutoFixture.Xunit2": "4.17.0",
-      "FluentAssertions": "6.7.0",
-      "Microsoft.NET.Test.Sdk": "17.4.0-preview-20220726-02",
-      "xunit": "2.4.2",
-      "xunit.assert": "2.4.2",
-      "xunit.runner.visualstudio": "2.4.5",
-      "coverlet.collector": "3.1.2"
-    },
     "author": {
       "name": "Primitive IO",
       "email": "john@primitive.io",
