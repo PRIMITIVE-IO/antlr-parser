@@ -315,7 +315,7 @@ public class AntlrParseJavaScriptTest
 
         fakeClass.CodeRange.Of(source).Should().Be(source);
     }
-    
+
     [Fact]
     void DoesntFailOnDeconstruction()
     {
@@ -333,7 +333,7 @@ public class AntlrParseJavaScriptTest
 
         FileDto fileDto = AntlrParseJavaScript.Parse(source, "any/path");
     }
-    
+
     [Fact]
     void ParseExportedFunctionAsMethod()
     {
@@ -352,5 +352,35 @@ public class AntlrParseJavaScriptTest
         AntlrParseJavaScript.Parse(source, "any/path");
 
         // should not fail
+    }
+
+    [Fact]
+    void StaticMembers()
+    {
+        string source = @"
+            class X {
+               static x = 1;
+            };
+        ".TrimIndent2();
+
+        FileDto fileDto = AntlrParseJavaScript.Parse(source, "any/path");
+
+        fileDto.Classes[0].Name.Should().Be("X");
+        fileDto.Classes[0].Methods[0].Name.Should().Be("x");
+    }
+
+    [Fact]
+    void ExportClass()
+    {
+        string source = @"
+            export class ImageOrientation {
+                 f(){}
+            }
+        ".TrimIndent2();
+
+        FileDto fileDto = AntlrParseJavaScript.Parse(source, "any/path");
+
+        fileDto.Classes[0].Name.Should().Be("ImageOrientation");
+        fileDto.Classes[0].Methods[0].Name.Should().Be("f");
     }
 }

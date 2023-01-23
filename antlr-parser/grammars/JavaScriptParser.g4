@@ -238,7 +238,7 @@ classTail
 classElement
     : (Static | {this.n("static")}? identifier | Async)* (methodDefinition | assignable '=' objectLiteral ';')
     | emptyStatement_
-    | '#'? propertyName '=' singleExpression
+    | '#'? Static? propertyName '=' singleExpression
     ;
 
 methodDefinition

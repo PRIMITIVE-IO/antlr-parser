@@ -29,8 +29,6 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
         public override AstNode VisitProgram(JavaScriptParser.ProgramContext context)
         {
-            
-
             List<AstNode.ClassNode> classes = new List<AstNode.ClassNode>();
             List<AstNode.MethodNode> methods = new List<AstNode.MethodNode>();
             List<AstNode.FieldNode> fields = new List<AstNode.FieldNode>();
@@ -111,7 +109,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
         {
             if (context.children.OfType<JavaScriptParser.MemberDotExpressionContext>().FirstOrDefault()?.GetText() !=
                 "module.exports") return null;
-            
+
             return context.children.OfType<JavaScriptParser.FunctionExpressionContext>().FirstOrDefault()?.Accept(this);
         }
 
@@ -191,7 +189,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
 
             if (context.propertyName() != null)
             {
-                // field containing lambda, like `field = x => { return 10 }` 
+                // field containing lambda, like `field = x => { return 10 }` //TODO field is more honest
                 int startIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
                 int endIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
                 CodeRange codeRange = IndexToLocationConverter.IdxToCodeRange(startIdx, endIdx);
@@ -300,20 +298,14 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             {
                 case null:
                     return -1;
-                case JavaScriptParser.StatementContext _:
-                case JavaScriptParser.SourceElementContext _:
-                    return PreviousPeerEndPosition(parent.Parent, parent);
-                default:
-                {
-                    JavaScriptParser.SourceElementsContext sourceElementsContext =
-                        parent as JavaScriptParser.SourceElementsContext;
-
-                    return sourceElementsContext.sourceElement()
+                case JavaScriptParser.SourceElementsContext sourceElement:
+                    return sourceElement.sourceElement()
                         .TakeWhile(it => it != self)
                         .Select(it => it.Stop.StopIndex + 1)
                         .DefaultIfEmpty(-1)
                         .Max();
-                }
+                default:
+                    return PreviousPeerEndPosition(parent.Parent, parent);
             }
         }
     }
