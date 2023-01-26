@@ -601,13 +601,6 @@ public interface IJavaScriptParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitDeleteExpression([NotNull] JavaScriptParser.DeleteExpressionContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>ImportExpression</c>
-	/// labeled alternative in <see cref="JavaScriptParser.singleExpression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitImportExpression([NotNull] JavaScriptParser.ImportExpressionContext context);
-	/// <summary>
 	/// Visit a parse tree produced by the <c>EqualityExpression</c>
 	/// labeled alternative in <see cref="JavaScriptParser.singleExpression"/>.
 	/// </summary>

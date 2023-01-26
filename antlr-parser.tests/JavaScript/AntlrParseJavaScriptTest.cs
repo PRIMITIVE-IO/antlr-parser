@@ -383,4 +383,25 @@ public class AntlrParseJavaScriptTest
         fileDto.Classes[0].Name.Should().Be("ImageOrientation");
         fileDto.Classes[0].Methods[0].Name.Should().Be("f");
     }
+
+    [Fact]
+    void NotFailOnForOf()
+    {
+        string source = @"
+                for (const [x, y, z = f(x)] of xs) {
+                }
+        ".TrimIndent2();
+
+        FileDto fileDto = AntlrParseJavaScript.Parse(source, "any/path");
+    }
+
+    [Fact]
+    void DoNotFailOnDynamicImportWithMoreThanOneParameter()
+    {
+        string source = @"
+            const x = import('x', { a: { b: 1 } });
+        ";
+
+        FileDto fileDto = AntlrParseJavaScript.Parse(source, "any/path");
+    }
 }
