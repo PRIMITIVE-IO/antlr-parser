@@ -1,5 +1,5 @@
 {
-    "name": "@primitive-io/io.primitive.antlr-parser",
+    "name": "io.primitive.antlr_parser",
     "version": "0.0.0",
     "displayName": "Primitive Antler Parser",
     "description": "Antler Parser",
