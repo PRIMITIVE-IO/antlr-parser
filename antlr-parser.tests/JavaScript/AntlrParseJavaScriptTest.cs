@@ -55,14 +55,12 @@ public class AntlrParseJavaScriptTest
                 }
             ".TrimIndent2();
         FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
-        res.Classes.Should().HaveCount(2);
-        ClassDto script = res.Classes[0];
-        script.Name.Should().Be("path");
+        res.Classes.Should().HaveCount(1);
 
-        script.Methods.Count().Should().Be(1);
-        script.Methods.First().Name.Should().Be("f");
-        script.Methods.First().CodeRange.Of(source).Should().Be("function f(x){ return 10; }");
-        ClassDto klass = res.Classes[1];
+        res.Functions.Count().Should().Be(1);
+        res.Functions.First().Name.Should().Be("f");
+        res.Functions.First().CodeRange.Of(source).Should().Be("function f(x){ return 10; }");
+        ClassDto klass = res.Classes[0];
         klass.Name.Should().Be("C");
         klass.Methods.Count().Should().Be(1);
         MethodDto method = klass.Methods.First();
@@ -77,13 +75,10 @@ public class AntlrParseJavaScriptTest
                 var x = 10;
             ".TrimIndent2();
         FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
-        res.Classes.Count().Should().Be(1);
-        ClassDto script = res.Classes.First();
-        script.Name.Should().Be("path");
 
-        script.Fields.Count().Should().Be(1);
-        script.Fields.First().Name.Should().Be("x");
-        script.Fields.First().CodeRange.Of(source).Should().Be("x = 10");
+        res.Fields.Count().Should().Be(1);
+        res.Fields.First().Name.Should().Be("x");
+        res.Fields.First().CodeRange.Of(source).Should().Be("x = 10");
     }
 
     [Fact]
@@ -93,13 +88,10 @@ public class AntlrParseJavaScriptTest
                 const { y: { x } } = obj;
             ".Unindent();
         FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
-        res.Classes.Count().Should().Be(1);
-        ClassDto script = res.Classes.First();
-        script.Name.Should().Be("path");
 
-        script.Fields.Count().Should().Be(1);
-        script.Fields.First().Name.Should().Be("x");
-        script.Fields.First().CodeRange.Of(source).Should().Be("{ y: { x } } = obj");
+        res.Fields.Count().Should().Be(1);
+        res.Fields.First().Name.Should().Be("x");
+        res.Fields.First().CodeRange.Of(source).Should().Be("{ y: { x } } = obj");
     }
 
     [Fact]
@@ -109,13 +101,10 @@ public class AntlrParseJavaScriptTest
                 const { a: { x, y } } = obj;
             ".Unindent();
         FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
-        res.Classes.Count().Should().Be(1);
-        ClassDto script = res.Classes.First();
-        script.Name.Should().Be("path");
 
-        script.Fields.Count().Should().Be(1);
-        script.Fields.First().Name.Should().Be("x,y");
-        script.Fields.First().CodeRange.Of(source).Should().Be("{ a: { x, y } } = obj");
+        res.Fields.Count().Should().Be(1);
+        res.Fields.First().Name.Should().Be("x,y");
+        res.Fields.First().CodeRange.Of(source).Should().Be("{ a: { x, y } } = obj");
     }
 
     [Fact]
@@ -125,13 +114,11 @@ public class AntlrParseJavaScriptTest
                 const [x, ...y] = obj;
             ".Unindent();
         FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
-        res.Classes.Count().Should().Be(1);
-        ClassDto script = res.Classes.First();
-        script.Name.Should().Be("path");
+        res.Path.Should().Be("any/path");
 
-        script.Fields.Count().Should().Be(1);
-        script.Fields.First().Name.Should().Be("x,y");
-        script.Fields.First().CodeRange.Of(source).Should().Be("[x, ...y] = obj");
+        res.Fields.Count().Should().Be(1);
+        res.Fields.First().Name.Should().Be("x,y");
+        res.Fields.First().CodeRange.Of(source).Should().Be("[x, ...y] = obj");
     }
 
     [Fact]
@@ -141,13 +128,11 @@ public class AntlrParseJavaScriptTest
                 const { a: [x, ...y]} = obj;
             ".Unindent();
         FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
-        res.Classes.Count().Should().Be(1);
-        ClassDto script = res.Classes.First();
-        script.Name.Should().Be("path");
+        res.Classes.Count().Should().Be(0);
 
-        script.Fields.Count().Should().Be(1);
-        script.Fields.First().Name.Should().Be("x,y");
-        script.Fields.First().CodeRange.Of(source).Should().Be("{ a: [x, ...y]} = obj");
+        res.Fields.Count().Should().Be(1);
+        res.Fields.First().Name.Should().Be("x,y");
+        res.Fields.First().CodeRange.Of(source).Should().Be("{ a: [x, ...y]} = obj");
     }
 
     [Fact]
@@ -157,13 +142,11 @@ public class AntlrParseJavaScriptTest
                 const { a: [{x}, ...y], z} = obj;
             ".Unindent();
         FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
-        res.Classes.Count().Should().Be(1);
-        ClassDto script = res.Classes.First();
-        script.Name.Should().Be("path");
+        res.Classes.Count().Should().Be(0);
 
-        script.Fields.Count().Should().Be(1);
-        script.Fields.First().Name.Should().Be("x,y,z");
-        script.Fields.First().CodeRange.Of(source).Should().Be("{ a: [{x}, ...y], z} = obj");
+        res.Fields.Count().Should().Be(1);
+        res.Fields.First().Name.Should().Be("x,y,z");
+        res.Fields.First().CodeRange.Of(source).Should().Be("{ a: [{x}, ...y], z} = obj");
     }
 
     [Fact]
@@ -221,12 +204,9 @@ public class AntlrParseJavaScriptTest
             ".TrimIndent2();
         FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
 
-        ClassDto fakeClass = res.Classes.First();
-
-        fakeClass.CodeRange.Of(source).Should().Be(
+        res.Functions.First().CodeRange.Of(source).Should().Be(
             @"
-                requires('')
-                /**comment1*/
+                function f(){}
             ".TrimIndent2()
         );
     }
@@ -243,16 +223,13 @@ public class AntlrParseJavaScriptTest
             ".TrimIndent2();
         FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
 
-        ClassDto fakeClass = res.Classes[0];
-
-        fakeClass.CodeRange.Of(source).Should().Be(
+        res.Functions[0].CodeRange.Of(source).Should().Be(
             @"
-                requires('')
-                /**comment1*/
+                function f(){}
             ".TrimIndent2()
         );
 
-        res.Classes[1].CodeRange.Of(source).Should().Be(
+        res.Classes[0].CodeRange.Of(source).Should().Be(
             @"
                 /**comment2*/
                 class A {}
@@ -270,7 +247,7 @@ public class AntlrParseJavaScriptTest
             ".Unindent();
         FileDto res = AntlrParseJavaScript.Parse(source, "any/path");
 
-        res.Classes[0].Methods[0].CodeRange.Of(source).Should().Be(
+        res.Functions[0].CodeRange.Of(source).Should().Be(
             @"
                 function f(){
                    return 10;
@@ -311,9 +288,6 @@ public class AntlrParseJavaScriptTest
         ".TrimIndent2();
 
         FileDto fileDto = AntlrParseJavaScript.Parse(source, "any/path");
-        ClassDto fakeClass = fileDto.Classes.Single();
-
-        fakeClass.CodeRange.Of(source).Should().Be(source);
     }
 
     [Fact]
@@ -342,7 +316,7 @@ public class AntlrParseJavaScriptTest
         ";
 
         FileDto fileDto = AntlrParseJavaScript.Parse(source, "any/path");
-        fileDto.Classes[0].Methods[0].Name.Should().Be("autoImporter");
+        fileDto.Functions[0].Name.Should().Be("autoImporter");
     }
 
     [Fact]

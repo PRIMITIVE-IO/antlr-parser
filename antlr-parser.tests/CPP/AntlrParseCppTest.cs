@@ -18,11 +18,10 @@ public class AntlrParseCppTest
                    return 10; 
                 }
             ".TrimIndent2();
-        FileDto classInfos = AntlrParseCpp.Parse(source, "path");
+        FileDto fileDto = AntlrParseCpp.Parse(source, "path");
 
-        ClassDto classInfo = classInfos.Classes.First();
-        classInfo.Name.Should().Be("path");
-        MethodDto method = classInfo.Methods.Single();
+        fileDto.Path.Should().Be("path");
+        MethodDto method = fileDto.Functions.Single();
 
         method.Name.Should().Be("f");
         method.CodeRange.Of(source).Should().Be(@"
@@ -40,11 +39,9 @@ public class AntlrParseCppTest
                    return 10; 
                 };
             ".TrimIndent2();
-        FileDto classInfos = AntlrParseCpp.Parse(source, "path");
+        FileDto fileDto = AntlrParseCpp.Parse(source, "path");
 
-        ClassDto classInfo = classInfos.Classes.First();
-        classInfo.Name.Should().Be("path");
-        MethodDto method = classInfo.Methods.Single();
+        MethodDto method = fileDto.Functions.Single();
 
         method.Name.Should().Be("f");
         method.CodeRange.Of(source).Should().Be(@"
@@ -60,11 +57,9 @@ public class AntlrParseCppTest
         string source = @"
                 int f(int a, int b);
             ".TrimIndent2();
-        FileDto classInfos = AntlrParseCpp.Parse(source, "path");
+        FileDto fileDto = AntlrParseCpp.Parse(source, "path");
 
-        ClassDto classInfo = classInfos.Classes.First();
-        classInfo.Name.Should().Be("path");
-        MethodDto method = classInfo.Methods.Single();
+        MethodDto method = fileDto.Functions.Single();
 
         method.Name.Should().Be("f");
         method.CodeRange.Of(source).Should().Be(@"
@@ -209,11 +204,10 @@ public class AntlrParseCppTest
                     int y = 0;
                     static a b GUARDED_BY(c) = 0;
             ".Unindent();
-        FileDto classInfos = AntlrParseCpp.Parse(source, "path");
+        FileDto fileDto = AntlrParseCpp.Parse(source, "path");
 
-        ClassDto classInfo = classInfos.Classes.First();
-        classInfo.Fields.ToArray()[0].Name.Should().Be("x");
-        classInfo.Fields.ToArray()[1].Name.Should().Be("y");
+        fileDto.Fields.ToArray()[0].Name.Should().Be("x");
+        fileDto.Fields.ToArray()[1].Name.Should().Be("y");
         // classInfo.Fields.ToArray()[2].Name.Should().Be("b"); TODO GUARDED BY is a macro :(
     }
 
@@ -226,10 +220,9 @@ public class AntlrParseCppTest
                        
                     }
             ".Unindent();
-        FileDto classInfos = AntlrParseCpp.Parse(source, "path");
+        FileDto fileDto = AntlrParseCpp.Parse(source, "path");
 
-        ClassDto classInfo = classInfos.Classes.First();
-        classInfo.Methods.Single().Name.Should().Be("T1");
+        fileDto.Functions.Single().Name.Should().Be("T1");
     }
 
     [Fact]
@@ -240,10 +233,9 @@ public class AntlrParseCppTest
                  
                 }
             ".Unindent();
-        FileDto classInfos = AntlrParseCpp.Parse(source, "path");
+        FileDto fileDto = AntlrParseCpp.Parse(source, "path");
 
-        ClassDto classInfo = classInfos.Classes.First();
-        classInfo.Methods.Single().Name.Should().Be("()");
+        fileDto.Functions.Single().Name.Should().Be("()");
     }
 
     [Fact]
@@ -270,10 +262,9 @@ public class AntlrParseCppTest
                     
                 }
             ".Unindent();
-        FileDto classInfos = AntlrParseCpp.Parse(source, "path");
+        FileDto fileDto = AntlrParseCpp.Parse(source, "path");
 
-        ClassDto classInfo = classInfos.Classes.Single();
-        classInfo.Methods.Single().Name.Should().Be("<<");
+        fileDto.Functions.Single().Name.Should().Be("<<");
     }
 
     [Fact]
@@ -302,8 +293,7 @@ public class AntlrParseCppTest
             ".Unindent();
         FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-        ClassDto classInfo = classInfos.Classes.Single();
-        classInfo.Methods.Single().Name.Should().Be("~Session");
+        classInfos.Functions.Single().Name.Should().Be("~Session");
     }
 
     [Fact]
@@ -314,10 +304,9 @@ public class AntlrParseCppTest
                 {
                 }
             ".Unindent();
-        FileDto classInfos = AntlrParseCpp.Parse(source, "path");
+        FileDto fileDto = AntlrParseCpp.Parse(source, "path");
 
-        ClassDto classInfo = classInfos.Classes.Single();
-        classInfo.Methods.Single().Name.Should().Be("bool");
+        fileDto.Functions.Single().Name.Should().Be("bool");
     }
 
     [Fact]
@@ -328,8 +317,7 @@ public class AntlrParseCppTest
             ".Unindent();
         FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-        ClassDto classInfo = classInfos.Classes.Single();
-        classInfo.Fields.Single().Name.Should().Be("MAX_GETUTXOS_OUTPOINTS");
+        classInfos.Fields.Single().Name.Should().Be("MAX_GETUTXOS_OUTPOINTS");
     }
 
     //[Fact]TODO
@@ -406,7 +394,7 @@ public class AntlrParseCppTest
             ".TrimIndent2();
         FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
-        ClassDto classInfo = classInfos.Classes[1];
+        ClassDto classInfo = classInfos.Classes[0];
         classInfo.CodeRange.Of(source).Should().Be(@"
                 /**comment*/
                 class A{

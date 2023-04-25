@@ -25,7 +25,7 @@ namespace antlr_parser.tests.C;
 
         FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
-        MethodDto method = fileDto.Classes[0].Methods[0];
+        MethodDto method = fileDto.Functions[0];
         method.Name.Should().Be("addNumbers");
         method.CodeRange.Of(source).Should().Be(source);
     }
@@ -117,9 +117,7 @@ namespace antlr_parser.tests.C;
                 #include ""HeaderX.h""
                 #include ""SymbolsX.h""
             ".Unindent();
-        FileDto fileDto = AntlrParseC.Parse(source, "file/path");
-        fileDto.Classes.Should().HaveCount(1);
-        fileDto.Classes[0].CodeRange.Of(source).Should().Be(source.TrimIndent2());
+        AntlrParseC.Parse(source, "file/path");
     }
 
     [Fact]
@@ -166,7 +164,7 @@ namespace antlr_parser.tests.C;
 
         FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
-        List<MethodDto> methodInfos = fileDto.Classes[0].Methods;
+        List<MethodDto> methodInfos = fileDto.Functions;
 
         // methodInfos.Count().Should().Be(2);
         MethodDto vaweMethod = methodInfos.Single(it => it.Name == "AudioDecodeWave");
@@ -194,7 +192,7 @@ namespace antlr_parser.tests.C;
 
         FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
-        List<MethodDto> methodInfos = fileDto.Classes[0].Methods;
+        List<MethodDto> methodInfos = fileDto.Functions;
         MethodDto fMethod = methodInfos.Single(it => it.Name == "f");
         fMethod.Should().NotBeNull();
 
@@ -229,7 +227,7 @@ namespace antlr_parser.tests.C;
 
             FileDto fileDto = AntlrParseC.Parse(source, "file/path");
 
-            List<MethodDto> methodInfos = fileDto.Classes[0].Methods;
+            List<MethodDto> methodInfos = fileDto.Functions;
             MethodDto fMethod = methodInfos.Single(it => it.Name == "f");
             fMethod.Should().NotBeNull();
 

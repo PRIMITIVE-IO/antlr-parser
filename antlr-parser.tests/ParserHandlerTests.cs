@@ -56,19 +56,9 @@ public class ParserHandlerTests
 
             ".TrimIndent2();
 
-        FileDto result = PrimitiveAntlrParser.FileDtoFromSourceText("kotlin.kt",  source)!;
+        FileDto result = PrimitiveAntlrParser.FileDtoFromSourceText("kotlin.kt", source)!;
 
-        //Verify
-        ClassDto fileInfo = result.Classes.First();
-        fileInfo.CodeRange.Of(source).Should().Be(
-            @"
-                  package pkg
-                  
-                  /** comment */
-            ".TrimIndent2()
-        );
-
-        ClassDto classInfo = result.Classes[1];
+        ClassDto classInfo = result.Classes[0];
         classInfo.Name.Should().Be("C");
         classInfo.CodeRange.Of(source).Should().Be(
             @"
@@ -84,6 +74,11 @@ public class ParserHandlerTests
                 fun method() {
                     println()
                   }
+            ".TrimIndent2()
+        );
+        result.Functions.Single().CodeRange.Of(source).Should().Be(
+            @"
+                fun outerFunction() { }
             ".TrimIndent2()
         );
     }

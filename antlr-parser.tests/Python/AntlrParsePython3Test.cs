@@ -121,11 +121,10 @@ public class AntlrParsePython3Test
 
         FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 
-        ClassDto classDto = fileDto.Classes[0];
 
 
-        classDto.Methods.Should().HaveCount(1);
-        MethodDto fMethodDto = classDto.Methods[0];
+        fileDto.Functions.Should().HaveCount(1);
+        MethodDto fMethodDto = fileDto.Functions[0];
         fMethodDto.Name.Should().Be("f");
         fMethodDto.CodeRange.Of(source).Should()
             .Be("def f():\n    \"\"\"Function F comment\"\"\"\n    return 'hello F'".PlatformSpecific());
@@ -138,7 +137,7 @@ public class AntlrParsePython3Test
 
         FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 
-        MethodDto fMethodDto = fileDto.Classes[0].Methods[0];
+        MethodDto fMethodDto = fileDto.Functions[0];
         fMethodDto.CodeRange.Of(source).Should()
             .Be("def f():\r\n    \"\"\"Function F comment\"\"\"\r\n    return 'hello F'");
     }
@@ -288,9 +287,9 @@ public class AntlrParsePython3Test
 
         FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 
-        fileDto.Classes.Should().HaveCount(2);
-        fileDto.Classes[0].Methods.Should().HaveCount(6);
-        fileDto.Classes[0].Methods[5].CodeRange.Of(source).Should().Be(@"
+        fileDto.Classes.Should().HaveCount(1);
+        fileDto.Functions.Should().HaveCount(6);
+        fileDto.Functions[5].CodeRange.Of(source).Should().Be(@"
                 def digest_locals(obj, keys=None):
                     caller_locals = filtered_locals(
                         inspect.currentframe().f_back.f_locals
@@ -311,8 +310,7 @@ public class AntlrParsePython3Test
         string source = TestUtils.Resource("invalid_new_line_separators.py");
         FileDto fileDto = AntlrParsePython3.Parse(source, "some/path");
 
-        fileDto.Classes.Should().HaveCount(1);
-        fileDto.Classes[0].Methods.Should().HaveCount(1);
-        fileDto.Classes[0].Methods[0].CodeRange.Should().Be(CodeRange.Of(10, 1, 18, 25));
+        fileDto.Functions.Should().HaveCount(1);
+        fileDto.Functions[0].CodeRange.Should().Be(CodeRange.Of(10, 1, 18, 25));
     }
 }

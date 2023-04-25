@@ -29,12 +29,10 @@ public class AntlrParserKotlinTest
                 fun f(){}
             ".TrimIndent2();
         FileDto res = AntlrParseKotlin.Parse(source, "path");
-        res.Classes.Should().HaveCount(2);
+        res.Classes.Should().HaveCount(1);
 
-        ClassDto fakeClass = res.Classes[0];
-        fakeClass.Name.Should().Be("path");
-        fakeClass.Methods.Count().Should().Be(1);
-        res.Classes[1].Name.Should().Be("X");
+        res.Functions.Count().Should().Be(1);
+        res.Classes[0].Name.Should().Be("X");
     }
 
 

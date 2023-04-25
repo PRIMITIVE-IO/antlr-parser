@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
 using PrimitiveCodebaseElements.Primitive;
 using PrimitiveCodebaseElements.Primitive.dto;
 using static antlr_parser.Antlr4Impl.AntlrUtil;
@@ -33,7 +34,6 @@ namespace antlr_parser.Antlr4Impl.Python
             List<AstNode> children = context.children
                 .SelectNotNull(x => x.Accept(this))
                 .ToList();
-
 
             List<AstNode.ClassNode> classNodes = children.OfType<AstNode.ClassNode>().ToList();
             List<AstNode.FieldNode> fieldNodes = children.OfType<AstNode.FieldNode>().ToList();
@@ -96,9 +96,7 @@ namespace antlr_parser.Antlr4Impl.Python
 
         public override AstNode VisitSimple_stmt(Python3Parser.Simple_stmtContext context)
         {
-            string text = context.GetText();
-
-            if (text.StartsWith("\"\"\""))
+            if (IsComment(context))
             {
                 int commentEndIdx = MethodBodyRemovalResult.RestoreIdx(context.Stop.StopIndex);
 
@@ -110,9 +108,7 @@ namespace antlr_parser.Antlr4Impl.Python
 
         public override AstNode VisitExpr_stmt(Python3Parser.Expr_stmtContext context)
         {
-            string text = context.GetText();
-
-            if (text.StartsWith("\"\"\""))
+            if (IsComment(context))
             {
                 int commentStartIdx = MethodBodyRemovalResult.RestoreIdx(context.Start.StartIndex);
                 return new AstNode.Comment(commentStartIdx);
@@ -169,6 +165,11 @@ namespace antlr_parser.Antlr4Impl.Python
         protected override AstNode AggregateResult(AstNode aggregate, AstNode nextResult)
         {
             return AstNode.NodeList.Combine(aggregate, nextResult);
+        }
+
+        static bool IsComment(IParseTree context)
+        {
+            return context.GetText().StartsWith("\"\"\"") || context.GetText().StartsWith("'''");
         }
     }
 }

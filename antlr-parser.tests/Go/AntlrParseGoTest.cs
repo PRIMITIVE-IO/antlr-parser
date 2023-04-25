@@ -26,7 +26,11 @@ public class AntlrParseGoTest
         cls.Name.Should().Be("person");
         cls.FullyQualifiedName.Should().Be("some/path:main.person");
 
-        cls.CodeRange.Of(source).Should().Be("type person struct {");
+        cls.CodeRange.Of(source).Should().Be(@"
+            package main
+            import ""fmt""
+            type person struct {
+        ".TrimIndent2());
 
         cls.Fields[0].Name.Should().Be("name");
         cls.Fields[0].CodeRange.Of(source).Should().Be("name string");
@@ -61,27 +65,13 @@ public class AntlrParseGoTest
 
         FileDto? res = AntlrParseGo.Parse(source, "some/path");
 
-
-        ClassDto fakeClass = res.Classes[0];
-        fakeClass.FullyQualifiedName.Should().Be("some/path:main.path");
-        fakeClass.Name.Should().Be("path");
-
-        fakeClass.CodeRange.Of(source).Should().Be(@"
-            package main
-
-            import (
-	            ""fmt""
-                ""math""
-            )
-        ".TrimIndent2());
-
-        MethodDto method = fakeClass.Methods[0];
+        MethodDto method = res.Functions[0];
         method.Name.Should().Be("Abs");
 
-        MethodDto function = fakeClass.Methods[1];
+        MethodDto function = res.Functions[1];
         function.Name.Should().Be("main");
 
-        ClassDto vertexClass = res.Classes[1];
+        ClassDto vertexClass = res.Classes[0];
         vertexClass.Name.Should().Be("Vertex");
 
         vertexClass.Fields[0].Name.Should().Be("X");
@@ -102,9 +92,9 @@ public class AntlrParseGoTest
 
         FileDto? res = AntlrParseGo.Parse(source, "some/path");
 
-        MethodDto func = res.Classes[0].Methods[0];
+        MethodDto func = res.Functions[0];
         func.Name.Should().Be("f");
-        func.Signature.Should().Be("some/path:main.path.f(int,double)");
+        func.Signature.Should().Be("some/path:main.f(int,double)");
 
         ArgumentDto arg1 = func.Arguments[0];
         arg1.Name.Should().Be("x");
@@ -116,6 +106,7 @@ public class AntlrParseGoTest
 
         func.ReturnType.Should().Be("float");
         func.CodeRange.Of(source).Should().Be(@"
+            package main
             func f(x int, y double) float {
                 
             }
@@ -134,9 +125,9 @@ public class AntlrParseGoTest
 
         FileDto? res = AntlrParseGo.Parse(source, "some/path");
 
-        MethodDto func = res.Classes[0].Methods[0];
+        MethodDto func = res.Functions[0];
         func.Name.Should().Be("f");
-        func.Signature.Should().Be("some/path:main.path.f(Vertex,int,double)");
+        func.Signature.Should().Be("some/path:main.f(Vertex,int,double)");
     }
 
     [Fact]
@@ -151,9 +142,9 @@ public class AntlrParseGoTest
 
         FileDto? res = AntlrParseGo.Parse(source, "some/path");
 
-        MethodDto func = res.Classes[0].Methods[0];
+        MethodDto func = res.Functions[0];
         func.Name.Should().Be("unregister");
-        func.Signature.Should().Be("some/path:main.path.unregister(serverSet,clientPeer)");
+        func.Signature.Should().Be("some/path:main.unregister(serverSet,clientPeer)");
     }
 
     [Fact]
@@ -171,13 +162,13 @@ public class AntlrParseGoTest
 
         FileDto? res = AntlrParseGo.Parse(source, "some/path");
 
-        MethodDto func1 = res.Classes[0].Methods[0];
+        MethodDto func1 = res.Functions[0];
         func1.Name.Should().Be("init");
-        func1.Signature.Should().Be("some/path:main.path.init#1()");
+        func1.Signature.Should().Be("some/path:main.init#1()");
 
-        MethodDto func2 = res.Classes[0].Methods[1];
+        MethodDto func2 = res.Functions[1];
         func2.Name.Should().Be("init");
-        func2.Signature.Should().Be("some/path:main.path.init#2()");
+        func2.Signature.Should().Be("some/path:main.init#2()");
     }
 
     [Fact]
@@ -196,7 +187,7 @@ public class AntlrParseGoTest
 
         FileDto? res = AntlrParseGo.Parse(source, "some/path");
 
-        MethodDto funcf = res.Classes[0].Methods.Find(x => x.Name == "f");
+        MethodDto funcf = res.Functions.Find(x => x.Name == "f");
 
         funcf.CodeRange.Of(source).Should().Be(@"
             package main
@@ -206,7 +197,7 @@ public class AntlrParseGoTest
         ".TrimIndent2()
         );
         
-        MethodDto funcg = res.Classes[0].Methods.Find(x => x.Name == "g");
+        MethodDto funcg = res.Functions.Find(x => x.Name == "g");
 
         funcg.CodeRange.Of(source).Should().Be(@"
             // comment 2
@@ -227,8 +218,8 @@ public class AntlrParseGoTest
 
         FileDto? res = AntlrParseGo.Parse(source, "some/path");
 
-        MethodDto func1 = res.Classes[0].Methods[0];
-        func1.Signature.Should().Be("some/path:main.path.Call([]interface)");
+        MethodDto func1 = res.Functions[0];
+        func1.Signature.Should().Be("some/path:main.Call([]interface)");
     }
 
     [Fact]
@@ -242,7 +233,7 @@ public class AntlrParseGoTest
 
         FileDto? res = AntlrParseGo.Parse(source, "some/path");
 
-        MethodDto func1 = res.Classes[0].Methods[0];
-        func1.Signature.Should().Be("some/path:main.path.Call([]interface)");
+        MethodDto func1 = res.Functions[0];
+        func1.Signature.Should().Be("some/path:main.Call([]interface)");
     }
 }
