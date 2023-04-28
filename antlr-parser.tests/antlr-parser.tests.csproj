@@ -3,11 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <RootNamespace>antlr_parser.tests</RootNamespace>
-
         <IsPackable>false</IsPackable>
-
-        <LangVersion>10</LangVersion>
-
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
@@ -25,7 +21,6 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <None Include="../README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -42,9 +37,5 @@
         <EmbeddedResource Include="Resources\TestCsharp.txt" />
         <EmbeddedResource Include="Resources\invalid_new_line_separators.py" />
     </ItemGroup>
-
-    <PropertyGroup>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    </PropertyGroup>
 
 </Project>
