@@ -29,16 +29,16 @@ namespace antlr_parser.Antlr4Impl
             );
         }
 
-        private static string FileFqn(string path, string? package)
+        static string FileFqn(string path, string? package)
         {
             return EnumerableOfNotNull(path, package).JoinToString(":");
         }
-        
+
         /// <summary>
         /// extracts nested fields, methods, or classes from list of namespaces
         /// </summary>
         /// <returns></returns>
-        static List<ClassDto> ExtractNested(List<AstNode.Namespace> namespaces, AstNode.FileNode fileNode)
+        static IEnumerable<ClassDto> ExtractNested(IEnumerable<AstNode.Namespace> namespaces, AstNode.FileNode fileNode)
         {
             return namespaces.SelectMany(nameSpace =>
                 {
@@ -53,7 +53,7 @@ namespace antlr_parser.Antlr4Impl
 
                     return classes.Concat(nested);
                 }
-            ).ToList();
+            );
         }
 
         static IEnumerable<ClassDto> ToDto(
@@ -91,38 +91,38 @@ namespace antlr_parser.Antlr4Impl
                 .ToList();
         }
 
-        private static List<MethodDto> ToDtos(List<AstNode.MethodNode> methodNodes, string parentFullyQualifiedName)
+        static List<MethodDto> ToDtos(IEnumerable<AstNode.MethodNode> methodNodes, string parentFullyQualifiedName)
         {
             List<MethodDto> dtos = methodNodes.Select(it => ToDto(it, parentFullyQualifiedName)).ToList();
 
             Dictionary<string, int> duplicatedSignaturesToCounter = dtos
-                .GroupBy(x => x.Signature)
-                .Select(x => new { signature = x.Key, count = x.Count() })
-                .Where(x => x.count > 1)
-                .ToDictionary(x => x.signature, x => 1);
+                .GroupBy(methodDto => methodDto.Signature)
+                .Select(methodDtos => new { signature = methodDtos.Key, count = methodDtos.Count() })
+                .Where(arg => arg.count > 1)
+                .ToDictionary(arg => arg.signature, x => 1);
 
             // rename `func init()` to `func init#1()` in case of duplicates 
-            return dtos.Select(x =>
+            return dtos.Select(methodDto =>
                     {
-                        int counter = duplicatedSignaturesToCounter.GetValueOrDefault(x.Signature);
-                        if (counter == 0) return x;
-                        duplicatedSignaturesToCounter[x.Signature] = counter + 1;
+                        int counter = duplicatedSignaturesToCounter.GetValueOrDefault(methodDto.Signature);
+                        if (counter == 0) return methodDto;
+                        duplicatedSignaturesToCounter[methodDto.Signature] = counter + 1;
                         return new MethodDto(
-                            signature: x.Signature.Replace("(", $"#{counter}("),
-                            name: x.Name,
-                            accFlag: x.AccFlag,
-                            arguments: x.Arguments,
-                            returnType: x.ReturnType,
-                            codeRange: x.CodeRange,
-                            methodReferences: x.MethodReferences,
-                            cyclomaticScore: x.CyclomaticScore
+                            signature: methodDto.Signature.Replace("(", $"#{counter}("),
+                            name: methodDto.Name,
+                            accFlag: methodDto.AccFlag,
+                            arguments: methodDto.Arguments,
+                            returnType: methodDto.ReturnType,
+                            codeRange: methodDto.CodeRange,
+                            methodReferences: methodDto.MethodReferences,
+                            cyclomaticScore: methodDto.CyclomaticScore
                         );
                     }
                 )
                 .ToList();
         }
 
-        private static string FullyQualifiedName(string path, string className, string? parentFqn, string? packageName)
+        static string FullyQualifiedName(string path, string className, string? parentFqn, string? packageName)
         {
             if (parentFqn == null)
             {
