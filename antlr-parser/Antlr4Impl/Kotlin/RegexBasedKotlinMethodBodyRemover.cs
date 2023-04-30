@@ -29,7 +29,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
             fun f():A<B.c>? {
             fun f(): A<B, C> {
         */
-        static readonly Regex KotlinFunctionDeclarationRegex = new Regex(
+        static readonly Regex KotlinFunctionDeclarationRegex = new(
             "fun\\s+[\\w, <, >, \\[,\\],\\-,_,`,\\.]*\\s*\\((\\s*(vararg\\s*)?\\w*\\s*:\\s*[\\w, <, >, \\[, \\],\\?,=,\\(,\\),->,\\.]*\\s*,?)*\\)(\\s*:\\s*[<,>,\\[,\\],\\w,\\?,\\., ]*[\\w,>,?])?(\\s*)({)");
 
         /// <summary>

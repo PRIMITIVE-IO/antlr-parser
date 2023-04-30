@@ -226,7 +226,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
 
         static List<CSharpParser.Class_definitionContext> FindClassDefinitionContexts(IParseTree parseTree)
         {
-            List<CSharpParser.Class_definitionContext> result = new List<CSharpParser.Class_definitionContext>();
+            List<CSharpParser.Class_definitionContext> result = new();
             for (int i = 0; i < parseTree.ChildCount; i++)
             {
                 IParseTree child = parseTree.GetChild(i);

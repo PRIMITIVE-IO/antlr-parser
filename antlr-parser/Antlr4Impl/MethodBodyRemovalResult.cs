@@ -71,7 +71,7 @@ namespace antlr_parser.Antlr4Impl
         /// <returns></returns>
         static List<Tuple<int, int>> RemoveNested(SortedSet<Tuple<int, int>> blocksForRemoval)
         {
-            List<Tuple<int, int>> res = new List<Tuple<int, int>>();
+            List<Tuple<int, int>> res = new();
             int lastIndexForRemoval = -1;
             foreach (Tuple<int, int> blockForRemoval in blocksForRemoval)
             {

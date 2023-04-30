@@ -25,7 +25,7 @@ namespace antlr_parser.Antlr4Impl.C
             bool PSBTInput::IsNull() const{
             bool DecodeRawPSBT(PartiallySignedTransaction& psbt, const std::string& tx_data, std::string& error){
         */
-        static readonly Regex CFunctionDeclarationRegex = new Regex(
+        static readonly Regex CFunctionDeclarationRegex = new(
             "\\w+(\\s*\\[\\s*\\])?\\s+(\\w+::)?\\w+\\s*\\([\\w,\\,\\s,\\[,\\],\\*,\\&,:,<,>]*\\)(\\s+const)?(\\s*)(\\{)");
 
         /// <summary>

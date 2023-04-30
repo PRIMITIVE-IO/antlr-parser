@@ -18,7 +18,7 @@ namespace antlr_parser.Antlr4Impl.Java
             final public string f(s[] x, List<Z> a){              
         */
 
-        static readonly Regex MethodDeclarationRegex = new Regex(
+        static readonly Regex MethodDeclarationRegex = new(
             @"(public |private |protected |static |final )?(public |private |protected |static |final )?(public |private |protected |static |final )?(public |private |protected |static |final )?(<[A-Za-z0-9_]*> )?([A-Za-z0-9_\[\]<>]*) ([A-Za-z0-9_]*)(\s)*\(([A-Za-z\[\]<>,\s]*)\)\s*(\{)"
         );
 

@@ -6,7 +6,7 @@ namespace antlr_parser.Antlr4Impl.Python
 {
     public class OpenBraceFinder
     {
-        readonly Stack<char> Stack = new Stack<char>();
+        readonly Stack<char> Stack = new();
 
         public bool CompletedExpression(string line)
         {

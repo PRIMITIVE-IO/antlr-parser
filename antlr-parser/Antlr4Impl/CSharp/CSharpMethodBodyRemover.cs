@@ -24,7 +24,7 @@ namespace antlr_parser.Antlr4Impl.CSharp
             while(x){
         */
 
-        static readonly Regex MethodDeclarationRegex = new Regex(
+        static readonly Regex MethodDeclarationRegex = new(
             @"(?<!if)(?<!for)(?<!foreach)(?<!while)\s*?\(.*?\)\s*?({)"
         );
 

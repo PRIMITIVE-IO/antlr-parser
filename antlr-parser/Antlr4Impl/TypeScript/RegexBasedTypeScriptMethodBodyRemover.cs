@@ -20,7 +20,7 @@ namespace antlr_parser.Antlr4Impl.TypeScript
             f(){
             f (a:{b,c,[d,...rest]}){
         */
-        static readonly Regex TypescriptFunctionDeclarationRegex = new Regex(
+        static readonly Regex TypescriptFunctionDeclarationRegex = new(
             "(function\\*?)?\\s*(\\w)+\\s*\\([\\w,\\s,\\,:,\\[,\\],\\{,\\},\\.,=]*\\)(\\s*)(\\{)");
 
         /// <summary>

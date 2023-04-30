@@ -12,12 +12,12 @@ namespace antlr_parser.Antlr4Impl.CSharp
     {
         public static ListTokenSource TokenSource(Lexer preprocessorLexer)
         {
-            List<IToken> codeTokens = new List<IToken>();
-            List<IToken> commentTokens = new List<IToken>();
+            List<IToken> codeTokens = new();
+            List<IToken> commentTokens = new();
 
             // Collect all tokens with lexer (CSharpLexer.g4).
             IList<IToken> tokens = preprocessorLexer.GetAllTokens();
-            List<IToken> directiveTokens = new List<IToken>();
+            List<IToken> directiveTokens = new();
             ListTokenSource directiveTokenSource = new ListTokenSource(directiveTokens);
             CommonTokenStream directiveTokenStream = new CommonTokenStream(directiveTokenSource, CSharpLexer.DIRECTIVE);
             CSharpPreprocessorParser preprocessorParser = new CSharpPreprocessorParser(directiveTokenStream);

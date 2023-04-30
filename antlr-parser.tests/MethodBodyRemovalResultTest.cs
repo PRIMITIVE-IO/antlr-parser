@@ -15,7 +15,7 @@ public class MethodBodyRemovalResultTest
     {
         string source = "\nfun f(){ REMOVE }\nfun g() { REMOVE }";
 
-        List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>
+        List<Tuple<int, int>> blocksToRemove = new()
         {
             new Tuple<int, int>(8, 17), // first '{ REMOVE }' block
             new Tuple<int, int>(26, 36) // second ' { REMOVE }' block including leading space
@@ -34,7 +34,7 @@ public class MethodBodyRemovalResultTest
     {
         string source = "123456";
 
-        List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>
+        List<Tuple<int, int>> blocksToRemove = new()
         {
             new (0, 0),
             new (2, 2),
@@ -55,7 +55,7 @@ public class MethodBodyRemovalResultTest
     {
         string source = "1234567890";
 
-        List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>
+        List<Tuple<int, int>> blocksToRemove = new()
         {
             new (0, 1),
             new (3, 4),
@@ -128,7 +128,7 @@ public class MethodBodyRemovalResultTest
             ".TrimIndent2();
 
 
-        List<Tuple<int, int>> blocksToRemove1 = new List<Tuple<int, int>>
+        List<Tuple<int, int>> blocksToRemove1 = new()
         {
             block(original, '(', ')')
         };
@@ -141,7 +141,7 @@ public class MethodBodyRemovalResultTest
                 ]
                 &textAfter
             ".TrimIndent2());
-        List<Tuple<int, int>> blocksToRemove2 = new List<Tuple<int, int>>
+        List<Tuple<int, int>> blocksToRemove2 = new()
         {
             block(rem.ShortenedSource, '[', ']')
         };

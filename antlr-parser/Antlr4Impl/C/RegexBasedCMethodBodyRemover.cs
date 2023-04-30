@@ -21,7 +21,7 @@ namespace antlr_parser.Antlr4Impl.C
             int[] a ( x x, y y) {
             fsw_status_t fsw_mount(void *host_data, struct fsw_host_table **host_table) {
         */
-        static readonly Regex CFunctionDeclarationRegex = new Regex(
+        static readonly Regex CFunctionDeclarationRegex = new(
             "\\w+(\\s*\\[\\s*\\])?\\s+\\w+\\s*\\([\\w,\\,\\s,\\[,\\],\\*]*\\)(\\s*)(\\{)");
 
         /// <summary>

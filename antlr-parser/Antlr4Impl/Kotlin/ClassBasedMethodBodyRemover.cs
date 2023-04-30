@@ -22,7 +22,7 @@ namespace antlr_parser.Antlr4Impl.Kotlin
     {
         public static List<Tuple<int, int>> FindBlocksToRemove(string s)
         {
-            List<Tuple<int, int>> removeFromTo = new List<Tuple<int, int>>();
+            List<Tuple<int, int>> removeFromTo = new();
             bool keepNextCurly = false;
             int lastNonEmptyCharIdx = -1;
             for (int i = 0; i < s.Length; i++)

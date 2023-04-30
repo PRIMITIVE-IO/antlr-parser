@@ -12,9 +12,9 @@ namespace antlr_parser.Antlr4Impl.C
     public static class DirectivesRemover
     {
         //matches text from # to end of a line
-        static readonly Regex IfRegex = new Regex("^[ \\t]*#if((n)?def)?.*?$", RegexOptions.Multiline);
-        static readonly Regex ElseRegex = new Regex("^[ \\t]*#(elif|else).*?$", RegexOptions.Multiline);
-        static readonly Regex EndifRegex = new Regex("^[ \\t]*#endif.*?$", RegexOptions.Multiline);
+        static readonly Regex IfRegex = new("^[ \\t]*#if((n)?def)?.*?$", RegexOptions.Multiline);
+        static readonly Regex ElseRegex = new("^[ \\t]*#(elif|else).*?$", RegexOptions.Multiline);
+        static readonly Regex EndifRegex = new("^[ \\t]*#endif.*?$", RegexOptions.Multiline);
 
         enum DirectiveType
         {
@@ -37,7 +37,7 @@ namespace antlr_parser.Antlr4Impl.C
 
         public static List<Tuple<int, int>> FindBlocksToRemove(string source)
         {
-            List<Tuple<int, int>> blocksToRemove = new List<Tuple<int, int>>();
+            List<Tuple<int, int>> blocksToRemove = new();
 
             IList<Match> ifMatches = IfRegex.Matches(source).Cast<Match>().ToList();
             IList<Match> endifMatches = EndifRegex.Matches(source).Cast<Match>().ToList();

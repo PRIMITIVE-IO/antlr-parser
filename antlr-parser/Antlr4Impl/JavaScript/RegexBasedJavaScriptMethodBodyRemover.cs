@@ -19,7 +19,7 @@ namespace antlr_parser.Antlr4Impl.JavaScript
             f (a:{b,c,[d,...rest]}){
             function generateAssets(repo, outputName, commit = """", diffs = [], iGenerateDB = false, createDBcallback = null) {
         */
-        static readonly Regex KotlinFunctionDeclarationRegex = new Regex(
+        static readonly Regex KotlinFunctionDeclarationRegex = new(
             @"(function\*?)?\s*(\w)+\s*\([\w,\s,\,:,\[,\],\{,\},\.,=""]*\)(\s*)(\{)");
 
         /// <summary>

@@ -17,14 +17,13 @@ namespace antlr_parser
     public static class PrimitiveAntlrParser
     {
         // see: https://github.com/dyne/file-extension-list
-        public static readonly HashSet<string> SupportedParsableFiles =
-            new HashSet<string>
-            {
-                ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3", ".js", ".jsx", ".kt", 
-                ".sol", ".ts", ".go"
-            };
-        
-          public static FileDto? FileDtoFromSourceText(
+        public static readonly HashSet<string> SupportedParsableFiles = new()
+        {
+            ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3", ".js", ".jsx", ".kt",
+            ".sol", ".ts", ".go"
+        };
+
+        public static FileDto? FileDtoFromSourceText(
             string filePath,
             string sourceText,
             bool verbose = false)
