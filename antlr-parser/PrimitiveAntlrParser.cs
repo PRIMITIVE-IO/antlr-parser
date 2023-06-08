@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using antlr_parser.Antlr4Impl.C;
+using antlr_parser.Antlr4Impl.Cobol;
 using antlr_parser.Antlr4Impl.CPP;
 using antlr_parser.Antlr4Impl.CSharp;
 using antlr_parser.Antlr4Impl.Go;
@@ -20,7 +21,7 @@ namespace antlr_parser
         public static readonly HashSet<string> SupportedParsableFiles = new()
         {
             ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3", ".js", ".jsx", ".kt",
-            ".sol", ".ts", ".go"
+            ".sol", ".ts", ".go", ".cbl"
         };
 
         public static FileDto? FileDtoFromSourceText(
@@ -80,6 +81,10 @@ namespace antlr_parser
                         filePath);
                 case ".go":
                     return AntlrParseGo.Parse(
+                        sourceText,
+                        filePath);
+                case ".cbl":
+                    return AntlrParseCobol.Parse(
                         sourceText,
                         filePath);
             }
