@@ -3,6 +3,7 @@ using System.IO;
 using antlr_parser.Antlr4Impl.C;
 using antlr_parser.Antlr4Impl.CPP;
 using antlr_parser.Antlr4Impl.CSharp;
+using antlr_parser.Antlr4Impl.Fortran;
 using antlr_parser.Antlr4Impl.Go;
 using antlr_parser.Antlr4Impl.Java;
 using antlr_parser.Antlr4Impl.JavaScript;
@@ -20,7 +21,7 @@ namespace antlr_parser
         public static readonly HashSet<string> SupportedParsableFiles = new()
         {
             ".java", ".cs", ".h", ".hxx", ".hpp", ".cpp", ".c", ".cc", ".m", ".py", ".py3", ".js", ".jsx", ".kt",
-            ".sol", ".ts", ".go"
+            ".sol", ".ts", ".go", ".f90"
         };
 
         public static FileDto? FileDtoFromSourceText(
@@ -80,6 +81,10 @@ namespace antlr_parser
                         filePath);
                 case ".go":
                     return AntlrParseGo.Parse(
+                        sourceText,
+                        filePath);
+                case ".f90":
+                    return AntlrParseFortran.Parse(
                         sourceText,
                         filePath);
             }
