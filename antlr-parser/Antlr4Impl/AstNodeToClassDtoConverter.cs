@@ -73,11 +73,13 @@ namespace antlr_parser.Antlr4Impl
                         path: fileNode.Path,
                         packageName: packageName,
                         name: classNode.Name,
+                        classId: -1,
                         fullyQualifiedName: fullyQualifiedName,
                         methods: ToDtos(classNode.Methods, fullyQualifiedName),
                         fields: classNode.Fields.Select(ToDto).ToList(),
                         modifier: classNode.Modifier,
                         parentClassFqn: parentFqn,
+                        parentClassId: null,
                         codeRange: classNode.CodeRange!,
                         referencesFromThis: new List<ClassReferenceDto>()
                     )
@@ -110,6 +112,7 @@ namespace antlr_parser.Antlr4Impl
                         return new MethodDto(
                             signature: methodDto.Signature.Replace("(", $"#{counter}("),
                             name: methodDto.Name,
+                            methodId: -1,
                             accFlag: methodDto.AccFlag,
                             arguments: methodDto.Arguments,
                             returnType: methodDto.ReturnType,
@@ -137,24 +140,27 @@ namespace antlr_parser.Antlr4Impl
         static MethodDto ToDto(AstNode.MethodNode methodNode, string classFqn)
         {
             List<ArgumentDto> arguments = methodNode.Arguments
-                .Select((arg, i) => new ArgumentDto(i, arg.Name, arg.Type))
+                .Select((arg, i) => new ArgumentDto(i, arg.Name, arg.Type, -1))
                 .ToList();
 
             // args for signature include receiver argument as a first argument
             List<ArgumentDto> argsForSignature =
-                EnumerableOfNotNull(methodNode.Receiver?.Let(r => new ArgumentDto(0, r.Name, r.Type)))
+                EnumerableOfNotNull(methodNode.Receiver?.Let(r => new ArgumentDto(0, r.Name, r.Type, -1)))
                     .Concat(arguments)
                     .ToList();
 
             string signature = MethodDto.MethodSignature(
+                methodNode.AccFlag,
                 classFqn,
                 methodNode.Name,
-                argsForSignature
+                argsForSignature,
+                methodNode.ReturnType
             );
 
             return new MethodDto(
                 signature: signature,
                 name: methodNode.Name,
+                methodId: -1,
                 accFlag: methodNode.AccFlag,
                 arguments: arguments,
                 returnType: methodNode.ReturnType,
@@ -170,7 +176,8 @@ namespace antlr_parser.Antlr4Impl
                 name: fieldNode.Name,
                 type: "void",
                 accFlag: fieldNode.AccFlag,
-                codeRange: fieldNode.CodeRange
+                codeRange: fieldNode.CodeRange,
+                fieldId: -1
             );
         }
     }
