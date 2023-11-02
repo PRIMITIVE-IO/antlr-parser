@@ -38,7 +38,7 @@ public class ClassBasedMethodBodyRemoverTest
                 }
         ".Unindent();
         
-//        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be(expected);
+        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be(expected);
     }
 
     [Fact]
@@ -55,12 +55,12 @@ public class ClassBasedMethodBodyRemoverTest
         List<Tuple<int, int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
 
         //Verify
-//        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be(@"
-//                class {
-//                    classes
-//                    myclass
-//                }
-//        ".TrimIndent2());
+        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be(@"
+                class {
+                    classes
+                    myclass
+                }
+        ".TrimIndent2());
     }
     
     [Fact]
@@ -80,16 +80,16 @@ public class ClassBasedMethodBodyRemoverTest
         List<Tuple<int, int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
 
         //Verify
-//        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be(@"
-//
-//                object X {
-//                    fun f()
-//                    fun g()
-//                    class {
-//                        fun h()
-//                    }
-//                }
-//        ".Unindent());
+        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be(@"
+
+                object X {
+                    fun f()
+                    fun g()
+                    class {
+                        fun h()
+                    }
+                }
+        ".Unindent());
     }
     [Fact]
     public void RemoveAllCurliesExceptInterfaceOnes()
@@ -108,15 +108,15 @@ public class ClassBasedMethodBodyRemoverTest
         List<Tuple<int, int>> blocksToRemove = ClassBasedMethodBodyRemover.FindBlocksToRemove(source);
 
         //Verify
-//        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be(@"
-//
-//                interface X {
-//                    fun f()
-//                    fun g()
-//                    class {
-//                        fun h()
-//                    }
-//                }
-//        ".Unindent());
+        MethodBodyRemovalResult.From(source, blocksToRemove).ShortenedSource.Should().Be(@"
+
+                interface X {
+                    fun f()
+                    fun g()
+                    class {
+                        fun h()
+                    }
+                }
+        ".Unindent());
     }
 }

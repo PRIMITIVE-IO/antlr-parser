@@ -24,11 +24,11 @@ public class AntlrParseCppTest
         MethodDto method = fileDto.Functions.Single();
 
         method.Name.Should().Be("f");
-//        method.CodeRange.Of(source).Should().Be(@"
-//                int f(int a, int b) {
-//                   return 10; 
-//                }
-//            ".TrimIndent2());
+        method.CodeRange.Of(source).Should().Be(@"
+                int f(int a, int b) {
+                   return 10; 
+                }
+            ".TrimIndent2());
     }
 
     [Fact]
@@ -44,11 +44,11 @@ public class AntlrParseCppTest
         MethodDto method = fileDto.Functions.Single();
 
         method.Name.Should().Be("f");
-//        method.CodeRange.Of(source).Should().Be(@"
-//                int f(int a, int b) {
-//                   return 10; 
-//                };
-//            ".TrimIndent2());
+        method.CodeRange.Of(source).Should().Be(@"
+                int f(int a, int b) {
+                   return 10; 
+                };
+            ".TrimIndent2());
     }
 
     [Fact]
@@ -62,9 +62,9 @@ public class AntlrParseCppTest
         MethodDto method = fileDto.Functions.Single();
 
         method.Name.Should().Be("f");
-//        method.CodeRange.Of(source).Should().Be(@"
-//                int f(int a, int b);
-//            ".TrimIndent2());
+        method.CodeRange.Of(source).Should().Be(@"
+                int f(int a, int b);
+            ".TrimIndent2());
     }
 
     [Fact]
@@ -85,11 +85,11 @@ public class AntlrParseCppTest
         MethodDto method = classInfo.Methods.Single();
 
         method.Name.Should().Be("f");
-//        method.CodeRange.Of(source).Should().Be(@"
-//                int f(int a, int b) {
-//                       return 10; 
-//                    }
-//            ".TrimIndent2());
+        method.CodeRange.Of(source).Should().Be(@"
+                int f(int a, int b) {
+                       return 10; 
+                    }
+            ".TrimIndent2());
 
         FieldDto field = classInfo.Fields.Single();
         field.Name.Should().Be("x");
@@ -280,9 +280,9 @@ public class AntlrParseCppTest
 
         ClassDto classInfo = classInfos.Classes.Single();
         classInfo.Name.Should().Be("E");
-//        classInfo.CodeRange.Of(source).Should().Be(@"
-//                enum class E {
-//            ".TrimIndent2());
+        classInfo.CodeRange.Of(source).Should().Be(@"
+                enum class E {
+            ".TrimIndent2());
     }
 
     [Fact]
@@ -374,10 +374,10 @@ public class AntlrParseCppTest
         FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
         ClassDto classInfo = classInfos.Classes.Single();
-//        classInfo.CodeRange.Of(source).Should().Be(@"
-//                /**comment*/
-//                class A{
-//            ".TrimIndent2());
+        classInfo.CodeRange.Of(source).Should().Be(@"
+                /**comment*/
+                class A{
+            ".TrimIndent2());
     }
 
     [Fact]
@@ -395,10 +395,10 @@ public class AntlrParseCppTest
         FileDto classInfos = AntlrParseCpp.Parse(source, "path");
 
         ClassDto classInfo = classInfos.Classes[0];
-//        classInfo.CodeRange.Of(source).Should().Be(@"
-//                /**comment*/
-//                class A{
-//            ".TrimIndent2());
+        classInfo.CodeRange.Of(source).Should().Be(@"
+                /**comment*/
+                class A{
+            ".TrimIndent2());
     }
 
     [Fact]
@@ -417,9 +417,9 @@ public class AntlrParseCppTest
 
         ClassDto classInfo = classInfos.Classes.ToArray()[1];
         classInfo.Name.Should().Be("B");
-//        classInfo.CodeRange.Of(source).Should().Be(@"
-//                /**comment*/
-//                class B{
-//            ".TrimIndent2());
+        classInfo.CodeRange.Of(source).Should().Be(@"
+                /**comment*/
+                class B{
+            ".TrimIndent2());
     }
 }

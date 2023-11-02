@@ -18,7 +18,7 @@ public static class TestUtils
         string resourceName = $"antlr_parser.tests.Resources.{name}";
         using Stream stream = assembly.GetManifestResourceStream(resourceName);
         using StreamReader reader = new StreamReader(stream);
-        return reader.ReadToEnd();
+        return reader.ReadToEnd().PlatformSpecific();
     }
 
     public static string PlatformSpecific(this string str)

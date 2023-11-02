@@ -35,40 +35,40 @@ public class AntlrParseJavaTest
         myClass.Name.Should().Be("MyClass");
         myClass.Modifier.Should().Be(AccessFlags.AccPublic);
         myClass.Fields.Should().HaveCount(1);
-//        myClass.CodeRange.Of(source).Should().Be(@"
-//                package MyPackage;
-//
-//                // My class comment
-//                public class MyClass {
-//            ".TrimIndent2());
+        myClass.CodeRange.Of(source).Should().Be(@"
+                package MyPackage;
+
+                // My class comment
+                public class MyClass {
+            ".TrimIndent2());
 
         FieldDto myField = myClass.Fields[0];
         myField.Name.Should().Be("myField");
         myField.AccFlag.Should().Be(AccessFlags.AccPublic);
-//        myField.CodeRange.Of(source).Should().Be(@"
-//                |//field comment
-//                |    public String myField;
-//            ".TrimMargin());
+        myField.CodeRange.Of(source).Should().Be(@"
+                |//field comment
+                |    public String myField;
+            ".TrimMargin());
 
         myClass.Methods.Should().HaveCount(2);
         MethodDto constructor = myClass.Methods[0];
         constructor.Name.Should().Be("MyClass");
         constructor.AccFlag.Should().Be(AccessFlags.AccPublic);
-//        constructor.CodeRange.Of(source).Should().Be(@"
-//                |//constructor comment
-//                |    public MyClass(){
-//                |    }
-//            ".TrimMargin());
+        constructor.CodeRange.Of(source).Should().Be(@"
+                |//constructor comment
+                |    public MyClass(){
+                |    }
+            ".TrimMargin());
 
         MethodDto myMethod = myClass.Methods[1];
         myMethod.Name.Should().Be("myMethod");
         myMethod.AccFlag.Should().Be(AccessFlags.AccPublic);
-//        myMethod.CodeRange.Of(source).Should().Be(@"
-//                |//method comment
-//                |    public String myMethod(){
-//                |        return """";
-//                |    }
-//            ".TrimMargin());
+        myMethod.CodeRange.Of(source).Should().Be(@"
+                |//method comment
+                |    public String myMethod(){
+                |        return """";
+                |    }
+            ".TrimMargin());
     }
 
     [Fact]
@@ -98,15 +98,15 @@ public class AntlrParseJavaTest
 
         fileDto.Classes.Should().HaveCount(1);
         ClassDto myEnum = fileDto.Classes[0];
-//        myEnum.CodeRange.Of(source).Should().Be(@"
-//                package MyPackage;
-//
-//                // enum comment
-//                public enum MyEnum {
-//                    ONE,
-//                    TWO,
-//                    THREE
-//            ".TrimIndent2());
+        myEnum.CodeRange.Of(source).Should().Be(@"
+                package MyPackage;
+
+                // enum comment
+                public enum MyEnum {
+                    ONE,
+                    TWO,
+                    THREE
+            ".TrimIndent2());
 
         myEnum.Fields.Should().HaveCount(1);
         myEnum.Methods.Should().HaveCount(2); //method and constructor
@@ -139,10 +139,10 @@ public class AntlrParseJavaTest
         //innerClass.ParentClassFqn.Should().Be("some/path:MyPackage.MyClass");
         innerClass.Name.Should().Be("InnerClass");
         innerClass.FullyQualifiedName.Should().Be("some/path:MyPackage.MyClass$InnerClass");
-//        innerClass.CodeRange.Of(source).Should().Be(@"
-//                |//inner class comment
-//                |    static class InnerClass {
-//            ".TrimMargin());
+        innerClass.CodeRange.Of(source).Should().Be(@"
+                |//inner class comment
+                |    static class InnerClass {
+            ".TrimMargin());
     }
 
     [Fact]
@@ -168,17 +168,17 @@ public class AntlrParseJavaTest
         MethodDto myMethod = myInterface.Methods[0];
         myMethod.Name.Should().Be("myMethod");
         myMethod.AccFlag.Should().Be(AccessFlags.AccPublic);
-//        myMethod.CodeRange.Of(source).Should().Be(@"
-//                |//method comment
-//                |    public void myMethod();
-//            ".TrimMargin());
+        myMethod.CodeRange.Of(source).Should().Be(@"
+                |//method comment
+                |    public void myMethod();
+            ".TrimMargin());
 
-//        myInterface.CodeRange.Of(source).Should().Be(@"
-//                package MyPackage;
-//
-//                //  comment
-//                public interface MyInterface {
-//            ".TrimIndent2());
+        myInterface.CodeRange.Of(source).Should().Be(@"
+                package MyPackage;
+
+                //  comment
+                public interface MyInterface {
+            ".TrimIndent2());
     }
 
     [Fact]

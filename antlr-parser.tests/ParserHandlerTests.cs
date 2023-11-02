@@ -60,27 +60,26 @@ public class ParserHandlerTests
 
         ClassDto classInfo = result.Classes[0];
         classInfo.Name.Should().Be("C");
+        classInfo.CodeRange.Of(source).Should().Be(
+            @"
+                package pkg
+                
+                /** comment */
+                class C {
+            ".TrimIndent2()
+        );
 
-//        classInfo.CodeRange.Of(source).Should().Be(
-//            @"
-//                package pkg
-//                
-//               /** comment */
-//                class C {
-//            ".TrimIndent2()
-//        );
-
-//        classInfo.Methods.Single().CodeRange.Of(source).Should().Be(
-//            @"
-//                fun method() {
-//                    println()
-//                  }
-//            ".TrimIndent2()
-//        );
-//        result.Functions.Single().CodeRange.Of(source).Should().Be(
-//            @"
-//                fun outerFunction() { }
-//            ".TrimIndent2()
-//        );
+        classInfo.Methods.Single().CodeRange.Of(source).Should().Be(
+            @"
+                fun method() {
+                    println()
+                  }
+            ".TrimIndent2()
+        );
+        result.Functions.Single().CodeRange.Of(source).Should().Be(
+            @"
+                fun outerFunction() { }
+            ".TrimIndent2()
+        );
     }
 }
