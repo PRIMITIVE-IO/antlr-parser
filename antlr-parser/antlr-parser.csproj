@@ -15,8 +15,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.0" />
-    <PackageReference Include="PrimitiveCodebaseElements" Version="0.35.0" />
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
+    <PackageReference Include="PrimitiveCodebaseElements" Version="0.36.0" />
   </ItemGroup>
 
   <ItemGroup>
