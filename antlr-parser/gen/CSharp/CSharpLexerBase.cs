@@ -1,9 +1,7 @@
 using Antlr4.Runtime;
 using System.Collections.Generic;
-using System;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 public abstract class CSharpLexerBase : Lexer
 {
