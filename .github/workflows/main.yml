@@ -1,28 +1,34 @@
 on:
-  create:
+  push:
     tags:
-      - "v-[0-9]+.[0-9]+.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+"
 jobs:
   build:
-    runs-on: mcr.microsoft.com/dotnet/sdk:7.0
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      VERSION_NUMBER: ${GITHUB_REF/refs\/tags\/v-/}
+      VERSION: ${{ github.ref_name }}
       SOLUTION_NAME: ${{ vars.SOLUTION_NAME }}
       CONFIGURATION: ${{ vars.CONFIGURATION }}
       
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.x'
+      - name: Set version number for build process
+        run: echo "VERSION=$(echo $VERSION | sed -e 's/v//gI')" >> $GITHUB_ENV
       - name: Update and install xmlstarlet
-        run: apt-get update -y && apt-get install -y xmlstarlet
-      - name: Update version number
-        run: xmlstarlet ed --inplace -u "//Project//PropertyGroup/Version" -v $VERSION_NUMBER antlr-parser/$SOLUTION_NAME.csproj
+        run: sudo apt-get update -y && sudo apt-get install -y xmlstarlet
+      - name: Update version number in csproj
+        run: xmlstarlet ed --inplace -u "//Project//PropertyGroup/Version" -v $VERSION antlr-parser/$SOLUTION_NAME.csproj
       - name: Restore SLN
         run: dotnet restore $SOLUTION_NAME.sln
       - name: Build
         run: dotnet build --no-restore $SOLUTION_NAME.sln --configuration $CONFIGURATION
       - name: Push to Nuget
-        run: dotnet nuget push antlr-parser/bin/$CONFIGURATION/$SOLUTION_NAME.$VERSION_NUMBER.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_KEY
+        run: dotnet nuget push antlr-parser/bin/$CONFIGURATION/$SOLUTION_NAME.$VERSION.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_KEY
         env:
           NUGET_KEY: ${{ secrets.NUGET_KEY }}
