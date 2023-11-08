@@ -1,0 +1,28 @@
+on:
+  create:
+    tags:
+      - "v-[0-9]+.[0-9]+.[0-9]+"
+jobs:
+  build:
+    runs-on: mcr.microsoft.com/dotnet/sdk:7.0
+    timeout-minutes: 30
+    env:
+      VERSION_NUMBER: ${GITHUB_REF/refs\/tags\/v-/}
+      SOLUTION_NAME: ${{ vars.SOLUTION_NAME }}
+      CONFIGURATION: ${{ vars.CONFIGURATION }}
+      
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Update and install xmlstarlet
+        run: apt-get update -y && apt-get install -y xmlstarlet
+      - name: Update version number
+        run: xmlstarlet ed --inplace -u "//Project//PropertyGroup/Version" -v $VERSION_NUMBER antlr-parser/$SOLUTION_NAME.csproj
+      - name: Restore SLN
+        run: dotnet restore $SOLUTION_NAME.sln
+      - name: Build
+        run: dotnet build --no-restore $SOLUTION_NAME.sln --configuration $CONFIGURATION
+      - name: Push to Nuget
+        run: dotnet nuget push antlr-parser/bin/$CONFIGURATION/$SOLUTION_NAME.$VERSION_NUMBER.nupkg --source https://api.nuget.org/v3/index.json --api-key $NUGET_KEY
+        env:
+          NUGET_KEY: ${{ secrets.NUGET_KEY }}
