@@ -19,7 +19,7 @@ jobs:
         with:
           dotnet-version: '8.x'
       - name: Set version number for build process
-        run: echo "VERSION=$(echo $VERSION | sed -e 's/v//gI')" >> $GITHUB_ENV
+        run: echo "VERSION=$(echo $VERSION | sed -e 's/v-//gI' | sed -e 's/^-//')" >> $GITHUB_ENV
       - name: Update and install xmlstarlet
         run: sudo apt-get update -y && sudo apt-get install -y xmlstarlet
       - name: Update version number in csproj
