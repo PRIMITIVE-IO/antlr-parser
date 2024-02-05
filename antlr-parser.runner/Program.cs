@@ -16,28 +16,23 @@ namespace antlr_parser.runner;
 
 static class Program
 {
-    class Args
-    {
-        public bool Verbose { get; set; }
-        public string InputPath { get; set; }
-    }
-
     static void Main(string[] args)
     {
         // Create a root command with some options 
-        RootCommand rootCommand = new()
-        {
+        RootCommand rootCommand =
+        [
             new Option<bool>(
-                new[] { "--verbose", "-v" },
+                ["--verbose", "-v"],
                 () => false,
                 "Verbose"),
+
             new Argument<string>("InputPath")
-        };
+        ];
 
         rootCommand.Description = "Parse Files";
 
         // Note that the parameters of the handler method are matched according to the names of the options 
-        rootCommand.Handler = CommandHandler.Create<Args>(Parse);
+        rootCommand.Handler = CommandHandler.Create<string, bool>(Parse);
 
         SetupLogger();
         rootCommand.Invoke(args);
@@ -45,13 +40,13 @@ static class Program
         Environment.Exit(0);
     }
 
-    static void Parse(Args args)
+    static void Parse(string inputPath, bool verbose)
     {
-        IEnumerable<FileDto> fileDtos = FilePathsFrom(args.InputPath)
+        IEnumerable<FileDto> fileDtos = FilePathsFrom(inputPath)
             .Where(filePath => PrimitiveAntlrParser.SupportedParsableFiles.Contains(Path.GetExtension(filePath)))
-            .SelectNotNull(filePath => ParseFile(filePath, args.Verbose));
+            .SelectNotNull(filePath => ParseFile(filePath, verbose));
 
-        if (args.Verbose)
+        if (verbose)
         {
             foreach (FileDto fileDto in fileDtos)
             {

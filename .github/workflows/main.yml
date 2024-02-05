@@ -17,7 +17,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '7.x'
+          dotnet-version: '8.x'
       - name: Set version number for build process
         run: echo "VERSION=$(echo $VERSION | sed -e 's/v//gI')" >> $GITHUB_ENV
       - name: Update and install xmlstarlet

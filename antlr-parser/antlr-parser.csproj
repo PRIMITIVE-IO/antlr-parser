@@ -11,7 +11,7 @@
     <Nullable>enable</Nullable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <!-- Unity still requires .netstandard2.1. This will change in a future release -->
-    <TargetFrameworks>net7.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;net8.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
