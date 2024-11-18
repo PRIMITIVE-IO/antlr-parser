@@ -29,8 +29,6 @@ namespace antlr_parser.Antlr4Impl
             IEnumerable<Tuple<int, int>> restoredBlocksToRemove = blocksToRemove
                 .Select(r => new Tuple<int, int>(RestoreIdx(r.Item1), RestoreIdx(r.Item2)));
 
-            new SortedSet<Tuple<int, int>>();
-
             List<Tuple<int, int>> newBlocksToRemove =
                 RemoveNested(BlocksToRemove.Concat(restoredBlocksToRemove).ToSortedSet(x => x.Item1));
 

@@ -27,7 +27,7 @@ namespace antlr_parser.Antlr4Impl
         /// </summary>
         /// <param name="context">The context that contains the tokens</param>
         /// <returns>Original new-lined and indented text</returns>
-        public static string GetFullText(this ParserRuleContext context)
+        public static string GetFullText(this ParserRuleContext? context)
         {
             if (context == null)
             {
@@ -72,7 +72,7 @@ namespace antlr_parser.Antlr4Impl
             do
             {
                 cur = cur.Parent;
-            } while (cur != null && !(cur is T));
+            } while (cur != null && cur is not T);
 
             return cur as T;
         }

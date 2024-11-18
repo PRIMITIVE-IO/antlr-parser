@@ -36,55 +36,28 @@ namespace antlr_parser
                 PrimitiveLogger.Logger.Instance().Info($"Parsing: {filePath}");
             }
 
-            switch (sourceExtension)
+            return sourceExtension switch
             {
-                case ".java":
-                    return AntlrParseJava.Parse(
-                        sourceText,
-                        filePath);
-                case ".js":
-                case ".jsx":
-                    return AntlrParseJavaScript.Parse(
-                        sourceText,
-                        filePath);
-                case ".ts":
-                    return AntlrParseTypeScript.Parse(
-                        sourceText,
-                        filePath);
-                case ".cs":
+                ".java" => AntlrParseJava.Parse(sourceText, filePath),
+                ".js" or ".jsx" => AntlrParseJavaScript.Parse(sourceText, filePath),
+                ".ts" => AntlrParseTypeScript.Parse(sourceText, filePath),
+                ".cs" =>
                     // cs
-                    return AntlrParseCSharp.Parse(
-                        sourceText,
-                        filePath);
-                case ".h":
-                case ".c":
+                    AntlrParseCSharp.Parse(sourceText, filePath),
+                ".h" or ".c" =>
                     // C
-                    return AntlrParseC.Parse(sourceText, filePath);
-                case ".cpp":
-                case ".hxx":
-                case ".hpp":
-                case ".m":
-                case ".cc":
+                    AntlrParseC.Parse(sourceText, filePath),
+                ".cpp" or ".hxx" or ".hpp" or ".m" or ".cc" =>
                     //cpp
-                    return AntlrParseCpp.Parse(sourceText, filePath);
-                case ".py":
+                    AntlrParseCpp.Parse(sourceText, filePath),
+                ".py" =>
                     // python
-                    return AntlrParsePython3.Parse(sourceText, filePath);
-                case ".kt":
-                    return AntlrParseKotlin.Parse(
-                        sourceText,
-                        filePath);
-                case ".sol":
-                    return AntlrParseSolidity.Parse(
-                        sourceText,
-                        filePath);
-                case ".go":
-                    return AntlrParseGo.Parse(
-                        sourceText,
-                        filePath);
-            }
-
-            return null;
+                    AntlrParsePython3.Parse(sourceText, filePath),
+                ".kt" => AntlrParseKotlin.Parse(sourceText, filePath),
+                ".sol" => AntlrParseSolidity.Parse(sourceText, filePath),
+                ".go" => AntlrParseGo.Parse(sourceText, filePath),
+                _ => null
+            };
         }
 
         public static string GetTextFromFilePath(string filePath, bool verbose = false)
